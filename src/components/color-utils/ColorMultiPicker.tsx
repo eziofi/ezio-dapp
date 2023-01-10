@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 // @mui
-import { Box, Checkbox } from '@mui/material';
+import { Box, Checkbox, SxProps, Theme } from '@mui/material';
 //
 import Icon from './Icon';
 
@@ -13,10 +13,21 @@ ColorMultiPicker.propTypes = {
   selected: PropTypes.arrayOf(PropTypes.string),
 };
 
-export default function ColorMultiPicker({ colors, selected, onChangeColor, sx, ...other }) {
+export default function ColorMultiPicker({
+  colors,
+  selected,
+  onChangeColor,
+  sx,
+  ...other
+}: {
+  colors: string[];
+  selected: string[];
+  onChangeColor: (color: string) => void;
+  sx: SxProps<Theme>;
+}) {
   return (
     <Box sx={sx}>
-      {colors.map((color) => {
+      {colors.map(color => {
         const whiteColor = color === '#FFFFFF' || color === 'white';
 
         return (

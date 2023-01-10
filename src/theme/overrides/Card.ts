@@ -1,10 +1,13 @@
 // ----------------------------------------------------------------------
 
-export default function Card(theme) {
+import { Theme } from '@mui/material';
+
+export default function Card(theme: Theme) {
   return {
     MuiCard: {
       styleOverrides: {
         root: {
+          // @ts-ignore
           boxShadow: theme.customShadows.card,
           borderRadius: Number(theme.shape.borderRadius) * 2,
           position: 'relative',

@@ -1,6 +1,8 @@
 // ----------------------------------------------------------------------
 
-export default function Typography(theme) {
+import { Theme } from '@mui/material';
+
+export default function Typography(theme: Theme) {
   return {
     MuiTypography: {
       styleOverrides: {

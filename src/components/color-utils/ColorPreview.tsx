@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // @mui
 import { alpha } from '@mui/material/styles';
-import { Box, Typography, Stack } from '@mui/material';
+import { Box, Typography, Stack, SxProps, Theme } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -11,7 +11,15 @@ ColorPreview.propTypes = {
   colors: PropTypes.arrayOf(PropTypes.string),
 };
 
-export default function ColorPreview({ colors, limit = 3, sx }) {
+export default function ColorPreview({
+  colors,
+  limit = 3,
+  sx,
+}: {
+  colors: string[];
+  limit: number;
+  sx: SxProps<Theme>;
+}) {
   const showColor = colors.slice(0, limit);
 
   const moreColor = colors.length - limit;
@@ -26,8 +34,8 @@ export default function ColorPreview({ colors, limit = 3, sx }) {
             width: 16,
             height: 16,
             borderRadius: '50%',
-            border: (theme) => `solid 2px ${theme.palette.background.paper}`,
-            boxShadow: (theme) => `inset -1px 1px 2px ${alpha(theme.palette.common.black, 0.24)}`,
+            border: theme => `solid 2px ${theme.palette.background.paper}`,
+            boxShadow: theme => `inset -1px 1px 2px ${alpha(theme.palette.common.black, 0.24)}`,
             bgcolor: color,
           }}
         />

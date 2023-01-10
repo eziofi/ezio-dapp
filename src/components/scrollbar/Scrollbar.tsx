@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
-import { memo } from 'react';
+import { memo, ReactNode } from 'react';
 // @mui
 import { Box } from '@mui/material';
 //
 import { StyledRootScrollbar, StyledScrollbar } from './styles';
+import { SxProps } from '@mui/system';
+import { Theme } from '@mui/material/styles';
 
 // ----------------------------------------------------------------------
 
@@ -12,7 +14,7 @@ Scrollbar.propTypes = {
   children: PropTypes.node,
 };
 
-function Scrollbar({ children, sx, ...other }) {
+function Scrollbar({ children, sx, ...other }: { children: ReactNode; sx: SxProps<Theme> }) {
   const userAgent = typeof navigator === 'undefined' ? 'SSR' : navigator.userAgent;
 
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);

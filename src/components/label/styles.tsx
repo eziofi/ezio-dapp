@@ -1,10 +1,16 @@
 // @mui
 import { alpha, styled } from '@mui/material/styles';
-import { Box } from '@mui/material';
+import { Box, Theme } from '@mui/material';
+import { Palette } from '@mui/material/styles/createPalette';
 
 // ----------------------------------------------------------------------
 
-export const StyledLabel = styled(Box)(({ theme, ownerState }) => {
+interface IOwnerState {
+  variant: string;
+  color: 'default' | 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
+}
+
+export const StyledLabel = styled(Box)(({ theme, ownerState }: { theme: Theme; ownerState: IOwnerState }) => {
   const isLight = theme.palette.mode === 'light';
 
   const filledVariant = ownerState.variant === 'filled';

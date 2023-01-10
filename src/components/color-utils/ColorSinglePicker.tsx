@@ -7,9 +7,9 @@ import Icon from './Icon';
 
 // ----------------------------------------------------------------------
 
-const ColorSinglePicker = forwardRef(({ colors, ...other }, ref) => (
+const ColorSinglePicker = forwardRef(({ colors, ...other }: { colors: string[] }, ref) => (
   <RadioGroup row ref={ref} {...other}>
-    {colors.map((color) => {
+    {colors.map(color => {
       const whiteColor = color === '#FFFFFF' || color === 'white';
 
       return (
@@ -29,9 +29,5 @@ const ColorSinglePicker = forwardRef(({ colors, ...other }, ref) => (
     })}
   </RadioGroup>
 ));
-
-ColorSinglePicker.propTypes = {
-  colors: PropTypes.arrayOf(PropTypes.string),
-};
 
 export default ColorSinglePicker;

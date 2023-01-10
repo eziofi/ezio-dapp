@@ -11,6 +11,7 @@ export default function StyledChart() {
 
   const inputGlobalStyles = (
     <GlobalStyles
+      // @ts-ignore
       styles={{
         '.apexcharts-canvas': {
           // Tooltip
@@ -18,6 +19,7 @@ export default function StyledChart() {
             ...bgBlur({ color: theme.palette.background.default }),
             border: 0,
             color: theme.palette.text.primary,
+            // @ts-ignore
             boxShadow: theme.customShadows.dropdown,
             borderRadius: Number(theme.shape.borderRadius) * 1.5,
             '&:before': { borderBottomColor: 'transparent' },
@@ -26,6 +28,7 @@ export default function StyledChart() {
           '.apexcharts-tooltip.apexcharts-theme-light': {
             ...bgBlur({ color: theme.palette.background.default }),
             border: 0,
+            // @ts-ignore
             boxShadow: theme.customShadows.dropdown,
             borderRadius: Number(theme.shape.borderRadius) * 1.5,
             '.apexcharts-tooltip-title': {

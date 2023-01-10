@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // @mui
 import { alpha } from '@mui/material/styles';
-import { Box } from '@mui/material';
+import { Box, SxProps, Theme } from '@mui/material';
 //
 import Iconify from '../iconify';
 
@@ -13,7 +13,16 @@ Icon.propTypes = {
   whiteColor: PropTypes.bool,
 };
 
-export default function Icon({ checked, whiteColor, sx, ...other }) {
+export default function Icon({
+  checked,
+  whiteColor,
+  sx,
+  ...other
+}: {
+  checked?: boolean;
+  whiteColor: boolean;
+  sx?: SxProps<Theme>;
+}) {
   const shadow = (
     <Box
       sx={{
@@ -54,13 +63,13 @@ export default function Icon({ checked, whiteColor, sx, ...other }) {
         alignItems: 'center',
         justifyContent: 'center',
         bgcolor: 'currentColor',
-        transition: (theme) =>
+        transition: theme =>
           theme.transitions.create('all', {
             duration: theme.transitions.duration.shortest,
           }),
         ...(whiteColor && {
-          border: (theme) => `solid 1px ${theme.palette.divider}`,
-          boxShadow: (theme) => `4px 4px 8px 0 ${alpha(theme.palette.grey[500], 0.24)}`,
+          border: theme => `solid 1px ${theme.palette.divider}`,
+          boxShadow: theme => `4px 4px 8px 0 ${alpha(theme.palette.grey[500], 0.24)}`,
         }),
         ...(checked && {
           transform: 'scale(1.4)',
