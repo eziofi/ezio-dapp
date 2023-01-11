@@ -18,7 +18,7 @@ export function fTimestamp(date: string) {
   return date ? getTime(new Date(date)) : '';
 }
 
-export function fToNow(date: string) {
+export function fToNow(date: Date) {
   return date
     ? formatDistanceToNow(new Date(date), {
         addSuffix: true,

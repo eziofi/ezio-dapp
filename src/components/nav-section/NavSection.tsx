@@ -41,6 +41,7 @@ function NavItem({ item }: { item: INavConfig }) {
   const { title, path, icon, info } = item;
 
   return (
+    // @ts-ignore
     <StyledNavItem
       component={RouterLink}
       to={path}

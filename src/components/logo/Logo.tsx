@@ -8,7 +8,7 @@ import { Box, Link, SxProps, Theme } from '@mui/material';
 // ----------------------------------------------------------------------
 
 const Logo = forwardRef(
-  ({ disabledLink = false, sx, ...other }: { disabledLink: boolean; sx: SxProps<Theme> }, ref) => {
+  ({ disabledLink = false, sx, ...other }: { disabledLink?: boolean; sx?: SxProps<Theme> }, ref) => {
     const theme = useTheme();
 
     const PRIMARY_LIGHT = theme.palette.primary.light;
