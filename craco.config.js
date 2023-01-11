@@ -1,7 +1,12 @@
 const webpack = require('webpack');
+const CracoLessPlugin = require('craco-less');
 
 module.exports = {
-  plugins: [],
+  plugins: [
+    {
+      plugin: CracoLessPlugin,
+    },
+  ],
   webpack: {
     configure: {
       resolve: {
