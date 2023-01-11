@@ -29,7 +29,6 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
     }),
     [],
   );
-
   // @ts-ignore
   const theme = createTheme(themeOptions);
   theme.components = componentsOverride(theme);

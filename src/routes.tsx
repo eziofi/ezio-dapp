@@ -1,6 +1,11 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
 import DashboardLayout from './layouts/dashboard';
+//  Childrens
+import HomePage from './views/homePage/HomePage';
+import Purchase from './views/purchase/Purchase';
+import Redeem from './views/redeem/Redeem';
+import Account from './views/account/Account';
 // import SimpleLayout from './layouts/simple';
 //
 // import BlogPage from './pages/BlogPage';
@@ -14,16 +19,24 @@ import DashboardLayout from './layouts/dashboard';
 
 export default function Router() {
   const routes = useRoutes([
+    // 重定向
+    {
+      path: '/',
+      element: <Navigate to="/dashboard/homePage" />,
+    },
     {
       path: '/dashboard',
       element: <DashboardLayout />,
-      // children: [
-      // { element: <Navigate to="/dashboard/app" />, index: true },
-      // { path: 'app', element: <DashboardAppPage /> },
-      // { path: 'user', element: <UserPage /> },
-      // { path: 'products', element: <ProductsPage /> },
-      // { path: 'blog', element: <BlogPage /> },
-      // ],
+      children: [
+        { element: <Navigate to="/dashboard/homePage" />, index: true },
+        { path: 'homePage', element: <HomePage /> },
+        { path: 'purchase', element: <Purchase /> },
+        { path: 'redeem', element: <Redeem /> },
+        { path: 'account', element: <Account /> },
+        // { path: 'user', element: <UserPage /> },
+        // { path: 'products', element: <ProductsPage /> },
+        // { path: 'blog', element: <BlogPage /> },
+      ],
     },
     // {
     //   path: 'login',

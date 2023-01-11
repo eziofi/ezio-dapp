@@ -1,0 +1,79 @@
+.accountBox {
+  padding: 14px;
+
+  .tokenCardBox {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    //grid-template-rows: 118px 118px 118px;
+    grid-gap: 15px 15px;
+
+    .tokenCard {
+      background: rgba(26, 32, 47, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+
+      .tokenText {
+        font-size: 18px;
+        color: rgba(126, 126, 136, 1);
+      }
+      .tokenAmount {
+        font-size: 24px;
+        font-weight: 600;
+        color: rgba(67, 207, 124, 1);
+        line-height: 40px;
+      }
+      .tokenValue {
+        font-size: 12px;
+      }
+      .buttonDiv {
+        margin-top: 10px;
+      }
+    }
+  }
+}
+
+.dialogTips {
+  font-size: 12px;
+}
+
+.accountDetailBox {
+  padding: 22px 14px;
+
+  .detailItemBox {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed rgba(120, 125, 145, 0.36);
+    .detailItem {
+      display: flex;
+      justify-content: space-between;
+      .column1 {
+        .timestamp {
+          font-size: 12px;
+          line-height: 16px;
+          color: rgba(120, 125, 145, 1);
+        }
+        .title {
+          font-size: 16px;
+          line-height: 30px;
+        }
+      }
+      .column2 {
+        .valueIn {
+          text-align: right;
+          font-size: 16px;
+          line-height: 26px;
+          color: rgba(18, 230, 103, 1);
+        }
+        .valueOut {
+          text-align: right;
+          font-size: 16px;
+          line-height: 26px;
+          color: rgb(230, 50, 18);
+        }
+      }
+    }
+  }
+}

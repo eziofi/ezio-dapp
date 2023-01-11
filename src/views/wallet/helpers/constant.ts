@@ -1,0 +1,26 @@
+/*export enum ContractAddress {
+  ezat = '0xEc9b88Fbc96a95203b625e442Dd46E84A9C62Fe6',
+  ezbt = '0x30b76D79c3fe6c60ce0BB3164CA34eb2BF93dD73',
+  ezio = '0xF9E395de7DAf29c9316F56Aa1271dc52e8765c20',
+  purchase = '0x8C4a3f1b1125bF1d8c725daB2c9A29DED74E4df9',
+  steth = '0x03c4606148C06Dee2d55B54AFF1a425Fc4c52D8F',
+  swap = '0xc8e35cfA5D498aCafE66641BCc320071B6a245c6',
+  treasury = '0x08cCd1f4F7152d46c6cC97F1c2ab535128F65e86',
+  usdt = '0xd08Bab20CEaA36CFF1300191b2Bd352999c44A7B',
+}*/
+
+export enum TOKEN_TYPE {
+  EZAT,
+  EZBT,
+}
+
+export enum TRANSFER_TYPE {
+  PURCHASE = 0,
+  REDEEM = 1,
+}
+
+export enum TOKEN_BALANCE_TYPE {
+  EZAT = 'EZAT',
+  EZBT = 'EZBT',
+  USDT = 'USDT',
+}
