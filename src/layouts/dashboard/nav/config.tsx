@@ -6,14 +6,14 @@ const icon = (name: string) => <SvgColor src={`/assets/icons/navbar/${name}.svg`
 
 const navConfig = [
   {
-    title: 'HomePage',
+    title: 'Dashboard',
     path: '/dashboard/homePage',
-    icon: icon('ic_analytics'),
+    icon: icon('ic_dashboard'),
   },
   {
-    title: 'Purchase',
+    title: 'Swap',
     path: '/dashboard/purchase',
-    icon: icon('ic_user'),
+    icon: icon('ic_cart'),
   },
   {
     title: 'Redeem',
@@ -23,7 +23,7 @@ const navConfig = [
   {
     title: 'Account',
     path: '/dashboard/account',
-    icon: icon('ic_blog'),
+    icon: icon('ic_user'),
   },
   // {
   //   title: 'login',
