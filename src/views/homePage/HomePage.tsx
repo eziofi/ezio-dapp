@@ -1,19 +1,25 @@
-import styles from './homePage.module.less';
-import netBtn from '../../assets/home/net@2x.png';
+import { useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useQuery } from 'react-query';
+import { Box, FormControlLabel, Link, Switch } from '@mui/material';
 import walletBtn from '../../assets/home/wallet@2x.png';
-import langBtn from '../../assets/home/lang@2x.png';
 import MarketChart from './components/MarketChart';
 import PriceTable from './components/PriceTable';
-import { useContext, useEffect, useState } from 'react';
 import NetDrawer from './components/NetDrawer';
 import LangDrawer from './components/LangDrawer';
-import { useTranslation } from 'react-i18next';
 import useWallet from '../hooks/useWallet';
-import { useQuery } from 'react-query';
-import { TOKEN_TYPE } from '../wallet/helpers/constant';
 import metamaskBtn from '../../assets/home/metamask@3x.png';
-import { FormControlLabel, Link, Stack, Switch, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import {
+  TitleContainer,
+  ImageBox,
+  ChartBox,
+  MintBox,
+  MintCard,
+  MintCardTitle,
+  MintCardValue,
+  TitleBtnBox,
+} from './mainStyle';
 
 import {
   ezatTotalSupply,
@@ -33,93 +39,89 @@ export default function HomePage() {
   const { connectState, connect, disconnect, account, ethersProvider } = useWallet();
 
   return (
-    <div className={styles.HomePage}>
-      <div className={styles.titleContainer}>
-        {connectState === 'connected' ? (
-          <div style={{ fontSize: '12px' }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <img src={metamaskBtn} alt="" width="30" height="30" />
-              <div style={{ marginLeft: '7px' }}>
-                <div>{t('home.connectedAccount')}</div>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <div style={{ marginRight: '7px' }}>
-                    {account.substring(0, 7) + '...' + account.substring(account.length - 7, account.length)}
-                  </div>
-                  <Link onClick={disconnect}>{t('home.logout')}</Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div style={{ display: 'flex', alignItems: 'center' }} onClick={connect}>
-            <div className={`${styles.imgBox} ${styles.wallet}`}>
-              <img src={walletBtn} alt="" width="18" />
-            </div>
-            <Link style={{ fontSize: '12px', marginLeft: '7px' }}>
-              {connectState === 'connecting' ? t('home.connecting') : t('home.login')}
-            </Link>
-          </div>
-        )}
-        <div className={styles.titleBtnBox}>
-          {/*<div className={`${styles.imgBox} ${styles.net}`} onClick={() => setNetDrawerOpened(true)}>*/}
-          {/*  <img src={netBtn} alt="" width="18" />*/}
-          {/*</div>*/}
-          {/*<div className={styles.imgBox}} onClick={() => setLangDrawerOpened(false)}>*/}
-          {/*<img src={langBtn} alt="" width="18" />*/}
-          <FormControlLabel
-            control={
-              <MaterialUISwitch
-                sx={{ m: 1 }}
-                defaultChecked={localStorage.getItem('lang') === 'zh'}
-                onChange={e => {
-                  const lang = e.target.checked ? 'zh' : 'en';
-                  localStorage.setItem('lang', lang);
-                  window.location.reload();
-                }}
-              />
-            }
-            label=""
-          />
-          {/*</div>*/}
-        </div>
-      </div>
-      <div className={styles.tableBox}>
-        <PriceTable />
-      </div>
-      <div className={styles.chartBox}>
-        {/*<div className={styles.chartTitle}>{t('home.treasury')}</div>*/}
-        <MarketChart />
-      </div>
-      <div className={styles.chartBox}>
-        <NetWorthChart />
-      </div>
-      <div className={styles.chartBox}>
-        <TotalSupplyChart />
-      </div>
-      {ethersProvider && <TotalSupplyBox />}
-      <NetDrawer
-        opened={netDrawerOpened}
-        close={() => setNetDrawerOpened(false)}
-        netChecked={netChecked}
-        setNetChecked={setNetChecked}
-      />
-      {/*<WalletDrawer opened={walletDrawerOpened} close={() => setWalletDrawerOpened(false)} />*/}
-      <LangDrawer opened={langDrawerOpened} close={() => setLangDrawerOpened(false)} />
-    </div>
+    <Box>
+      <Box>
+        <TitleContainer>
+          {connectState === 'connected' ? (
+            <Box sx={{ fontSize: 12 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <img src={metamaskBtn} alt="" width="30" height="30" />
+                <Box sx={{ marginLeft: '7px' }}>
+                  <Box>{t('home.connectedAccount')}</Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Box sx={{ marginRight: '7px' }}>
+                      {account.substring(0, 7) + '...' + account.substring(account.length - 7, account.length)}
+                    </Box>
+                    <Link onClick={disconnect}>{t('home.logout')}</Link>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          ) : (
+            <Box sx={{ display: 'flex', alignItems: 'center' }} onClick={connect}>
+              <ImageBox sx={{ marginLeft: 12 }}>
+                <img src={walletBtn} alt="" width="18" />
+              </ImageBox>
+              <Link sx={{ fontSize: '12px', marginLeft: '7px' }}>
+                {connectState === 'connecting' ? t('home.connecting') : t('home.login')}
+              </Link>
+            </Box>
+          )}
+          <TitleBtnBox>
+            <FormControlLabel
+              control={
+                <MaterialUISwitch
+                  sx={{ m: 1 }}
+                  defaultChecked={localStorage.getItem('lang') === 'zh'}
+                  onChange={e => {
+                    const lang = e.target.checked ? 'zh' : 'en';
+                    localStorage.setItem('lang', lang);
+                    window.location.reload();
+                  }}
+                />
+              }
+              label=""
+            />
+          </TitleBtnBox>
+        </TitleContainer>
+        <Box>
+          <PriceTable />
+        </Box>
+        <ChartBox>
+          {/*<Box className={styles.chartTitle}>{t('home.treasury')}</Box>*/}
+          <MarketChart />
+        </ChartBox>
+        <ChartBox>
+          <NetWorthChart />
+        </ChartBox>
+        <ChartBox>
+          <TotalSupplyChart />
+        </ChartBox>
+        {ethersProvider && <TotalSupplyBox />}
+        <NetDrawer
+          opened={netDrawerOpened}
+          close={() => setNetDrawerOpened(false)}
+          netChecked={netChecked}
+          setNetChecked={setNetChecked}
+        />
+        {/*<WalletDrawer opened={walletDrawerOpened} close={() => setWalletDrawerOpened(false)} />*/}
+        <LangDrawer opened={langDrawerOpened} close={() => setLangDrawerOpened(false)} />
+      </Box>
+    </Box>
   );
 }
 
 function TotalSupplyBox() {
   return (
     <>
-      <div className={styles.mintBox}>
+      <MintBox>
         <ValueCard type={VALUE_TYPE.treasury} />
         <ValueCard type={VALUE_TYPE.rate} />
-      </div>
-      <div className={styles.mintBox}>
+      </MintBox>
+      <MintBox>
         <ValueCard type={VALUE_TYPE.EZAT} />
         <ValueCard type={VALUE_TYPE.EZBT} />
-      </div>
+      </MintBox>
     </>
   );
 }
@@ -158,15 +160,15 @@ function ValueCard({ type }: { type: VALUE_TYPE }) {
     },
   });
   return (
-    <div className={styles.mintCard}>
-      <div className={styles.mintCardTitle}>{title[type]}</div>
+    <MintCard>
+      <MintCardTitle>{title[type]}</MintCardTitle>
       {type === VALUE_TYPE.rate ? (
-        <div className={styles.mintCardValue}>{data ? (parseFloat(formatNetWorth(data)) / 10000).toFixed(2) : 0} ‱</div>
+        <MintCardValue>{data ? (parseFloat(formatNetWorth(data)) / 10000).toFixed(2) : 0} ‱</MintCardValue>
       ) : (
-        <div className={styles.mintCardValue}>{data ? toNum(data).toFixed() : 0}</div>
+        <MintCardValue>{data ? toNum(data).toFixed() : 0}</MintCardValue>
       )}
-      {/*<div className={styles.mintCardValue}>{data ? formatNetWorth(data) : 0}</div>*/}
-    </div>
+      {/*<Box className={styles.mintCardValue}>{data ? formatNetWorth(data) : 0}</Box>*/}
+    </MintCard>
   );
 }
 

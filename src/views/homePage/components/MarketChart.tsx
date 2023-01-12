@@ -78,8 +78,9 @@ export default function MarketChart() {
             yAxisIndex: 1,
           },
         ],
+        padding: [0, 0, 0, 20],
       });
     },
   });
-  return <>{options ? <ReactECharts option={options} style={{ paddingLeft: '20px' }} /> : <></>}</>;
+  return <>{options ? <ReactECharts option={options} /> : <></>}</>;
 }
