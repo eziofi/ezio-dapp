@@ -11,6 +11,7 @@ import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
 import NotificationsPopover from './NotificationsPopover';
+import Iconify from '../../../components/iconify';
 
 // ----------------------------------------------------------------------
 
@@ -55,11 +56,10 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
             display: { lg: 'none' },
           }}
         >
-          Iconify
-          {/*<Iconify icon="eva:menu-2-fill" />*/}
+          <Iconify icon="eva:menu-2-fill" />
         </IconButton>
 
-        <Searchbar />
+        {/*<Searchbar />*/}
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack
@@ -71,7 +71,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
           }}
         >
           <LanguagePopover />
-          <NotificationsPopover />
+          {/*<NotificationsPopover />*/}
           <AccountPopover />
         </Stack>
       </StyledToolbar>

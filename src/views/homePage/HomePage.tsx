@@ -148,14 +148,13 @@ function ValueCard({ type }: { type: VALUE_TYPE }) {
   };
   const { data } = useQuery(['totalSupply', type], () => api[type](ethersProvider!.getSigner()), {
     onSuccess: data1 => {
-      debugger;
       // if (type === VALUE_TYPE.rate) {
       //   const res = formatNetWorth(data1);
       //   debugger;
       // }
     },
     onError: err => {
-      debugger;
+      // debugger;
     },
   });
   return (
