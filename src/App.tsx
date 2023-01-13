@@ -7,9 +7,10 @@ import ThemeProvider from './theme';
 import ScrollToTop from './components/scroll-to-top';
 import { StyledChart } from './components/chart';
 
-import './App.less';
+// import './App.less';
 import WalletProvider from './views/context/WalletProvider';
 import { QueryClient, QueryClientProvider } from 'react-query';
+
 // ----------------------------------------------------------------------
 
 const queryClient = new QueryClient({
@@ -21,9 +22,10 @@ const queryClient = new QueryClient({
     },
   },
 });
+
 export default function App() {
   return (
-    <div className="App">
+    <div>
       <QueryClientProvider client={queryClient}>
         <WalletProvider>
           <ThemeProvider>

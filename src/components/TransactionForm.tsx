@@ -169,7 +169,7 @@ export function TransactionForm({
             variant="contained"
             disableElevation
             sx={{ width: '100%' }}
-            onClick={doPurchase}
+            onClick={doPurchase} // 购买
             disabled={!inputValue || !parseInt(inputValue)}
           >
             {t('purchase.purchaseAction')}
@@ -180,7 +180,7 @@ export function TransactionForm({
             variant="contained"
             disableElevation
             sx={{ width: '100%' }}
-            onClick={doRedeem}
+            onClick={doRedeem} //赎回
             disabled={!inputValue || !parseInt(inputValue)}
           >
             {t('redeem.redeemAction')}
