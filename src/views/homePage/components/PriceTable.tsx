@@ -12,9 +12,8 @@ import { TOKEN_TYPE } from '../../wallet/helpers/constant';
 import { useState } from 'react';
 import numeral from 'numeral';
 import { formatNetWorth } from '../../wallet/helpers/utilities';
-import { Card, TablePagination } from '@mui/material';
+import { Card } from '@mui/material';
 import Scrollbar from '../../../components/scrollbar';
-import UserListHead from '../../../components/dashboard/UserListHead';
 
 interface ITokenInfo {
   type: TOKEN_TYPE;
@@ -76,7 +75,21 @@ export default function PriceTable() {
         <Scrollbar>
           <TableContainer sx={{ minWidth: 800 }}>
             <Table>
-              <UserListHead headLabel={TABLE_HEAD} />
+              <TableHead
+                sx={{
+                  '.MuiTableCell-root': {
+                    color: 'rgba(120, 125, 145, 1)',
+                    fontWeight: 400,
+                  },
+                }}
+              >
+                <TableRow>
+                  <TableCell align="center">{t('home.coin')}</TableCell>
+                  <TableCell align="center">{t('home.price')}</TableCell>
+                  <TableCell align="center">{t('home.one_day_purchase')}</TableCell>
+                  <TableCell align="center">{t('home.one_day_change')}</TableCell>
+                </TableRow>
+              </TableHead>
               <TableBody>
                 {tokenList.map(row => (
                   <TableRow key={row.type} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
@@ -98,42 +111,43 @@ export default function PriceTable() {
           </TableContainer>
         </Scrollbar>
       </Card>
-      <TableContainer component={Paper} sx={{ backgroundColor: 'rgba(26, 32, 47, 1)' }}>
-        <Table aria-label="simple table">
-          <TableHead
-            sx={{
-              '.MuiTableCell-root': {
-                color: 'rgba(120, 125, 145, 1)',
-                fontWeight: 400,
-              },
-            }}
-          >
-            <TableRow>
-              <TableCell align="center">{t('home.coin')}</TableCell>
-              <TableCell align="center">{t('home.price')}</TableCell>
-              <TableCell align="center">{t('home.one_day_purchase')}</TableCell>
-              <TableCell align="center">{t('home.one_day_change')}</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {tokenList.map(row => (
-              <TableRow key={row.type} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell align="center" component="th" scope="row">
-                  {row.type === 0 ? 'EZAT' : 'EZBT'}
-                </TableCell>
-                <TableCell align="center">${row.netWorth}</TableCell>
-                <TableCell align="center">{row.totalPurchase}</TableCell>
-                <TableCell
-                  align="center"
-                  sx={{ color: row.oneDayChange.startsWith('-') ? 'rgba(255, 47, 0, 1)' : 'rgba(18, 230, 103, 1)' }}
-                >
-                  {row.oneDayChange}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+
+      {/*<TableContainer component={Paper} sx={{ backgroundColor: 'rgba(26, 32, 47, 1)' }}>*/}
+      {/*  <Table aria-label="simple table">*/}
+      {/*    <TableHead*/}
+      {/*      sx={{*/}
+      {/*        '.MuiTableCell-root': {*/}
+      {/*          color: 'rgba(120, 125, 145, 1)',*/}
+      {/*          fontWeight: 400,*/}
+      {/*        },*/}
+      {/*      }}*/}
+      {/*    >*/}
+      {/*      <TableRow>*/}
+      {/*        <TableCell align="center">{t('home.coin')}</TableCell>*/}
+      {/*        <TableCell align="center">{t('home.price')}</TableCell>*/}
+      {/*        <TableCell align="center">{t('home.one_day_purchase')}</TableCell>*/}
+      {/*        <TableCell align="center">{t('home.one_day_change')}</TableCell>*/}
+      {/*      </TableRow>*/}
+      {/*    </TableHead>*/}
+      {/*    <TableBody>*/}
+      {/*      {tokenList.map(row => (*/}
+      {/*        <TableRow key={row.type} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>*/}
+      {/*          <TableCell align="center" component="th" scope="row">*/}
+      {/*            {row.type === 0 ? 'EZAT' : 'EZBT'}*/}
+      {/*          </TableCell>*/}
+      {/*          <TableCell align="center">${row.netWorth}</TableCell>*/}
+      {/*          <TableCell align="center">{row.totalPurchase}</TableCell>*/}
+      {/*          <TableCell*/}
+      {/*            align="center"*/}
+      {/*            sx={{ color: row.oneDayChange.startsWith('-') ? 'rgba(255, 47, 0, 1)' : 'rgba(18, 230, 103, 1)' }}*/}
+      {/*          >*/}
+      {/*            {row.oneDayChange}*/}
+      {/*          </TableCell>*/}
+      {/*        </TableRow>*/}
+      {/*      ))}*/}
+      {/*    </TableBody>*/}
+      {/*  </Table>*/}
+      {/*</TableContainer>*/}
     </>
   );
 }

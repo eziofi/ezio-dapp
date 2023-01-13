@@ -12,6 +12,7 @@ import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
 import NotificationsPopover from './NotificationsPopover';
 import Iconify from '../../../components/iconify';
+import AddressPopover from './AddressPopover';
 
 // ----------------------------------------------------------------------
 
@@ -72,7 +73,8 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
         >
           <LanguagePopover />
           {/*<NotificationsPopover />*/}
-          <AccountPopover />
+          {/*<AccountPopover />*/}
+          <AddressPopover />
         </Stack>
       </StyledToolbar>
     </StyledRoot>

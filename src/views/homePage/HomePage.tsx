@@ -41,49 +41,49 @@ export default function HomePage() {
   return (
     <Box>
       <Box>
-        <TitleContainer>
-          {connectState === 'connected' ? (
-            <Box sx={{ fontSize: 12 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <img src={metamaskBtn} alt="" width="30" height="30" />
-                <Box sx={{ marginLeft: '7px' }}>
-                  <Box>{t('home.connectedAccount')}</Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Box sx={{ marginRight: '7px' }}>
-                      {account.substring(0, 7) + '...' + account.substring(account.length - 7, account.length)}
-                    </Box>
-                    <Link onClick={disconnect}>{t('home.logout')}</Link>
-                  </Box>
-                </Box>
-              </Box>
-            </Box>
-          ) : (
-            <Box sx={{ display: 'flex', alignItems: 'center' }} onClick={connect}>
-              <ImageBox sx={{ marginLeft: 12 }}>
-                <img src={walletBtn} alt="" width="18" />
-              </ImageBox>
-              <Link sx={{ fontSize: '12px', marginLeft: '7px' }}>
-                {connectState === 'connecting' ? t('home.connecting') : t('home.login')}
-              </Link>
-            </Box>
-          )}
-          <TitleBtnBox>
-            <FormControlLabel
-              control={
-                <MaterialUISwitch
-                  sx={{ m: 1 }}
-                  defaultChecked={localStorage.getItem('lang') === 'zh'}
-                  onChange={e => {
-                    const lang = e.target.checked ? 'zh' : 'en';
-                    localStorage.setItem('lang', lang);
-                    window.location.reload();
-                  }}
-                />
-              }
-              label=""
-            />
-          </TitleBtnBox>
-        </TitleContainer>
+        {/*<TitleContainer>*/}
+        {/*  {connectState === 'connected' ? (*/}
+        {/*    <Box sx={{ fontSize: 12 }}>*/}
+        {/*      <Box sx={{ display: 'flex', alignItems: 'center' }}>*/}
+        {/*        <img src={metamaskBtn} alt="" width="30" height="30" />*/}
+        {/*        <Box sx={{ marginLeft: '7px' }}>*/}
+        {/*          <Box>{t('home.connectedAccount')}</Box>*/}
+        {/*          <Box sx={{ display: 'flex', alignItems: 'center' }}>*/}
+        {/*            <Box sx={{ marginRight: '7px' }}>*/}
+        {/*              {account.substring(0, 7) + '...' + account.substring(account.length - 7, account.length)}*/}
+        {/*            </Box>*/}
+        {/*            <Link onClick={disconnect}>{t('home.logout')}</Link>*/}
+        {/*          </Box>*/}
+        {/*        </Box>*/}
+        {/*      </Box>*/}
+        {/*    </Box>*/}
+        {/*  ) : (*/}
+        {/*    <Box sx={{ display: 'flex', alignItems: 'center' }} onClick={connect}>*/}
+        {/*      <ImageBox sx={{ marginLeft: 12 }}>*/}
+        {/*        <img src={walletBtn} alt="" width="18" />*/}
+        {/*      </ImageBox>*/}
+        {/*      <Link sx={{ fontSize: '12px', marginLeft: '7px' }}>*/}
+        {/*        {connectState === 'connecting' ? t('home.connecting') : t('home.login')}*/}
+        {/*      </Link>*/}
+        {/*    </Box>*/}
+        {/*  )}*/}
+        {/*  <TitleBtnBox>*/}
+        {/*    <FormControlLabel*/}
+        {/*      control={*/}
+        {/*        <MaterialUISwitch*/}
+        {/*          sx={{ m: 1 }}*/}
+        {/*          defaultChecked={localStorage.getItem('lang') === 'zh'}*/}
+        {/*          onChange={e => {*/}
+        {/*            const lang = e.target.checked ? 'zh' : 'en';*/}
+        {/*            localStorage.setItem('lang', lang);*/}
+        {/*            window.location.reload();*/}
+        {/*          }}*/}
+        {/*        />*/}
+        {/*      }*/}
+        {/*      label=""*/}
+        {/*    />*/}
+        {/*  </TitleBtnBox>*/}
+        {/*</TitleContainer>*/}
         <Box>
           <PriceTable />
         </Box>
