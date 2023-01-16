@@ -68,7 +68,7 @@ function MyCardContentOne({ transactionType, tokenType, getInputVal1 }: CardCont
   );
 }
 
-function MyCardContentSencoed({ transactionType, tokenType, getInputVal2 }: CardContentSencoedProps) {
+function MyCardContentSecond({ transactionType, tokenType, getInputVal2 }: CardContentSencoedProps) {
   const [currency, SetCurrency] = React.useState('EZBT');
   const handleChange = (event: SelectChangeEvent) => {
     SetCurrency(event.target.value as string);
@@ -117,4 +117,4 @@ function MyCardContentSencoed({ transactionType, tokenType, getInputVal2 }: Card
   );
 }
 
-export { MyCardContentOne, MyCardContentSencoed };
+export { MyCardContentOne, MyCardContentSecond };

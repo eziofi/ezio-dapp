@@ -45,7 +45,7 @@ import {
   FooterContent,
 } from './PurchaseStyle';
 import CachedIcon from '@mui/icons-material/Cached';
-import { MyCardContentOne, MyCardContentSencoed } from '../components/CardContent';
+import { MyCardContentOne, MyCardContentSecond } from '../components/CardContent';
 
 export default function Purchase() {
   const [type, setType] = useState(TRANSFER_TYPE.PURCHASE); // 初始化是购买
@@ -98,7 +98,7 @@ export default function Purchase() {
       {/* 卡片2 */}
       <ContentTop>
         <CardContent>
-          <MyCardContentSencoed
+          <MyCardContentSecond
             transactionType={type}
             // tokenType={tab === 0 ? TOKEN_TYPE.EZBT : TOKEN_TYPE.EZAT}
             getInputVal2={getInputVal2}

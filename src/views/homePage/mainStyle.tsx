@@ -33,7 +33,7 @@ const ChartBox = styled('div')(() => {
   return {
     margin: '18px 0',
     padding: '18px 14px',
-    backgroundColor: 'rgba(26, 32, 47, 1)',
+    // backgroundColor: 'rgba(26, 32, 47, 1)',
   };
 });
 
