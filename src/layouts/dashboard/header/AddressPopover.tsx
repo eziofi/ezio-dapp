@@ -1,13 +1,15 @@
-import { Box, Button, Divider, MenuItem, Popover, Stack, Typography } from '@mui/material';
+import { Box, Button, Popover, Stack, Typography, Avatar, IconButton, Snackbar } from '@mui/material';
 import useWallet from '../../../views/hooks/useWallet';
 import { useTranslation } from 'react-i18next';
 import account from '../../../_mock/account';
 import { useState } from 'react';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
-
+import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
+import { styled } from '@mui/material/styles';
 export default function AddressPopover() {
   const { connectState, connect, disconnect, account, ethersProvider } = useWallet();
   const [open, setOpen] = useState<(EventTarget & HTMLButtonElement) | null>(null);
+  const [copyFlag, setCopyFlag] = useState<boolean>(false);
   const { t } = useTranslation();
 
   const addressToShow = account.substring(0, 7) + '...' + account.substring(account.length - 7, account.length);
@@ -20,6 +22,29 @@ export default function AddressPopover() {
   const handleClose = () => {
     setOpen(null);
   };
+
+  const TextDiv = styled('div')({
+    textAlign: 'center',
+    fontSize: '28px',
+  });
+
+  const copyText = () => {
+    var copyDOM = document.getElementById('account'); //需要复制文字的节点
+    var range = document.createRange(); //创建一个range
+    window.getSelection()?.removeAllRanges(); //清楚页面中已有的selection
+    range.selectNode(copyDOM as any); // 选中需要复制的节点
+    window.getSelection()?.addRange(range); // 执行选中元素
+    var successful = document.execCommand('copy');
+    setCopyFlag(true);
+    // message.success('复制成功!');
+  };
+  const copyClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setCopyFlag(false);
+  };
+
   return (
     <>
       {connectState === 'connected' ? (
@@ -50,7 +75,7 @@ export default function AddressPopover() {
             p: 0,
             mt: 1.5,
             ml: 0.75,
-            width: 180,
+            width: 313,
             '& .MuiMenuItem-root': {
               typography: 'body2',
               borderRadius: 0.75,
@@ -58,17 +83,42 @@ export default function AddressPopover() {
           },
         }}
       >
-        <Box sx={{ my: 1.5, px: 2.5 }}>
-          <Typography variant="subtitle2" noWrap>
+        <Box sx={{ my: 1.5, px: 2.5, display: 'flex', alignItems: 'center' }}>
+          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" sx={{ width: 24, height: 24, marginRight: 1 }} />
+          <Typography id="account" variant="subtitle2" noWrap sx={{ width: '60%' }}>
             {account}
           </Typography>
+          <IconButton color="primary" sx={{ marginLeft: '20px', color: 'rgb(108, 75, 246)' }} onClick={copyText}>
+            <ContentCopyRoundedIcon />
+          </IconButton>
         </Box>
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+        {/* <Divider sx={{ borderStyle: 'dashed' }} /> */}
 
-        <MenuItem onClick={logout} sx={{ m: 1 }}>
-          {t('home.logout')}
-        </MenuItem>
+        <Box sx={{ my: 1.5, px: 2.5 }}>
+          <TextDiv>0USDT</TextDiv>
+          <Button
+            sx={{
+              width: '100%',
+              background: 'linear-gradient(180deg, rgba(108, 75, 246, 1) 0%, rgba(113, 79, 251, 1) 100%)',
+              borderRadius: '36px',
+            }}
+            onClick={logout}
+            variant="contained"
+          >
+            {t('home.logout')}
+          </Button>
+        </Box>
+        <Snackbar
+          open={copyFlag}
+          autoHideDuration={1000}
+          onClose={copyClose}
+          message="复制成功"
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        />
       </Popover>
     </>
   );
