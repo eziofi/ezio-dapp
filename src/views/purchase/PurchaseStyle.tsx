@@ -1,18 +1,13 @@
 import { Box, Button, Card, FormControl } from '@mui/material';
 import { styled } from '@mui/system';
-
-interface IProps {
-  children?: React.ReactElement[] | React.ReactElement;
-  className?: string;
-}
+import { IProps } from '../styleType';
 
 const PurchaseContainer = styled((props: IProps) => {
   return <Card {...props} />;
 })(() => {
   return {
-    width: '95%',
+    width: 'lg',
     height: 588,
-    opacity: 1,
     background: 'rgba(255, 255, 255, 1)',
     margin: '0 auto',
     display: 'flex',
@@ -32,12 +27,12 @@ const ContentBottom = styled((props: IProps) => {
       position: 'absolute',
       content: '""',
       width: 45,
-      height: 40,
+      height: 45,
       // background: '#eef1f9',
       borderRadius: '100%',
       top: '100%',
       left: '50%',
-      transform: 'translate(-50%, -50%)',
+      transform: 'translate(-50%, -25%)',
       border: '1px solid  rgba(229, 224, 251, 1);',
     },
   };
@@ -54,12 +49,12 @@ const ContentTop = styled((props: IProps) => {
       position: 'absolute',
       content: '""',
       width: 45,
-      height: 40,
+      height: 45,
       // background: '#eef1f9',
       borderRadius: '100%',
-      top: 0,
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
+      top: '0',
+      right: '50%',
+      transform: 'translate(50%, -75%)',
       border: '1px solid  rgba(229, 224, 251, 1);',
     },
   };
@@ -67,19 +62,31 @@ const ContentTop = styled((props: IProps) => {
 
 const ConverBtn = styled('div')(() => {
   return {
-    minWidth: 40,
-    maxWidth: 40,
-    height: 40,
+    minWidth: 45,
+    maxWidth: 45,
+    height: 45,
     borderRadius: '50%',
     alignContent: 'center',
-    margin: '-15px 0 -15px 0',
-    background: 'rgba(110, 76, 248, 1)',
+    margin: '-12px 0 -12px 0',
+    background: 'rgba(247, 248, 249, 100ch)',
     zIndex: 100,
-    border: '1px solid rgba(145, 158, 171, 0.24)',
+    // border: '1px solid rgba(145, 158, 171, 0.24)',
+    borderRight: 'none',
+    borderLeft: 'none',
     // boxShadow: '0 0 2px 0 rgb(145 158 171 / 20%), 0 12px 24px -4px rgb(145 158 171 / 12%)',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    '.iconBtn': {
+      width: 35,
+      height: 35,
+      borderRadius: '50%',
+      background: 'rgba(110, 76, 248, 1)',
+      border: 'none',
+      ':hover': {
+        background: 'rgba(110, 76, 248, 1)',
+      },
+    },
   };
 });
 
@@ -111,11 +118,13 @@ const FormControlStyle = styled((props: IProps) => {
 
 const DateNow = styled('p')(() => {
   return {
-    marginLeft: 10,
     alignSelf: 'flex-start',
     color: 'rgba(76, 80, 97, 1)',
     fontSize: 14,
     letterSpacing: 0,
+    width: '95%',
+    bgColor: 'red',
+    margin: '10px auto',
   };
 });
 

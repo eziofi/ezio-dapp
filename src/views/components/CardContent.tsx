@@ -1,9 +1,10 @@
-import { CardContent, Select, MenuItem, Input, SelectChangeEvent } from '@mui/material';
+import { CardContent, Select, MenuItem, Input, SelectChangeEvent, styled } from '@mui/material';
 import React, { Dispatch, SetStateAction } from 'react';
 import { BalanceContent, BodyContent, FormControlStyle } from '../purchase/PurchaseStyle';
 import { useTranslation } from 'react-i18next';
 import { useBalance } from '../../hooks/useBalance';
 import { formatNetWorth, formatNum, timestampFormat } from '../../views/wallet/helpers/utilities';
+import TextField from '@mui/material/TextField';
 
 interface IProps {
   isBuy?: boolean;
@@ -18,6 +19,27 @@ type CardContentOneProps = Pick<IProps, 'transactionType' | 'tokenType' | 'getIn
 type CardContentSencoedProps = Pick<IProps, 'transactionType' | 'tokenType' | 'getInputVal2'>;
 
 import { TOKEN_BALANCE_TYPE, TOKEN_TYPE, TRANSFER_TYPE } from '../../views/wallet/helpers/constant';
+
+const CssTextField = styled(TextField)({
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      border: 'none',
+    },
+    '&.Mui-focused fieldset': {
+      border: 'none',
+    },
+    '& .MuiOutlinedInput-notchedOutline': {
+      border: 'none',
+    },
+    '#custom-css-outlined-input': {
+      fontSize: 40,
+      width: 100,
+      color: 'rgba(191, 191, 191, 1)',
+      textAlign: 'center',
+      padding: 0,
+    },
+  },
+});
 function MyCardContentOne({ transactionType, tokenType, getInputVal1 }: CardContentOneProps) {
   const { t } = useTranslation();
   const { balance, refetchBalance } = useBalance(
@@ -32,14 +54,21 @@ function MyCardContentOne({ transactionType, tokenType, getInputVal1 }: CardCont
     SetCurrency(event.target.value as string);
   };
 
+  const customTextField: any = {
+    fontSize: 40,
+    width: 100,
+    color: 'rgba(191, 191, 191, 1)',
+    textAlign: 'center',
+    ...TextField,
+  };
+
   return (
     <BodyContent>
-      <Input
+      <CssTextField
+        id="custom-css-outlined-input"
         size="small"
-        sx={{ fontSize: 40, width: 100, color: 'rgba(191, 191, 191, 1)', textAlign: 'center' }}
-        onChange={e => {
-          getInputVal1(e.target.value);
-        }}
+        placeholder="0"
+        onChange={e => getInputVal1(e.target.value)}
       />
       {transactionType === TRANSFER_TYPE.PURCHASE ? (
         <BalanceContent>
@@ -85,9 +114,10 @@ function MyCardContentSecond({ transactionType, tokenType, getInputVal2 }: CardC
 
   return (
     <BodyContent>
-      <Input
+      <CssTextField
+        id="custom-css-outlined-input"
         size="small"
-        sx={{ fontSize: 40, width: 100, color: 'rgba(191, 191, 191, 1)', textAlign: 'center' }}
+        placeholder="0"
         onChange={e => getInputVal2(e.target.value)}
       />
       {transactionType === TRANSFER_TYPE.PURCHASE ? (

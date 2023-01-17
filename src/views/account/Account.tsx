@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useState } from 'react';
 import rollbackIcon from '../../assets/account/rollback@2x.png';
-import { IconButton } from '@mui/material';
+import { Card, CardContent, IconButton } from '@mui/material';
 import AccountDetail from './AccountDetail';
 import styles from './account.module.less';
 import useWallet from '../hooks/useWallet';
@@ -14,6 +14,11 @@ import { formatNum, toNum } from '../wallet/helpers/utilities';
 import { useTranslation } from 'react-i18next';
 import { useBalance } from '../../hooks/useBalance';
 import { useNetWorth } from '../../hooks/useNetWorth';
+import { PurchaseContainer } from '../purchase/PurchaseStyle';
+import { AccountCard, AccountCardBox, AccountToolBar, Content } from './AccountStyle';
+import UndoIcon from '@mui/icons-material/Undo';
+import ReplyIcon from '@mui/icons-material/Reply';
+import BaseIconFont from '../components/BaseIconFont';
 
 export default function Account() {
   const [page, setPage] = useState('account');
@@ -39,71 +44,136 @@ export default function Account() {
     const { balance } = useBalance(type);
     const { netWorth } = useNetWorth(type === TOKEN_BALANCE_TYPE.EZAT ? TOKEN_TYPE.EZAT : TOKEN_TYPE.EZBT);
 
+    const IconStyle = {
+      width: 50,
+      height: 50,
+      borderRadius: '50%',
+      marginRight: 10,
+      opacity: 1,
+    };
+
     return (
-      <div className={styles.tokenCard}>
-        {type === TOKEN_BALANCE_TYPE.USDT ? (
-          <>
-            <div className={styles.tokenText}>{type}</div>
-            <div className={styles.tokenAmount}>{toNum(balance)}</div>
-            <div className={styles.tokenValue}>
-              {t('account.netWorth')}: ${formatNum(balance).toUnsafeFloat().toFixed(2)}
-            </div>
-          </>
-        ) : (
-          <>
-            <div className={styles.tokenText}>{type}</div>
-            <div className={styles.tokenAmount}>{toNum(balance)}</div>
-            <div className={styles.tokenValue}>
-              {t('account.netWorth')}: ${formatNum(balance).mulUnsafe(formatNum(netWorth)).toUnsafeFloat().toFixed(2)}
-            </div>
-          </>
-        )}
-      </div>
+      <AccountCard>
+        <Content>
+          {type === TOKEN_BALANCE_TYPE.USDT ? (
+            <>
+              {/* icon */}
+              {/* <Box sx={{ width: 50, height: 50, borderRadius: '50%', background: 'pink', marginRight: 2 }} /> */}
+              <BaseIconFont name="icon-B" style={{ ...IconStyle, background: 'rgba(26, 107, 173, 1)' }} />
+              <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box>
+                  <div style={{ fontSize: 20 }}>{type}</div>
+                  <div style={{ fontSize: 12, color: 'rgba(76, 80, 97, 1)' }}>
+                    {t('account.netWorth')}: ${formatNum(balance).toUnsafeFloat().toFixed(2)}
+                  </div>
+                </Box>
+                <div>
+                  <div style={{ fontSize: 40, color: 'rgba(67, 207, 124, 1)' }}>{toNum(balance)}</div>
+                </div>
+              </Box>
+            </>
+          ) : (
+            <>
+              {/* icon */}
+              {/* <Box sx={{ width: 50, height: 50, borderRadius: '50%', background: 'pink', marginRight: 2 }} /> */}
+              <BaseIconFont
+                name={type === TOKEN_BALANCE_TYPE.EZAT ? 'icon-A' : 'icon-qiandaizi'}
+                style={{
+                  ...IconStyle,
+                  background: type === TOKEN_BALANCE_TYPE.EZAT ? 'rgba(95, 69, 186, 1)' : 'rgba(255, 87, 0, 1)',
+                }}
+              />
+              <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box>
+                  <div style={{ fontSize: 20 }}>{type}</div>
+                  <div style={{ fontSize: 12, color: 'rgba(76, 80, 97, 1)' }}>
+                    {t('account.netWorth')}: ${formatNum(balance).toUnsafeFloat().toFixed(2)}
+                  </div>
+                </Box>
+                <div>
+                  <div style={{ fontSize: 40, color: 'rgba(67, 207, 124, 1)' }}>{toNum(balance)}</div>
+                </div>
+              </Box>
+            </>
+          )}
+        </Content>
+      </AccountCard>
     );
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {page === 'account' ? t('account.balance') : t('account.detail')}
-          </Typography>
-          {page === 'account' ? (
-            <Button color="inherit" onClick={() => setPage('detail')}>
-              {t('account.checkDetail')}
-            </Button>
-          ) : (
-            <IconButton size="large" edge="start" color="inherit" onClick={() => setPage('account')}>
-              <img src={rollbackIcon} width="24" />
-            </IconButton>
-          )}
-        </Toolbar>
-      </AppBar>
+    // <Box sx={{ flexGrow: 1 }}>
+    //   <AppBar position="static">
+    //     <Toolbar>
+    //       <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+    //         {page === 'account' ? t('account.balance') : t('account.detail')}
+    //       </Typography>
+    //       {page === 'account' ? (
+    //         <Button color="inherit" onClick={() => setPage('detail')}>
+    //           {t('account.checkDetail')}
+    //         </Button>
+    //       ) : (
+    //         <IconButton size="large" edge="start" color="inherit" onClick={() => setPage('account')}>
+    //           <img src={rollbackIcon} width="24" />
+    //         </IconButton>
+    //       )}
+    //     </Toolbar>
+    //   </AppBar>
+    //   {page === 'account' ? (
+    //     <>
+    //       <div className={styles.accountBox}>
+    //         <div className={styles.tokenCardBox}>
+    //           <TokenCard type="USDT" />
+    //           <TokenCard type="EZAT" />
+    //           <TokenCard type="EZBT" />
+    //         </div>
+    //       </div>
+    //       {/*<div style={{ paddingLeft: '14px', paddingRight: '14px', width: '100%' }}>*/}
+    //       {/*  <Button*/}
+    //       {/*    variant="contained"*/}
+    //       {/*    disableElevation*/}
+    //       {/*    sx={{ width: '100%', marginTop: '20px' }}*/}
+    //       {/*    onClick={extractEzio}*/}
+    //       {/*    disabled={!(purchaseInvitation && purchaseInvitation[4])}*/}
+    //       {/*  >*/}
+    //       {/*    {t('account.extractAction')}*/}
+    //       {/*  </Button>*/}
+    //       {/*</div>*/}
+    //     </>
+    //   ) : (
+    //     <AccountDetail />
+    //   )}
+    // </Box>
+    <PurchaseContainer>
+      <AccountToolBar>
+        <Typography variant="h6" component="div">
+          {page === 'account' ? t('account.balance') : t('account.detail')}
+        </Typography>
+        {page === 'account' ? (
+          // <Button color="inherit" >
+          //   {t('account.checkDetail')}
+          // </Button>
+          <IconButton onClick={() => setPage('detail')}>
+            <BaseIconFont name="icon-jiaofeizhangdan_active" style={{ width: 20, height: 20 }} />
+          </IconButton>
+        ) : (
+          <IconButton onClick={() => setPage('account')}>
+            {/* <img src={rollbackIcon} width="24" style={{ background: 'red' }} /> */}
+            {/* <ReplyIcon /> */}
+            <BaseIconFont name="icon-chexiao" style={{ width: 20, height: 20 }} />
+          </IconButton>
+        )}
+      </AccountToolBar>
+
       {page === 'account' ? (
-        <>
-          <div className={styles.accountBox}>
-            <div className={styles.tokenCardBox}>
-              <TokenCard type="USDT" />
-              <TokenCard type="EZAT" />
-              <TokenCard type="EZBT" />
-            </div>
-          </div>
-          {/*<div style={{ paddingLeft: '14px', paddingRight: '14px', width: '100%' }}>*/}
-          {/*  <Button*/}
-          {/*    variant="contained"*/}
-          {/*    disableElevation*/}
-          {/*    sx={{ width: '100%', marginTop: '20px' }}*/}
-          {/*    onClick={extractEzio}*/}
-          {/*    disabled={!(purchaseInvitation && purchaseInvitation[4])}*/}
-          {/*  >*/}
-          {/*    {t('account.extractAction')}*/}
-          {/*  </Button>*/}
-          {/*</div>*/}
-        </>
+        <AccountCardBox>
+          <TokenCard type="USDT" />
+          <TokenCard type="EZAT" />
+          <TokenCard type="EZBT" />
+        </AccountCardBox>
       ) : (
         <AccountDetail />
       )}
-    </Box>
+    </PurchaseContainer>
   );
 }

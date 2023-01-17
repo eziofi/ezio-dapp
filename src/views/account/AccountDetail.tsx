@@ -4,55 +4,129 @@ import { timestampFormat } from '../wallet/helpers/utilities';
 import { t } from 'i18next';
 import { useRecord } from '../../hooks/useRecord';
 import { PurchaseRecord, RedeemRecord } from '../wallet/helpers/contract_call';
-
+import { Avatar, CardContent, List, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
+import WorkIcon from '@mui/icons-material/Work';
+import ImageIcon from '@mui/icons-material/Image';
+import BeachAccessIcon from '@mui/icons-material/BeachAccess';
+import Divider from '@mui/material/Divider';
+import { Box } from '@mui/system';
+import BaseIconFont from '../components/BaseIconFont';
 export default function AccountDetail() {
   const recordList = useRecord();
 
+  const list: (RedeemRecord | PurchaseRecord)[] = [
+    {
+      timestamp: 0,
+      amt: 'a',
+      qty: 'a',
+      transferType: TRANSFER_TYPE.REDEEM,
+      tokenType: 1,
+    },
+    {
+      timestamp: 1,
+      amt: 'a',
+      qty: 'a',
+      transferType: TRANSFER_TYPE.PURCHASE,
+      tokenType: 0,
+    },
+  ];
+
   return (
-    <div className={styles.accountDetailBox}>
-      {recordList?.map((record, index) => (
+    // <div className={styles.accountDetailBox}>
+    //   {recordList?.map((record, index) => (
+    //     <DetailItem record={record} key={record.timestamp} />
+    //   ))}
+    // </div>
+    <>
+      {list?.map((record, index) => (
         <DetailItem record={record} key={record.timestamp} />
       ))}
-    </div>
+    </>
   );
 }
 
 const DetailItem = ({ record }: { record: PurchaseRecord | RedeemRecord }) => {
   const { transferType: type, timestamp, amt, qty } = record;
+  console.log(record);
+
   const titleMap = {
     [TRANSFER_TYPE.PURCHASE]: t('account.recordPurchaseAction'),
     [TRANSFER_TYPE.REDEEM]: t('account.recordRedeemAction'),
   };
+
+  const fontStyle = {
+    width: 20,
+    height: 20,
+  };
+
   return (
-    <div className={styles.detailItemBox}>
-      <div className={styles.detailItem}>
-        <div className={styles.column1}>
-          <div className={styles.title}>
-            {titleMap[type]}
-            {/*{type === TRANSFER_TYPE.PURCHASE && <span>{ezat ? ' EZAT' : ezbt ? ' EZBT' : ''}</span>}*/}
+    // <div className={styles.detailItemBox}>
+    //   <div className={styles.detailItem}>
+    //     <div className={styles.column1}>
+    //       <div className={styles.title}>
+    //         {titleMap[type]}
+    //         {/* {type === TRANSFER_TYPE.PURCHASE && <span>{ezat ? ' EZAT' : ezbt ? ' EZBT' : ''}</span>} */}
+    //       </div>
+    //     </div>
+    //     <div className={styles.column2}>
+    //       {type === TRANSFER_TYPE.PURCHASE ? (
+    //         <>
+    //           <div className={styles.valueOut}>-{amt} USDT</div>
+    //           <div className={styles.valueIn}>
+    //             +{qty} {record.tokenType === 0 ? 'EZAT' : 'EZBT'}
+    //           </div>
+    //         </>
+    //       ) : type === TRANSFER_TYPE.REDEEM ? (
+    //         <>
+    //           <div className={styles.valueIn}>+{amt} USDT</div>
+    //           <div className={styles.valueOut}>
+    //             -{qty} {record.tokenType === 0 ? 'EZAT' : 'EZBT'}
+    //           </div>
+    //         </>
+    //       ) : (
+    //         <></>
+    //       )}
+    //     </div>
+    //   </div>
+    // </div>
+    <List sx={{ width: '97%' }}>
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar sx={{ background: 'rgba(247, 248, 250, 1)' }}>
+            {/* <ImageIcon /> */}
+            <BaseIconFont
+              name={titleMap[type] === t('account.recordPurchaseAction') ? 'icon-basket-fill-copy' : 'icon-maihuo-copy'}
+              style={fontStyle}
+            />
+          </Avatar>
+        </ListItemAvatar>
+        <Box sx={{ display: 'flex', alignItem: 'center', width: '100%' }}>
+          <ListItemText
+            primary={
+              type === TRANSFER_TYPE.PURCHASE ? (
+                (record.tokenType === 0 ? 'EZAT' : 'EZBT') + titleMap[type]
+              ) : type === TRANSFER_TYPE.REDEEM ? (
+                (record.tokenType === 0 ? 'EZAT' : 'EZBT') + titleMap[type]
+              ) : (
+                <></>
+              )
+            }
+            secondary={<span style={{ fontSize: 12 }}>{timestampFormat(timestamp)}</span>}
+          />
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              fontSize: 20,
+              color: 'rgba(67, 207, 124, 1)',
+              margin: '0 10px 0 0',
+            }}
+          >
+            +999
           </div>
-          <div className={styles.timestamp}>{timestampFormat(timestamp)}</div>
-        </div>
-        <div className={styles.column2}>
-          {type === TRANSFER_TYPE.PURCHASE ? (
-            <>
-              <div className={styles.valueOut}>-{amt} USDT</div>
-              <div className={styles.valueIn}>
-                +{qty} {record.tokenType === 0 ? 'EZAT' : 'EZBT'}
-              </div>
-            </>
-          ) : type === TRANSFER_TYPE.REDEEM ? (
-            <>
-              <div className={styles.valueIn}>+{amt} USDT</div>
-              <div className={styles.valueOut}>
-                -{qty} {record.tokenType === 0 ? 'EZAT' : 'EZBT'}
-              </div>
-            </>
-          ) : (
-            <></>
-          )}
-        </div>
-      </div>
-    </div>
+        </Box>
+      </ListItem>
+      <Divider />
+    </List>
   );
 };

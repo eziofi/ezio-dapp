@@ -2,7 +2,7 @@ import TokenTabs from './components/TokenTabs';
 import { Dispatch, SetStateAction, useState, useTransition } from 'react';
 import styles from './purchase.module.less';
 import TextField from '@mui/material/TextField';
-import { Button, Link, Snackbar } from '@mui/material';
+import { Button, Link, Snackbar, Toolbar } from '@mui/material';
 import PurchaseRecordTable from './components/PurchaseRecordTable';
 import PurchaseDrawer from './components/PurchaseDrawer';
 import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
@@ -70,11 +70,13 @@ export default function Purchase() {
 
   return (
     <PurchaseContainer>
-      <Typography sx={{ margin: '22px 0 22px 10px', alignSelf: 'flex-start' }}>
-        {t('purchase.purchaseValue')}
-      </Typography>
+      <Toolbar sx={{ width: '98%', alignSelf: 'flex-start', margin: '0 auto' }}>
+        <Typography variant="h6" component="div">
+          {t('purchase.purchaseValue')}
+        </Typography>
+      </Toolbar>
       {/* 卡片1 */}
-      <ContentBottom>
+      <ContentBottom sx={{ borderColor: `${inputValue1 ? 'rgba(110, 76, 248, 1)' : ''}` }}>
         <CardContent>
           <MyCardContentOne
             transactionType={type}
@@ -86,7 +88,8 @@ export default function Purchase() {
       {/* cover btn */}
       <ConverBtn>
         <IconButton
-          size="large"
+          className="iconBtn"
+          // size="large"
           sx={{ color: 'white' }}
           onClick={() => {
             setType(type === TRANSFER_TYPE.PURCHASE ? TRANSFER_TYPE.REDEEM : TRANSFER_TYPE.PURCHASE);
@@ -96,7 +99,7 @@ export default function Purchase() {
         </IconButton>
       </ConverBtn>
       {/* 卡片2 */}
-      <ContentTop>
+      <ContentTop sx={{ borderColor: `${inputValue2 ? 'rgba(110, 76, 248, 1)' : ''}` }}>
         <CardContent>
           <MyCardContentSecond
             transactionType={type}
