@@ -54,8 +54,8 @@ function EzbtConnect(signerOrProvider: Signer | Provider): EzbtERC20 {
 }
 
 /*function EzioConnect(signerOrProvider: Signer | Provider): EzioERC20 {
-    return EzioERC20__factory.connect(ezioJson.address, signerOrProvider);
-  }*/
+  return EzioERC20__factory.connect(ezioJson.address, signerOrProvider);
+}*/
 
 function EzPurchaseConnect(signerOrProvider: Signer | Provider): EzPurchase {
   return EzPurchase__factory.connect(purchaseJson.address, signerOrProvider);
@@ -108,16 +108,16 @@ export async function ezbtBalanceOf(signerOrProvider: Signer | Provider, address
  * @returns ezio token 数量
  */
 /*export async function ezioBalanceOf(signerOrProvider: Signer | Provider, address: string): Promise<BigNumber> {
-    return EzioConnect(signerOrProvider).balanceOf(address);
-  }*/
+  return EzioConnect(signerOrProvider).balanceOf(address);
+}*/
 
 /**
  * 获取账户的 eth 余额
  * @returns eth 余额
  */
 /*export async function ethBalanceOf(signerOrProvider: Signer | Provider): Promise<BigNumber> {
-    return signerOrProvider.getBalance('latest');
-  }*/
+  return signerOrProvider.getBalance('latest');
+}*/
 
 /**
  * 获取 usdt token 数量
@@ -149,8 +149,8 @@ export async function ezbtNetWorth(signerOrProvider: Signer | Provider): Promise
  * @returns ezio totalSupply
  */
 /*export async function ezioTotalSupply(signerOrProvider: Signer | Provider): Promise<BigNumber> {
-    return EzioConnect(signerOrProvider).totalSupply();
-  }*/
+  return EzioConnect(signerOrProvider).totalSupply();
+}*/
 
 /**
  * 获取 ezat totalSupply
