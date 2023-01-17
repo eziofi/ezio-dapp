@@ -15,11 +15,11 @@ const navConfig = [
     path: '/dashboard/purchase',
     icon: icon('ic_cart'),
   },
-  {
-    title: 'Redeem',
-    path: '/dashboard/redeem',
-    icon: icon('ic_cart'),
-  },
+  // {
+  //   title: 'Redeem',
+  //   path: '/dashboard/redeem',
+  //   icon: icon('ic_cart'),
+  // },
   {
     title: 'Account',
     path: '/dashboard/account',

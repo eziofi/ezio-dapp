@@ -6,6 +6,17 @@ import { Card, SxProps, Theme, Typography } from '@mui/material';
 import { fShortenNumber } from '../../../utils/formatNumber';
 // components
 import Iconify from '../../../components/iconify';
+import { useTranslation } from 'react-i18next';
+import useWallet from '../../hooks/useWallet';
+import {
+  ezatTotalSupply,
+  ezbtTotalSupply,
+  treasuryInterestRate,
+  treasuryTotalNetWorth,
+} from '../../wallet/helpers/contract_call';
+import { useQuery } from 'react-query';
+import { MintCardValue } from '../../homePage/mainStyle';
+import { formatNetWorth, toNum } from '../../wallet/helpers/utilities';
 
 // ----------------------------------------------------------------------
 
@@ -20,30 +31,54 @@ const StyledIcon = styled('div')(({ theme }) => ({
   marginBottom: theme.spacing(3),
 }));
 
-// ----------------------------------------------------------------------
-
-AppWidgetSummary.propTypes = {
-  color: PropTypes.string,
-  icon: PropTypes.string,
-  title: PropTypes.string.isRequired,
-  total: PropTypes.number.isRequired,
-  sx: PropTypes.object,
-};
-
+enum VALUE_TYPE {
+  EZAT = 'EZAT',
+  EZBT = 'EZBT',
+  treasury = 'treasury',
+  rate = 'rate',
+}
 export default function AppWidgetSummary({
-  title,
-  total,
-  icon,
+  type,
   color = 'primary',
   sx,
   ...other
 }: {
-  title: string;
-  total: number;
-  icon: string;
+  type: keyof typeof VALUE_TYPE;
   color?: 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
   sx?: SxProps<Theme>;
 }) {
+  const { t } = useTranslation();
+  const { ethersProvider } = useWallet();
+
+  const api = {
+    EZAT: ezatTotalSupply,
+    EZBT: ezbtTotalSupply,
+    treasury: treasuryTotalNetWorth,
+    rate: treasuryInterestRate,
+  };
+  const title = {
+    EZAT: t('home.EZAT_totalSupply'),
+    EZBT: t('home.EZBT_totalSupply'),
+    treasury: t('home.treasury_totalValue'),
+    rate: t('home.EZAT_Rate'),
+  };
+  const icon = {
+    EZAT: 'ant-design:android-filled',
+    EZBT: 'ant-design:android-filled',
+    treasury: 'ant-design:android-filled',
+    rate: 'ant-design:android-filled',
+  };
+  const { data } = useQuery(['totalSupply', type], () => api[type](ethersProvider!.getSigner()), {
+    onSuccess: data1 => {
+      // if (type === VALUE_TYPE.rate) {
+      //   const res = formatNetWorth(data1);
+      //   debugger;
+      // }
+    },
+    onError: err => {
+      // debugger;
+    },
+  });
   return (
     <Card
       sx={{
@@ -68,13 +103,16 @@ export default function AppWidgetSummary({
             )} 100%)`,
         }}
       >
-        <Iconify icon={icon} width={24} height={24} />
+        <Iconify icon={icon[type]} width={24} height={24} />
       </StyledIcon>
 
-      <Typography variant="h3">{fShortenNumber(total)}</Typography>
-
+      {type === VALUE_TYPE.rate ? (
+        <Typography variant="h3">{data ? (parseFloat(formatNetWorth(data)) / 10000).toFixed(2) : 0} ‱</Typography>
+      ) : (
+        <Typography variant="h3">{data ? toNum(data).toFixed() : 0}</Typography>
+      )}
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-        {title}
+        {title[type]}
       </Typography>
     </Card>
   );
