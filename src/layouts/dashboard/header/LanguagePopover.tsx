@@ -22,17 +22,17 @@ const LANGS = {
 // ----------------------------------------------------------------------
 
 export default function LanguagePopover() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<(EventTarget & HTMLButtonElement) | null>(null);
 
   const lang = localStorage.getItem('lang');
 
   const handleClose = () => {
-    setOpen(false);
+    setOpen(null);
   };
 
   const changeLang = (_lang: string) => {
     if (_lang === lang) {
-      handleClose();
+      setOpen(null);
       return;
     }
     localStorage.setItem('lang', _lang);
@@ -43,7 +43,7 @@ export default function LanguagePopover() {
     <>
       <IconButton
         onClick={event => {
-          setOpen(true);
+          setOpen(event.currentTarget);
         }}
         sx={{
           padding: 0,
@@ -58,8 +58,8 @@ export default function LanguagePopover() {
       </IconButton>
 
       <Popover
-        open={open}
-        // anchorEl={open}
+        open={Boolean(open)}
+        anchorEl={open}
         onClose={handleClose}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
