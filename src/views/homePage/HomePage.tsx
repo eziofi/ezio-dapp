@@ -84,21 +84,21 @@ export default function HomePage() {
         </Grid>
       </Container>
 
-      <ChartBox>
-        <NetWorthChart />
-      </ChartBox>
-      <ChartBox>
-        <TotalSupplyChart />
-      </ChartBox>
-      {ethersProvider && <TotalSupplyBox />}
-      <NetDrawer
-        opened={netDrawerOpened}
-        close={() => setNetDrawerOpened(false)}
-        netChecked={netChecked}
-        setNetChecked={setNetChecked}
-      />
-      {/*<WalletDrawer opened={walletDrawerOpened} close={() => setWalletDrawerOpened(false)} />*/}
-      <LangDrawer opened={langDrawerOpened} close={() => setLangDrawerOpened(false)} />
+      {/*<ChartBox>*/}
+      {/*  <NetWorthChart />*/}
+      {/*</ChartBox>*/}
+      {/*<ChartBox>*/}
+      {/*  <TotalSupplyChart />*/}
+      {/*</ChartBox>*/}
+      {/*{ethersProvider && <TotalSupplyBox />}*/}
+      {/*<NetDrawer*/}
+      {/*  opened={netDrawerOpened}*/}
+      {/*  close={() => setNetDrawerOpened(false)}*/}
+      {/*  netChecked={netChecked}*/}
+      {/*  setNetChecked={setNetChecked}*/}
+      {/*/>*/}
+      {/*/!*<WalletDrawer opened={walletDrawerOpened} close={() => setWalletDrawerOpened(false)} />*!/*/}
+      {/*<LangDrawer opened={langDrawerOpened} close={() => setLangDrawerOpened(false)} />*/}
     </>
   );
 }

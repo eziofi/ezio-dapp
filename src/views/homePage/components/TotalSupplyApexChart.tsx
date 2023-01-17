@@ -69,7 +69,7 @@ export default function TotalSupplyApexChart() {
 
   return (
     <Card>
-      <CardHeader title={t('home.treasuryValue') as string} />
+      <CardHeader title={t('home.totalSupplyTitle') as string} />
 
       <Box sx={{ p: 3, pb: 1 }} dir="ltr">
         {/*@ts-ignore*/}

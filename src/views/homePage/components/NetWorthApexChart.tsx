@@ -56,13 +56,13 @@ export default function NetWorthApexChart() {
           yaxis: [
             {
               title: {
-                text: t('home.netWorthAxis'),
+                text: t('home.netWorthEzatAxis'),
               },
               max: getYMax([...bNetWorth, ...aNetWorth]),
             },
             {
               title: {
-                text: t('home.netWorthAxis'),
+                text: t('home.netWorthEzbtAxis'),
               },
               max: getYMax([...bNetWorth, ...aNetWorth]),
             },
@@ -86,7 +86,7 @@ export default function NetWorthApexChart() {
 
   return (
     <Card>
-      <CardHeader title={t('home.treasuryValue') as string} />
+      <CardHeader title={t('home.priceTitle') as string} />
 
       <Box sx={{ p: 3, pb: 1 }} dir="ltr">
         {/*@ts-ignore*/}
