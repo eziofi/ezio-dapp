@@ -4,16 +4,13 @@ import { useLocation } from 'react-router-dom';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
 import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
-// mock
-import account from '../../../_mock/account';
 // hooks
 import useResponsive from '../../../hooks/useResponsive';
 // components
-import Logo from '../../../components/logo';
 import Scrollbar from '../../../components/scrollbar';
 import NavSection from '../../../components/nav-section';
-//
-import navConfig from './config';
+import SvgColor from '../../../components/svg-color';
+import { useTranslation } from 'react-i18next';
 
 const logo = require('../../../assets/logo.png');
 
@@ -29,10 +26,13 @@ const StyledAccount = styled('div')(({ theme }) => ({
   backgroundColor: alpha(theme.palette.grey[500], 0.12),
 }));
 
+const icon = (name: string) => <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />;
+
 // ----------------------------------------------------------------------
 
 export default function Nav({ openNav, onCloseNav }: { openNav: boolean; onCloseNav: () => void }) {
   const { pathname } = useLocation();
+  const { t } = useTranslation();
 
   const isDesktop = useResponsive('up', 'lg', 'lg');
 
@@ -41,6 +41,24 @@ export default function Nav({ openNav, onCloseNav }: { openNav: boolean; onClose
       onCloseNav();
     }
   }, [pathname]);
+
+  const navConfig = [
+    {
+      title: t('nav.home'),
+      path: '/dashboard/homePage',
+      icon: icon('ic_dashboard'),
+    },
+    {
+      title: t('nav.swap'),
+      path: '/dashboard/purchase',
+      icon: icon('ic_cart'),
+    },
+    {
+      title: t('nav.account'),
+      path: '/dashboard/account',
+      icon: icon('ic_user'),
+    },
+  ];
 
   const renderContent = (
     <Scrollbar

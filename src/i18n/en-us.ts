@@ -1,6 +1,7 @@
 export default {
   nav: {
     home: 'Home',
+    swap: 'purchase/redeem',
     purchase: 'Purchase',
     redeem: 'Redeem',
     account: 'Account',
