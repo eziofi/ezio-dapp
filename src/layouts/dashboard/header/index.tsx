@@ -13,6 +13,7 @@ import LanguagePopover from './LanguagePopover';
 import NotificationsPopover from './NotificationsPopover';
 import Iconify from '../../../components/iconify';
 import AddressPopover from './AddressPopover';
+import ThemeSwitcher from './ThemeSwitcher';
 
 // ----------------------------------------------------------------------
 
@@ -71,6 +72,7 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
             sm: 1,
           }}
         >
+          <ThemeSwitcher />
           <LanguagePopover />
           {/*<NotificationsPopover />*/}
           {/*<AccountPopover />*/}

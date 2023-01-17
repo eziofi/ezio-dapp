@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 // @mui
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider as MUIThemeProvider, createTheme, StyledEngineProvider } from '@mui/material/styles';
@@ -19,9 +19,11 @@ ThemeProvider.propTypes = {
 };
 
 export default function ThemeProvider({ children }: { children: ReactNode }) {
+  const [mode, setMode] = useState<'light' | 'dark'>('light');
+
   const themeOptions = useMemo(
     () => ({
-      palette,
+      palette: { ...palette, mode },
       shape: { borderRadius: 6 },
       typography,
       shadows: shadows(),
