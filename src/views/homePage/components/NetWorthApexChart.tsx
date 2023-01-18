@@ -1,13 +1,24 @@
 import { Box, Card, CardHeader } from '@mui/material';
 import ReactApexChart from 'react-apexcharts';
-import { useQuery } from 'react-query';
+import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { queryTokenGroup } from '../../../api/api';
 import { t } from 'i18next';
 import { getYMax } from '../../wallet/helpers/utilities';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useTheme } from '@mui/material/styles';
+import { ColorModeContext } from '../../../theme';
 
 export default function NetWorthApexChart() {
   const [option, setOption] = useState<any>(null);
+  const theme = useTheme();
+
+  const { mode } = useContext(ColorModeContext);
+
+  const queryClient: QueryClient = useQueryClient();
+
+  useEffect(() => {
+    queryClient.invalidateQueries('queryTotalNetWorth');
+  }, [mode]);
 
   useQuery('queryTokenGroup', queryTokenGroup, {
     onSuccess: data => {
@@ -35,7 +46,11 @@ export default function NetWorthApexChart() {
           },
         ],
         options: {
+          theme: {
+            mode,
+          },
           chart: {
+            background: 'transparent',
             height: 350,
             type: 'line',
             toolbar: {
@@ -55,6 +70,7 @@ export default function NetWorthApexChart() {
           },
           yaxis: [
             {
+              show: false,
               title: {
                 text: t('home.netWorthEzatAxis'),
               },
@@ -62,7 +78,7 @@ export default function NetWorthApexChart() {
             },
             {
               title: {
-                text: t('home.netWorthEzbtAxis'),
+                text: t('home.netWorthAxis'),
               },
               max: getYMax([...bNetWorth, ...aNetWorth]),
             },
@@ -72,7 +88,6 @@ export default function NetWorthApexChart() {
                 text: t('home.aRateAxis'),
               },
               max: getYMax(aRate),
-              // interval: getYMax(ethData) / 5,
             },
           ],
           tooltip: {

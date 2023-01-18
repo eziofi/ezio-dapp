@@ -31,6 +31,7 @@ export default {
     treasuryValue: 'Treasury Value',
     priceTitle: 'Token Price',
     ethPrice: 'Eth Price',
+    netWorthAxis: 'Price',
     netWorthEzatAxis: 'Ezat Price',
     netWorthEzbtAxis: 'Ezbt Price',
     aRateAxis: 'EZAT Rate',

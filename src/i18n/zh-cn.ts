@@ -30,6 +30,7 @@ export default {
     treasuryValue: '金库市值',
     priceTitle: 'Token价格',
     ethPrice: '以太币价格',
+    netWorthAxis: '价格',
     netWorthEzatAxis: 'Ezat价格',
     netWorthEzbtAxis: 'Ezbt价格',
     aRateAxis: 'EZAT利率',

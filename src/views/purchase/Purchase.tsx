@@ -134,6 +134,7 @@ export default function Purchase() {
 
   const { ethersProvider, account } = useWallet();
   const { data: rate } = useQuery(['EZATrate'], () => treasuryInterestRate(ethersProvider!.getSigner()), {
+    enabled: !!ethersProvider,
     // onSuccess: data => {
     //   const res = formatNetWorth(data);
     //   debugger;

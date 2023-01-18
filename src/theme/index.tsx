@@ -33,7 +33,8 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
   const toggleColorMode = () => {
     const _mode = mode === 'light' ? 'dark' : 'light';
     localStorage.setItem('colorMode', _mode);
-    setMode(_mode);
+    window.location.reload();
+    // setMode(_mode);
   };
 
   const colorModeContext = { mode, toggleColorMode };

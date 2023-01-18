@@ -1,13 +1,23 @@
 import { Box, Card, CardHeader } from '@mui/material';
 import ReactApexChart from 'react-apexcharts';
-import { useQuery } from 'react-query';
+import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { queryTotalNetWorth } from '../../../api/api';
 import { t } from 'i18next';
 import { getYMax } from '../../wallet/helpers/utilities';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useTheme } from '@mui/material/styles';
+import { ColorModeContext } from '../../../theme';
 
 export default function MarketApexChart() {
   const [option, setOption] = useState<any>(null);
+  const theme = useTheme();
+  const { mode } = useContext(ColorModeContext);
+
+  const queryClient: QueryClient = useQueryClient();
+
+  useEffect(() => {
+    queryClient.invalidateQueries('queryTotalNetWorth');
+  }, [mode]);
 
   useQuery('queryTotalNetWorth', queryTotalNetWorth, {
     onSuccess: data => {
@@ -29,7 +39,12 @@ export default function MarketApexChart() {
           },
         ],
         options: {
+          theme: {
+            mode,
+          },
           chart: {
+            // @ts-ignore
+            background: 'transparent',
             height: 350,
             type: 'line',
             toolbar: {
@@ -52,30 +67,22 @@ export default function MarketApexChart() {
               title: {
                 text: t('home.treasuryValue'),
               },
-              min: 5,
+              decimalsInFloat: 0,
+              min: 0,
               max: getYMax(treasuryData),
-              // interval: getYMax(treasuryData) / 5,
             },
             {
               opposite: true,
               title: {
                 text: t('home.ethPrice'),
               },
+              decimalsInFloat: 0,
               max: getYMax(ethData),
-              // interval: getYMax(ethData) / 5,
             },
           ],
           tooltip: {
             shared: true,
             intersect: false,
-            y: {
-              formatter: function (y: any) {
-                if (typeof y !== 'undefined') {
-                  return y.toFixed(0) + ' points';
-                }
-                return y;
-              },
-            },
           },
         },
       });
@@ -87,7 +94,6 @@ export default function MarketApexChart() {
       <CardHeader title={t('home.treasuryValue') as string} />
 
       <Box sx={{ p: 3, pb: 1 }} dir="ltr">
-        {/*@ts-ignore*/}
         {option && <ReactApexChart options={option.options} series={option.series} type="line" height={350} />}
       </Box>
     </Card>

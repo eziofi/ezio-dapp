@@ -1,13 +1,24 @@
 import { Box, Card, CardHeader } from '@mui/material';
 import ReactApexChart from 'react-apexcharts';
-import { useQuery } from 'react-query';
+import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { queryTokenGroup } from '../../../api/api';
 import { t } from 'i18next';
 import { getYMax } from '../../wallet/helpers/utilities';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useTheme } from '@mui/material/styles';
+import { ColorModeContext } from '../../../theme';
 
 export default function TotalSupplyApexChart() {
   const [option, setOption] = useState<any>(null);
+  const theme = useTheme();
+
+  const { mode } = useContext(ColorModeContext);
+
+  const queryClient: QueryClient = useQueryClient();
+
+  useEffect(() => {
+    queryClient.invalidateQueries('queryTotalNetWorth');
+  }, [mode]);
 
   useQuery('queryTokenGroup', queryTokenGroup, {
     onSuccess: data => {
@@ -31,7 +42,11 @@ export default function TotalSupplyApexChart() {
           },
         ],
         options: {
+          theme: {
+            mode,
+          },
           chart: {
+            background: 'transparent',
             height: 350,
             type: 'line',
             toolbar: {
@@ -54,6 +69,7 @@ export default function TotalSupplyApexChart() {
               title: {
                 text: t('home.totalSupplyAxis'),
               },
+              decimalsInFloat: 0,
               min: 0,
               max: totalSupplyMax,
             },
