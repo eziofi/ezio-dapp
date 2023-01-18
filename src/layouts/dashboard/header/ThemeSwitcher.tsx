@@ -1,5 +1,5 @@
 import { IconButton } from '@mui/material';
-import Brightness5Icon from '@mui/icons-material/Brightness5';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import NightlightIcon from '@mui/icons-material/Nightlight';
 import { useContext } from 'react';
 import { ColorModeContext } from '../../../theme';
@@ -9,7 +9,7 @@ export default function ThemeSwitcher() {
   return (
     <>
       <IconButton aria-label="delete" onClick={toggleColorMode}>
-        {mode === 'light' ? <NightlightIcon /> : <Brightness5Icon />}
+        {mode === 'light' ? <NightlightIcon /> : <WbSunnyIcon />}
       </IconButton>
     </>
   );

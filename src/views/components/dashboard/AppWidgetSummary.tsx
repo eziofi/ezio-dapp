@@ -1,6 +1,6 @@
 // @mui
 import PropTypes from 'prop-types';
-import { alpha, styled } from '@mui/material/styles';
+import { alpha, styled, useTheme } from '@mui/material/styles';
 import { Card, SxProps, Theme, Typography } from '@mui/material';
 // utils
 import { fShortenNumber } from '../../../utils/formatNumber';
@@ -17,6 +17,7 @@ import {
 import { useQuery } from 'react-query';
 import { MintCardValue } from '../../homePage/mainStyle';
 import { formatNetWorth, toNum } from '../../wallet/helpers/utilities';
+import BaseIconFont from '../BaseIconFont';
 
 // ----------------------------------------------------------------------
 
@@ -50,6 +51,8 @@ export default function AppWidgetSummary({
   const { t } = useTranslation();
   const { ethersProvider } = useWallet();
 
+  const theme = useTheme();
+
   const api = {
     EZAT: ezatTotalSupply,
     EZBT: ezbtTotalSupply,
@@ -63,12 +66,13 @@ export default function AppWidgetSummary({
     rate: t('home.EZAT_Rate'),
   };
   const icon = {
-    EZAT: 'ant-design:android-filled',
-    EZBT: 'ant-design:android-filled',
-    treasury: 'ant-design:android-filled',
-    rate: 'ant-design:android-filled',
+    EZAT: 'icon-A',
+    EZBT: 'icon-B',
+    treasury: 'icon-zuanshi',
+    rate: 'icon-weidaizijinchilixichaxun',
   };
   const { data } = useQuery(['totalSupply', type], () => api[type](ethersProvider!.getSigner()), {
+    enabled: !!ethersProvider,
     onSuccess: data1 => {
       // if (type === VALUE_TYPE.rate) {
       //   const res = formatNetWorth(data1);
@@ -86,24 +90,34 @@ export default function AppWidgetSummary({
         boxShadow: 0,
         textAlign: 'center',
         // @ts-ignore
-        color: theme => theme.palette[color].darker,
+        color: theme => theme.palette[color][theme.palette.mode === 'light' ? 'darker' : 'lighter'],
         // @ts-ignore
-        bgcolor: theme => theme.palette[color].lighter,
+        bgcolor: theme => theme.palette[color][theme.palette.mode === 'light' ? 'lighter' : 'darker'],
         ...sx,
       }}
       {...other}
     >
       <StyledIcon
         sx={{
-          color: theme => theme.palette[color].dark,
+          // color: theme => theme.palette[color][theme.palette.mode === 'light' ? 'dark' : 'light'],
           backgroundImage: theme =>
-            `linear-gradient(135deg, ${alpha(theme.palette[color].dark, 0)} 0%, ${alpha(
-              theme.palette[color].dark,
-              0.24,
-            )} 100%)`,
+            `linear-gradient(${theme.palette.mode === 'light' ? '135deg' : '-45deg'}, ${alpha(
+              theme.palette[color][theme.palette.mode === 'light' ? 'dark' : 'light'],
+              0,
+            )} 0%, ${alpha(theme.palette[color][theme.palette.mode === 'light' ? 'dark' : 'light'], 0.24)} 100%)`,
         }}
       >
-        <Iconify icon={icon[type]} width={24} height={24} />
+        <BaseIconFont
+          name={icon[type]}
+          style={{
+            width: 22,
+            height: 22,
+            // @ts-ignore
+            fill: theme.palette[color][theme.palette.mode === 'light' ? 'darker' : 'lighter'],
+          }}
+        />
+
+        {/*<Iconify icon={icon[type]} width={24} height={24} />*/}
       </StyledIcon>
 
       {type === VALUE_TYPE.rate ? (

@@ -87,9 +87,9 @@ const paletteDark = {
     disabled: GREY[500],
   },
   background: {
-    paper: GREY[700],
-    default: GREY[900],
-    neutral: GREY[500],
+    paper: GREY[800],
+    default: GREY[900], // 背景
+    neutral: GREY[800],
   },
   action: {
     active: GREY[600],

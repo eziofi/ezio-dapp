@@ -46,6 +46,8 @@ function NavItem({ item }: { item: INavConfig }) {
       component={RouterLink}
       to={path}
       sx={{
+        color: theme => (theme.palette.mode === 'light' ? theme.palette.grey[600] : theme.palette.grey[400]),
+
         '&.active': {
           color: 'text.primary',
           bgcolor: 'action.selected',
@@ -55,7 +57,7 @@ function NavItem({ item }: { item: INavConfig }) {
     >
       <StyledNavItemIcon>{icon && icon}</StyledNavItemIcon>
 
-      <ListItemText disableTypography primary={title} />
+      <ListItemText disableTypography primary={title} sx={{}} />
 
       {info && info}
     </StyledNavItem>
