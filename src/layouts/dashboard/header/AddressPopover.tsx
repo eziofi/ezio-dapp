@@ -113,7 +113,7 @@ export default function AddressPopover() {
           open={copyFlag}
           autoHideDuration={1000}
           onClose={copyClose}
-          message="复制成功"
+          message={t('home.copyText')}
           anchorOrigin={{
             vertical: 'top',
             horizontal: 'center',

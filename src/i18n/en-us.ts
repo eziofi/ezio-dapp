@@ -40,6 +40,7 @@ export default {
     bNetWorthSeries: 'EZBT Price',
     aTotalSupplySeries: 'EZAT Supply',
     bTotalSupplySeries: 'EZBT Supply',
+    copyText: 'Copy Succeeded',
   },
   purchase: {
     purchaseValue: 'Purchase amount',

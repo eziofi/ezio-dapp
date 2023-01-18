@@ -39,6 +39,7 @@ export default {
     bNetWorthSeries: 'EZBT价格',
     aTotalSupplySeries: 'EZAT供应量',
     bTotalSupplySeries: 'EZBT供应量',
+    copyText: '复制成功',
   },
   purchase: {
     purchaseValue: '购买金额',
