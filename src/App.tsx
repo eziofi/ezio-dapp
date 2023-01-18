@@ -11,8 +11,6 @@ import { StyledChart } from './components/chart';
 import WalletProvider from './views/context/WalletProvider';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-// ----------------------------------------------------------------------
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

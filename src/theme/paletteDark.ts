@@ -70,8 +70,8 @@ const ERROR = {
   contrastText: '#fff',
 };
 
-const palette = {
-  mode: 'light',
+const paletteDark = {
+  mode: 'dark',
   common: { black: '#000', white: '#fff' },
   primary: PRIMARY,
   secondary: SECONDARY,
@@ -82,14 +82,14 @@ const palette = {
   grey: GREY,
   divider: alpha(GREY[500], 0.24),
   text: {
-    primary: GREY[800],
+    primary: GREY[100],
     secondary: GREY[600],
     disabled: GREY[500],
   },
   background: {
-    paper: '#fff',
-    default: GREY[100],
-    neutral: GREY[200],
+    paper: GREY[700],
+    default: GREY[900],
+    neutral: GREY[500],
   },
   action: {
     active: GREY[600],
@@ -103,4 +103,4 @@ const palette = {
   },
 };
 
-export default palette;
+export default paletteDark;
