@@ -1,4 +1,4 @@
-import { CardContent, Select, MenuItem, Input, SelectChangeEvent, styled } from '@mui/material';
+import { CardContent, Select, MenuItem, Input, SelectChangeEvent, styled, useTheme } from '@mui/material';
 import React, { Dispatch, SetStateAction } from 'react';
 import { BalanceContent, BodyContent, FormControlStyle } from '../purchase/PurchaseStyle';
 import { useTranslation } from 'react-i18next';
@@ -10,57 +10,55 @@ interface IProps {
   isBuy?: boolean;
   setIsBuy: (buy: boolean) => void;
   transactionType: TRANSFER_TYPE.PURCHASE | TRANSFER_TYPE.REDEEM;
-  tokenType?: TOKEN_TYPE;
+  getTokenType: (tokenType: TOKEN_BALANCE_TYPE) => void;
   getInputVal1: (InputVal: string) => void | any;
   getInputVal2: (InputVal: string) => void;
 }
 
-type CardContentOneProps = Pick<IProps, 'transactionType' | 'tokenType' | 'getInputVal1'>;
-type CardContentSencoedProps = Pick<IProps, 'transactionType' | 'tokenType' | 'getInputVal2'>;
+type CardContentOneProps = Pick<IProps, 'transactionType' | 'getInputVal1' | 'getTokenType'>;
+type CardContentSencoedProps = Pick<IProps, 'transactionType' | 'getInputVal2' | 'getTokenType'>;
 
 import { TOKEN_BALANCE_TYPE, TOKEN_TYPE, TRANSFER_TYPE } from '../../views/wallet/helpers/constant';
 
-const CssTextField = styled(TextField)({
-  '& .MuiOutlinedInput-root': {
-    '& fieldset': {
-      border: 'none',
+const CssTextField = styled(TextField)(() => {
+  const theme = useTheme();
+  return {
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        border: 'none',
+      },
+      '&.Mui-focused fieldset': {
+        border: 'none',
+      },
+      '& .MuiOutlinedInput-notchedOutline': {
+        border: 'none',
+      },
+      '#custom-css-outlined-input': {
+        fontSize: 40,
+        width: 100,
+        color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+        textAlign: 'center',
+        padding: 0,
+      },
     },
-    '&.Mui-focused fieldset': {
-      border: 'none',
-    },
-    '& .MuiOutlinedInput-notchedOutline': {
-      border: 'none',
-    },
-    '#custom-css-outlined-input': {
-      fontSize: 40,
-      width: 100,
-      color: 'rgba(191, 191, 191, 1)',
-      textAlign: 'center',
-      padding: 0,
-    },
-  },
+  };
 });
-function MyCardContentOne({ transactionType, tokenType, getInputVal1 }: CardContentOneProps) {
+function MyCardContentOne({ transactionType, getTokenType, getInputVal1 }: CardContentOneProps) {
   const { t } = useTranslation();
+
+  const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
+  const handleChange = (event: SelectChangeEvent) => {
+    getTokenType(event.target.value as TOKEN_BALANCE_TYPE);
+    SetCurrency(event.target.value as TOKEN_BALANCE_TYPE);
+  };
   const { balance, refetchBalance } = useBalance(
     transactionType === TRANSFER_TYPE.PURCHASE
       ? TOKEN_BALANCE_TYPE.USDT
-      : tokenType === 0
+      : currency === 'EZAT'
       ? TOKEN_BALANCE_TYPE.EZAT
       : TOKEN_BALANCE_TYPE.EZBT,
   );
-  const [currency, SetCurrency] = React.useState('EZBT');
-  const handleChange = (event: SelectChangeEvent) => {
-    SetCurrency(event.target.value as string);
-  };
-
-  const customTextField: any = {
-    fontSize: 40,
-    width: 100,
-    color: 'rgba(191, 191, 191, 1)',
-    textAlign: 'center',
-    ...TextField,
-  };
+  const theme = useTheme();
 
   return (
     <BodyContent>
@@ -69,6 +67,7 @@ function MyCardContentOne({ transactionType, tokenType, getInputVal1 }: CardCont
         size="small"
         placeholder="0"
         onChange={e => getInputVal1(e.target.value)}
+        type="number"
       />
       {transactionType === TRANSFER_TYPE.PURCHASE ? (
         <BalanceContent>
@@ -79,14 +78,24 @@ function MyCardContentOne({ transactionType, tokenType, getInputVal1 }: CardCont
               value={currency}
               onChange={handleChange}
               label="Age"
+              sx={{
+                background: theme.palette.background.paper,
+                color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+              }}
             >
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value="EZBT">EZBT</MenuItem>
+              <MenuItem value={TOKEN_BALANCE_TYPE.EZAT}>EZAT</MenuItem>
+              <MenuItem value={TOKEN_BALANCE_TYPE.EZBT}>EZBT</MenuItem>
             </Select>
           </FormControlStyle>
-          <span style={{ fontSize: 12, color: 'rgba(76, 80, 97, 1)' }}>
+          <span
+            style={{
+              fontSize: 12,
+              color: theme.palette.text.secondary,
+            }}
+          >
             {t('purchase.leftBalance')}: {balance ? formatNum(balance).toUnsafeFloat().toFixed(2) : 0} USDT
           </span>
         </BalanceContent>
@@ -97,17 +106,19 @@ function MyCardContentOne({ transactionType, tokenType, getInputVal1 }: CardCont
   );
 }
 
-function MyCardContentSecond({ transactionType, tokenType, getInputVal2 }: CardContentSencoedProps) {
-  const [currency, SetCurrency] = React.useState('EZBT');
+function MyCardContentSecond({ transactionType, getTokenType, getInputVal2 }: CardContentSencoedProps) {
+  const theme = useTheme();
+  const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
   const handleChange = (event: SelectChangeEvent) => {
-    SetCurrency(event.target.value as string);
+    getTokenType(event.target.value as TOKEN_BALANCE_TYPE);
+    SetCurrency(event.target.value as TOKEN_BALANCE_TYPE);
   };
 
   const { t } = useTranslation();
   const { balance, refetchBalance } = useBalance(
     transactionType === TRANSFER_TYPE.PURCHASE
       ? TOKEN_BALANCE_TYPE.USDT
-      : tokenType === 0
+      : currency === 'EZAT'
       ? TOKEN_BALANCE_TYPE.EZAT
       : TOKEN_BALANCE_TYPE.EZBT,
   );
@@ -119,6 +130,7 @@ function MyCardContentSecond({ transactionType, tokenType, getInputVal2 }: CardC
         size="small"
         placeholder="0"
         onChange={e => getInputVal2(e.target.value)}
+        type="number"
       />
       {transactionType === TRANSFER_TYPE.PURCHASE ? (
         <span>USDT</span>
@@ -131,14 +143,24 @@ function MyCardContentSecond({ transactionType, tokenType, getInputVal2 }: CardC
               value={currency}
               onChange={handleChange}
               label="Age"
+              sx={{
+                background: theme.palette.background.paper,
+                color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+              }}
             >
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value="EZBT">EZBT</MenuItem>
+              <MenuItem value={TOKEN_BALANCE_TYPE.EZAT}>EZAT</MenuItem>
+              <MenuItem value={TOKEN_BALANCE_TYPE.EZBT}>EZBT</MenuItem>
             </Select>
           </FormControlStyle>
-          <span style={{ fontSize: 12, color: 'rgba(76, 80, 97, 1)' }}>
+          <span
+            style={{
+              fontSize: 12,
+              color: theme.palette.text.secondary,
+            }}
+          >
             {t('purchase.leftBalance')}: {balance ? formatNum(balance).toUnsafeFloat().toFixed(2) : 0} USDT
           </span>
         </BalanceContent>

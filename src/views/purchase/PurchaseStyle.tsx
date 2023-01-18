@@ -1,4 +1,4 @@
-import { Box, Button, Card, FormControl } from '@mui/material';
+import { Box, Button, Card, FormControl, useTheme } from '@mui/material';
 import { styled } from '@mui/system';
 import { IProps } from '../styleType';
 
@@ -6,9 +6,8 @@ const PurchaseContainer = styled((props: IProps) => {
   return <Card {...props} />;
 })(() => {
   return {
-    width: 'lg',
+    width: 'xl',
     height: 588,
-    background: 'rgba(255, 255, 255, 1)',
     margin: '0 auto',
     display: 'flex',
     flexDirection: 'column',
@@ -26,14 +25,14 @@ const ContentBottom = styled((props: IProps) => {
     ':after': {
       position: 'absolute',
       content: '""',
-      width: 45,
-      height: 45,
+      width: 50,
+      height: 50,
       // background: '#eef1f9',
       borderRadius: '100%',
       top: '100%',
       left: '50%',
       transform: 'translate(-50%, -25%)',
-      border: '1px solid  rgba(229, 224, 251, 1);',
+      border: '1px solid  rgba(145, 158, 171, 0.24);',
     },
   };
 });
@@ -48,27 +47,29 @@ const ContentTop = styled((props: IProps) => {
     ':after': {
       position: 'absolute',
       content: '""',
-      width: 45,
-      height: 45,
+      width: 50,
+      height: 50,
       // background: '#eef1f9',
+      color: 'red',
       borderRadius: '100%',
       top: '0',
       right: '50%',
       transform: 'translate(50%, -75%)',
-      border: '1px solid  rgba(229, 224, 251, 1);',
+      border: '1px solid  rgba(145, 158, 171, 0.24)',
     },
   };
 });
 
 const ConverBtn = styled('div')(() => {
+  const theme = useTheme();
   return {
-    minWidth: 45,
-    maxWidth: 45,
+    minWidth: 48,
+    maxWidth: 48,
     height: 45,
     borderRadius: '50%',
     alignContent: 'center',
     margin: '-12px 0 -12px 0',
-    background: 'rgba(247, 248, 249, 100ch)',
+    background: theme.palette.background.paper,
     zIndex: 100,
     // border: '1px solid rgba(145, 158, 171, 0.24)',
     borderRight: 'none',
@@ -128,17 +129,6 @@ const DateNow = styled('p')(() => {
   };
 });
 
-const BuyBtn = styled('div')(() => {
-  return {};
-});
-
-const ViewRule = styled('span')(() => {
-  return {
-    fontSize: 12,
-    color: 'rgba(0, 111, 255, 1)',
-  };
-});
-
 const FooterContent = styled('div')(() => {
   return {
     display: 'flex',
@@ -160,7 +150,5 @@ export {
   BalanceContent,
   FormControlStyle,
   DateNow,
-  BuyBtn,
-  ViewRule,
   FooterContent,
 };

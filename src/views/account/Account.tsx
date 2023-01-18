@@ -50,6 +50,7 @@ export default function Account() {
       borderRadius: '50%',
       marginRight: 10,
       opacity: 1,
+      fill: 'white',
     };
 
     return (
