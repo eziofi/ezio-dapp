@@ -25,7 +25,9 @@ export default function AddressPopover() {
 
   const TextDiv = styled('div')({
     textAlign: 'center',
-    fontSize: '28px',
+    fontSize: '40px',
+    marginBottom: '37px',
+    marginTop: '37px',
   });
 
   const copyText = () => {
@@ -83,11 +85,13 @@ export default function AddressPopover() {
           },
         }}
       >
-        <Box sx={{ my: 1.5, px: 2.5, display: 'flex', alignItems: 'center' }}>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" sx={{ width: 24, height: 24, marginRight: 1 }} />
-          <Typography id="account" variant="subtitle2" noWrap sx={{ width: '60%' }}>
-            {account}
-          </Typography>
+        <Box sx={{ my: 1.5, px: 2.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ display: 'flex', width: '60%' }}>
+            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" sx={{ width: 24, height: 24, marginRight: 1 }} />
+            <Typography id="account" variant="subtitle2" noWrap>
+              {addressToShow}
+            </Typography>
+          </span>
           <IconButton color="primary" sx={{ marginLeft: '20px', color: 'rgb(108, 75, 246)' }} onClick={copyText}>
             <ContentCopyRoundedIcon />
           </IconButton>
@@ -102,6 +106,7 @@ export default function AddressPopover() {
               width: '100%',
               background: 'linear-gradient(180deg, rgba(108, 75, 246, 1) 0%, rgba(113, 79, 251, 1) 100%)',
               borderRadius: '36px',
+              marginBottom: '37px',
             }}
             onClick={logout}
             variant="contained"
