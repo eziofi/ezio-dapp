@@ -78,6 +78,8 @@ export default function Purchase() {
   }
 
   function setAnimation() {
+    setInputValue1('');
+    setInputValue2('');
     setIsClick(true);
     setType(type === TRANSFER_TYPE.PURCHASE ? TRANSFER_TYPE.REDEEM : TRANSFER_TYPE.PURCHASE);
     const contentBottom: any = document.querySelector('.contentBottom');
@@ -150,7 +152,7 @@ export default function Purchase() {
         setMsgOpen(true);
       } else {
         const args: IPurchaseArg = {
-          type: tokenType as any,
+          type: type as any,
           tokenQty: parseInt(inputValue1),
           signerOrProvider: ethersProvider!.getSigner(),
         };
@@ -169,7 +171,7 @@ export default function Purchase() {
         setMsgOpen(true);
       } else {
         const args: IPurchaseArg = {
-          type: tokenType as any,
+          type: type as any,
           tokenQty: parseInt(inputValue1),
           signerOrProvider: ethersProvider!.getSigner(),
         };

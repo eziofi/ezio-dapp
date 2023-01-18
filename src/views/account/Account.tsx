@@ -44,11 +44,20 @@ export default function Account() {
     const { balance } = useBalance(type);
     const { netWorth } = useNetWorth(type === TOKEN_BALANCE_TYPE.EZAT ? TOKEN_TYPE.EZAT : TOKEN_TYPE.EZBT);
 
-    const IconStyle = {
+    const iconDiv = {
       width: 50,
       height: 50,
       borderRadius: '50%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       marginRight: 10,
+    };
+
+    const IconStyle = {
+      width: 30,
+      height: 30,
+      borderRadius: '50%',
       opacity: 1,
       fill: 'white',
     };
@@ -60,7 +69,14 @@ export default function Account() {
             <>
               {/* icon */}
               {/* <Box sx={{ width: 50, height: 50, borderRadius: '50%', background: 'pink', marginRight: 2 }} /> */}
-              <BaseIconFont name="icon-B" style={{ ...IconStyle, background: 'rgba(26, 107, 173, 1)' }} />
+              <div
+                style={{
+                  ...iconDiv,
+                  background: 'rgba(26, 107, 173, 1)',
+                }}
+              >
+                <BaseIconFont name="icon-B" style={{ ...IconStyle }} />
+              </div>
               <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box>
                   <div style={{ fontSize: 20 }}>{type}</div>
@@ -77,13 +93,19 @@ export default function Account() {
             <>
               {/* icon */}
               {/* <Box sx={{ width: 50, height: 50, borderRadius: '50%', background: 'pink', marginRight: 2 }} /> */}
-              <BaseIconFont
-                name={type === TOKEN_BALANCE_TYPE.EZAT ? 'icon-A' : 'icon-qiandaizi'}
+              <div
                 style={{
-                  ...IconStyle,
+                  ...iconDiv,
                   background: type === TOKEN_BALANCE_TYPE.EZAT ? 'rgba(95, 69, 186, 1)' : 'rgba(255, 87, 0, 1)',
                 }}
-              />
+              >
+                <BaseIconFont
+                  name={type === TOKEN_BALANCE_TYPE.EZAT ? 'icon-A' : 'icon-qiandaizi'}
+                  style={{
+                    ...IconStyle,
+                  }}
+                />
+              </div>
               <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box>
                   <div style={{ fontSize: 20 }}>{type}</div>
