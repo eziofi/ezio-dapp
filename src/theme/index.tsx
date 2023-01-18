@@ -27,10 +27,13 @@ interface IColorMode {
 export const ColorModeContext = createContext<IColorMode>({ mode: 'light', toggleColorMode: () => {} });
 
 export default function ThemeProvider({ children }: { children: ReactNode }) {
-  const [mode, setMode] = useState<'light' | 'dark'>('dark');
+  const defaultMode = localStorage.getItem('colorMode') || 'light';
+  const [mode, setMode] = useState<'light' | 'dark'>(defaultMode as colorModeType);
 
   const toggleColorMode = () => {
-    setMode(mode === 'light' ? 'dark' : 'light');
+    const _mode = mode === 'light' ? 'dark' : 'light';
+    localStorage.setItem('colorMode', _mode);
+    setMode(_mode);
   };
 
   const colorModeContext = { mode, toggleColorMode };
