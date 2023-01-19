@@ -85,7 +85,7 @@ export default function Account() {
                   </div>
                 </Box>
                 <div>
-                  <div style={{ fontSize: 40, color: 'rgba(67, 207, 124, 1)' }}>{toNum(balance)}</div>
+                  <div style={{ fontSize: 28, color: 'rgba(67, 207, 124, 1)' }}>{toNum(balance)}</div>
                 </div>
               </Box>
             </>
@@ -114,7 +114,7 @@ export default function Account() {
                   </div>
                 </Box>
                 <div>
-                  <div style={{ fontSize: 40, color: 'rgba(67, 207, 124, 1)' }}>{toNum(balance)}</div>
+                  <div style={{ fontSize: 28, color: 'rgba(67, 207, 124, 1)' }}>{toNum(balance)}</div>
                 </div>
               </Box>
             </>

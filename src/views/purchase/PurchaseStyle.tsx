@@ -3,13 +3,18 @@ import { styled } from '@mui/system';
 import { IProps } from '../styleType';
 
 const PurchaseContainer = styled((props: IProps) => {
-  return <Card {...props} />;
+  return (
+    <div style={{ padding: '0 15px' }}>
+      <Card {...props} />
+    </div>
+  );
 })(() => {
   return {
     maxWidth: 500,
     height: '100%',
     maxHeight: document.body.offsetHeight - 196,
     paddingBottom: 30,
+    // margin: '0 30px 20px',
     margin: '0 auto',
     display: 'flex',
     flexDirection: 'column',
