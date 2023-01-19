@@ -139,15 +139,15 @@ const DetailItem = ({ record }: { record: PurchaseRecord | RedeemRecord }) => {
           >
             {type === TRANSFER_TYPE.PURCHASE ? (
               <>
-                <div style={{ color: '#e63212' }}>-{amt} USDT</div>
-                <div className={styles.valueIn}>
+                <div style={{ color: '#e63212', fontSize: '1rem' }}>-{amt} USDT</div>
+                <div style={{ fontSize: '1rem' }}>
                   +{qty} {record.tokenType === 0 ? 'EZAT' : 'EZBT'}
                 </div>
               </>
             ) : type === TRANSFER_TYPE.REDEEM ? (
               <>
-                <div className={styles.valueIn}>+{amt} USDT</div>
-                <div style={{ color: '#e63212' }}>
+                <div style={{ fontSize: '1rem' }}>+{amt} USDT</div>
+                <div style={{ color: '#e63212', fontSize: '1rem' }}>
                   -{qty} {record.tokenType === 0 ? 'EZAT' : 'EZBT'}
                 </div>
               </>
