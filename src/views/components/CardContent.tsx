@@ -23,11 +23,11 @@ interface IProps {
   transactionType: TRANSFER_TYPE.PURCHASE | TRANSFER_TYPE.REDEEM;
   getTokenType: (tokenType: TOKEN_BALANCE_TYPE) => void;
   getInputVal1: (InputVal: string) => void | any;
-  getInputVal2: (InputVal: string) => void;
+  inputValue2: string;
 }
 
 type CardContentOneProps = Pick<IProps, 'transactionType' | 'getInputVal1' | 'getTokenType'>;
-type CardContentSencoedProps = Pick<IProps, 'transactionType' | 'getInputVal2' | 'getTokenType'>;
+type CardContentSencoedProps = Pick<IProps, 'transactionType' | 'inputValue2' | 'getTokenType'>;
 
 import { TOKEN_BALANCE_TYPE, TOKEN_TYPE, TRANSFER_TYPE } from '../../views/wallet/helpers/constant';
 import BaseIconFont from './BaseIconFont';
@@ -86,9 +86,9 @@ const CssTextField = styled(TextField)(() => {
       },
       '#custom-css-outlined-input': {
         fontSize: 40,
-        width: 100,
+        width: 200,
         color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
-        textAlign: 'center',
+        // textAlign: 'center',
         padding: 0,
       },
     },
@@ -112,7 +112,7 @@ function MyCardContentOne({ transactionType, getTokenType, getInputVal1 }: CardC
     getTokenType(event.target.value as TOKEN_BALANCE_TYPE);
     SetCurrency(event.target.value as TOKEN_BALANCE_TYPE);
   };
-  const { balance, refetchBalance } = useBalance(
+  const { balance } = useBalance(
     transactionType === TRANSFER_TYPE.PURCHASE
       ? TOKEN_BALANCE_TYPE.USDT
       : currency === 'EZAT'
@@ -131,6 +131,19 @@ function MyCardContentOne({ transactionType, getTokenType, getInputVal1 }: CardC
         type="number"
       />
       {transactionType === TRANSFER_TYPE.PURCHASE ? (
+        <div style={{ display: 'flex', alignItems: 'center', marginRight: 5 }}>
+          <div
+            style={{
+              ...iconStyle,
+              background: 'rgba(255, 87, 0, 1)',
+              marginRight: 5,
+            }}
+          >
+            <BaseIconFont name="icon-qiandaizi" style={{ width: 20, height: 20, fill: 'white' }} />
+          </div>
+          USDT
+        </div>
+      ) : (
         <BalanceContent>
           <Select
             id="demo-customized-select-native"
@@ -138,19 +151,19 @@ function MyCardContentOne({ transactionType, getTokenType, getInputVal1 }: CardC
             onChange={handleChange}
             input={<BootstrapInput />}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
+            {/*<MenuItem value="">*/}
+            {/*  <em>None</em>*/}
+            {/*</MenuItem>*/}
             <MenuItem value={TOKEN_BALANCE_TYPE.EZAT}>
               <>
                 <div
                   style={{
                     ...iconStyle,
-                    background: 'rgba(26, 107, 173, 1)',
-                    margin: '0 5px',
+                    background: 'rgba(95, 69, 186, 1)',
+                    margin: '0 10px',
                   }}
                 >
-                  <BaseIconFont name="icon-B" style={{ width: 20, height: 20, fill: 'white' }} />
+                  <BaseIconFont name="icon-A" style={{ width: 20, height: 20, fill: 'white' }} />
                 </div>
                 EZAT
               </>
@@ -161,7 +174,7 @@ function MyCardContentOne({ transactionType, getTokenType, getInputVal1 }: CardC
                   style={{
                     ...iconStyle,
                     background: 'rgba(26, 107, 173, 1)',
-                    margin: '0 5px',
+                    margin: '0 10px',
                   }}
                 >
                   <BaseIconFont name="icon-B" style={{ width: 20, height: 20, fill: 'white' }} />
@@ -180,25 +193,12 @@ function MyCardContentOne({ transactionType, getTokenType, getInputVal1 }: CardC
             {t('purchase.leftBalance')}: {balance ? formatNum(balance).toUnsafeFloat().toFixed(2) : 0} USDT
           </span>
         </BalanceContent>
-      ) : (
-        <div style={{ display: 'flex', alignItems: 'center', marginRight: 5 }}>
-          <div
-            style={{
-              ...iconStyle,
-              background: 'rgba(255, 87, 0, 1)',
-              marginRight: 5,
-            }}
-          >
-            <BaseIconFont name="icon-qiandaizi" style={{ width: 20, height: 20, fill: 'white' }} />
-          </div>
-          USDT
-        </div>
       )}
     </BodyContent>
   );
 }
 
-function MyCardContentSecond({ transactionType, getTokenType, getInputVal2 }: CardContentSencoedProps) {
+function MyCardContentSecond({ transactionType, getTokenType, inputValue2 }: CardContentSencoedProps) {
   const theme = useTheme();
   const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
   const handleChange = (event: SelectChangeEvent) => {
@@ -221,23 +221,11 @@ function MyCardContentSecond({ transactionType, getTokenType, getInputVal2 }: Ca
         id="custom-css-outlined-input"
         size="small"
         placeholder="0"
-        onChange={e => getInputVal2(e.target.value)}
+        // onChange={e => getInputVal2(e.target.value)}
         type="number"
+        value={inputValue2}
       />
       {transactionType === TRANSFER_TYPE.PURCHASE ? (
-        <div style={{ display: 'flex', alignItems: 'center', marginRight: 5 }}>
-          <div
-            style={{
-              ...iconStyle,
-              background: 'rgba(255, 87, 0, 1)',
-              marginRight: 5,
-            }}
-          >
-            <BaseIconFont name="icon-qiandaizi" style={{ width: 20, height: 20, fill: 'white' }} />
-          </div>
-          USDT
-        </div>
-      ) : (
         <BalanceContent>
           <Select
             id="demo-customized-select-native"
@@ -287,6 +275,19 @@ function MyCardContentSecond({ transactionType, getTokenType, getInputVal2 }: Ca
             {t('purchase.leftBalance')}: {balance ? formatNum(balance).toUnsafeFloat().toFixed(2) : 0} USDT
           </span>
         </BalanceContent>
+      ) : (
+        <div style={{ display: 'flex', alignItems: 'center', marginRight: 5 }}>
+          <div
+            style={{
+              ...iconStyle,
+              background: 'rgba(255, 87, 0, 1)',
+              marginRight: 5,
+            }}
+          >
+            <BaseIconFont name="icon-qiandaizi" style={{ width: 20, height: 20, fill: 'white' }} />
+          </div>
+          USDT
+        </div>
       )}
     </BodyContent>
   );

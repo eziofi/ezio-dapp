@@ -61,6 +61,9 @@ export default function Purchase() {
   const [inputValue2, setInputValue2] = useState('');
   const [isClick, setIsClick] = useState(false);
   const [tokenType, setTokenType] = useState<TOKEN_BALANCE_TYPE>(TOKEN_BALANCE_TYPE.EZAT); // 下拉框value
+
+  const { netWorth } = useNetWorth(TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE]);
+
   const { t } = useTranslation();
   const style = {
     display: 'flex',
@@ -71,6 +74,13 @@ export default function Purchase() {
   };
   function getInputVal1(value: string) {
     setInputValue1(value);
+    setInputValue2(
+      value
+        ? type === TRANSFER_TYPE.PURCHASE
+          ? '' + Math.floor(parseInt(value) / parseFloat(formatNetWorth(netWorth, true)))
+          : '' + Math.floor(parseInt(value) * parseFloat(formatNetWorth(netWorth, true)))
+        : '0',
+    );
   }
 
   function getInputVal2(value: string) {
@@ -80,24 +90,22 @@ export default function Purchase() {
   function setAnimation() {
     setInputValue1('');
     setInputValue2('');
-    setIsClick(true);
     setType(type === TRANSFER_TYPE.PURCHASE ? TRANSFER_TYPE.REDEEM : TRANSFER_TYPE.PURCHASE);
-    const contentBottom: any = document.querySelector('.contentBottom');
-    contentBottom.style.animation = 'move_down 1.5s ease-out alternate';
-    const contentTop: any = document.querySelector('.contentTop');
-    contentTop.style.animation = 'move_up 1.5s ease-out alternate';
-    setTimeout(() => {
-      setIsClick(false);
-      contentBottom.style.animation = 'none';
-      contentTop.style.animation = 'none';
-    }, 1500);
+    // setIsClick(true);
+    // const contentBottom: any = document.querySelector('.contentBottom');
+    // contentBottom.style.animation = 'move_down 1.5s ease-out alternate';
+    // const contentTop: any = document.querySelector('.contentTop');
+    // contentTop.style.animation = 'move_up 1.5s ease-out alternate';
+    // setTimeout(() => {
+    //   setIsClick(false);
+    //   contentBottom.style.animation = 'none';
+    //   contentTop.style.animation = 'none';
+    // }, 1500);
   }
 
   function getTokenType(tokenType: TOKEN_BALANCE_TYPE) {
     setTokenType(tokenType);
   }
-
-  // const { netWorth } = useNetWorth(type);
 
   const [msgOpen, setMsgOpen] = useState(false);
   const [msg, setMsg] = useState('');
@@ -152,7 +160,7 @@ export default function Purchase() {
         setMsgOpen(true);
       } else {
         const args: IPurchaseArg = {
-          type: TOKEN_TYPE[TOKEN_BALANCE_TYPE.EZAT],
+          type: TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE],
           tokenQty: parseInt(inputValue1),
           signerOrProvider: ethersProvider!.getSigner(),
         };
@@ -171,7 +179,7 @@ export default function Purchase() {
         setMsgOpen(true);
       } else {
         const args: IPurchaseArg = {
-          type: TOKEN_TYPE[TOKEN_BALANCE_TYPE.EZAT],
+          type: TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE],
           tokenQty: parseInt(inputValue1),
           signerOrProvider: ethersProvider!.getSigner(),
         };
@@ -267,7 +275,7 @@ export default function Purchase() {
               transactionType={type}
               // tokenType={tab === 0 ? TOKEN_TYPE.EZBT : TOKEN_TYPE.EZAT}
               getTokenType={getTokenType}
-              getInputVal2={getInputVal2}
+              inputValue2={inputValue2}
             />
           </CardContent>
         ) : (
@@ -306,8 +314,10 @@ export default function Purchase() {
         {tipDrawerOpened ? <PurchaseDrawer opened={tipDrawerOpened} close={() => setTipDrawerOpened(false)} /> : <></>}
       </>
       <FooterContent>
-        <span>{t('purchase.unitPrice')} $0</span>
-        <span>{t('purchase.EZATRate')} 0%..</span>
+        <span>{t('purchase.unitPrice') + ' $' + formatNetWorth(netWorth, true)}</span>
+        <span>
+          {t('purchase.EZATRate')} {(rate ? (parseFloat(formatNetWorth(rate)) / 10000).toFixed(2) : 0) + ' ‱'}
+        </span>
       </FooterContent>
     </PurchaseContainer>
   );
