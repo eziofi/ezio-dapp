@@ -152,7 +152,7 @@ export default function Purchase() {
         setMsgOpen(true);
       } else {
         const args: IPurchaseArg = {
-          type: type as any,
+          type: TOKEN_TYPE[TOKEN_BALANCE_TYPE.EZAT],
           tokenQty: parseInt(inputValue1),
           signerOrProvider: ethersProvider!.getSigner(),
         };
@@ -171,7 +171,7 @@ export default function Purchase() {
         setMsgOpen(true);
       } else {
         const args: IPurchaseArg = {
-          type: type as any,
+          type: TOKEN_TYPE[TOKEN_BALANCE_TYPE.EZAT],
           tokenQty: parseInt(inputValue1),
           signerOrProvider: ethersProvider!.getSigner(),
         };

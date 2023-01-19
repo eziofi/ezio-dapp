@@ -2,6 +2,8 @@ import { ChangeEvent, useState } from 'react';
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, MenuItem, Stack, IconButton, Popover } from '@mui/material';
+import icon_en from '../../../assets/header/ic_flag_en.svg';
+import icon_zh from '../../../assets/header/ic_flag_cn.svg';
 
 // ----------------------------------------------------------------------
 
@@ -10,12 +12,12 @@ const LANGS = {
   en: {
     value: 'en',
     label: 'English',
-    icon: '/assets/icons/ic_flag_en.svg',
+    icon: icon_en,
   },
   zh: {
     value: 'zh',
     label: '简体中文',
-    icon: '/assets/icons/ic_flag_cn.svg',
+    icon: icon_zh,
   },
 };
 

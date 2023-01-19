@@ -14,7 +14,7 @@ export function useBalance(tokenType: keyof typeof TOKEN_BALANCE_TYPE) {
     ['balanceOf', tokenType],
     () => balanceApi[tokenType](ethersProvider!.getSigner(), account),
     {
-      enabled: !!ethersProvider,
+      enabled: !!ethersProvider && !!account,
     },
   );
   return { balance, refetchBalance };
