@@ -55,6 +55,7 @@ export default {
     // rewardTips: 'reward 1 EZIO every 1000 USD',
     unitPrice: 'Unit Price',
     USDTEstimated: 'USDT Estimated',
+    estimated: 'Estimated',
     EZATRate: 'EZAT Daily Rate',
     moreThanAvailableMsg: 'Purchase amount cannot be more than the available amount.',
     moreThanBalanceMsg: 'Purchase amount cannot be more than balance.',

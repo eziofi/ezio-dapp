@@ -54,6 +54,7 @@ export default {
     // rewardTips: '每满1000 USD奖励 1 EZIO',
     unitPrice: '参考单价',
     USDTEstimated: '预估获得',
+    estimated: '预计获得',
     EZATRate: 'EZAT参考日利率',
     moreThanAvailableMsg: '购买金额不能大于本轮剩余数量。',
     moreThanBalanceMsg: '购买金额不能大于余额。',

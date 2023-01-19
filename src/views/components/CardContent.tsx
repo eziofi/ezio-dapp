@@ -3,10 +3,11 @@ import React from 'react';
 import { BalanceContent, BodyContent } from '../purchase/PurchaseStyle';
 import { useTranslation } from 'react-i18next';
 import { useBalance } from '../../hooks/useBalance';
-import { formatNum } from '../../views/wallet/helpers/utilities';
+import { formatNetWorth, formatNum } from '../../views/wallet/helpers/utilities';
 import TextField from '@mui/material/TextField';
-import { TOKEN_BALANCE_TYPE, TRANSFER_TYPE } from '../../views/wallet/helpers/constant';
+import { TOKEN_BALANCE_TYPE, TOKEN_TYPE, TRANSFER_TYPE } from '../../views/wallet/helpers/constant';
 import BaseIconFont from './BaseIconFont';
+import { useNetWorth } from '../../hooks/useNetWorth';
 
 interface IProps {
   isBuy?: boolean;
@@ -73,7 +74,7 @@ const CssTextField = styled(TextField)(() => {
         border: 'none',
       },
       '#custom-css-outlined-input': {
-        fontSize: 40,
+        fontSize: 32,
         width: 200,
         color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
         // textAlign: 'center',
@@ -95,6 +96,8 @@ const iconStyle = {
 function MyCardContentOne({ transactionType, getTokenType, getInputVal1, tokenType }: CardContentOneProps) {
   const { t } = useTranslation();
 
+  const { netWorth } = useNetWorth(TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE]);
+
   const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
   const handleChange = (event: { target: { value: string } }) => {
     getTokenType(event.target.value as TOKEN_BALANCE_TYPE);
@@ -111,16 +114,27 @@ function MyCardContentOne({ transactionType, getTokenType, getInputVal1, tokenTy
 
   return (
     <BodyContent>
-      <CssTextField
-        id="custom-css-outlined-input"
-        size="small"
-        placeholder="0"
-        onChange={e => getInputVal1(e.target.value)}
-        type="number"
-      />
+      <div>
+        <CssTextField
+          id="custom-css-outlined-input"
+          size="small"
+          placeholder="0"
+          onChange={e => getInputVal1(e.target.value)}
+          type="number"
+        />
+        <div
+          style={{
+            fontSize: 12,
+            color: theme.palette.text.secondary,
+            marginTop: 5,
+          }}
+        >
+          {t('purchase.unitPrice') + ' $' + formatNetWorth(netWorth, true)}
+        </div>
+      </div>
       {transactionType === TRANSFER_TYPE.PURCHASE ? (
         <BalanceContent>
-          <div style={{ display: 'flex', alignItems: 'center', marginRight: 5 }}>
+          <div style={{ display: 'flex', alignItems: 'center', marginRight: 5, height: 46 }}>
             <div
               style={{
                 ...iconStyle,
@@ -216,14 +230,25 @@ function MyCardContentSecond({ transactionType, getTokenType, inputValue2 }: Car
 
   return (
     <BodyContent>
-      <CssTextField
-        id="custom-css-outlined-input"
-        size="small"
-        placeholder="0"
-        // onChange={e => getInputVal2(e.target.value)}
-        type="number"
-        value={inputValue2}
-      />
+      <div>
+        <CssTextField
+          id="custom-css-outlined-input"
+          size="small"
+          placeholder="0"
+          // onChange={e => getInputVal2(e.target.value)}
+          type="number"
+          value={inputValue2}
+        />
+        <div
+          style={{
+            fontSize: 12,
+            color: theme.palette.text.secondary,
+            marginTop: 5,
+          }}
+        >
+          {t('purchase.estimated')}
+        </div>
+      </div>
       {transactionType === TRANSFER_TYPE.PURCHASE ? (
         <BalanceContent>
           <Select
@@ -235,7 +260,7 @@ function MyCardContentSecond({ transactionType, getTokenType, inputValue2 }: Car
             {/*<MenuItem value="">*/}
             {/*  <em>None</em>*/}
             {/*</MenuItem>*/}
-            <MenuItem value={TOKEN_BALANCE_TYPE.EZAT}>
+            <MenuItem value={TOKEN_BALANCE_TYPE.EZAT} sx={{ height: 46 }}>
               <>
                 <div
                   style={{
@@ -264,15 +289,7 @@ function MyCardContentSecond({ transactionType, getTokenType, inputValue2 }: Car
               </>
             </MenuItem>
           </Select>
-          {/*<span*/}
-          {/*  style={{*/}
-          {/*    fontSize: 12,*/}
-          {/*    color: theme.palette.text.secondary,*/}
-          {/*    marginTop: 5,*/}
-          {/*  }}*/}
-          {/*>*/}
-          {/*  {t('purchase.leftBalance')}: {balance ? formatNum(balance).toUnsafeFloat().toFixed(2) : 0} USDT*/}
-          {/*</span>*/}
+          <span style={{ height: 18 }} />
         </BalanceContent>
       ) : (
         <div style={{ display: 'flex', alignItems: 'center', marginRight: 5 }}>

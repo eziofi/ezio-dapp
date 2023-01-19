@@ -7,6 +7,9 @@ import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDown
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import { styled } from '@mui/material/styles';
 import metamaskBtn from '../../../assets/home/metamask@3x.png';
+import { useBalance } from '../../../hooks/useBalance';
+import { TOKEN_BALANCE_TYPE } from '../../../views/wallet/helpers/constant';
+import { toNum } from '../../../views/wallet/helpers/utilities';
 
 export default function AddressPopover() {
   const { connectState, connect, disconnect, account, ethersProvider } = useWallet();
@@ -14,7 +17,10 @@ export default function AddressPopover() {
   const [copyFlag, setCopyFlag] = useState<boolean>(false);
   const { t } = useTranslation();
 
+  const { balance } = useBalance(TOKEN_BALANCE_TYPE.USDT);
+
   const addressToShow = account.substring(0, 7) + '...' + account.substring(account.length - 7, account.length);
+  const addressToShowInPop = account.substring(0, 12) + '...' + account.substring(account.length - 12, account.length);
 
   const logout = () => {
     disconnect();
@@ -80,7 +86,7 @@ export default function AddressPopover() {
             p: 0,
             mt: 1.5,
             ml: 0.75,
-            width: 313,
+            width: 400,
             '& .MuiMenuItem-root': {
               typography: 'body2',
               borderRadius: 0.75,
@@ -91,7 +97,7 @@ export default function AddressPopover() {
         <Box sx={{ my: 1.5, px: 2.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <span style={{ display: 'flex', width: '60%' }}>
             <Avatar alt="Remy Sharp" src={metamaskBtn} sx={{ width: 24, height: 24, marginRight: 1 }} />
-            <Typography variant="subtitle2">{addressToShow}</Typography>
+            <Typography variant="subtitle2">{addressToShowInPop}</Typography>
           </span>
           <IconButton color="primary" sx={{ marginLeft: '20px', color: 'rgb(108, 75, 246)' }} onClick={copyText}>
             <ContentCopyRoundedIcon />
@@ -101,7 +107,7 @@ export default function AddressPopover() {
         {/* <Divider sx={{ borderStyle: 'dashed' }} /> */}
 
         <Box sx={{ my: 1.5, px: 2.5 }}>
-          <TextDiv>0USDT</TextDiv>
+          <TextDiv>{toNum(balance) + ' USDT'}</TextDiv>
           <Button
             sx={{
               width: '100%',

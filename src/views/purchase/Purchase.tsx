@@ -2,7 +2,7 @@ import TokenTabs from './components/TokenTabs';
 import { Dispatch, ReactElement, SetStateAction, useState, useTransition } from 'react';
 import './animation.less';
 import TextField from '@mui/material/TextField';
-import { Button, Link, Snackbar, Toolbar } from '@mui/material';
+import { Button, Link, Snackbar, Toolbar, useTheme } from '@mui/material';
 import PurchaseRecordTable from './components/PurchaseRecordTable';
 import PurchaseDrawer from './components/PurchaseDrawer';
 import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
@@ -61,13 +61,14 @@ export default function Purchase() {
   const [inputValue2, setInputValue2] = useState('');
   const [isClick, setIsClick] = useState(false);
   const [tokenType, setTokenType] = useState<TOKEN_BALANCE_TYPE>(TOKEN_BALANCE_TYPE.EZAT); // 下拉框value
+  const theme = useTheme();
 
   const { netWorth } = useNetWorth(TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE]);
 
   const { t } = useTranslation();
   const style = {
     display: 'flex',
-    width: '95%',
+    width: '90%',
     color: 'white',
     margin: '10px 0',
     fontWeight: 'none',
@@ -314,8 +315,8 @@ export default function Purchase() {
         {tipDrawerOpened ? <PurchaseDrawer opened={tipDrawerOpened} close={() => setTipDrawerOpened(false)} /> : <></>}
       </>
       <FooterContent>
-        <span>{t('purchase.unitPrice') + ' $' + formatNetWorth(netWorth, true)}</span>
-        <span>
+        {/*<span>{t('purchase.unitPrice') + ' $' + formatNetWorth(netWorth, true)}</span>*/}
+        <span style={{ color: theme.palette.text.secondary }}>
           {t('purchase.EZATRate')} {(rate ? (parseFloat(formatNetWorth(rate)) / 10000).toFixed(2) : 0) + ' ‱'}
         </span>
       </FooterContent>

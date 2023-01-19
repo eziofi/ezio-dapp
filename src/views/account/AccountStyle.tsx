@@ -20,7 +20,7 @@ export const AccountCardBox = styled((props: IProps) => {
   return <Box {...props} />;
 })(() => {
   return {
-    width: '95%',
+    width: '90%',
     display: 'flex',
     flexDirection: 'column',
     alignContent: 'center',

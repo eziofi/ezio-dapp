@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useState } from 'react';
 import rollbackIcon from '../../assets/account/rollback@2x.png';
-import { Card, CardContent, IconButton } from '@mui/material';
+import { Card, CardContent, IconButton, Tooltip } from '@mui/material';
 import AccountDetail from './AccountDetail';
 import styles from './account.module.less';
 import useWallet from '../hooks/useWallet';
@@ -176,9 +176,11 @@ export default function Account() {
           // <Button color="inherit" >
           //   {t('account.checkDetail')}
           // </Button>
-          <IconButton onClick={() => setPage('detail')}>
-            <BaseIconFont name="icon-jiaofeizhangdan_active" style={{ width: 20, height: 20 }} />
-          </IconButton>
+          <Tooltip title={t('account.detail')} placement="top">
+            <IconButton onClick={() => setPage('detail')}>
+              <BaseIconFont name="icon-jiaofeizhangdan_active" style={{ width: 20, height: 20 }} />
+            </IconButton>
+          </Tooltip>
         ) : (
           <IconButton onClick={() => setPage('account')}>
             {/* <img src={rollbackIcon} width="24" style={{ background: 'red' }} /> */}
