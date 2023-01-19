@@ -4,7 +4,7 @@ RUN echo 'server {\
   listen       80 default_server; \
   location / {\
     root   /usr/share/nginx/html; \
-    index  index.html index.htm; \
+    try_files $uri /index.html; \
     gzip_static on; \
     gzip_proxied expired no-cache no-store private auth; \
   } \
