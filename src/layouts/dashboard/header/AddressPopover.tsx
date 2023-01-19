@@ -6,6 +6,8 @@ import { useState } from 'react';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import { styled } from '@mui/material/styles';
+import metamaskBtn from '../../../assets/home/metamask@3x.png';
+
 export default function AddressPopover() {
   const { connectState, connect, disconnect, account, ethersProvider } = useWallet();
   const [open, setOpen] = useState<(EventTarget & HTMLButtonElement) | null>(null);
@@ -57,6 +59,7 @@ export default function AddressPopover() {
           }}
           endIcon={<KeyboardArrowDownOutlinedIcon />}
         >
+          <Avatar src={metamaskBtn} sx={{ width: 24, height: 24, marginRight: 1 }} />
           {addressToShow}
         </Button>
       ) : connectState === 'connecting' ? (
@@ -87,10 +90,8 @@ export default function AddressPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <span style={{ display: 'flex', width: '60%' }}>
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" sx={{ width: 24, height: 24, marginRight: 1 }} />
-            <Typography id="account" variant="subtitle2" noWrap>
-              {addressToShow}
-            </Typography>
+            <Avatar alt="Remy Sharp" src={metamaskBtn} sx={{ width: 24, height: 24, marginRight: 1 }} />
+            <Typography variant="subtitle2">{addressToShow}</Typography>
           </span>
           <IconButton color="primary" sx={{ marginLeft: '20px', color: 'rgb(108, 75, 246)' }} onClick={copyText}>
             <ContentCopyRoundedIcon />

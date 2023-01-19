@@ -38,7 +38,7 @@ export default function AccountDetail() {
     //   ))}
     // </div>
     <>
-      {list?.map((record, index) => (
+      {recordList?.map((record, index) => (
         <DetailItem record={record} key={record.timestamp} />
       ))}
     </>
@@ -48,6 +48,7 @@ export default function AccountDetail() {
 const DetailItem = ({ record }: { record: PurchaseRecord | RedeemRecord }) => {
   const theme = useTheme();
   const { transferType: type, timestamp, amt, qty } = record;
+  console.log(record);
   const titleMap = {
     [TRANSFER_TYPE.PURCHASE]: t('account.recordPurchaseAction'),
     [TRANSFER_TYPE.REDEEM]: t('account.recordRedeemAction'),
@@ -130,14 +131,29 @@ const DetailItem = ({ record }: { record: PurchaseRecord | RedeemRecord }) => {
           />
           <div
             style={{
-              display: 'flex',
-              alignItems: 'center',
               fontSize: 20,
               color: 'rgba(67, 207, 124, 1)',
               margin: '0 10px 0 0',
+              textAlign: 'end',
             }}
           >
-            +999
+            {type === TRANSFER_TYPE.PURCHASE ? (
+              <>
+                <div style={{ color: '#e63212' }}>-{amt} USDT</div>
+                <div className={styles.valueIn}>
+                  +{qty} {record.tokenType === 0 ? 'EZAT' : 'EZBT'}
+                </div>
+              </>
+            ) : type === TRANSFER_TYPE.REDEEM ? (
+              <>
+                <div className={styles.valueIn}>+{amt} USDT</div>
+                <div style={{ color: '#e63212' }}>
+                  -{qty} {record.tokenType === 0 ? 'EZAT' : 'EZBT'}
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
           </div>
         </Box>
       </ListItem>
