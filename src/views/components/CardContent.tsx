@@ -20,7 +20,7 @@ interface IProps {
 }
 
 type CardContentOneProps = Pick<IProps, 'transactionType' | 'getInputVal1' | 'getTokenType' | 'tokenType'>;
-type CardContentSencoedProps = Pick<IProps, 'transactionType' | 'inputValue2' | 'getTokenType'>;
+type CardContentSencoedProps = Pick<IProps, 'transactionType' | 'inputValue2' | 'getTokenType' | 'tokenType'>;
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   'label + &': {
@@ -98,15 +98,15 @@ function MyCardContentOne({ transactionType, getTokenType, getInputVal1, tokenTy
 
   const { netWorth } = useNetWorth(TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE]);
 
-  const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
+  // const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
   const handleChange = (event: { target: { value: string } }) => {
     getTokenType(event.target.value as TOKEN_BALANCE_TYPE);
-    SetCurrency(event.target.value as TOKEN_BALANCE_TYPE);
+    // SetCurrency(event.target.value as TOKEN_BALANCE_TYPE);
   };
   const { balance } = useBalance(
     transactionType === TRANSFER_TYPE.PURCHASE
       ? TOKEN_BALANCE_TYPE.USDT
-      : currency === 'EZAT'
+      : tokenType === 'EZAT'
       ? TOKEN_BALANCE_TYPE.EZAT
       : TOKEN_BALANCE_TYPE.EZBT,
   );
@@ -160,7 +160,7 @@ function MyCardContentOne({ transactionType, getTokenType, getInputVal1, tokenTy
         <BalanceContent>
           <Select
             id="demo-customized-select-native"
-            value={currency}
+            value={tokenType}
             onChange={handleChange}
             input={<BootstrapInput />}
           >
@@ -211,12 +211,12 @@ function MyCardContentOne({ transactionType, getTokenType, getInputVal1, tokenTy
   );
 }
 
-function MyCardContentSecond({ transactionType, getTokenType, inputValue2 }: CardContentSencoedProps) {
+function MyCardContentSecond({ transactionType, getTokenType, inputValue2, tokenType }: CardContentSencoedProps) {
   const theme = useTheme();
-  const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
+  // const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
   const handleChange = (event: SelectChangeEvent) => {
     getTokenType(event.target.value as TOKEN_BALANCE_TYPE);
-    SetCurrency(event.target.value as TOKEN_BALANCE_TYPE);
+    // SetCurrency(event.target.value as TOKEN_BALANCE_TYPE);
   };
 
   const { t } = useTranslation();
@@ -253,7 +253,7 @@ function MyCardContentSecond({ transactionType, getTokenType, inputValue2 }: Car
         <BalanceContent>
           <Select
             id="demo-customized-select-native"
-            value={currency}
+            value={tokenType}
             onChange={handleChange}
             input={<BootstrapInput />}
           >
@@ -266,7 +266,7 @@ function MyCardContentSecond({ transactionType, getTokenType, inputValue2 }: Car
                   style={{
                     ...iconStyle,
                     margin: '0 10px',
-                    background: 'rgba(26, 107, 173, 1)',
+                    background: 'rgba(95, 69, 186, 1)',
                   }}
                 >
                   <BaseIconFont name="icon-A" style={{ width: 20, height: 20, fill: 'white' }} />
@@ -280,7 +280,7 @@ function MyCardContentSecond({ transactionType, getTokenType, inputValue2 }: Car
                   style={{
                     ...iconStyle,
                     margin: '0 10px',
-                    background: 'rgba(95, 69, 186, 1)',
+                    background: 'rgba(26, 107, 173, 1)',
                   }}
                 >
                   <BaseIconFont name="icon-B" style={{ width: 20, height: 20, fill: 'white' }} />
@@ -289,20 +289,23 @@ function MyCardContentSecond({ transactionType, getTokenType, inputValue2 }: Car
               </>
             </MenuItem>
           </Select>
-          <span style={{ height: 18 }} />
+          <div style={{ height: 18, visibility: 'hidden' }} />
         </BalanceContent>
       ) : (
-        <div style={{ display: 'flex', alignItems: 'center', marginRight: 5 }}>
-          <div
-            style={{
-              ...iconStyle,
-              background: 'rgba(255, 87, 0, 1)',
-              marginRight: 5,
-            }}
-          >
-            <BaseIconFont name="icon-qiandaizi" style={{ width: 20, height: 20, fill: 'white' }} />
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', marginRight: 5, height: 46 }}>
+            <div
+              style={{
+                ...iconStyle,
+                background: 'rgba(255, 87, 0, 1)',
+                marginRight: 5,
+              }}
+            >
+              <BaseIconFont name="icon-qiandaizi" style={{ width: 20, height: 20, fill: 'white' }} />
+            </div>
+            USDT
           </div>
-          USDT
+          <div style={{ height: 18, visibility: 'hidden' }} />
         </div>
       )}
     </BodyContent>

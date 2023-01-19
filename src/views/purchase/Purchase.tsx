@@ -274,7 +274,7 @@ export default function Purchase() {
           <CardContent>
             <MyCardContentSecond
               transactionType={type}
-              // tokenType={tab === 0 ? TOKEN_TYPE.EZBT : TOKEN_TYPE.EZAT}
+              tokenType={tokenType}
               getTokenType={getTokenType}
               inputValue2={inputValue2}
             />
