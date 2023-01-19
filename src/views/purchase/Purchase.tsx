@@ -77,8 +77,8 @@ export default function Purchase() {
     setInputValue2(
       value
         ? type === TRANSFER_TYPE.PURCHASE
-          ? '' + Math.floor(parseInt(value) / parseFloat(formatNetWorth(netWorth, true)))
-          : '' + Math.floor(parseInt(value) * parseFloat(formatNetWorth(netWorth, true)))
+          ? '' + (parseInt(value) / parseFloat(formatNetWorth(netWorth, true))).toFixed(2)
+          : '' + (parseInt(value) * parseFloat(formatNetWorth(netWorth, true))).toFixed(2)
         : '0',
     );
   }
