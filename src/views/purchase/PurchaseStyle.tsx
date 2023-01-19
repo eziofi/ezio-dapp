@@ -7,7 +7,9 @@ const PurchaseContainer = styled((props: IProps) => {
 })(() => {
   return {
     maxWidth: 500,
-    height: 500,
+    height: '100%',
+    maxHeight: 900,
+    paddingBottom: 10,
     margin: '0 auto',
     display: 'flex',
     flexDirection: 'column',
