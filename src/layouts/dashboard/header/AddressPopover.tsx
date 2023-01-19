@@ -19,7 +19,7 @@ export default function AddressPopover() {
 
   const { balance } = useBalance(TOKEN_BALANCE_TYPE.USDT);
 
-  const addressToShow = account.substring(0, 7) + '...' + account.substring(account.length - 7, account.length);
+  const addressToShow = account.substring(0, 5) + '...' + account.substring(account.length - 5, account.length);
   const addressToShowInPop = account.substring(0, 12) + '...' + account.substring(account.length - 12, account.length);
 
   const logout = () => {

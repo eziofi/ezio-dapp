@@ -75,7 +75,7 @@ const CssTextField = styled(TextField)(() => {
       },
       '#custom-css-outlined-input': {
         fontSize: 32,
-        width: 200,
+        width: 150,
         color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
         // textAlign: 'center',
         padding: 0,
@@ -153,7 +153,7 @@ function MyCardContentOne({ transactionType, getTokenType, getInputVal1, tokenTy
               marginTop: 5,
             }}
           >
-            {t('purchase.leftBalance')}: {balance ? formatNum(balance).toUnsafeFloat().toFixed(2) : 0} USDT
+            {t('purchase.leftBalance')}: {balance ? formatNum(balance).toUnsafeFloat().toFixed(2) : 0}
           </span>
         </BalanceContent>
       ) : (

@@ -43,7 +43,7 @@ export default {
     copyText: '复制成功',
   },
   purchase: {
-    purchaseValue: '购买金额',
+    purchaseValue: '购买',
     leftBalance: '账户余额',
     leftAvailableAmount: '本轮剩余额度',
     currentTime: '当前时间',
@@ -66,7 +66,7 @@ export default {
     action: '操作',
   },
   redeem: {
-    redeemValue: '赎回数量',
+    redeemValue: '赎回',
     title: '赎回',
     redeemInputLabel: '份数',
     redeemAction: '赎回',
@@ -78,7 +78,7 @@ export default {
   account: {
     extractAction: '提取',
     balance: '余额',
-    detail: '账户明细',
+    detail: '交易记录',
     checkDetail: '查看明细>>',
     netWorth: '总价值',
     recordPurchaseAction: '购买',
