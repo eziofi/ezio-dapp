@@ -1,7 +1,7 @@
 export default {
   nav: {
     home: '首页',
-    swap: '购买/赎回',
+    swap: '兑换',
     // purchase: '购买',
     // redeem: '赎回',
     account: '账户',
