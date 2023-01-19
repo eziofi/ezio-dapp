@@ -95,7 +95,7 @@ const DetailItem = ({ record }: { record: PurchaseRecord | RedeemRecord }) => {
     //     </div>
     //   </div>
     // </div>
-    <List sx={{ width: '97%' }}>
+    <List sx={{ width: '97%', paddingBottom: 0 }}>
       <ListItem>
         <ListItemAvatar>
           <Avatar
@@ -157,7 +157,7 @@ const DetailItem = ({ record }: { record: PurchaseRecord | RedeemRecord }) => {
           </div>
         </Box>
       </ListItem>
-      <Divider />
+      <Divider sx={{ marginTop: '8px' }} />
     </List>
   );
 };

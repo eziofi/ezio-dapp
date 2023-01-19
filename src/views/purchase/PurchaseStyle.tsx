@@ -8,12 +8,13 @@ const PurchaseContainer = styled((props: IProps) => {
   return {
     maxWidth: 500,
     height: '100%',
-    maxHeight: 900,
-    paddingBottom: 10,
+    maxHeight: document.body.offsetHeight - 116,
+    paddingBottom: 30,
     margin: '0 auto',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    overflow: 'auto',
   };
 });
 
