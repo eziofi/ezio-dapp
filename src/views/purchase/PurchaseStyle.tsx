@@ -8,7 +8,7 @@ const PurchaseContainer = styled((props: IProps) => {
   return {
     maxWidth: 500,
     height: '100%',
-    maxHeight: document.body.offsetHeight - 116,
+    maxHeight: document.body.offsetHeight - 196,
     paddingBottom: 30,
     margin: '0 auto',
     display: 'flex',
