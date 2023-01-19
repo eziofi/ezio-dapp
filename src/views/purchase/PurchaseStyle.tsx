@@ -6,8 +6,8 @@ const PurchaseContainer = styled((props: IProps) => {
   return <Card {...props} />;
 })(() => {
   return {
-    width: 'xl',
-    height: 588,
+    maxWidth: 500,
+    height: 500,
     margin: '0 auto',
     display: 'flex',
     flexDirection: 'column',
@@ -19,7 +19,7 @@ const ContentBottom = styled((props: IProps) => {
   return <Card {...props} variant="outlined" />;
 })(() => {
   return {
-    width: '95%',
+    width: '90%',
     height: 109,
     position: 'relative',
     ':after': {
@@ -41,7 +41,7 @@ const ContentTop = styled((props: IProps) => {
   return <Card {...props} variant="outlined" />;
 })(() => {
   return {
-    width: '95%',
+    width: '90%',
     height: 109,
     position: 'relative',
     ':after': {
@@ -123,9 +123,9 @@ const DateNow = styled('p')(() => {
     color: 'rgba(76, 80, 97, 1)',
     fontSize: 14,
     letterSpacing: 0,
-    width: '95%',
+    width: '90%',
     bgColor: 'red',
-    margin: '10px auto',
+    margin: '10px auto 20px',
   };
 });
 
@@ -134,7 +134,7 @@ const FooterContent = styled('div')(() => {
     display: 'flex',
     flexDirection: 'column',
     textAlign: 'center',
-    width: 120,
+    width: 200,
     fontSize: 12,
     letterSpacing: 0,
     marginTop: 10,
