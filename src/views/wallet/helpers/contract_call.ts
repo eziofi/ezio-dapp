@@ -1,30 +1,44 @@
 import {
-  EzatERC20,
-  EzatERC20__factory,
-  EzbtERC20,
-  EzbtERC20__factory,
-  EzPurchase,
-  EzPurchase__factory,
-  StETH,
-  StETH__factory,
-  Treasury,
-  Treasury__factory,
-  USDT,
-  USDT__factory,
+  EzUSD,
+  EzUSD__factory,
+  EzMATIC,
+  EzMATIC__factory,
+  EzioERC20,
+  EzioERC20__factory,
+  EzioV1,
+  EzioV1__factory,
 } from '../contract';
-import { TOKEN_TYPE, TRANSFER_TYPE } from './constant';
-import { BigNumber, ContractTransaction, Signer, utils } from 'ethers';
+
+import { ERC20_ABI, POLYGON_TOKENS, TOKEN_TYPE, TRANSFER_TYPE } from './constant';
+import { BigNumber, ContractTransaction, ethers, Signer, utils } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
-import { formatNumToString } from './utilities';
+import { formatNumToString, getOneInchQuoteResponse } from './utilities';
+import { OneInchQuoteParams } from './types';
+// import { Treasury__factory } from '../contract/factories/contracts/Treasury__factory';
+// import { EzPurchase__factory } from '../contract/factories/contracts/EzPurchase__factory';
+// import { USDT__factory } from '../contract/factories/contracts/USDT__factory';
 
 const usdtJson = require('../contract/abi/USDT.json');
 const stEthJson = require('../contract/abi/StETH.json');
-const ezatJson = require('../contract/abi/EzatERC20.json');
-const ezbtJson = require('../contract/abi/EzbtERC20.json');
+const ezatJson = require('../contract/abi/EzUSD.json');
+const ezbtJson = require('../contract/abi/EzMATIC.json');
 const ezioJson = require('../contract/abi/EzioERC20.json');
 const treasuryJson = require('../contract/abi/Treasury.json');
 const purchaseJson = require('../contract/abi/EzPurchase.json');
 const swapJson = require('../contract/abi/Swap.json');
+const EzioV1Json = require('../contract/abi/EzioV1.json');
+const EzioERC20Json = require('../contract/abi/EzioERC20.json');
+const EzUSDJson = require('../contract/abi/EzUSD.json');
+const EzMATICJson = require('../contract/abi/EzMATIC.json');
+
+const USDC_ADDRESS = POLYGON_TOKENS.USDC;
+const USDT_ADDRESS = POLYGON_TOKENS.USDT;
+const DAI_ADDRESS = POLYGON_TOKENS.DAI;
+const WETH_ADDRESS = POLYGON_TOKENS.WETH;
+const STMATIC_ADDRESS = POLYGON_TOKENS.stMATIC;
+const USDC_TAKER_ADDRESS = process.env.POLYGON_USDC_TAKER_ADDRESS || '';
+const USDT_TAKER_ADDRESS = process.env.POLYGON_USDT_TAKER_ADDRESS || '';
+const DAI_TAKER_ADDRESS = process.env.POLYGON_DAI_TAKER_ADDRESS || '';
 
 // export interface Overrides {
 //   gasLimit?: BigNumberish | Promise<BigNumberish>;
@@ -41,31 +55,30 @@ const override = {
   gasLimit: 2000000,
 };
 
-function TreasuryConnect(signerOrProvider: Signer | Provider): Treasury {
+function TreasuryConnect(signerOrProvider: Signer | Provider) {
   return Treasury__factory.connect(treasuryJson.address, signerOrProvider);
 }
 
-function EzatConnect(signerOrProvider: Signer | Provider): EzatERC20 {
-  return EzatERC20__factory.connect(ezatJson.address, signerOrProvider);
+function EzatConnect(signerOrProvider: Signer | Provider) {
+  return EzUSD__factory.connect(ezatJson.address, signerOrProvider);
 }
 
-function EzbtConnect(signerOrProvider: Signer | Provider): EzbtERC20 {
-  return EzbtERC20__factory.connect(ezbtJson.address, signerOrProvider);
+function EzbtConnect(signerOrProvider: Signer | Provider): EzMATIC {
+  return EzMATIC__factory.connect(ezbtJson.address, signerOrProvider);
 }
 
 /*function EzioConnect(signerOrProvider: Signer | Provider): EzioERC20 {
   return EzioERC20__factory.connect(ezioJson.address, signerOrProvider);
 }*/
 
-function EzPurchaseConnect(signerOrProvider: Signer | Provider): EzPurchase {
+function EzPurchaseConnect(signerOrProvider: Signer | Provider) {
   return EzPurchase__factory.connect(purchaseJson.address, signerOrProvider);
 }
-function USDTConnect(signerOrProvider: Signer | Provider): USDT {
+function USDTConnect(signerOrProvider: Signer | Provider) {
   return USDT__factory.connect(usdtJson.address, signerOrProvider);
 }
-
-function StEthConnect(signerOrProvider: Signer | Provider): StETH {
-  return StETH__factory.connect(stEthJson.address, signerOrProvider);
+function EzioConnect(signerOrProvider: Signer | Provider) {
+  return EzioV1__factory.connect(ezioJson.address, signerOrProvider);
 }
 
 /**
@@ -176,38 +189,54 @@ export async function ethPrice(signerOrProvider: Signer | Provider): Promise<Big
   return TreasuryConnect(signerOrProvider).ethPrice();
 }
 
-/**
- * 购买 token
- * @param type token 类型
- * @param amt 申购所用USDT
- * @param signer  ether signer
- * @returns
- */
-export async function purchase(type: TOKEN_TYPE, amt: number, signer: Signer) {
-  const daiContract = USDTConnect(signer);
-  const parseQty = utils.parseEther(`${amt}`);
-  await daiContract.approve(purchaseJson.address, parseQty, override);
-  await new Promise(resolve => setTimeout(resolve, 2000));
-
-  const contract = EzPurchaseConnect(signer);
-  const purchaseTr = await contract.purchase(type, parseQty, override);
-  return purchaseTr;
+export async function purchase(signerOrProvider: Signer | Provider) {
+  let quoteParams1: OneInchQuoteParams = {
+    fromTokenAddress: USDT_ADDRESS,
+    toTokenAddress: USDC_ADDRESS,
+    amount: '2500000000',
+    fromAddress: ezioJson.address,
+    slippage: 1,
+    disableEstimate: true,
+  };
+  const usdt = new ethers.Contract(USDT_ADDRESS, ERC20_ABI, signerOrProvider);
+  let quoteResponse1 = await getOneInchQuoteResponse(quoteParams1);
+  await usdt.approve(ezioJson.address, quoteResponse1.sellAmount);
+  let quotes1 = [quoteResponse1];
+  await EzioConnect(signerOrProvider).purchase(0, quotes1);
 }
 
-/**
- * 赎回
- * @param type 0为ezat,1为ezbt
- * @param tokenQty 赎回数量
- * @param signerOrProvider  ether provider or signer
- * @returns
- */
-export async function redeem(
-  type: number,
-  tokenQty: number,
-  signerOrProvider: Signer | Provider,
-): Promise<ContractTransaction> {
-  return EzPurchaseConnect(signerOrProvider).redeem(type, utils.parseEther(`${tokenQty}`), override);
-}
+// /**
+//  * 购买 token
+//  * @param type token 类型
+//  * @param amt 申购所用USDT
+//  * @param signer  ether signer
+//  * @returns
+//  */
+// export async function purchase(type: TOKEN_TYPE, amt: number, signer: Signer) {
+//   const daiContract = USDTConnect(signer);
+//   const parseQty = utils.parseEther(`${amt}`);
+//   await daiContract.approve(purchaseJson.address, parseQty, override);
+//   await new Promise(resolve => setTimeout(resolve, 2000));
+//
+//   const contract = EzPurchaseConnect(signer);
+//   const purchaseTr = await contract.purchase(type, parseQty, override);
+//   return purchaseTr;
+// }
+
+// /**
+//  * 赎回
+//  * @param type 0为ezat,1为ezbt
+//  * @param tokenQty 赎回数量
+//  * @param signerOrProvider  ether provider or signer
+//  * @returns
+//  */
+// export async function redeem(
+//   type: number,
+//   tokenQty: number,
+//   signerOrProvider: Signer | Provider,
+// ): Promise<ContractTransaction> {
+//   return EzPurchaseConnect(signerOrProvider).redeem(type, utils.parseEther(`${tokenQty}`), override);
+// }
 
 export interface PurchaseRecord {
   transferType: TRANSFER_TYPE.PURCHASE;

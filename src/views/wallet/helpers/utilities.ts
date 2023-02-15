@@ -1,10 +1,15 @@
 import * as ethUtil from 'ethereumjs-util';
-import { IChainData } from './types';
+import { IChainData, OneInchQuoteParams, ZeroExQuoteParams } from './types';
 import supportedChains from './chains';
 import { BigNumber, BigNumberish, FixedNumber, utils } from 'ethers';
 import numeral from 'numeral';
+import qs from 'qs';
+import { SwapQuoteStruct } from '../contract/contracts/EzioV1';
 // import { apiGetGasPrices, apiGetAccountNonce } from "./api";
 // import { convertAmountToRawNumber, convertStringToHex } from "./bignumber";
+
+const ZEROEX_API_QUOTE_URL = 'https://polygon.api.0x.org/swap/v1/quote';
+const ONEINCH_API_QUOTE_URL = 'https://api.1inch.io/v5.0/137/swap';
 
 export function capitalize(string: string): string {
   return string
@@ -293,4 +298,51 @@ export function getYMax(data: number[]) {
   const first = Math.ceil(float);
   const maxYValue = first * Math.pow(10, length - 1);
   return maxYValue;
+}
+
+export async function getZeroExQuoteResponse(quoteParams: ZeroExQuoteParams) {
+  let quoteResponse: SwapQuoteStruct;
+  let quoteUrl = `${ZEROEX_API_QUOTE_URL}?${qs.stringify(quoteParams)}`;
+  let response = await fetch(quoteUrl);
+  // Check for error from 0x API
+  if (response.status !== 200) {
+    const body = await response.text();
+    throw new Error(body);
+  }
+  let quote = await response.json();
+  //console.log("=======quote=",quote);
+  quoteResponse = {
+    buyToken: quote.buyTokenAddress,
+    sellAmount: quote.sellAmount,
+    sellToken: quote.sellTokenAddress,
+    swapCallData: quote.data,
+  };
+  return quoteResponse;
+}
+
+export async function getOneInchQuoteResponse(quoteParams: OneInchQuoteParams) {
+  let quote: SwapQuoteStruct;
+  let quoteUrl = `${ONEINCH_API_QUOTE_URL}?${qs.stringify(quoteParams)}`;
+  let response = await getJson(quoteUrl);
+  //console.log("=======response=",response);
+  quote = {
+    buyToken: quoteParams.toTokenAddress,
+    sellAmount: quoteParams.amount,
+    sellToken: quoteParams.fromTokenAddress,
+    swapCallData: response.tx.data,
+  };
+  return quote;
+}
+
+export async function getJson(url: RequestInfo | URL) {
+  const res = await fetch(url);
+  const json = await res.json();
+  if (!json) {
+    throw new Error('no response');
+  }
+  if (json.error) {
+    console.log(json);
+    throw new Error(json.description || json.error);
+  }
+  return json;
 }
