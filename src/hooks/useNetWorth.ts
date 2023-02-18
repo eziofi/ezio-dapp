@@ -4,13 +4,14 @@ import { BigNumber } from 'ethers';
 import { useQuery } from 'react-query';
 import useWallet from '../views/hooks/useWallet';
 
-export function useNetWorth(tokenType: TOKEN_TYPE) {
+export function useNetWorth(tokenType: TOKEN_BALANCE_TYPE) {
   const { ethersProvider } = useWallet();
 
-  const netWorthApi = {
-    [TOKEN_TYPE.EZAT]: ezatNetWorth,
-    [TOKEN_TYPE.EZBT]: ezbtNetWorth,
+  const netWorthApi: any = {
+    [TOKEN_BALANCE_TYPE.EZAT]: ezatNetWorth,
+    [TOKEN_BALANCE_TYPE.EZBT]: ezbtNetWorth,
   };
+
   const { data: netWorth } = useQuery(
     ['networth', tokenType],
     () => netWorthApi[tokenType](ethersProvider!.getSigner()),

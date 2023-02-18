@@ -57,6 +57,13 @@ interface IPurchaseArg {
   signerOrProvider: Signer | Provider;
 }
 
+interface IRedeemAeg {
+  fromType: TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT;
+  amount: number;
+  slippage: number;
+  signerOrProvider: Signer | Provider;
+}
+
 export default function Purchase() {
   const queryClient: QueryClient = useQueryClient();
   const [type, setType] = useState(TRANSFER_TYPE.PURCHASE); // 0是购买 1是赎回
@@ -68,7 +75,13 @@ export default function Purchase() {
   const [redeenTokenType, setRedeenTokenType] = useState<TOKEN_BALANCE_TYPE>(TOKEN_BALANCE_TYPE.USDT); // 下拉框value
   const theme = useTheme();
 
-  const { netWorth } = useNetWorth(TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE]);
+  const [slippage, setSlippage] = useState<number>(0);
+  const [time, setTime] = useState<string>();
+
+  // 定时时间
+  setInterval(() => setTime(timestampFormat(new Date().getTime())), 1000);
+
+  const { netWorth } = useNetWorth(TOKEN_BALANCE_TYPE[tokenType as keyof typeof TOKEN_BALANCE_TYPE]);
 
   const { t } = useTranslation();
   const style = {
@@ -117,7 +130,7 @@ export default function Purchase() {
   const [msg, setMsg] = useState('');
 
   const { mutate: purchaseMutate } = useMutation(
-    (arg: IPurchaseArg) => purchase(arg.type, arg.tokenQty, arg.signerOrProvider),
+    (arg: IPurchaseArg) => purchase(arg.fromType, arg.toType, arg.amount, arg.slippage, arg.signerOrProvider),
     {
       onSuccess: () => {
         queryClient.invalidateQueries();
@@ -129,7 +142,7 @@ export default function Purchase() {
   );
 
   const { mutate: redeemMutate } = useMutation(
-    (arg: IPurchaseArg) => redeem(arg.type, arg.tokenQty, arg.signerOrProvider),
+    (arg: IRedeemAeg) => redeem(arg.fromType, arg.amount, arg.signerOrProvider, arg.slippage),
     {
       onSuccess: () => {
         queryClient.invalidateQueries();
@@ -166,8 +179,10 @@ export default function Purchase() {
         setMsgOpen(true);
       } else {
         const args: IPurchaseArg = {
-          type: TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE],
-          tokenQty: parseInt(inputValue1),
+          fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC,
+          toType: TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
+          amount: Number(inputValue1),
+          slippage,
           signerOrProvider: ethersProvider!.getSigner(),
         };
         purchaseMutate(args);
@@ -184,10 +199,11 @@ export default function Purchase() {
         setMsg(t('redeem.moreThanBalanceMsg'));
         setMsgOpen(true);
       } else {
-        const args: IPurchaseArg = {
-          type: TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE],
-          tokenQty: parseInt(inputValue1),
+        const args: IRedeemAeg = {
+          fromType: TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
+          amount: Number(inputValue1),
           signerOrProvider: ethersProvider!.getSigner(),
+          slippage,
         };
         redeemMutate(args);
         setInputValue1('');
@@ -241,7 +257,7 @@ export default function Purchase() {
             {/* <ReplyIcon /> */}
             <BaseIconFont name="icon-shezhi" style={{ width: 20, height: 20 }} />
           </IconButton>
-          <FormDialog open={open} setOpen={setOpen} />
+          <FormDialog open={open} setOpen={setOpen} slippage={slippage} setSlippage={setSlippage} />
         </Typography>
       </Toolbar>
       {/* 卡片1 */}
@@ -309,7 +325,7 @@ export default function Purchase() {
       </ContentTop>
       {/* 当前时间 */}
       <DateNow>
-        {t('purchase.currentTime')}: {timestampFormat(new Date().getTime())}
+        {t('purchase.currentTime')}: {time}
       </DateNow>
       {/* 购买按钮 */}
       <Button

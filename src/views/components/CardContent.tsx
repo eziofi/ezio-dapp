@@ -194,7 +194,7 @@ function MyCardContentOne({
   redeenTokenType,
   setRedeenTokenType,
 }: CardContentOneProps) {
-  const { netWorth } = useNetWorth(TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE]);
+  const { netWorth } = useNetWorth(TOKEN_BALANCE_TYPE[tokenType as keyof typeof TOKEN_BALANCE_TYPE]);
 
   // const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
   const handleChange = (event: { target: { value: string } }) => {

@@ -40,9 +40,11 @@ export default function Account() {
   //   }
   // };
 
-  const TokenCard = ({ type }: { type: keyof typeof TOKEN_BALANCE_TYPE }) => {
+  const TokenCard = ({ type }: { type: TOKEN_BALANCE_TYPE }) => {
     const { balance } = useBalance(type);
-    const { netWorth } = useNetWorth(type === TOKEN_BALANCE_TYPE.EZAT ? TOKEN_TYPE.EZAT : TOKEN_TYPE.EZBT);
+    const { netWorth } = useNetWorth(
+      type === TOKEN_BALANCE_TYPE.EZAT ? TOKEN_BALANCE_TYPE.EZAT : TOKEN_BALANCE_TYPE.EZBT,
+    );
 
     const iconDiv = {
       width: 50,
@@ -192,9 +194,9 @@ export default function Account() {
 
       {page === 'account' ? (
         <AccountCardBox>
-          <TokenCard type="USDT" />
-          <TokenCard type="EZAT" />
-          <TokenCard type="EZBT" />
+          <TokenCard type={TOKEN_BALANCE_TYPE.USDT} />
+          <TokenCard type={TOKEN_BALANCE_TYPE.EZAT} />
+          <TokenCard type={TOKEN_BALANCE_TYPE.EZBT} />
         </AccountCardBox>
       ) : (
         <AccountDetail />

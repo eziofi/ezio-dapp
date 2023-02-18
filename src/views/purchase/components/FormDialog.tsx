@@ -11,19 +11,26 @@ import {
   DialogContent,
   DialogTitle,
 } from '@mui/material';
-export default function FormDialog({ open, setOpen }: { open: boolean; setOpen: (openFlag: boolean) => void }) {
+export default function FormDialog({
+  open,
+  setOpen,
+  slippage,
+  setSlippage,
+}: {
+  open: boolean;
+  setOpen: (openFlag: boolean) => void;
+  slippage: number;
+  setSlippage: (count: number) => void;
+}) {
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleOk = () => {
     setOpen(false);
-    console.log('inputValue', inputVal);
   };
 
   const { t } = useTranslation();
-
-  const [inputVal, setInputVal] = useState<null | string>('');
 
   const theme = useTheme();
 
@@ -52,8 +59,8 @@ export default function FormDialog({ open, setOpen }: { open: boolean; setOpen: 
           fullWidth
           variant="standard"
           type="number"
-          value={inputVal}
-          onChange={(e: any) => setInputVal(e.target.value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1') as string)}
+          value={slippage}
+          onChange={(e: any) => setSlippage(e.target.value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1'))}
           InputProps={{
             endAdornment: <InputAdornment position="end">%</InputAdornment>,
           }}
