@@ -220,7 +220,6 @@ export function formatNetWorth(value: BigNumberish | string | undefined, format1
 
 /**
  * 格式化数值，
- * todo abstract functions
  * @param value wei 单位的数值
  * @returns
  */
@@ -253,7 +252,6 @@ export function formatNumToString(value: BigNumber): string {
 
 /**
  * 数字类型转换为字符串
- * todo need abstract functions
  * @param value
  * @returns
  */

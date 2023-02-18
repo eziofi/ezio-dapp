@@ -218,8 +218,7 @@ export async function purchaseA(
     ezioJson.address,
     quoteResponse.sellAmount,
   );
-  let quotes1 = [quoteResponse];
-  await EzioConnect(signerOrProvider).purchase(fromType, quotes1);
+  await EzioConnect(signerOrProvider).purchase(TOKEN_TYPE.EZAT, [quoteResponse]);
 }
 
 export async function purchaseB(
@@ -248,7 +247,9 @@ export async function purchaseB(
   const quoteNetWorth = BigNumber.from(quoteParams.amount)
     .mul(fromType === TOKEN_TYPE.USDT ? await ezio.getPrice(quoteParams.fromTokenAddress) : 1)
     .div(1000000);
-  if (quoteNetWorth.lte(await ezio.pooledA())) {
+  const pooledA = await ezio.pooledA();
+
+  if (quoteNetWorth.lte(pooledA)) {
     let convertSellAmount =
       fromType === TOKEN_TYPE.USDT
         ? await ezio.convertAmt(quoteParams.fromTokenAddress, USDC_ADDRESS, BigNumber.from(quoteParams.amount))
@@ -263,11 +264,26 @@ export async function purchaseB(
     };
     let quoteResponse2 = await getOneInchQuoteResponse(quoteParams2);
     quotes = [quoteResponse, quoteResponse2];
+  } else if (pooledA.gt(0)) {
+    // 如果金库储量大于0
+    let convertSellAmount =
+      fromType === TOKEN_TYPE.USDT
+        ? await ezio.convertAmt(quoteParams.fromTokenAddress, USDC_ADDRESS, pooledA)
+        : pooledA; // 这是是否要转换小数位
+    let quoteParams2: OneInchQuoteParams = {
+      fromTokenAddress: USDC_ADDRESS,
+      toTokenAddress: STMATIC_ADDRESS,
+      amount: convertSellAmount.toString(),
+      fromAddress: ezioJson.address,
+      slippage,
+      disableEstimate: true,
+    };
+    let quoteResponse2 = await getOneInchQuoteResponse(quoteParams2);
+    quotes = [quoteResponse, quoteResponse2];
   } else {
-    // todo 金库里不足部分全部买成stmatic
     quotes = [quoteResponse];
   }
-  await ezio.purchase(1, quotes);
+  await ezio.purchase(TOKEN_TYPE.EZBT, quotes);
 }
 
 // /**
