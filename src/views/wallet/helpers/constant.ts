@@ -13,6 +13,25 @@ export const COMPARISON_PRICE_DECIMALS = 10;
 export const ETH_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 export const EXCHANGE_PROXY_ADDRESS = '0xdef1c0ded9bec7f1a1670819833240f027b25eff';
 
+export enum TOKEN_TYPE {
+  EZAT,
+  EZBT,
+  USDC,
+  stMatic,
+  USDT,
+}
+
+export enum TRANSFER_TYPE {
+  PURCHASE = 0,
+  REDEEM = 1,
+}
+
+export enum TOKEN_BALANCE_TYPE {
+  EZAT = 'EZAT',
+  EZBT = 'EZBT',
+  USDT = 'USDT',
+}
+
 // Mainnet tokens
 // Not an exhaustive list, just enough so we don't repeat ourselves
 export const MAINNET_TOKENS = {

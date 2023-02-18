@@ -4,7 +4,6 @@ import DashboardLayout from './layouts/dashboard';
 //  Childrens
 import HomePage from './views/homePage/HomePage';
 import Purchase from './views/purchase/Purchase';
-import Redeem from './views/redeem/Redeem';
 import Account from './views/account/Account';
 // import SimpleLayout from './layouts/simple';
 //
@@ -31,7 +30,7 @@ export default function Router() {
         { element: <Navigate to="/dashboard/homePage" />, index: true },
         { path: 'homePage', element: <HomePage /> },
         { path: 'purchase', element: <Purchase /> },
-        { path: 'redeem', element: <Redeem /> },
+        // { path: 'redeem', element: <Redeem /> },
         { path: 'account', element: <Account /> },
         // { path: 'user', element: <UserPage /> },
         // { path: 'products', element: <ProductsPage /> },

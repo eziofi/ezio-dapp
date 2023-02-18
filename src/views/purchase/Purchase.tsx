@@ -19,7 +19,6 @@ import { TOKEN_BALANCE_TYPE, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers
 import useWallet from '../hooks/useWallet';
 import { formatNetWorth, formatNum, timestampFormat } from '../wallet/helpers/utilities';
 import { useTranslation } from 'react-i18next';
-import { TransactionForm } from '../../components/TransactionForm';
 
 // export default function Purchase() {
 //   const { t } = useTranslation();
@@ -48,7 +47,8 @@ import { useNetWorth } from '../../hooks/useNetWorth';
 import { useBalance } from '../../hooks/useBalance';
 
 interface IPurchaseArg {
-  type: TOKEN_TYPE;
+  fromType: TOKEN_TYPE;
+  toType: TOKEN_TYPE;
   tokenQty: number;
   signerOrProvider: Signer;
 }
