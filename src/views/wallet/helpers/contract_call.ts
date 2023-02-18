@@ -306,11 +306,10 @@ export async function purchaseB(
 
 /**
  * 赎回
- * @param fromType
+ * @param fromType 卖出token类型，tokenA或者tokenB
  * @param amount
- * @param signerOrProvider  ether provider or signer
- * @param slippage
- * @returns
+ * @param slippage 滑点
+ * @param signerOrProvider signerOrProvider
  */
 export async function redeem(
   fromType: TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
@@ -384,6 +383,14 @@ export interface RedeemRecord {
 //   return TreasuryConnect(signerOrProvider).ethPrice();
 // }
 
+/**
+ * 购买
+ * @param fromType 花费token类型，USDT或者USDC
+ * @param toType 购买的token类型，tokenA或tokenB
+ * @param amount
+ * @param slippage 滑点
+ * @param signerOrProvider signerOrProvider
+ */
 export async function purchase(
   fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC,
   toType: TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
