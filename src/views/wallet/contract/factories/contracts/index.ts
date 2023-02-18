@@ -12,4 +12,3 @@ export { EzUSD__factory } from "./EzUSD__factory";
 export { EzioERC20__factory } from "./EzioERC20__factory";
 export { EzioV1__factory } from "./EzioV1__factory";
 export { OneInchSwap__factory } from "./OneInchSwap__factory";
-export { SwapCollector__factory } from "./SwapCollector__factory";

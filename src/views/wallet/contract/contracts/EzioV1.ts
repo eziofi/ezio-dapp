@@ -52,7 +52,6 @@ export interface EzioV1Interface extends utils.Interface {
     "check()": FunctionFragment;
     "convertAmt(address,address,uint256)": FunctionFragment;
     "convertDown((address,address,uint256,bytes))": FunctionFragment;
-    "feeTier()": FunctionFragment;
     "getPrice(address)": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
     "getRoleMember(bytes32,uint256)": FunctionFragment;
@@ -74,7 +73,8 @@ export interface EzioV1Interface extends utils.Interface {
     "revokeRole(bytes32,address)": FunctionFragment;
     "rewardRate()": FunctionFragment;
     "setAggregators(address,address)": FunctionFragment;
-    "setThreshold(uint256)": FunctionFragment;
+    "setRedeemFeeRate(uint16)": FunctionFragment;
+    "setRewardRate(uint16)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "tokenAggregators(address)": FunctionFragment;
     "totalNetWorth()": FunctionFragment;
@@ -93,7 +93,6 @@ export interface EzioV1Interface extends utils.Interface {
       | "check"
       | "convertAmt"
       | "convertDown"
-      | "feeTier"
       | "getPrice"
       | "getRoleAdmin"
       | "getRoleMember"
@@ -115,7 +114,8 @@ export interface EzioV1Interface extends utils.Interface {
       | "revokeRole"
       | "rewardRate"
       | "setAggregators"
-      | "setThreshold"
+      | "setRedeemFeeRate"
+      | "setRewardRate"
       | "supportsInterface"
       | "tokenAggregators"
       | "totalNetWorth"
@@ -160,7 +160,6 @@ export interface EzioV1Interface extends utils.Interface {
     functionFragment: "convertDown",
     values: [SwapQuoteStruct]
   ): string;
-  encodeFunctionData(functionFragment: "feeTier", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getPrice",
     values: [PromiseOrValue<string>]
@@ -235,7 +234,11 @@ export interface EzioV1Interface extends utils.Interface {
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "setThreshold",
+    functionFragment: "setRedeemFeeRate",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setRewardRate",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
@@ -289,7 +292,6 @@ export interface EzioV1Interface extends utils.Interface {
     functionFragment: "convertDown",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "feeTier", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getPrice", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getRoleAdmin",
@@ -339,7 +341,11 @@ export interface EzioV1Interface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setThreshold",
+    functionFragment: "setRedeemFeeRate",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setRewardRate",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -513,8 +519,8 @@ export interface EzioV1 extends BaseContract {
     ): Promise<[BigNumber]>;
 
     check(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+      overrides?: CallOverrides
+    ): Promise<[boolean] & { convertDownFlag: boolean }>;
 
     convertAmt(
       sourceAddress: PromiseOrValue<string>,
@@ -527,8 +533,6 @@ export interface EzioV1 extends BaseContract {
       quote_: SwapQuoteStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-
-    feeTier(overrides?: CallOverrides): Promise<[number]>;
 
     getPrice(
       tokenAddress: PromiseOrValue<string>,
@@ -618,8 +622,13 @@ export interface EzioV1 extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    setThreshold(
-      threshold_: PromiseOrValue<BigNumberish>,
+    setRedeemFeeRate(
+      redeemFeeRate_: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setRewardRate(
+      rewardRate_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -658,9 +667,7 @@ export interface EzioV1 extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  check(
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+  check(overrides?: CallOverrides): Promise<boolean>;
 
   convertAmt(
     sourceAddress: PromiseOrValue<string>,
@@ -673,8 +680,6 @@ export interface EzioV1 extends BaseContract {
     quote_: SwapQuoteStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
-
-  feeTier(overrides?: CallOverrides): Promise<number>;
 
   getPrice(
     tokenAddress: PromiseOrValue<string>,
@@ -764,8 +769,13 @@ export interface EzioV1 extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  setThreshold(
-    threshold_: PromiseOrValue<BigNumberish>,
+  setRedeemFeeRate(
+    redeemFeeRate_: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setRewardRate(
+    rewardRate_: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -804,7 +814,7 @@ export interface EzioV1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    check(overrides?: CallOverrides): Promise<void>;
+    check(overrides?: CallOverrides): Promise<boolean>;
 
     convertAmt(
       sourceAddress: PromiseOrValue<string>,
@@ -817,8 +827,6 @@ export interface EzioV1 extends BaseContract {
       quote_: SwapQuoteStruct,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    feeTier(overrides?: CallOverrides): Promise<number>;
 
     getPrice(
       tokenAddress: PromiseOrValue<string>,
@@ -904,8 +912,13 @@ export interface EzioV1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setThreshold(
-      threshold_: PromiseOrValue<BigNumberish>,
+    setRedeemFeeRate(
+      redeemFeeRate_: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setRewardRate(
+      rewardRate_: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1026,9 +1039,7 @@ export interface EzioV1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    check(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
+    check(overrides?: CallOverrides): Promise<BigNumber>;
 
     convertAmt(
       sourceAddress: PromiseOrValue<string>,
@@ -1041,8 +1052,6 @@ export interface EzioV1 extends BaseContract {
       quote_: SwapQuoteStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
-
-    feeTier(overrides?: CallOverrides): Promise<BigNumber>;
 
     getPrice(
       tokenAddress: PromiseOrValue<string>,
@@ -1132,8 +1141,13 @@ export interface EzioV1 extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    setThreshold(
-      threshold_: PromiseOrValue<BigNumberish>,
+    setRedeemFeeRate(
+      redeemFeeRate_: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setRewardRate(
+      rewardRate_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1181,9 +1195,7 @@ export interface EzioV1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    check(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
+    check(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     convertAmt(
       sourceAddress: PromiseOrValue<string>,
@@ -1196,8 +1208,6 @@ export interface EzioV1 extends BaseContract {
       quote_: SwapQuoteStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
-
-    feeTier(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getPrice(
       tokenAddress: PromiseOrValue<string>,
@@ -1287,8 +1297,13 @@ export interface EzioV1 extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    setThreshold(
-      threshold_: PromiseOrValue<BigNumberish>,
+    setRedeemFeeRate(
+      redeemFeeRate_: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setRewardRate(
+      rewardRate_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

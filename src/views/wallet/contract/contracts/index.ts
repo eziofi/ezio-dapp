@@ -16,4 +16,3 @@ export type { EzUSD } from "./EzUSD";
 export type { EzioERC20 } from "./EzioERC20";
 export type { EzioV1 } from "./EzioV1";
 export type { OneInchSwap } from "./OneInchSwap";
-export type { SwapCollector } from "./SwapCollector";

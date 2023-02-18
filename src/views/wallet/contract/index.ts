@@ -88,8 +88,6 @@ export type { IEzio } from "./contracts/interfaces/IEzio";
 export { IEzio__factory } from "./factories/contracts/interfaces/IEzio__factory";
 export type { OneInchSwap } from "./contracts/OneInchSwap";
 export { OneInchSwap__factory } from "./factories/contracts/OneInchSwap__factory";
-export type { SwapCollector } from "./contracts/SwapCollector";
-export { SwapCollector__factory } from "./factories/contracts/SwapCollector__factory";
 export type { Uniswap } from "./contracts/UniSwap.sol/Uniswap";
 export { Uniswap__factory } from "./factories/contracts/UniSwap.sol/Uniswap__factory";
 export type { ZeroExSwap } from "./contracts/ZeroExSwap.sol/ZeroExSwap";
