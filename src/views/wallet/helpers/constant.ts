@@ -30,6 +30,8 @@ export enum TOKEN_BALANCE_TYPE {
   EZAT = 'EZAT',
   EZBT = 'EZBT',
   USDT = 'USDT',
+  USDC = 'USDC',
+  stMatic = 'stMatic',
 }
 
 // Mainnet tokens

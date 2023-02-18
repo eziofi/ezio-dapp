@@ -9,6 +9,8 @@ export function useBalance(tokenType: keyof typeof TOKEN_BALANCE_TYPE) {
     [TOKEN_BALANCE_TYPE.EZAT]: ezatBalanceOf,
     [TOKEN_BALANCE_TYPE.EZBT]: ezbtBalanceOf,
     [TOKEN_BALANCE_TYPE.USDT]: usdtBalanceOf,
+    [TOKEN_BALANCE_TYPE.USDC]: usdtBalanceOf,
+    [TOKEN_BALANCE_TYPE.stMatic]: usdtBalanceOf,
   };
   const { data: balance, refetch: refetchBalance } = useQuery(
     ['balanceOf', tokenType],

@@ -64,6 +64,11 @@ export default {
     tokenName: '币别',
     amount: '金额',
     action: '操作',
+    slippageSetting: '滑点设置',
+    PleaseEnterTheSlipPoint: '请输入滑点',
+    slippage: '滑点',
+    cancel: '取消',
+    ok: '确定',
   },
   redeem: {
     redeemValue: '赎回',

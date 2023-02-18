@@ -10,18 +10,18 @@ import { SwapQuoteStruct } from '../contract/contracts/EzioV1';
 // import { EzPurchase__factory } from '../contract/factories/contracts/EzPurchase__factory';
 // import { USDT__factory } from '../contract/factories/contracts/USDT__factory';
 
-const usdtJson = require('../contract/abi/USDT.json');
-const stEthJson = require('../contract/abi/StETH.json');
+// const usdtJson = require('../contract/abi/USDT.json');
+// const stEthJson = require('../contract/abi/StETH.json');
 const ezatJson = require('../contract/abi/EzUSD.json');
 const ezbtJson = require('../contract/abi/EzMATIC.json');
 const ezioJson = require('../contract/abi/EzioERC20.json');
-const treasuryJson = require('../contract/abi/Treasury.json');
-const purchaseJson = require('../contract/abi/EzPurchase.json');
-const swapJson = require('../contract/abi/Swap.json');
-const EzioV1Json = require('../contract/abi/EzioV1.json');
-const EzioERC20Json = require('../contract/abi/EzioERC20.json');
-const EzUSDJson = require('../contract/abi/EzUSD.json');
-const EzMATICJson = require('../contract/abi/EzMATIC.json');
+// const treasuryJson = require('../contract/abi/Treasury.json');
+// const purchaseJson = require('../contract/abi/EzPurchase.json');
+// const swapJson = require('../contract/abi/Swap.json');
+// const EzioV1Json = require('../contract/abi/EzioV1.json');
+// const EzioERC20Json = require('../contract/abi/EzioERC20.json');
+// const EzUSDJson = require('../contract/abi/EzUSD.json');
+// const EzMATICJson = require('../contract/abi/EzMATIC.json');
 
 const USDC_ADDRESS = POLYGON_TOKENS.USDC;
 const USDT_ADDRESS = POLYGON_TOKENS.USDT;

@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3861749 */
-  src: url('iconfont.woff2?t=1673947110783') format('woff2'),
-       url('iconfont.woff?t=1673947110783') format('woff'),
-       url('iconfont.ttf?t=1673947110783') format('truetype');
+  src: url('iconfont.woff2?t=1676613501415') format('woff2'),
+       url('iconfont.woff?t=1676613501415') format('woff'),
+       url('iconfont.ttf?t=1676613501415') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,46 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-stMatic-copy:before {
+  content: "\e74e";
+}
+
+.icon-stMatic:before {
+  content: "\e603";
+}
+
+.icon-USDT:before {
+  content: "\e604";
+}
+
+.icon-USDT-copy:before {
+  content: "\e74f";
+}
+
+.icon-USDC:before {
+  content: "\e605";
+}
+
+.icon-USDC-copy:before {
+  content: "\e750";
+}
+
+.icon-shezhi-copy:before {
+  content: "\e751";
+}
+
+.icon-shezhi-copy1:before {
+  content: "\e752";
+}
+
+.icon-shezhi:before {
+  content: "\e608";
+}
+
+.icon-shezhi-copy2:before {
+  content: "\e74d";
 }
 
 .icon-zuanshi-copy:before {
@@ -27,6 +67,14 @@
 
 .icon-weidaizijinchilixichaxun:before {
   content: "\e658";
+}
+
+.icon-A-copy-copy:before {
+  content: "\e753";
+}
+
+.icon-B-copy-copy:before {
+  content: "\e754";
 }
 
 .icon-A-copy:before {

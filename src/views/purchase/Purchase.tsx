@@ -19,6 +19,7 @@ import { TOKEN_BALANCE_TYPE, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers
 import useWallet from '../hooks/useWallet';
 import { formatNetWorth, formatNum, timestampFormat } from '../wallet/helpers/utilities';
 import { useTranslation } from 'react-i18next';
+import { TransactionForm } from '../../components/TransactionForm';
 
 // export default function Purchase() {
 //   const { t } = useTranslation();
@@ -45,6 +46,8 @@ import CachedIcon from '@mui/icons-material/Cached';
 import { MyCardContentOne, MyCardContentSecond } from '../components/CardContent';
 import { useNetWorth } from '../../hooks/useNetWorth';
 import { useBalance } from '../../hooks/useBalance';
+import FormDialog from './components/FormDialog';
+import BaseIconFont from '../components/BaseIconFont';
 
 interface IPurchaseArg {
   fromType: TOKEN_TYPE;
@@ -61,6 +64,7 @@ export default function Purchase() {
   const [inputValue2, setInputValue2] = useState('');
   const [isClick, setIsClick] = useState(false);
   const [tokenType, setTokenType] = useState<TOKEN_BALANCE_TYPE>(TOKEN_BALANCE_TYPE.EZAT); // 下拉框value
+  const [redeenTokenType, setRedeenTokenType] = useState<TOKEN_BALANCE_TYPE>(TOKEN_BALANCE_TYPE.USDT); // 下拉框value
   const theme = useTheme();
 
   const { netWorth } = useNetWorth(TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE]);
@@ -207,6 +211,10 @@ export default function Purchase() {
     // });
   };
 
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => setOpen(true);
+
   return (
     <PurchaseContainer>
       <Snackbar
@@ -220,8 +228,19 @@ export default function Purchase() {
         sx={{ position: 'fixed' }}
       />
       <Toolbar sx={{ width: '98%', alignSelf: 'flex-start', margin: '0 auto' }}>
-        <Typography variant="h6" component="div">
-          {type === 0 ? t('purchase.purchaseValue') : t('redeem.redeemValue')}
+        <Typography
+          variant="h6"
+          component="div"
+          sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}
+        >
+          <span>{type === 0 ? t('purchase.purchaseValue') : t('redeem.redeemValue')}</span>
+          {/* <span onClick={handleClickOpen}>设置</span> */}
+          <IconButton onClick={handleClickOpen}>
+            {/* <img src={rollbackIcon} width="24" style={{ background: 'red' }} /> */}
+            {/* <ReplyIcon /> */}
+            <BaseIconFont name="icon-shezhi" style={{ width: 20, height: 20 }} />
+          </IconButton>
+          <FormDialog open={open} setOpen={setOpen} />
         </Typography>
       </Toolbar>
       {/* 卡片1 */}
@@ -241,6 +260,8 @@ export default function Purchase() {
               tokenType={tokenType}
               getTokenType={getTokenType}
               getInputVal1={getInputVal1}
+              redeenTokenType={redeenTokenType}
+              setRedeenTokenType={setRedeenTokenType}
             />
           </CardContent>
         ) : (
@@ -277,6 +298,8 @@ export default function Purchase() {
               tokenType={tokenType}
               getTokenType={getTokenType}
               inputValue2={inputValue2}
+              redeenTokenType={redeenTokenType}
+              setRedeenTokenType={setRedeenTokenType}
             />
           </CardContent>
         ) : (

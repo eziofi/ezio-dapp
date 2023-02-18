@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import { TOKEN_BALANCE_TYPE, TOKEN_TYPE, TRANSFER_TYPE } from '../../views/wallet/helpers/constant';
 import BaseIconFont from './BaseIconFont';
 import { useNetWorth } from '../../hooks/useNetWorth';
+import { BigNumber } from 'ethers';
 
 interface IProps {
   isBuy?: boolean;
@@ -17,10 +18,25 @@ interface IProps {
   getInputVal1: (InputVal: string) => void | any;
   inputValue2: string;
   tokenType: TOKEN_BALANCE_TYPE;
+  redeenTokenType: TOKEN_BALANCE_TYPE;
+  setRedeenTokenType: (redeenTokenType: TOKEN_BALANCE_TYPE) => void;
 }
 
-type CardContentOneProps = Pick<IProps, 'transactionType' | 'getInputVal1' | 'getTokenType' | 'tokenType'>;
-type CardContentSencoedProps = Pick<IProps, 'transactionType' | 'inputValue2' | 'getTokenType' | 'tokenType'>;
+interface IOptions {
+  value: TOKEN_BALANCE_TYPE;
+  style: { margin: string; background: string };
+  iconName: string;
+  iconStyle: { width: number; height: number; fill: string };
+}
+
+type CardContentOneProps = Pick<
+  IProps,
+  'transactionType' | 'getInputVal1' | 'getTokenType' | 'tokenType' | 'redeenTokenType' | 'setRedeenTokenType'
+>;
+type CardContentSencoedProps = Pick<
+  IProps,
+  'transactionType' | 'inputValue2' | 'getTokenType' | 'tokenType' | 'redeenTokenType' | 'setRedeenTokenType'
+>;
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   'label + &': {
@@ -30,14 +46,10 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
     borderRadius: 15,
     width: 110,
     position: 'relative',
-    // backgroundColor: theme.palette.background.paper,
     backgroundColor: theme.palette.mode === 'light' ? 'rgba(247, 239, 255, 1)' : theme.palette.grey[700],
-    // border: '1px solid #ced4da',
     fontSize: 14,
     display: 'flex',
     alignItems: 'center',
-    // transition: theme.transitions.create(['border-color', 'box-shadow']),
-    // Use the system font instead of the default Roboto font.
     fontFamily: [
       '-apple-system',
       'BlinkMacSystemFont',
@@ -52,10 +64,6 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
     ].join(','),
     '&:focus': {
       borderRadius: 15,
-
-      // borderRadius: 4,
-      // borderColor: '#80bdff',
-      // boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
     },
   },
 }));
@@ -77,7 +85,6 @@ const CssTextField = styled(TextField)(() => {
         fontSize: 32,
         width: 150,
         color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
-        // textAlign: 'center',
         padding: 0,
       },
     },
@@ -93,9 +100,100 @@ const iconStyle = {
   borderRadius: '50%',
 };
 
-function MyCardContentOne({ transactionType, getTokenType, getInputVal1, tokenType }: CardContentOneProps) {
-  const { t } = useTranslation();
+function RanderOptions(
+  Options: IOptions[],
+  tokenType: string,
+  handleChange: (event: SelectChangeEvent) => void,
+  isShowBalance?: boolean,
+  balance?: BigNumber,
+) {
+  const theme = useTheme();
+  let translate: any;
+  if (isShowBalance) {
+    translate = useTranslation().t;
+  }
+  return (
+    <BalanceContent>
+      <Select id="demo-customized-select-native" value={tokenType} onChange={handleChange} input={<BootstrapInput />}>
+        {Options.map((item: IOptions, index: number) => {
+          return (
+            <MenuItem value={item.value} key={index}>
+              <>
+                <div
+                  style={{
+                    ...iconStyle,
+                    ...item.style,
+                  }}
+                >
+                  <BaseIconFont name={item.iconName} style={item.iconStyle} />
+                </div>
+                {item.value}
+              </>
+            </MenuItem>
+          );
+        })}
+      </Select>
+      {isShowBalance ? (
+        <span
+          style={{
+            fontSize: 12,
+            color: theme.palette.text.secondary,
+            marginTop: 5,
+          }}
+        >
+          {translate('purchase.leftBalance')}: {balance ? formatNum(balance).toUnsafeFloat().toFixed(2) : 0}
+        </span>
+      ) : (
+        <div style={{ height: 18, visibility: 'hidden' }} />
+      )}
+    </BalanceContent>
+  );
+}
 
+const PurchasenOptions: IOptions[] = [
+  {
+    value: TOKEN_BALANCE_TYPE.EZAT,
+    style: { margin: '0 10px', background: 'rgba(95, 69, 186, 1)' },
+    iconName: 'icon-A',
+    iconStyle: { width: 20, height: 20, fill: 'white' },
+  },
+  {
+    value: TOKEN_BALANCE_TYPE.EZBT,
+    style: { margin: '0 10px', background: 'rgba(26, 107, 173, 1)' },
+    iconName: 'icon-B',
+    iconStyle: { width: 20, height: 20, fill: 'white' },
+  },
+];
+
+const RedeenOptions: IOptions[] = [
+  {
+    value: TOKEN_BALANCE_TYPE.USDT,
+    style: { margin: '0 10px', background: 'rgba(95, 69, 186, 1)' },
+    iconName: 'icon-USDT-copy',
+    iconStyle: { width: 20, height: 20, fill: 'white' },
+  },
+  {
+    value: TOKEN_BALANCE_TYPE.USDC,
+    style: { margin: '0 10px', background: 'rgba(95, 69, 186, 1)' },
+    iconName: 'icon-USDC-copy',
+    iconStyle: { width: 20, height: 20, fill: 'white' },
+  },
+  // {
+  //   value: TOKEN_BALANCE_TYPE.stMatic,
+  //   style: { margin: '0 10px', background: 'rgba(239, 89, 114)' },
+  //   iconName: 'icon-stMatic-copy',
+  //   iconStyle: { width: 20, height: 20, fill: 'white' },
+  // },
+];
+
+function MyCardContentOne({
+  transactionType,
+  getTokenType,
+  getInputVal1,
+  tokenType,
+  redeenTokenType,
+  setRedeenTokenType,
+}: CardContentOneProps) {
   const { netWorth } = useNetWorth(TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE]);
 
   // const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
@@ -103,6 +201,11 @@ function MyCardContentOne({ transactionType, getTokenType, getInputVal1, tokenTy
     getTokenType(event.target.value as TOKEN_BALANCE_TYPE);
     // SetCurrency(event.target.value as TOKEN_BALANCE_TYPE);
   };
+
+  const redeenChange = (event: SelectChangeEvent) => {
+    setRedeenTokenType(event.target.value as TOKEN_BALANCE_TYPE);
+  };
+
   const { balance } = useBalance(
     transactionType === TRANSFER_TYPE.PURCHASE
       ? TOKEN_BALANCE_TYPE.USDT
@@ -110,7 +213,9 @@ function MyCardContentOne({ transactionType, getTokenType, getInputVal1, tokenTy
       ? TOKEN_BALANCE_TYPE.EZAT
       : TOKEN_BALANCE_TYPE.EZBT,
   );
+
   const theme = useTheme();
+  const { t } = useTranslation();
 
   return (
     <BodyContent>
@@ -132,93 +237,55 @@ function MyCardContentOne({ transactionType, getTokenType, getInputVal1, tokenTy
           {t('purchase.unitPrice') + ' $' + formatNetWorth(netWorth, true)}
         </div>
       </div>
-      {transactionType === TRANSFER_TYPE.PURCHASE ? (
-        <BalanceContent>
-          <div style={{ display: 'flex', alignItems: 'center', marginRight: 5, height: 46 }}>
-            <div
-              style={{
-                ...iconStyle,
-                background: 'rgba(255, 87, 0, 1)',
-                marginRight: 5,
-              }}
-            >
-              <BaseIconFont name="icon-qiandaizi" style={{ width: 20, height: 20, fill: 'white' }} />
-            </div>
-            USDT
-          </div>
-          <span
-            style={{
-              fontSize: 12,
-              color: theme.palette.text.secondary,
-              marginTop: 5,
-            }}
-          >
-            {t('purchase.leftBalance')}: {balance ? formatNum(balance).toUnsafeFloat().toFixed(2) : 0}
-          </span>
-        </BalanceContent>
-      ) : (
-        <BalanceContent>
-          <Select
-            id="demo-customized-select-native"
-            value={tokenType}
-            onChange={handleChange}
-            input={<BootstrapInput />}
-          >
-            {/*<MenuItem value="">*/}
-            {/*  <em>None</em>*/}
-            {/*</MenuItem>*/}
-            <MenuItem value={TOKEN_BALANCE_TYPE.EZAT}>
-              <>
-                <div
-                  style={{
-                    ...iconStyle,
-                    background: 'rgba(95, 69, 186, 1)',
-                    margin: '0 10px',
-                  }}
-                >
-                  <BaseIconFont name="icon-A" style={{ width: 20, height: 20, fill: 'white' }} />
-                </div>
-                EZAT
-              </>
-            </MenuItem>
-            <MenuItem value={TOKEN_BALANCE_TYPE.EZBT}>
-              <>
-                <div
-                  style={{
-                    ...iconStyle,
-                    background: 'rgba(26, 107, 173, 1)',
-                    margin: '0 10px',
-                  }}
-                >
-                  <BaseIconFont name="icon-B" style={{ width: 20, height: 20, fill: 'white' }} />
-                </div>
-                EZBT
-              </>
-            </MenuItem>
-          </Select>
-          <span
-            style={{
-              fontSize: 12,
-              color: theme.palette.text.secondary,
-              marginTop: 5,
-            }}
-          >
-            {t('purchase.leftBalance')}: {balance ? formatNum(balance).toUnsafeFloat().toFixed(2) : 0} {tokenType}
-          </span>
-        </BalanceContent>
-      )}
+      {transactionType === TRANSFER_TYPE.PURCHASE
+        ? // <BalanceContent>
+          //   <div style={{ display: 'flex', alignItems: 'center', marginRight: 5, height: 46 }}>
+          //     <div
+          //       style={{
+          //         ...iconStyle,
+          //         background: 'rgba(255, 87, 0, 1)',
+          //         marginRight: 5,
+          //       }}
+          //     >
+          //       <BaseIconFont name="icon-qiandaizi" style={{ width: 20, height: 20, fill: 'white' }} />
+          //     </div>
+          //     USDT
+          //   </div>
+          //   <span
+          //     style={{
+          //       fontSize: 12,
+          //       color: theme.palette.text.secondary,
+          //       marginTop: 5,
+          //     }}
+          //   >
+          //     {t('purchase.leftBalance')}: {balance ? formatNum(balance).toUnsafeFloat().toFixed(2) : 0}
+          //   </span>
+          // </BalanceContent>
+          RanderOptions(RedeenOptions, redeenTokenType, redeenChange, true, balance)
+        : RanderOptions(PurchasenOptions, tokenType, handleChange, true, balance)}
     </BodyContent>
   );
 }
 
-function MyCardContentSecond({ transactionType, getTokenType, inputValue2, tokenType }: CardContentSencoedProps) {
-  const theme = useTheme();
+function MyCardContentSecond({
+  transactionType,
+  getTokenType,
+  inputValue2,
+  tokenType,
+  redeenTokenType,
+  setRedeenTokenType,
+}: CardContentSencoedProps) {
   // const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
   const handleChange = (event: SelectChangeEvent) => {
     getTokenType(event.target.value as TOKEN_BALANCE_TYPE);
     // SetCurrency(event.target.value as TOKEN_BALANCE_TYPE);
   };
 
+  const redeenChange = (event: SelectChangeEvent) => {
+    setRedeenTokenType(event.target.value as TOKEN_BALANCE_TYPE);
+  };
+
+  const theme = useTheme();
   const { t } = useTranslation();
   // const { balance, refetchBalance } = useBalance(
   //   transactionType === TRANSFER_TYPE.PURCHASE
@@ -249,48 +316,11 @@ function MyCardContentSecond({ transactionType, getTokenType, inputValue2, token
           {t('purchase.estimated')}
         </div>
       </div>
+      {/* {transactionType === TRANSFER_TYPE.PURCHASE
+        ? RanderOptions(PurchasenOptions, tokenType, handleChange)
+        : RanderOptions(RedeenOptions, redeenTokenType, redeenChange)} */}
       {transactionType === TRANSFER_TYPE.PURCHASE ? (
-        <BalanceContent>
-          <Select
-            id="demo-customized-select-native"
-            value={tokenType}
-            onChange={handleChange}
-            input={<BootstrapInput />}
-          >
-            {/*<MenuItem value="">*/}
-            {/*  <em>None</em>*/}
-            {/*</MenuItem>*/}
-            <MenuItem value={TOKEN_BALANCE_TYPE.EZAT} sx={{ height: 46 }}>
-              <>
-                <div
-                  style={{
-                    ...iconStyle,
-                    margin: '0 10px',
-                    background: 'rgba(95, 69, 186, 1)',
-                  }}
-                >
-                  <BaseIconFont name="icon-A" style={{ width: 20, height: 20, fill: 'white' }} />
-                </div>
-                EZAT
-              </>
-            </MenuItem>
-            <MenuItem value={TOKEN_BALANCE_TYPE.EZBT}>
-              <>
-                <div
-                  style={{
-                    ...iconStyle,
-                    margin: '0 10px',
-                    background: 'rgba(26, 107, 173, 1)',
-                  }}
-                >
-                  <BaseIconFont name="icon-B" style={{ width: 20, height: 20, fill: 'white' }} />
-                </div>
-                EZBT
-              </>
-            </MenuItem>
-          </Select>
-          <div style={{ height: 18, visibility: 'hidden' }} />
-        </BalanceContent>
+        RanderOptions(PurchasenOptions, tokenType, handleChange)
       ) : (
         <div>
           <div style={{ display: 'flex', alignItems: 'center', marginRight: 5, height: 46 }}>
@@ -303,7 +333,7 @@ function MyCardContentSecond({ transactionType, getTokenType, inputValue2, token
             >
               <BaseIconFont name="icon-qiandaizi" style={{ width: 20, height: 20, fill: 'white' }} />
             </div>
-            USDT
+            {TOKEN_BALANCE_TYPE.USDC}
           </div>
           <div style={{ height: 18, visibility: 'hidden' }} />
         </div>
