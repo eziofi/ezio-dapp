@@ -74,10 +74,8 @@ export default function Purchase() {
   const [tokenType, setTokenType] = useState<TOKEN_BALANCE_TYPE>(TOKEN_BALANCE_TYPE.EZAT); // 下拉框value
   const [redeenTokenType, setRedeenTokenType] = useState<TOKEN_BALANCE_TYPE>(TOKEN_BALANCE_TYPE.USDT); // 下拉框value
   const theme = useTheme();
-
   const [slippage, setSlippage] = useState<number>(0);
   const [time, setTime] = useState<string>();
-
   // 定时时间
   setInterval(() => setTime(timestampFormat(new Date().getTime())), 1000);
 
@@ -172,6 +170,12 @@ export default function Purchase() {
 
   // 购买
   const doPurchase = () => {
+    console.log({
+      fromType: TOKEN_TYPE[redeenTokenType as keyof typeof TOKEN_TYPE] as TOKEN_TYPE.USDT | TOKEN_TYPE.USDC,
+      toType: TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE] as TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
+      amount: Number(inputValue1),
+      slippage,
+    });
     refetchBalance().then(({ data }) => {
       const balance = formatNum(data).toUnsafeFloat();
       if (parseInt(inputValue1) > balance) {
@@ -179,12 +183,13 @@ export default function Purchase() {
         setMsgOpen(true);
       } else {
         const args: IPurchaseArg = {
-          fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC,
-          toType: TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
+          fromType: TOKEN_TYPE[redeenTokenType as keyof typeof TOKEN_TYPE] as TOKEN_TYPE.USDT | TOKEN_TYPE.USDC,
+          toType: TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE] as TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
           amount: Number(inputValue1),
           slippage,
           signerOrProvider: ethersProvider!.getSigner(),
         };
+
         purchaseMutate(args);
         setInputValue1('');
         setInputValue2('');
@@ -200,7 +205,7 @@ export default function Purchase() {
         setMsgOpen(true);
       } else {
         const args: IRedeemAeg = {
-          fromType: TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
+          fromType: TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE] as TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
           amount: Number(inputValue1),
           signerOrProvider: ethersProvider!.getSigner(),
           slippage,
