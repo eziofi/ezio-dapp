@@ -18,8 +18,8 @@ interface IProps {
   getInputVal1: (InputVal: string) => void | any;
   inputValue2: string;
   tokenType: TOKEN_BALANCE_TYPE;
-  redeenTokenType: TOKEN_BALANCE_TYPE;
-  setRedeenTokenType: (redeenTokenType: TOKEN_BALANCE_TYPE) => void;
+  redeemTokenType: TOKEN_BALANCE_TYPE;
+  setredeemTokenType: (redeemTokenType: TOKEN_BALANCE_TYPE) => void;
 }
 
 interface IOptions {
@@ -31,11 +31,11 @@ interface IOptions {
 
 type CardContentOneProps = Pick<
   IProps,
-  'transactionType' | 'getInputVal1' | 'getTokenType' | 'tokenType' | 'redeenTokenType' | 'setRedeenTokenType'
+  'isBuy' | 'transactionType' | 'getInputVal1' | 'getTokenType' | 'tokenType' | 'redeemTokenType' | 'setredeemTokenType'
 >;
 type CardContentSencoedProps = Pick<
   IProps,
-  'transactionType' | 'inputValue2' | 'getTokenType' | 'tokenType' | 'redeenTokenType' | 'setRedeenTokenType'
+  'transactionType' | 'inputValue2' | 'getTokenType' | 'tokenType' | 'redeemTokenType' | 'setredeemTokenType'
 >;
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
@@ -165,7 +165,7 @@ const PurchasenOptions: IOptions[] = [
   },
 ];
 
-const RedeenOptions: IOptions[] = [
+const redeemOptions: IOptions[] = [
   {
     value: TOKEN_BALANCE_TYPE.USDT,
     style: { margin: '0 10px', background: 'rgba(95, 69, 186, 1)' },
@@ -191,8 +191,9 @@ function MyCardContentOne({
   getTokenType,
   getInputVal1,
   tokenType,
-  redeenTokenType,
-  setRedeenTokenType,
+  redeemTokenType,
+  setredeemTokenType,
+  isBuy,
 }: CardContentOneProps) {
   const { netWorth } = useNetWorth(TOKEN_BALANCE_TYPE[tokenType as keyof typeof TOKEN_BALANCE_TYPE]);
 
@@ -202,13 +203,13 @@ function MyCardContentOne({
     // SetCurrency(event.target.value as TOKEN_BALANCE_TYPE);
   };
 
-  const redeenChange = (event: SelectChangeEvent) => {
-    setRedeenTokenType(event.target.value as TOKEN_BALANCE_TYPE);
+  const redeemChange = (event: SelectChangeEvent) => {
+    setredeemTokenType(event.target.value as TOKEN_BALANCE_TYPE);
   };
 
   const { balance } = useBalance(
     transactionType === TRANSFER_TYPE.PURCHASE
-      ? TOKEN_BALANCE_TYPE.USDT
+      ? redeemTokenType
       : tokenType === 'EZAT'
       ? TOKEN_BALANCE_TYPE.EZAT
       : TOKEN_BALANCE_TYPE.EZBT,
@@ -232,13 +233,14 @@ function MyCardContentOne({
             fontSize: 12,
             color: theme.palette.text.secondary,
             marginTop: 5,
+            height: 18,
           }}
         >
-          {t('purchase.unitPrice') + ' $' + formatNetWorth(netWorth, true)}
+          {isBuy ? '' : t('purchase.unitPrice') + ' $' + formatNetWorth(netWorth, true)}
         </div>
       </div>
       {transactionType === TRANSFER_TYPE.PURCHASE
-        ? RanderOptions(RedeenOptions, redeenTokenType, redeenChange, true, balance)
+        ? RanderOptions(redeemOptions, redeemTokenType, redeemChange, true, balance)
         : RanderOptions(PurchasenOptions, tokenType, handleChange, true, balance)}
     </BodyContent>
   );
@@ -249,8 +251,8 @@ function MyCardContentSecond({
   getTokenType,
   inputValue2,
   tokenType,
-  redeenTokenType,
-  setRedeenTokenType,
+  redeemTokenType,
+  setredeemTokenType,
 }: CardContentSencoedProps) {
   // const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
   const handleChange = (event: SelectChangeEvent) => {
@@ -258,8 +260,8 @@ function MyCardContentSecond({
     // SetCurrency(event.target.value as TOKEN_BALANCE_TYPE);
   };
 
-  const redeenChange = (event: SelectChangeEvent) => {
-    setRedeenTokenType(event.target.value as TOKEN_BALANCE_TYPE);
+  const redeemChange = (event: SelectChangeEvent) => {
+    setredeemTokenType(event.target.value as TOKEN_BALANCE_TYPE);
   };
 
   const theme = useTheme();
@@ -295,7 +297,7 @@ function MyCardContentSecond({
       </div>
       {/* {transactionType === TRANSFER_TYPE.PURCHASE
         ? RanderOptions(PurchasenOptions, tokenType, handleChange)
-        : RanderOptions(RedeenOptions, redeenTokenType, redeenChange)} */}
+        : RanderOptions(redeemOptions, redeemTokenType, redeemChange)} */}
       {transactionType === TRANSFER_TYPE.PURCHASE ? (
         RanderOptions(PurchasenOptions, tokenType, handleChange)
       ) : (

@@ -1,30 +1,7 @@
-import TokenTabs from './components/TokenTabs';
-import { Dispatch, ReactElement, SetStateAction, useState, useTransition } from 'react';
-import './animation.less';
-import TextField from '@mui/material/TextField';
-import { Button, Link, Snackbar, Toolbar, useTheme } from '@mui/material';
-import PurchaseRecordTable from './components/PurchaseRecordTable';
-import PurchaseDrawer from './components/PurchaseDrawer';
-import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
-import {
-  ezatNetWorth,
-  ezbtNetWorth,
-  purchase,
-  redeem,
-  treasuryInterestRate,
-  usdtBalanceOf,
-} from '../wallet/helpers/contract_call';
-import { Signer } from 'ethers';
-import { TOKEN_BALANCE_TYPE, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
-import useWallet from '../hooks/useWallet';
-import { formatNetWorth, formatNum, timestampFormat } from '../wallet/helpers/utilities';
-import { useTranslation } from 'react-i18next';
-
 // export default function Purchase() {
 //   const { t } = useTranslation();
 //   const [tab, setTab] = useState(0);
 //   const [tipDrawerOpened, setTipDrawerOpened] = useState(false);
-
 //   return (
 //     <div className={styles.purchaseTab}>
 //       <TokenTabs tab={tab} tabChange={tab => setTab(tab)} />
@@ -37,10 +14,18 @@ import { useTranslation } from 'react-i18next';
 //     </div>
 //   );
 // }
-
-import React from 'react';
-import { CardContent, IconButton, Typography } from '@mui/material';
-import { ContentBottom, ContentTop, ConverBtn, PurchaseContainer, DateNow, FooterContent } from './PurchaseStyle';
+import React, { useState } from 'react';
+import './animation.less';
+import { Button, CardContent, IconButton, Link, Snackbar, Toolbar, Typography, useTheme } from '@mui/material';
+import PurchaseDrawer from './components/PurchaseDrawer';
+import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
+import { purchase, redeem, treasuryInterestRate } from '../wallet/helpers/contract_call';
+import { Signer } from 'ethers';
+import { TOKEN_BALANCE_TYPE, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
+import useWallet from '../hooks/useWallet';
+import { formatNetWorth, formatNum, timestampFormat } from '../wallet/helpers/utilities';
+import { useTranslation } from 'react-i18next';
+import { ContentBottom, ContentTop, ConverBtn, DateNow, FooterContent, PurchaseContainer } from './PurchaseStyle';
 import CachedIcon from '@mui/icons-material/Cached';
 import { MyCardContentOne, MyCardContentSecond } from '../components/CardContent';
 import { useNetWorth } from '../../hooks/useNetWorth';
@@ -72,7 +57,7 @@ export default function Purchase() {
   const [inputValue2, setInputValue2] = useState('');
   const [isClick, setIsClick] = useState(false);
   const [tokenType, setTokenType] = useState<TOKEN_BALANCE_TYPE>(TOKEN_BALANCE_TYPE.EZAT); // 下拉框value
-  const [redeenTokenType, setRedeenTokenType] = useState<TOKEN_BALANCE_TYPE>(TOKEN_BALANCE_TYPE.USDT); // 下拉框value
+  const [redeemTokenType, setredeemTokenType] = useState<TOKEN_BALANCE_TYPE>(TOKEN_BALANCE_TYPE.USDT); // 下拉框value
   const theme = useTheme();
   const [slippage, setSlippage] = useState<number>(0);
   const [time, setTime] = useState<string>();
@@ -153,7 +138,7 @@ export default function Purchase() {
 
   const { balance, refetchBalance } = useBalance(
     type === TRANSFER_TYPE.PURCHASE
-      ? TOKEN_BALANCE_TYPE.USDT
+      ? redeemTokenType
       : tokenType === 'EZAT'
       ? TOKEN_BALANCE_TYPE.EZAT
       : TOKEN_BALANCE_TYPE.EZBT,
@@ -171,20 +156,19 @@ export default function Purchase() {
   // 购买
   const doPurchase = () => {
     console.log({
-      fromType: TOKEN_TYPE[redeenTokenType as keyof typeof TOKEN_TYPE] as TOKEN_TYPE.USDT | TOKEN_TYPE.USDC,
+      fromType: TOKEN_TYPE[redeemTokenType as keyof typeof TOKEN_TYPE] as TOKEN_TYPE.USDT | TOKEN_TYPE.USDC,
       toType: TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE] as TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
       amount: Number(inputValue1),
       slippage,
     });
     refetchBalance().then(({ data }) => {
-      const balance = formatNum(data, tokenType).toUnsafeFloat();
-      debugger;
+      const balance = formatNum(data, redeemTokenType).toUnsafeFloat();
       if (parseInt(inputValue1) > balance) {
         setMsg(t('purchase.moreThanBalanceMsg'));
         setMsgOpen(true);
       } else {
         const args: IPurchaseArg = {
-          fromType: TOKEN_TYPE[redeenTokenType as keyof typeof TOKEN_TYPE] as TOKEN_TYPE.USDT | TOKEN_TYPE.USDC,
+          fromType: TOKEN_TYPE[redeemTokenType as keyof typeof TOKEN_TYPE] as TOKEN_TYPE.USDT | TOKEN_TYPE.USDC,
           toType: TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE] as TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
           amount: Number(inputValue1),
           slippage,
@@ -263,12 +247,13 @@ export default function Purchase() {
         {!isClick ? (
           <CardContent>
             <MyCardContentOne
+              isBuy={type === TRANSFER_TYPE.PURCHASE}
               transactionType={type}
               tokenType={tokenType}
               getTokenType={getTokenType}
               getInputVal1={getInputVal1}
-              redeenTokenType={redeenTokenType}
-              setRedeenTokenType={setRedeenTokenType}
+              redeemTokenType={redeemTokenType}
+              setredeemTokenType={setredeemTokenType}
             />
           </CardContent>
         ) : (
@@ -305,8 +290,8 @@ export default function Purchase() {
               tokenType={tokenType}
               getTokenType={getTokenType}
               inputValue2={inputValue2}
-              redeenTokenType={redeenTokenType}
-              setRedeenTokenType={setRedeenTokenType}
+              redeemTokenType={redeemTokenType}
+              setredeemTokenType={setredeemTokenType}
             />
           </CardContent>
         ) : (

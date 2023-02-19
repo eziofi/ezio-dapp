@@ -1,12 +1,11 @@
 import { EzioV1__factory, EzMATIC, EzMATIC__factory, EzUSD__factory } from '../contract';
 
 import { ERC20_ABI, POLYGON_TOKENS, TOKEN_TYPE, TRANSFER_TYPE } from './constant';
-import { BigNumber, ethers, Signer, utils } from 'ethers';
+import { BigNumber, ethers, Signer } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
 import { formatNumToString, getOneInchQuoteResponse } from './utilities';
 import { OneInchQuoteParams } from './types';
 import { SwapQuoteStruct } from '../contract/contracts/EzioV1';
-import { formatUnits } from 'ethers/lib/utils';
 // import { Treasury__factory } from '../contract/factories/contracts/Treasury__factory';
 // import { EzPurchase__factory } from '../contract/factories/contracts/EzPurchase__factory';
 // import { USDT__factory } from '../contract/factories/contracts/USDT__factory';
@@ -139,11 +138,20 @@ export async function ezbtBalanceOf(signerOrProvider: Signer | Provider, address
  * 获取 usdt token 数量
  * @param signerOrProvider
  * @param address 账户地址
- * @returns ezio token 数量
+ * @returns usdt token 数量
  */
 export async function usdtBalanceOf(signerOrProvider: Signer | Provider, address: string): Promise<BigNumber> {
-  const res = await USDTConnect(signerOrProvider).balanceOf(address);
-  return res;
+  return await USDTConnect(signerOrProvider).balanceOf(address);
+}
+
+/**
+ * 获取 usdc token 数量
+ * @param signerOrProvider
+ * @param address 账户地址
+ * @returns usdc token 数量
+ */
+export async function usdcBalanceOf(signerOrProvider: Signer | Provider, address: string): Promise<BigNumber> {
+  return await USDCConnect(signerOrProvider).balanceOf(address);
 }
 
 /**
@@ -321,6 +329,7 @@ export async function redeem(
 ) {
   let redeemAmount = ethers.utils.parseEther(String(amount));
   let convertSellAmount = await getRedeemQuoteQty(fromType, redeemAmount, signerOrProvider);
+  debugger;
   let quoteParams: OneInchQuoteParams = {
     fromTokenAddress: STMATIC_ADDRESS,
     toTokenAddress: USDC_ADDRESS,
