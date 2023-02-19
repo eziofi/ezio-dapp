@@ -1,11 +1,12 @@
 import { EzioV1__factory, EzMATIC, EzMATIC__factory, EzUSD__factory } from '../contract';
 
 import { ERC20_ABI, POLYGON_TOKENS, TOKEN_TYPE, TRANSFER_TYPE } from './constant';
-import { BigNumber, ethers, Signer } from 'ethers';
+import { BigNumber, ethers, Signer, utils } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
 import { formatNumToString, getOneInchQuoteResponse } from './utilities';
 import { OneInchQuoteParams } from './types';
 import { SwapQuoteStruct } from '../contract/contracts/EzioV1';
+import { formatUnits } from 'ethers/lib/utils';
 // import { Treasury__factory } from '../contract/factories/contracts/Treasury__factory';
 // import { EzPurchase__factory } from '../contract/factories/contracts/EzPurchase__factory';
 // import { USDT__factory } from '../contract/factories/contracts/USDT__factory';
@@ -14,7 +15,7 @@ import { SwapQuoteStruct } from '../contract/contracts/EzioV1';
 // const stEthJson = require('../contract/abi/StETH.json');
 const ezatJson = require('../contract/abi/EzUSD.json');
 const ezbtJson = require('../contract/abi/EzMATIC.json');
-const ezioJson = require('../contract/abi/EzioERC20.json');
+const ezioJson = require('../contract/abi/EzioV1.json');
 // const treasuryJson = require('../contract/abi/Treasury.json');
 // const purchaseJson = require('../contract/abi/EzPurchase.json');
 // const swapJson = require('../contract/abi/Swap.json');
@@ -86,7 +87,7 @@ function stMaticConnect(signerOrProvider: Signer | Provider) {
  * @returns 金库储量
  */
 export async function treasuryTotalNetWorth(signerOrProvider: Signer | Provider): Promise<BigNumber> {
-  return EzioConnect(signerOrProvider).totalNetWorth();
+  return await EzioConnect(signerOrProvider).totalNetWorth();
 }
 
 /**
@@ -141,7 +142,8 @@ export async function ezbtBalanceOf(signerOrProvider: Signer | Provider, address
  * @returns ezio token 数量
  */
 export async function usdtBalanceOf(signerOrProvider: Signer | Provider, address: string): Promise<BigNumber> {
-  return USDTConnect(signerOrProvider).balanceOf(address);
+  const res = await USDTConnect(signerOrProvider).balanceOf(address);
+  return res;
 }
 
 /**

@@ -57,7 +57,7 @@ interface IPurchaseArg {
   signerOrProvider: Signer | Provider;
 }
 
-interface IRedeemAeg {
+interface IRedeemArg {
   fromType: TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT;
   amount: number;
   slippage: number;
@@ -140,7 +140,7 @@ export default function Purchase() {
   );
 
   const { mutate: redeemMutate } = useMutation(
-    (arg: IRedeemAeg) => redeem(arg.fromType, arg.amount, arg.signerOrProvider, arg.slippage),
+    (arg: IRedeemArg) => redeem(arg.fromType, arg.amount, arg.signerOrProvider, arg.slippage),
     {
       onSuccess: () => {
         queryClient.invalidateQueries();
@@ -177,7 +177,8 @@ export default function Purchase() {
       slippage,
     });
     refetchBalance().then(({ data }) => {
-      const balance = formatNum(data).toUnsafeFloat();
+      const balance = formatNum(data, tokenType).toUnsafeFloat();
+      debugger;
       if (parseInt(inputValue1) > balance) {
         setMsg(t('purchase.moreThanBalanceMsg'));
         setMsgOpen(true);
@@ -204,7 +205,7 @@ export default function Purchase() {
         setMsg(t('redeem.moreThanBalanceMsg'));
         setMsgOpen(true);
       } else {
-        const args: IRedeemAeg = {
+        const args: IRedeemArg = {
           fromType: TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE] as TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
           amount: Number(inputValue1),
           signerOrProvider: ethersProvider!.getSigner(),
@@ -215,22 +216,6 @@ export default function Purchase() {
         setInputValue2('');
       }
     });
-    // refetchBalance().then(data => {
-    //   const balance = formatNum(data.data).toUnsafeFloat();
-
-    //   if (parseInt(inputValue) > balance) {
-    //     setMsg(t('redeem.moreThanBalanceMsg'));
-    //     setMsgOpen(true);
-    //   } else {
-    //     const args: IPurchaseArg = {
-    //       type: tokenType,
-    //       tokenQty: parseInt(inputValue),
-    //       signerOrProvider: ethersProvider!.getSigner(),
-    //     };
-    //     redeemMutate(args);
-    //     setInputValue('');
-    //   }
-    // });
   };
 
   const [open, setOpen] = React.useState(false);

@@ -102,7 +102,7 @@ const iconStyle = {
 
 function RanderOptions(
   Options: IOptions[],
-  tokenType: string,
+  tokenType: keyof typeof TOKEN_BALANCE_TYPE,
   handleChange: (event: SelectChangeEvent) => void,
   isShowBalance?: boolean,
   balance?: BigNumber,
@@ -141,7 +141,7 @@ function RanderOptions(
             marginTop: 5,
           }}
         >
-          {translate('purchase.leftBalance')}: {balance ? formatNum(balance).toUnsafeFloat().toFixed(2) : 0}
+          {translate('purchase.leftBalance')}: {balance ? formatNum(balance, tokenType).toUnsafeFloat().toFixed(2) : 0}
         </span>
       ) : (
         <div style={{ height: 18, visibility: 'hidden' }} />
@@ -238,30 +238,7 @@ function MyCardContentOne({
         </div>
       </div>
       {transactionType === TRANSFER_TYPE.PURCHASE
-        ? // <BalanceContent>
-          //   <div style={{ display: 'flex', alignItems: 'center', marginRight: 5, height: 46 }}>
-          //     <div
-          //       style={{
-          //         ...iconStyle,
-          //         background: 'rgba(255, 87, 0, 1)',
-          //         marginRight: 5,
-          //       }}
-          //     >
-          //       <BaseIconFont name="icon-qiandaizi" style={{ width: 20, height: 20, fill: 'white' }} />
-          //     </div>
-          //     USDT
-          //   </div>
-          //   <span
-          //     style={{
-          //       fontSize: 12,
-          //       color: theme.palette.text.secondary,
-          //       marginTop: 5,
-          //     }}
-          //   >
-          //     {t('purchase.leftBalance')}: {balance ? formatNum(balance).toUnsafeFloat().toFixed(2) : 0}
-          //   </span>
-          // </BalanceContent>
-          RanderOptions(RedeenOptions, redeenTokenType, redeenChange, true, balance)
+        ? RanderOptions(RedeenOptions, redeenTokenType, redeenChange, true, balance)
         : RanderOptions(PurchasenOptions, tokenType, handleChange, true, balance)}
     </BodyContent>
   );

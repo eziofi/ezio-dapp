@@ -103,21 +103,6 @@ export default function HomePage() {
   );
 }
 
-function TotalSupplyBox() {
-  return (
-    <>
-      <MintBox>
-        <ValueCard type={VALUE_TYPE.treasury} />
-        <ValueCard type={VALUE_TYPE.rate} />
-      </MintBox>
-      <MintBox>
-        <ValueCard type={VALUE_TYPE.EZAT} />
-        <ValueCard type={VALUE_TYPE.EZBT} />
-      </MintBox>
-    </>
-  );
-}
-
 enum VALUE_TYPE {
   EZAT = 'EZAT',
   EZBT = 'EZBT',
