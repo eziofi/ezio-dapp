@@ -59,7 +59,7 @@ export default function Purchase() {
   const [tokenType, setTokenType] = useState<TOKEN_BALANCE_TYPE>(TOKEN_BALANCE_TYPE.EZAT); // 下拉框value
   const [redeemTokenType, setredeemTokenType] = useState<TOKEN_BALANCE_TYPE>(TOKEN_BALANCE_TYPE.USDT); // 下拉框value
   const theme = useTheme();
-  const [slippage, setSlippage] = useState<number>(0);
+  const [slippage, setSlippage] = useState<number>(1);
   const [time, setTime] = useState<string>();
 
   useEffect(() => {
@@ -80,13 +80,13 @@ export default function Purchase() {
   };
   function getInputVal1(value: string) {
     setInputValue1(value);
-    setInputValue2(
-      value
-        ? type === TRANSFER_TYPE.PURCHASE
-          ? '' + (parseInt(value) / parseFloat(formatNetWorth(netWorth, true))).toFixed(2)
-          : '' + (parseInt(value) * parseFloat(formatNetWorth(netWorth, true))).toFixed(2)
-        : '0',
-    );
+    // setInputValue2(
+    //   value
+    //     ? type === TRANSFER_TYPE.PURCHASE
+    //       ? '' + (parseInt(value) / parseFloat(formatNetWorth(netWorth, true))).toFixed(2)
+    //       : '' + (parseInt(value) * parseFloat(formatNetWorth(netWorth, true))).toFixed(2)
+    //     : '0',
+    // );
   }
 
   function getInputVal2(value: string) {

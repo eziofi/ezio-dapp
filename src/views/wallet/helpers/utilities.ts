@@ -6,7 +6,7 @@ import numeral from 'numeral';
 import qs from 'qs';
 import { SwapQuoteStruct } from '../contract/contracts/EzioV1';
 import { formatUnits } from 'ethers/lib/utils';
-import { TOKEN_BALANCE_TYPE } from './constant';
+import { TOKEN_BALANCE_TYPE, TOKEN_TYPE } from './constant';
 // import { apiGetGasPrices, apiGetAccountNonce } from "./api";
 // import { convertAmountToRawNumber, convertStringToHex } from "./bignumber";
 
@@ -226,11 +226,16 @@ export function formatNetWorth(value: BigNumberish | string | undefined, format1
  * @param tokenType
  * @returns
  */
-export function formatNum(value?: BigNumber, tokenType?: keyof typeof TOKEN_BALANCE_TYPE): FixedNumber {
+export function formatNum(value?: BigNumber, tokenType?: keyof typeof TOKEN_BALANCE_TYPE | TOKEN_TYPE): FixedNumber {
   if (!value) {
     return FixedNumber.from(0);
   }
-  const ether = formatUnits(value, tokenType === 'USDT' || tokenType === 'USDC' ? 6 : 18);
+  const ether = formatUnits(
+    value,
+    tokenType === 'USDT' || tokenType === 'USDC' || tokenType === TOKEN_TYPE.USDT || tokenType === TOKEN_TYPE.USDC
+      ? 6
+      : 18,
+  );
   const numArr = ether.split('.');
 
   if (numArr.length == 1) {

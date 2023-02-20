@@ -1,11 +1,6 @@
-// @mui
-import PropTypes from 'prop-types';
 import { alpha, styled, useTheme } from '@mui/material/styles';
 import { Card, SxProps, Theme, Typography } from '@mui/material';
-// utils
-import { fShortenNumber } from '../../../utils/formatNumber';
-// components
-import Iconify from '../../../components/iconify';
+
 import { useTranslation } from 'react-i18next';
 import useWallet from '../../hooks/useWallet';
 import {
@@ -15,11 +10,9 @@ import {
   treasuryTotalNetWorth,
 } from '../../wallet/helpers/contract_call';
 import { useQuery } from 'react-query';
-import { MintCardValue } from '../../homePage/mainStyle';
-import { formatNetWorth, toNum } from '../../wallet/helpers/utilities';
+import { formatNetWorth, formatNum, toNum } from '../../wallet/helpers/utilities';
 import BaseIconFont from '../BaseIconFont';
-
-// ----------------------------------------------------------------------
+import { TOKEN_TYPE } from '../../wallet/helpers/constant';
 
 const StyledIcon = styled('div')(({ theme }) => ({
   margin: 'auto',
@@ -38,7 +31,7 @@ enum VALUE_TYPE {
   treasury = 'treasury',
   rate = 'rate',
 }
-export default function AppWidgetSummary({
+export default function HomeCard({
   type,
   color = 'primary',
   sx,
@@ -123,7 +116,13 @@ export default function AppWidgetSummary({
       {type === VALUE_TYPE.rate ? (
         <Typography variant="h3">{data ? (parseFloat(formatNetWorth(data)) / 10000).toFixed(2) : 0} ‱</Typography>
       ) : (
-        <Typography variant="h3">{data ? toNum(data).toFixed() : 0}</Typography>
+        <Typography variant="h3">
+          {data
+            ? formatNum(data, type === 'treasury' ? TOKEN_TYPE.USDC : type)
+                .toUnsafeFloat()
+                .toFixed(2)
+            : 0}
+        </Typography>
       )}
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
         {title[type]}

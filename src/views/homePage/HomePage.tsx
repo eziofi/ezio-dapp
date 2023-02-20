@@ -30,7 +30,7 @@ import { formatNetWorth, toNum } from '../wallet/helpers/utilities';
 import NetWorthChart from './components/NetWorthChart';
 import TotalSupplyChart from './components/TotalSupplyChart';
 import MarketApexChart from './components/MarketApexChart';
-import AppWidgetSummary from '../components/dashboard/AppWidgetSummary';
+import HomeCard from '../components/dashboard/HomeCard';
 import { Helmet } from 'react-helmet-async';
 import Paper from '@mui/material/Paper';
 import NetWorthApexChart from './components/NetWorthApexChart';
@@ -55,19 +55,19 @@ export default function HomePage() {
       <Container maxWidth="xl">
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary type={VALUE_TYPE.treasury} color="warning" />
+            <HomeCard type={VALUE_TYPE.treasury} color="warning" />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary type={VALUE_TYPE.rate} color="error" />
+            <HomeCard type={VALUE_TYPE.rate} color="error" />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary type={VALUE_TYPE.EZAT} />
+            <HomeCard type={VALUE_TYPE.EZAT} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary type={VALUE_TYPE.EZBT} />
+            <HomeCard type={VALUE_TYPE.EZBT} />
           </Grid>
           <Grid item xs={12} md={12} lg={12}>
             <PriceTable />
