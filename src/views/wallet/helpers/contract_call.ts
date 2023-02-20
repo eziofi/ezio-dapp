@@ -314,34 +314,6 @@ export async function purchaseB(
 //   return purchaseTr;
 // }
 
-/**
- * 赎回
- * @param fromType 卖出token类型，tokenA或者tokenB
- * @param amount
- * @param slippage 滑点
- * @param signerOrProvider signerOrProvider
- */
-export async function redeem(
-  fromType: TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
-  amount: number,
-  signerOrProvider: Signer | Provider,
-  slippage: number,
-) {
-  let redeemAmount = ethers.utils.parseEther(String(amount));
-  let convertSellAmount = await getRedeemQuoteQty(fromType, redeemAmount, signerOrProvider);
-  debugger;
-  let quoteParams: OneInchQuoteParams = {
-    fromTokenAddress: STMATIC_ADDRESS,
-    toTokenAddress: USDC_ADDRESS,
-    amount: convertSellAmount.toString(),
-    fromAddress: ezioJson.address,
-    slippage,
-    disableEstimate: true,
-  };
-  let quoteResponse5 = await getOneInchQuoteResponse(quoteParams);
-  await EzioConnect(signerOrProvider).connect(signerOrProvider).redeem(fromType, redeemAmount, quoteResponse5);
-}
-
 export interface PurchaseRecord {
   transferType: TRANSFER_TYPE.PURCHASE;
   timestamp: number;
@@ -464,3 +436,31 @@ let getRedeemQuoteQty = async (type: number, qty: BigNumber, signerOrProvider: S
   }
   return quoteQty;
 };
+
+/**
+ * 赎回
+ * @param fromType 卖出token类型，tokenA或者tokenB
+ * @param amount
+ * @param slippage 滑点
+ * @param signerOrProvider signerOrProvider
+ */
+export async function redeem(
+  fromType: TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
+  amount: number,
+  signerOrProvider: Signer | Provider,
+  slippage: number,
+) {
+  let redeemAmount = ethers.utils.parseEther(String(amount));
+  let convertSellAmount = await getRedeemQuoteQty(fromType, redeemAmount, signerOrProvider);
+  debugger;
+  let quoteParams: OneInchQuoteParams = {
+    fromTokenAddress: STMATIC_ADDRESS,
+    toTokenAddress: USDC_ADDRESS,
+    amount: convertSellAmount.toString(),
+    fromAddress: ezioJson.address,
+    slippage,
+    disableEstimate: true,
+  };
+  let quoteResponse5 = await getOneInchQuoteResponse(quoteParams);
+  await EzioConnect(signerOrProvider).connect(signerOrProvider).redeem(fromType, redeemAmount, quoteResponse5);
+}

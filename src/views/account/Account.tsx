@@ -67,7 +67,7 @@ export default function Account() {
     return (
       <AccountCard>
         <Content>
-          {type === TOKEN_BALANCE_TYPE.USDT ? (
+          {type === TOKEN_BALANCE_TYPE.USDT || type === TOKEN_BALANCE_TYPE.USDC ? (
             <>
               {/* icon */}
               {/* <Box sx={{ width: 50, height: 50, borderRadius: '50%', background: 'pink', marginRight: 2 }} /> */}
@@ -83,11 +83,13 @@ export default function Account() {
                 <Box>
                   <div style={{ fontSize: 20 }}>{type}</div>
                   <div style={{ fontSize: 12, color: 'rgba(76, 80, 97, 1)' }}>
-                    {t('account.netWorth')}: ${formatNum(balance).toUnsafeFloat().toFixed(2)}
+                    {t('account.netWorth')}: ${formatNum(balance, type).toUnsafeFloat().toFixed(2)}
                   </div>
                 </Box>
                 <div>
-                  <div style={{ fontSize: 28, color: 'rgba(67, 207, 124, 1)' }}>{toNum(balance)}</div>
+                  <div style={{ fontSize: 28, color: 'rgba(67, 207, 124, 1)' }}>
+                    {formatNum(balance, type).toUnsafeFloat().toFixed(2)}
+                  </div>
                 </div>
               </Box>
             </>
@@ -195,6 +197,7 @@ export default function Account() {
       {page === 'account' ? (
         <AccountCardBox>
           <TokenCard type={TOKEN_BALANCE_TYPE.USDT} />
+          <TokenCard type={TOKEN_BALANCE_TYPE.USDC} />
           <TokenCard type={TOKEN_BALANCE_TYPE.EZAT} />
           <TokenCard type={TOKEN_BALANCE_TYPE.EZBT} />
         </AccountCardBox>
