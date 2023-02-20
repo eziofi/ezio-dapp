@@ -169,13 +169,13 @@ const redeemOptions: IOptions[] = [
   {
     value: TOKEN_BALANCE_TYPE.USDT,
     style: { margin: '0 10px', background: 'rgba(95, 69, 186, 1)' },
-    iconName: 'icon-USDT-copy',
+    iconName: 'icon-USDT-white',
     iconStyle: { width: 20, height: 20, fill: 'white' },
   },
   {
     value: TOKEN_BALANCE_TYPE.USDC,
     style: { margin: '0 10px', background: 'rgba(95, 69, 186, 1)' },
-    iconName: 'icon-USDC-copy',
+    iconName: 'icon-USDC-white',
     iconStyle: { width: 20, height: 20, fill: 'white' },
   },
   // {

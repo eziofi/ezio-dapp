@@ -14,7 +14,7 @@
 //     </div>
 //   );
 // }
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './animation.less';
 import { Button, CardContent, IconButton, Link, Snackbar, Toolbar, Typography, useTheme } from '@mui/material';
 import PurchaseDrawer from './components/PurchaseDrawer';
@@ -61,8 +61,12 @@ export default function Purchase() {
   const theme = useTheme();
   const [slippage, setSlippage] = useState<number>(0);
   const [time, setTime] = useState<string>();
-  // 定时时间
-  setInterval(() => setTime(timestampFormat(new Date().getTime())), 1000);
+
+  useEffect(() => {
+    // 定时时间
+    const timer = setInterval(() => setTime(timestampFormat(new Date().getTime())), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const { netWorth } = useNetWorth(TOKEN_BALANCE_TYPE[tokenType as keyof typeof TOKEN_BALANCE_TYPE]);
 
