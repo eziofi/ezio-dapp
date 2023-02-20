@@ -168,13 +168,13 @@ const PurchasenOptions: IOptions[] = [
 const redeemOptions: IOptions[] = [
   {
     value: TOKEN_BALANCE_TYPE.USDT,
-    style: { margin: '0 10px', background: 'rgba(95, 69, 186, 1)' },
+    style: { margin: '0 10px', background: 'rgba(50, 177, 108)' },
     iconName: 'icon-USDT-white',
     iconStyle: { width: 20, height: 20, fill: 'white' },
   },
   {
     value: TOKEN_BALANCE_TYPE.USDC,
-    style: { margin: '0 10px', background: 'rgba(95, 69, 186, 1)' },
+    style: { margin: '0 10px', background: 'rgba(60, 193, 200)' },
     iconName: 'icon-USDC-white',
     iconStyle: { width: 20, height: 20, fill: 'white' },
   },

@@ -74,7 +74,7 @@ export default function Account() {
               <div
                 style={{
                   ...iconDiv,
-                  background: 'rgba(26, 107, 173, 1)',
+                  background: type === TOKEN_BALANCE_TYPE.USDT ? 'rgba(50, 177, 108)' : 'rgba(60, 193, 200)',
                 }}
               >
                 <BaseIconFont
@@ -103,7 +103,7 @@ export default function Account() {
               <div
                 style={{
                   ...iconDiv,
-                  background: type === TOKEN_BALANCE_TYPE.EZAT ? 'rgba(95, 69, 186, 1)' : 'rgba(255, 87, 0, 1)',
+                  background: type === TOKEN_BALANCE_TYPE.EZAT ? 'rgba(95, 69, 186, 1)' : 'rgba(26, 107, 173, 1)',
                 }}
               >
                 <BaseIconFont
