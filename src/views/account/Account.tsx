@@ -77,7 +77,10 @@ export default function Account() {
                   background: 'rgba(26, 107, 173, 1)',
                 }}
               >
-                <BaseIconFont name="icon-B" style={{ ...IconStyle }} />
+                <BaseIconFont
+                  name={type === TOKEN_BALANCE_TYPE.USDT ? 'icon-USDT-white' : 'icon-USDC-white'}
+                  style={{ ...IconStyle }}
+                />
               </div>
               <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box>
@@ -104,7 +107,7 @@ export default function Account() {
                 }}
               >
                 <BaseIconFont
-                  name={type === TOKEN_BALANCE_TYPE.EZAT ? 'icon-A' : 'icon-qiandaizi'}
+                  name={type === TOKEN_BALANCE_TYPE.EZAT ? 'icon-A' : 'icon-B'}
                   style={{
                     ...IconStyle,
                   }}
