@@ -57,7 +57,7 @@ export default function Purchase() {
   const [inputValue2, setInputValue2] = useState('');
   const [isClick, setIsClick] = useState(false);
   const [tokenType, setTokenType] = useState<TOKEN_BALANCE_TYPE>(TOKEN_BALANCE_TYPE.EZAT); // 下拉框value
-  const [redeemTokenType, setredeemTokenType] = useState<TOKEN_BALANCE_TYPE>(TOKEN_BALANCE_TYPE.USDT); // 下拉框value
+  const [redeemTokenType, setredeemTokenType] = useState<TOKEN_BALANCE_TYPE>(TOKEN_BALANCE_TYPE.USDC); // 下拉框value
   const theme = useTheme();
   const [slippage, setSlippage] = useState<number>(1);
   const [time, setTime] = useState<string>();
@@ -159,12 +159,6 @@ export default function Purchase() {
 
   // 购买
   const doPurchase = () => {
-    console.log({
-      fromType: TOKEN_TYPE[redeemTokenType as keyof typeof TOKEN_TYPE] as TOKEN_TYPE.USDT | TOKEN_TYPE.USDC,
-      toType: TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE] as TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
-      amount: Number(inputValue1),
-      slippage,
-    });
     refetchBalance().then(({ data }) => {
       const balance = formatNum(data, redeemTokenType).toUnsafeFloat();
       if (parseInt(inputValue1) > balance) {

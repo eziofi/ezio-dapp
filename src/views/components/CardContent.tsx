@@ -167,23 +167,23 @@ const PurchasenOptions: IOptions[] = [
 
 const redeemOptions: IOptions[] = [
   {
+    value: TOKEN_BALANCE_TYPE.USDC,
+    style: { margin: '0 10px', background: 'rgba(60, 193, 200)' },
+    iconName: 'icon-USDC-white',
+    iconStyle: { width: 20, height: 20, fill: 'white' },
+  },
+  {
     value: TOKEN_BALANCE_TYPE.USDT,
     style: { margin: '0 10px', background: 'rgba(50, 177, 108)' },
     iconName: 'icon-USDT-white',
     iconStyle: { width: 20, height: 20, fill: 'white' },
   },
   {
-    value: TOKEN_BALANCE_TYPE.USDC,
-    style: { margin: '0 10px', background: 'rgba(60, 193, 200)' },
-    iconName: 'icon-USDC-white',
+    value: TOKEN_BALANCE_TYPE.stMatic,
+    style: { margin: '0 10px', background: 'rgba(239, 89, 114)' },
+    iconName: 'icon-stMatic-white',
     iconStyle: { width: 20, height: 20, fill: 'white' },
   },
-  // {
-  //   value: TOKEN_BALANCE_TYPE.stMatic,
-  //   style: { margin: '0 10px', background: 'rgba(239, 89, 114)' },
-  //   iconName: 'icon-stMatic-copy',
-  //   iconStyle: { width: 20, height: 20, fill: 'white' },
-  // },
 ];
 
 function MyCardContentOne({
@@ -240,7 +240,13 @@ function MyCardContentOne({
         </div>
       </div>
       {transactionType === TRANSFER_TYPE.PURCHASE
-        ? RanderOptions(redeemOptions, redeemTokenType, redeemChange, true, balance)
+        ? RanderOptions(
+            redeemOptions.filter(item => item.value !== TOKEN_BALANCE_TYPE.stMatic),
+            redeemTokenType,
+            redeemChange,
+            true,
+            balance,
+          )
         : RanderOptions(PurchasenOptions, tokenType, handleChange, true, balance)}
     </BodyContent>
   );
@@ -300,22 +306,33 @@ function MyCardContentSecond({
         : RanderOptions(redeemOptions, redeemTokenType, redeemChange)} */}
       {transactionType === TRANSFER_TYPE.PURCHASE ? (
         RanderOptions(PurchasenOptions, tokenType, handleChange)
-      ) : (
+      ) : tokenType === TOKEN_BALANCE_TYPE.EZAT ? (
         <div>
           <div style={{ display: 'flex', alignItems: 'center', marginRight: 5, height: 46 }}>
             <div
               style={{
                 ...iconStyle,
-                background: 'rgba(255, 87, 0, 1)',
+                background:
+                  redeemOptions[redeemOptions.findIndex(item => item.value === TOKEN_BALANCE_TYPE.USDC)].style
+                    .background,
                 marginRight: 5,
               }}
             >
-              <BaseIconFont name="icon-qiandaizi" style={{ width: 20, height: 20, fill: 'white' }} />
+              <BaseIconFont
+                name="icon-USDC-white"
+                style={redeemOptions[redeemOptions.findIndex(item => item.value === TOKEN_BALANCE_TYPE.USDC)].iconStyle}
+              />
             </div>
             {TOKEN_BALANCE_TYPE.USDC}
           </div>
           <div style={{ height: 18, visibility: 'hidden' }} />
         </div>
+      ) : (
+        RanderOptions(
+          redeemOptions.filter(item => item.value !== TOKEN_BALANCE_TYPE.USDT),
+          redeemTokenType,
+          redeemChange,
+        )
       )}
     </BodyContent>
   );
