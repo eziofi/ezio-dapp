@@ -237,13 +237,14 @@ export async function purchaseB(
   amount: number,
   slippage: number,
 ) {
+  debugger;
   const ezio = EzioConnect(signerOrProvider);
   let quotes: SwapQuoteStruct[];
   let quoteParams: OneInchQuoteParams = {
     fromTokenAddress: fromType === TOKEN_TYPE.USDT ? USDT_ADDRESS : USDC_ADDRESS,
     toTokenAddress: STMATIC_ADDRESS,
-    // amount: String(amount * 1000000),
-    amount: BigNumber.from(amount).mul(1000000).toString(),
+    amount: String(amount * 1000000),
+    // amount: BigNumber.from(amount).mul(1000000).toString(),
     fromAddress: ezioJson.address,
     slippage,
     disableEstimate: true,
@@ -260,6 +261,8 @@ export async function purchaseB(
   const pooledA = await ezio.pooledA();
 
   if (quoteNetWorth.lte(pooledA)) {
+    // 如果金库USDC足够，用USDC转换成stmatic
+    console.log('quoteNetWorth.lte(pooledA)');
     let convertSellAmount =
       fromType === TOKEN_TYPE.USDT
         ? await ezio.convertAmt(quoteParams.fromTokenAddress, USDC_ADDRESS, BigNumber.from(quoteParams.amount))
@@ -293,26 +296,10 @@ export async function purchaseB(
   } else {
     quotes = [quoteResponse];
   }
+  console.log(quotes);
+  console.log('ezio.purchase(TOKEN_TYPE.EZBT, quotes)');
   await ezio.purchase(TOKEN_TYPE.EZBT, quotes);
 }
-
-// /**
-//  * 购买 token
-//  * @param type token 类型
-//  * @param amt 申购所用USDT
-//  * @param signer  ether signer
-//  * @returns
-//  */
-// export async function purchase(type: TOKEN_TYPE, amt: number, signer: Signer) {
-//   const daiContract = USDTConnect(signer);
-//   const parseQty = utils.parseEther(`${amt}`);
-//   await daiContract.approve(purchaseJson.address, parseQty, override);
-//   await new Promise(resolve => setTimeout(resolve, 2000));
-//
-//   const contract = EzPurchaseConnect(signer);
-//   const purchaseTr = await contract.purchase(type, parseQty, override);
-//   return purchaseTr;
-// }
 
 export interface PurchaseRecord {
   transferType: TRANSFER_TYPE.PURCHASE;
@@ -444,11 +431,29 @@ let getRedeemQuoteQty = async (type: number, qty: BigNumber, signerOrProvider: S
 /**
  * 赎回
  * @param fromType 卖出token类型，tokenA或者tokenB
+ * @param toType 获得的token类型，USDC或者stMatic
  * @param amount
  * @param slippage 滑点
  * @param signerOrProvider signerOrProvider
  */
 export async function redeem(
+  fromType: TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
+  toType: TOKEN_TYPE.USDC | TOKEN_TYPE.stMatic,
+  amount: number,
+  signerOrProvider: Signer | Provider,
+  slippage: number,
+) {
+  await (toType === TOKEN_TYPE.USDC ? redeemToUSDC : redeemToStMatic)(fromType, amount, signerOrProvider, slippage);
+}
+
+/**
+ * 赎回成USDC
+ * @param fromType 卖出token类型，tokenA或者tokenB
+ * @param amount
+ * @param slippage 滑点
+ * @param signerOrProvider signerOrProvider
+ */
+export async function redeemToUSDC(
   fromType: TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
   amount: number,
   signerOrProvider: Signer | Provider,
@@ -476,7 +481,46 @@ export async function redeem(
       sellAmount: convertSellAmount,
       swapCallData: ethers.constants.HashZero,
     };
-    debugger;
     await EzioConnect(signerOrProvider).connect(signerOrProvider).redeem(fromType, redeemAmount, quoteResponse);
   }
+}
+
+/**
+ * 赎回成USDC
+ * @param fromType 卖出token类型，tokenA或者tokenB
+ * @param amount
+ * @param slippage 滑点
+ * @param signerOrProvider signerOrProvider
+ */
+export async function redeemToStMatic(
+  fromType: TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
+  amount: number,
+  signerOrProvider: Signer | Provider,
+  slippage: number,
+) {
+  // let redeemAmount = ethers.utils.parseEther(String(amount));
+  // let { quoteQty: convertSellAmount, needConvert } = await getRedeemQuoteQty(fromType, redeemAmount, signerOrProvider);
+  // if (needConvert) {
+  //   //如果金库USDC储量不够，动用stMatic换成USDC
+  //   let quoteParams: OneInchQuoteParams = {
+  //     fromTokenAddress: STMATIC_ADDRESS,
+  //     toTokenAddress: USDC_ADDRESS,
+  //     amount: convertSellAmount.toString(),
+  //     fromAddress: ezioJson.address,
+  //     slippage,
+  //     disableEstimate: true,
+  //   };
+  //   const quoteResponse = await getOneInchQuoteResponse(quoteParams);
+  //   await EzioConnect(signerOrProvider).connect(signerOrProvider).redeem(fromType, redeemAmount, quoteResponse);
+  // } else {
+  //   // 把USDC直接转给用户
+  //   const quoteResponse = {
+  //     sellToken: USDC_ADDRESS,
+  //     buyToken: ethers.constants.AddressZero,
+  //     sellAmount: convertSellAmount,
+  //     swapCallData: ethers.constants.HashZero,
+  //   };
+  //   debugger;
+  //   await EzioConnect(signerOrProvider).connect(signerOrProvider).redeem(fromType, redeemAmount, quoteResponse);
+  // }
 }

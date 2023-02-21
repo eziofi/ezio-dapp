@@ -44,6 +44,7 @@ interface IPurchaseArg {
 
 interface IRedeemArg {
   fromType: TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT;
+  toType: TOKEN_TYPE.USDC | TOKEN_TYPE.stMatic;
   amount: number;
   slippage: number;
   signerOrProvider: Signer | Provider;
@@ -57,7 +58,7 @@ export default function Purchase() {
   const [inputValue2, setInputValue2] = useState('');
   const [isClick, setIsClick] = useState(false);
   const [tokenType, setTokenType] = useState<TOKEN_BALANCE_TYPE>(TOKEN_BALANCE_TYPE.EZAT); // 下拉框value
-  const [redeemTokenType, setredeemTokenType] = useState<TOKEN_BALANCE_TYPE>(TOKEN_BALANCE_TYPE.USDC); // 下拉框value
+  const [redeemTokenType, setRedeemTokenType] = useState<TOKEN_BALANCE_TYPE>(TOKEN_BALANCE_TYPE.USDC); // 下拉框value
   const theme = useTheme();
   const [slippage, setSlippage] = useState<number>(1);
   const [time, setTime] = useState<string>();
@@ -129,7 +130,7 @@ export default function Purchase() {
   );
 
   const { mutate: redeemMutate } = useMutation(
-    (arg: IRedeemArg) => redeem(arg.fromType, arg.amount, arg.signerOrProvider, arg.slippage),
+    (arg: IRedeemArg) => redeem(arg.fromType, arg.toType, arg.amount, arg.signerOrProvider, arg.slippage),
     {
       onSuccess: () => {
         queryClient.invalidateQueries();
@@ -189,10 +190,12 @@ export default function Purchase() {
       } else {
         const args: IRedeemArg = {
           fromType: TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE] as TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
+          toType: TOKEN_TYPE[redeemTokenType as keyof typeof TOKEN_TYPE] as TOKEN_TYPE.USDC | TOKEN_TYPE.stMatic,
           amount: Number(inputValue1),
           signerOrProvider: ethersProvider!.getSigner(),
           slippage,
         };
+        debugger;
         redeemMutate(args);
         setInputValue1('');
         setInputValue2('');
@@ -251,7 +254,7 @@ export default function Purchase() {
               getTokenType={getTokenType}
               getInputVal1={getInputVal1}
               redeemTokenType={redeemTokenType}
-              setredeemTokenType={setredeemTokenType}
+              setredeemTokenType={setRedeemTokenType}
             />
           </CardContent>
         ) : (
@@ -289,7 +292,7 @@ export default function Purchase() {
               getTokenType={getTokenType}
               inputValue2={inputValue2}
               redeemTokenType={redeemTokenType}
-              setredeemTokenType={setredeemTokenType}
+              setredeemTokenType={setRedeemTokenType}
             />
           </CardContent>
         ) : (
