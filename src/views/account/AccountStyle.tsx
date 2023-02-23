@@ -33,9 +33,9 @@ export const AccountCard = styled((props: IProps) => {
   return <Card {...props} variant="outlined" />;
 })(() => {
   return {
-    // height: 109,
-    ':nth-of-type(2)': {
-      margin: '10px 0',
+    marginBottom: 10,
+    ':last-child': {
+      marginBottom: 0,
     },
   };
 });
