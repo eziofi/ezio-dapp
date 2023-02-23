@@ -17,21 +17,13 @@ export enum TOKEN_TYPE {
   EZAT,
   EZBT,
   USDC,
-  stMatic,
+  StMatic,
   USDT,
 }
 
 export enum TRANSFER_TYPE {
   PURCHASE = 0,
   REDEEM = 1,
-}
-
-export enum TOKEN_BALANCE_TYPE {
-  EZAT = 'EZAT',
-  EZBT = 'EZBT',
-  USDT = 'USDT',
-  USDC = 'USDC',
-  stMatic = 'stMatic',
 }
 
 // Mainnet tokens

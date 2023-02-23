@@ -4,9 +4,9 @@ import supportedChains from './chains';
 import { BigNumber, BigNumberish, FixedNumber, utils } from 'ethers';
 import numeral from 'numeral';
 import qs from 'qs';
-import { SwapQuoteStruct } from '../contract/contracts/EzioV1';
 import { formatUnits } from 'ethers/lib/utils';
-import { TOKEN_BALANCE_TYPE, TOKEN_TYPE } from './constant';
+import { TOKEN_TYPE } from './constant';
+import { SwapQuoteStruct } from '../contract/contracts/interfaces/v1/IEzio';
 // import { apiGetGasPrices, apiGetAccountNonce } from "./api";
 // import { convertAmountToRawNumber, convertStringToHex } from "./bignumber";
 
@@ -226,16 +226,11 @@ export function formatNetWorth(value: BigNumberish | string | undefined, format1
  * @param tokenType
  * @returns
  */
-export function formatNum(value?: BigNumber, tokenType?: keyof typeof TOKEN_BALANCE_TYPE | TOKEN_TYPE): FixedNumber {
+export function formatNum(value?: BigNumber, tokenType?: TOKEN_TYPE): FixedNumber {
   if (!value) {
     return FixedNumber.from(0);
   }
-  const ether = formatUnits(
-    value,
-    tokenType === 'USDT' || tokenType === 'USDC' || tokenType === TOKEN_TYPE.USDT || tokenType === TOKEN_TYPE.USDC
-      ? 6
-      : 18,
-  );
+  const ether = formatUnits(value, tokenType === TOKEN_TYPE.USDT || tokenType === TOKEN_TYPE.USDC ? 6 : 18);
   const numArr = ether.split('.');
 
   if (numArr.length == 1) {
@@ -341,6 +336,7 @@ export async function getOneInchQuoteResponse(quoteParams: OneInchQuoteParams) {
 }
 
 export async function getJson(url: RequestInfo | URL) {
+  console.log('=======url=', url);
   const res = await fetch(url);
   const json = await res.json();
   if (!json) {

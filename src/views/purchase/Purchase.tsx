@@ -21,7 +21,7 @@ import PurchaseDrawer from './components/PurchaseDrawer';
 import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
 import { purchase, redeem, treasuryInterestRate } from '../wallet/helpers/contract_call';
 import { Signer } from 'ethers';
-import { TOKEN_BALANCE_TYPE, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
+import { TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
 import useWallet from '../hooks/useWallet';
 import { formatNetWorth, formatNum, timestampFormat } from '../wallet/helpers/utilities';
 import { useTranslation } from 'react-i18next';
@@ -44,7 +44,7 @@ interface IPurchaseArg {
 
 interface IRedeemArg {
   fromType: TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT;
-  toType: TOKEN_TYPE.USDC | TOKEN_TYPE.stMatic;
+  toType: TOKEN_TYPE.USDC | TOKEN_TYPE.StMatic;
   amount: number;
   slippage: number;
   signerOrProvider: Signer | Provider;
@@ -57,8 +57,8 @@ export default function Purchase() {
   const [inputValue1, setInputValue1] = useState('');
   const [inputValue2, setInputValue2] = useState('');
   const [isClick, setIsClick] = useState(false);
-  const [tokenType, setTokenType] = useState<TOKEN_BALANCE_TYPE>(TOKEN_BALANCE_TYPE.EZAT); // 下拉框value
-  const [redeemTokenType, setRedeemTokenType] = useState<TOKEN_BALANCE_TYPE>(TOKEN_BALANCE_TYPE.USDC); // 下拉框value
+  const [tokenType, setTokenType] = useState<TOKEN_TYPE>(TOKEN_TYPE.EZAT); // 下拉框value
+  const [redeemTokenType, setRedeemTokenType] = useState<TOKEN_TYPE>(TOKEN_TYPE.USDT); // 下拉框value
   const theme = useTheme();
   const [slippage, setSlippage] = useState<number>(1);
   const [time, setTime] = useState<string>();
@@ -69,7 +69,7 @@ export default function Purchase() {
     return () => clearInterval(timer);
   }, []);
 
-  const { netWorth } = useNetWorth(TOKEN_BALANCE_TYPE[tokenType as keyof typeof TOKEN_BALANCE_TYPE]);
+  const { netWorth } = useNetWorth(tokenType);
 
   const { t } = useTranslation();
   const style = {
@@ -110,7 +110,7 @@ export default function Purchase() {
     // }, 1500);
   }
 
-  function getTokenType(tokenType: TOKEN_BALANCE_TYPE) {
+  function getTokenType(tokenType: TOKEN_TYPE) {
     setTokenType(tokenType);
   }
 
@@ -144,9 +144,9 @@ export default function Purchase() {
   const { balance, refetchBalance } = useBalance(
     type === TRANSFER_TYPE.PURCHASE
       ? redeemTokenType
-      : tokenType === 'EZAT'
-      ? TOKEN_BALANCE_TYPE.EZAT
-      : TOKEN_BALANCE_TYPE.EZBT,
+      : tokenType === TOKEN_TYPE.EZAT
+      ? TOKEN_TYPE.EZAT
+      : TOKEN_TYPE.EZBT,
   );
 
   const { ethersProvider, account } = useWallet();
@@ -167,8 +167,8 @@ export default function Purchase() {
         setMsgOpen(true);
       } else {
         const args: IPurchaseArg = {
-          fromType: TOKEN_TYPE[redeemTokenType as keyof typeof TOKEN_TYPE] as TOKEN_TYPE.USDT | TOKEN_TYPE.USDC,
-          toType: TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE] as TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
+          fromType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.USDT,
+          toType: tokenType as TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
           amount: Number(inputValue1),
           slippage,
           signerOrProvider: ethersProvider!.getSigner(),
@@ -189,8 +189,8 @@ export default function Purchase() {
         setMsgOpen(true);
       } else {
         const args: IRedeemArg = {
-          fromType: TOKEN_TYPE[tokenType as keyof typeof TOKEN_TYPE] as TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
-          toType: TOKEN_TYPE[redeemTokenType as keyof typeof TOKEN_TYPE] as TOKEN_TYPE.USDC | TOKEN_TYPE.stMatic,
+          fromType: tokenType as TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
+          toType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.StMatic,
           amount: Number(inputValue1),
           signerOrProvider: ethersProvider!.getSigner(),
           slippage,

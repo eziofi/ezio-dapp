@@ -9,7 +9,7 @@ import { Card, CardContent, IconButton, Tooltip } from '@mui/material';
 import AccountDetail from './AccountDetail';
 import styles from './account.module.less';
 import useWallet from '../hooks/useWallet';
-import { TOKEN_BALANCE_TYPE, TOKEN_TYPE } from '../wallet/helpers/constant';
+import { TOKEN_TYPE } from '../wallet/helpers/constant';
 import { formatNum, toNum } from '../wallet/helpers/utilities';
 import { useTranslation } from 'react-i18next';
 import { useBalance } from '../../hooks/useBalance';
@@ -40,11 +40,8 @@ export default function Account() {
   //   }
   // };
 
-  const TokenCard = ({ type }: { type: TOKEN_BALANCE_TYPE }) => {
+  const TokenCard = ({ type }: { type: TOKEN_TYPE }) => {
     const { balance } = useBalance(type);
-    const { netWorth } = useNetWorth(
-      type === TOKEN_BALANCE_TYPE.EZAT ? TOKEN_BALANCE_TYPE.EZAT : TOKEN_BALANCE_TYPE.EZBT,
-    );
 
     const iconDiv = {
       width: 50,
@@ -67,24 +64,24 @@ export default function Account() {
     return (
       <AccountCard>
         <Content>
-          {type === TOKEN_BALANCE_TYPE.USDT || type === TOKEN_BALANCE_TYPE.USDC ? (
+          {type === TOKEN_TYPE.USDT || type === TOKEN_TYPE.USDC ? (
             <>
               {/* icon */}
               {/* <Box sx={{ width: 50, height: 50, borderRadius: '50%', background: 'pink', marginRight: 2 }} /> */}
               <div
                 style={{
                   ...iconDiv,
-                  background: type === TOKEN_BALANCE_TYPE.USDT ? 'rgba(50, 177, 108)' : 'rgba(60, 193, 200)',
+                  background: type === TOKEN_TYPE.USDT ? 'rgba(50, 177, 108)' : 'rgba(60, 193, 200)',
                 }}
               >
                 <BaseIconFont
-                  name={type === TOKEN_BALANCE_TYPE.USDT ? 'icon-USDT-white' : 'icon-USDC-white'}
+                  name={type === TOKEN_TYPE.USDT ? 'icon-USDT-white' : 'icon-USDC-white'}
                   style={{ ...IconStyle }}
                 />
               </div>
               <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box>
-                  <div style={{ fontSize: 20 }}>{type}</div>
+                  <div style={{ fontSize: 20 }}>{TOKEN_TYPE[type]}</div>
                   <div style={{ fontSize: 12, color: 'rgba(76, 80, 97, 1)' }}>
                     {t('account.netWorth')}: ${formatNum(balance, type).toUnsafeFloat().toFixed(2)}
                   </div>
@@ -103,11 +100,11 @@ export default function Account() {
               <div
                 style={{
                   ...iconDiv,
-                  background: type === TOKEN_BALANCE_TYPE.EZAT ? 'rgba(95, 69, 186, 1)' : 'rgba(26, 107, 173, 1)',
+                  background: type === TOKEN_TYPE.EZAT ? 'rgba(95, 69, 186, 1)' : 'rgba(26, 107, 173, 1)',
                 }}
               >
                 <BaseIconFont
-                  name={type === TOKEN_BALANCE_TYPE.EZAT ? 'icon-A' : 'icon-B'}
+                  name={type === TOKEN_TYPE.EZAT ? 'icon-A' : 'icon-B'}
                   style={{
                     ...IconStyle,
                   }}
@@ -115,7 +112,7 @@ export default function Account() {
               </div>
               <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box>
-                  <div style={{ fontSize: 20 }}>{type}</div>
+                  <div style={{ fontSize: 20 }}>{TOKEN_TYPE[type]}</div>
                   <div style={{ fontSize: 12, color: 'rgba(76, 80, 97, 1)' }}>
                     {t('account.netWorth')}: ${formatNum(balance).toUnsafeFloat().toFixed(2)}
                   </div>
@@ -199,10 +196,10 @@ export default function Account() {
 
       {page === 'account' ? (
         <AccountCardBox>
-          <TokenCard type={TOKEN_BALANCE_TYPE.USDT} />
-          <TokenCard type={TOKEN_BALANCE_TYPE.USDC} />
-          <TokenCard type={TOKEN_BALANCE_TYPE.EZAT} />
-          <TokenCard type={TOKEN_BALANCE_TYPE.EZBT} />
+          <TokenCard type={TOKEN_TYPE.USDT} />
+          <TokenCard type={TOKEN_TYPE.USDC} />
+          <TokenCard type={TOKEN_TYPE.EZAT} />
+          <TokenCard type={TOKEN_TYPE.EZBT} />
         </AccountCardBox>
       ) : (
         <AccountDetail />

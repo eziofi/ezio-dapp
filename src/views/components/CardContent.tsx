@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useBalance } from '../../hooks/useBalance';
 import { formatNetWorth, formatNum } from '../../views/wallet/helpers/utilities';
 import TextField from '@mui/material/TextField';
-import { TOKEN_BALANCE_TYPE, TOKEN_TYPE, TRANSFER_TYPE } from '../../views/wallet/helpers/constant';
+import { TOKEN_TYPE, TRANSFER_TYPE } from '../../views/wallet/helpers/constant';
 import BaseIconFont from './BaseIconFont';
 import { useNetWorth } from '../../hooks/useNetWorth';
 import { BigNumber } from 'ethers';
@@ -14,16 +14,16 @@ interface IProps {
   isBuy?: boolean;
   setIsBuy: (buy: boolean) => void;
   transactionType: TRANSFER_TYPE.PURCHASE | TRANSFER_TYPE.REDEEM;
-  getTokenType: (tokenType: TOKEN_BALANCE_TYPE) => void;
+  getTokenType: (tokenType: TOKEN_TYPE) => void;
   getInputVal1: (InputVal: string) => void | any;
   inputValue2: string;
-  tokenType: TOKEN_BALANCE_TYPE;
-  redeemTokenType: TOKEN_BALANCE_TYPE;
-  setredeemTokenType: (redeemTokenType: TOKEN_BALANCE_TYPE) => void;
+  tokenType: TOKEN_TYPE;
+  redeemTokenType: TOKEN_TYPE;
+  setredeemTokenType: (redeemTokenType: TOKEN_TYPE) => void;
 }
 
 interface IOptions {
-  value: TOKEN_BALANCE_TYPE;
+  value: TOKEN_TYPE;
   style: { margin: string; background: string };
   iconName: string;
   iconStyle: { width: number; height: number; fill: string };
@@ -102,8 +102,8 @@ const iconStyle = {
 
 function RanderOptions(
   Options: IOptions[],
-  tokenType: keyof typeof TOKEN_BALANCE_TYPE,
-  handleChange: (event: SelectChangeEvent) => void,
+  tokenType: TOKEN_TYPE,
+  handleChange: (value: TOKEN_TYPE) => void,
   isShowBalance?: boolean,
   balance?: BigNumber,
 ) {
@@ -114,7 +114,13 @@ function RanderOptions(
   }
   return (
     <BalanceContent>
-      <Select id="demo-customized-select-native" value={tokenType} onChange={handleChange} input={<BootstrapInput />}>
+      <Select
+        id="demo-customized-select-native"
+        value={tokenType}
+        // @ts-ignore
+        onChange={e => handleChange(e.target.value as typeof TOKEN_TYPE)}
+        input={<BootstrapInput />}
+      >
         {Options.map((item: IOptions, index: number) => {
           return (
             <MenuItem value={item.value} key={index}>
@@ -127,7 +133,7 @@ function RanderOptions(
                 >
                   <BaseIconFont name={item.iconName} style={item.iconStyle} />
                 </div>
-                {item.value}
+                {TOKEN_TYPE[item.value]}
               </>
             </MenuItem>
           );
@@ -152,13 +158,13 @@ function RanderOptions(
 
 const PurchasenOptions: IOptions[] = [
   {
-    value: TOKEN_BALANCE_TYPE.EZAT,
+    value: TOKEN_TYPE.EZAT,
     style: { margin: '0 10px', background: 'rgba(95, 69, 186, 1)' },
     iconName: 'icon-A',
     iconStyle: { width: 20, height: 20, fill: 'white' },
   },
   {
-    value: TOKEN_BALANCE_TYPE.EZBT,
+    value: TOKEN_TYPE.EZBT,
     style: { margin: '0 10px', background: 'rgba(26, 107, 173, 1)' },
     iconName: 'icon-B',
     iconStyle: { width: 20, height: 20, fill: 'white' },
@@ -167,19 +173,19 @@ const PurchasenOptions: IOptions[] = [
 
 const redeemOptions: IOptions[] = [
   {
-    value: TOKEN_BALANCE_TYPE.USDC,
-    style: { margin: '0 10px', background: 'rgba(60, 193, 200)' },
-    iconName: 'icon-USDC-white',
-    iconStyle: { width: 20, height: 20, fill: 'white' },
-  },
-  {
-    value: TOKEN_BALANCE_TYPE.USDT,
+    value: TOKEN_TYPE.USDT,
     style: { margin: '0 10px', background: 'rgba(50, 177, 108)' },
     iconName: 'icon-USDT-white',
     iconStyle: { width: 20, height: 20, fill: 'white' },
   },
   {
-    value: TOKEN_BALANCE_TYPE.stMatic,
+    value: TOKEN_TYPE.USDC,
+    style: { margin: '0 10px', background: 'rgba(60, 193, 200)' },
+    iconName: 'icon-USDC-white',
+    iconStyle: { width: 20, height: 20, fill: 'white' },
+  },
+  {
+    value: TOKEN_TYPE.StMatic,
     style: { margin: '0 10px', background: 'rgba(239, 89, 114)' },
     iconName: 'icon-stMatic-white',
     iconStyle: { width: 20, height: 20, fill: 'white' },
@@ -195,24 +201,24 @@ function MyCardContentOne({
   setredeemTokenType,
   isBuy,
 }: CardContentOneProps) {
-  const { netWorth } = useNetWorth(TOKEN_BALANCE_TYPE[tokenType as keyof typeof TOKEN_BALANCE_TYPE]);
+  const { netWorth } = useNetWorth(tokenType);
 
   // const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
-  const handleChange = (event: { target: { value: string } }) => {
-    getTokenType(event.target.value as TOKEN_BALANCE_TYPE);
+  const handleChange = (value: TOKEN_TYPE) => {
+    getTokenType(value);
     // SetCurrency(event.target.value as TOKEN_BALANCE_TYPE);
   };
 
-  const redeemChange = (event: SelectChangeEvent) => {
-    setredeemTokenType(event.target.value as TOKEN_BALANCE_TYPE);
+  const redeemChange = (value: TOKEN_TYPE) => {
+    setredeemTokenType(value);
   };
 
   const { balance } = useBalance(
     transactionType === TRANSFER_TYPE.PURCHASE
       ? redeemTokenType
-      : tokenType === 'EZAT'
-      ? TOKEN_BALANCE_TYPE.EZAT
-      : TOKEN_BALANCE_TYPE.EZBT,
+      : tokenType === TOKEN_TYPE.EZAT
+      ? TOKEN_TYPE.EZAT
+      : TOKEN_TYPE.EZBT,
   );
 
   const theme = useTheme();
@@ -241,7 +247,7 @@ function MyCardContentOne({
       </div>
       {transactionType === TRANSFER_TYPE.PURCHASE
         ? RanderOptions(
-            redeemOptions.filter(item => item.value !== TOKEN_BALANCE_TYPE.stMatic),
+            redeemOptions.filter(item => item.value !== TOKEN_TYPE.StMatic),
             redeemTokenType,
             redeemChange,
             true,
@@ -261,13 +267,13 @@ function MyCardContentSecond({
   setredeemTokenType,
 }: CardContentSencoedProps) {
   // const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
-  const handleChange = (event: SelectChangeEvent) => {
-    getTokenType(event.target.value as TOKEN_BALANCE_TYPE);
+  const handleChange = (value: TOKEN_TYPE) => {
+    getTokenType(value);
     // SetCurrency(event.target.value as TOKEN_BALANCE_TYPE);
   };
 
-  const redeemChange = (event: SelectChangeEvent) => {
-    setredeemTokenType(event.target.value as TOKEN_BALANCE_TYPE);
+  const redeemChange = (value: TOKEN_TYPE) => {
+    setredeemTokenType(value);
   };
 
   const theme = useTheme();
@@ -306,30 +312,29 @@ function MyCardContentSecond({
         : RanderOptions(redeemOptions, redeemTokenType, redeemChange)} */}
       {transactionType === TRANSFER_TYPE.PURCHASE ? (
         RanderOptions(PurchasenOptions, tokenType, handleChange)
-      ) : tokenType === TOKEN_BALANCE_TYPE.EZAT ? (
+      ) : tokenType === TOKEN_TYPE.EZAT ? (
         <div>
           <div style={{ display: 'flex', alignItems: 'center', marginRight: 5, height: 46 }}>
             <div
               style={{
                 ...iconStyle,
                 background:
-                  redeemOptions[redeemOptions.findIndex(item => item.value === TOKEN_BALANCE_TYPE.USDC)].style
-                    .background,
+                  redeemOptions[redeemOptions.findIndex(item => item.value === TOKEN_TYPE.USDC)].style.background,
                 marginRight: 5,
               }}
             >
               <BaseIconFont
                 name="icon-USDC-white"
-                style={redeemOptions[redeemOptions.findIndex(item => item.value === TOKEN_BALANCE_TYPE.USDC)].iconStyle}
+                style={redeemOptions[redeemOptions.findIndex(item => item.value === TOKEN_TYPE.USDC)].iconStyle}
               />
             </div>
-            {TOKEN_BALANCE_TYPE.USDC}
+            {TOKEN_TYPE.USDC}
           </div>
           <div style={{ height: 18, visibility: 'hidden' }} />
         </div>
       ) : (
         RanderOptions(
-          redeemOptions.filter(item => item.value !== TOKEN_BALANCE_TYPE.USDT),
+          redeemOptions.filter(item => item.value !== TOKEN_TYPE.USDT),
           redeemTokenType,
           redeemChange,
         )

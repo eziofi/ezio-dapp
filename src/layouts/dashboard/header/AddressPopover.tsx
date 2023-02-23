@@ -8,7 +8,7 @@ import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import { styled } from '@mui/material/styles';
 import metamaskBtn from '../../../assets/home/metamask@3x.png';
 import { useBalance } from '../../../hooks/useBalance';
-import { TOKEN_BALANCE_TYPE } from '../../../views/wallet/helpers/constant';
+import { TOKEN_TYPE } from '../../../views/wallet/helpers/constant';
 import { toNum } from '../../../views/wallet/helpers/utilities';
 
 export default function AddressPopover() {
@@ -17,7 +17,7 @@ export default function AddressPopover() {
   const [copyFlag, setCopyFlag] = useState<boolean>(false);
   const { t } = useTranslation();
 
-  const { balance } = useBalance(TOKEN_BALANCE_TYPE.USDT);
+  const { balance } = useBalance(TOKEN_TYPE.USDT);
 
   const addressToShow = account.substring(0, 5) + '...' + account.substring(account.length - 5, account.length);
   const addressToShowInPop = account.substring(0, 12) + '...' + account.substring(account.length - 12, account.length);

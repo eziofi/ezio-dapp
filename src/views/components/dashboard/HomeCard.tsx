@@ -116,13 +116,7 @@ export default function HomeCard({
       {type === VALUE_TYPE.rate ? (
         <Typography variant="h3">{data ? (parseFloat(formatNetWorth(data)) / 10000).toFixed(2) : 0} ‱</Typography>
       ) : (
-        <Typography variant="h3">
-          {data
-            ? formatNum(data, type === 'treasury' ? TOKEN_TYPE.USDC : type)
-                .toUnsafeFloat()
-                .toFixed(2)
-            : 0}
-        </Typography>
+        <Typography variant="h3">{data ? formatNum(data, TOKEN_TYPE.USDC).toUnsafeFloat().toFixed(2) : 0}</Typography>
       )}
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
         {title[type]}
