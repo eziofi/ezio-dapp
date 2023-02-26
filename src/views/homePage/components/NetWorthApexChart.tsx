@@ -103,8 +103,7 @@ export default function NetWorthApexChart() {
     <Card>
       <CardHeader title={t('home.priceTitle') as string} />
 
-      <Box sx={{ p: 3, pb: 1 }} dir="ltr">
-        {/*@ts-ignore*/}
+      <Box dir="ltr">
         {option && <ReactApexChart options={option.options} series={option.series} type="line" height={350} />}
       </Box>
     </Card>

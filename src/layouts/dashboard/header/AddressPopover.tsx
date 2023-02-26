@@ -1,7 +1,6 @@
-import { Box, Button, Popover, Stack, Typography, Avatar, IconButton, Snackbar } from '@mui/material';
+import { Avatar, Box, Button, IconButton, Popover, Snackbar, Typography } from '@mui/material';
 import useWallet from '../../../views/hooks/useWallet';
 import { useTranslation } from 'react-i18next';
-import account from '../../../_mock/account';
 import { useState } from 'react';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
@@ -9,7 +8,7 @@ import { styled } from '@mui/material/styles';
 import metamaskBtn from '../../../assets/home/metamask@3x.png';
 import { useBalance } from '../../../hooks/useBalance';
 import { TOKEN_TYPE } from '../../../views/wallet/helpers/constant';
-import { toNum } from '../../../views/wallet/helpers/utilities';
+import { formatNum } from '../../../views/wallet/helpers/utilities';
 
 export default function AddressPopover() {
   const { connectState, connect, disconnect, account, ethersProvider } = useWallet();
@@ -107,7 +106,7 @@ export default function AddressPopover() {
         {/* <Divider sx={{ borderStyle: 'dashed' }} /> */}
 
         <Box sx={{ my: 1.5, px: 2.5 }}>
-          <TextDiv>{toNum(balance) + ' USDT'}</TextDiv>
+          <TextDiv>{formatNum(balance, TOKEN_TYPE.USDT) + ' USDT'}</TextDiv>
           <Button
             sx={{
               width: '100%',

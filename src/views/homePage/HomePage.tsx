@@ -55,19 +55,19 @@ export default function HomePage() {
       <Container maxWidth="xl">
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <HomeCard type={VALUE_TYPE.treasury} color="warning" />
+            <HomeCard type={HOME_CARD_TYPE.treasury} color="warning" />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <HomeCard type={VALUE_TYPE.rate} color="error" />
+            <HomeCard type={HOME_CARD_TYPE.rate} color="error" />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <HomeCard type={VALUE_TYPE.EZAT} />
+            <HomeCard type={HOME_CARD_TYPE.EZAT} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <HomeCard type={VALUE_TYPE.EZBT} />
+            <HomeCard type={HOME_CARD_TYPE.EZBT} />
           </Grid>
           <Grid item xs={12} md={12} lg={12}>
             <PriceTable />
@@ -83,68 +83,13 @@ export default function HomePage() {
           </Grid>
         </Grid>
       </Container>
-
-      {/*<ChartBox>*/}
-      {/*  <NetWorthChart />*/}
-      {/*</ChartBox>*/}
-      {/*<ChartBox>*/}
-      {/*  <TotalSupplyChart />*/}
-      {/*</ChartBox>*/}
-      {/*{ethersProvider && <TotalSupplyBox />}*/}
-      {/*<NetDrawer*/}
-      {/*  opened={netDrawerOpened}*/}
-      {/*  close={() => setNetDrawerOpened(false)}*/}
-      {/*  netChecked={netChecked}*/}
-      {/*  setNetChecked={setNetChecked}*/}
-      {/*/>*/}
-      {/*/!*<WalletDrawer opened={walletDrawerOpened} close={() => setWalletDrawerOpened(false)} />*!/*/}
-      {/*<LangDrawer opened={langDrawerOpened} close={() => setLangDrawerOpened(false)} />*/}
     </>
   );
 }
 
-enum VALUE_TYPE {
+enum HOME_CARD_TYPE {
   EZAT = 'EZAT',
   EZBT = 'EZBT',
   treasury = 'treasury',
   rate = 'rate',
-}
-function ValueCard({ type }: { type: VALUE_TYPE }) {
-  const { t } = useTranslation();
-  const { ethersProvider } = useWallet();
-
-  const api = {
-    EZAT: ezatTotalSupply,
-    EZBT: ezbtTotalSupply,
-    treasury: treasuryTotalNetWorth,
-    rate: treasuryInterestRate,
-  };
-  const title = {
-    EZAT: t('home.EZAT_totalSupply'),
-    EZBT: t('home.EZBT_totalSupply'),
-    treasury: t('home.treasury_totalValue'),
-    rate: t('home.EZAT_Rate'),
-  };
-  const { data } = useQuery(['totalSupply', type], () => api[type](ethersProvider!.getSigner()), {
-    onSuccess: data1 => {
-      // if (type === VALUE_TYPE.rate) {
-      //   const res = formatNetWorth(data1);
-      //   debugger;
-      // }
-    },
-    onError: err => {
-      // debugger;
-    },
-  });
-  return (
-    <MintCard>
-      <MintCardTitle>{title[type]}</MintCardTitle>
-      {type === VALUE_TYPE.rate ? (
-        <MintCardValue>{data ? (parseFloat(formatNetWorth(data)) / 10000).toFixed(2) : 0} ‱</MintCardValue>
-      ) : (
-        <MintCardValue>{data ? toNum(data).toFixed() : 0}</MintCardValue>
-      )}
-      {/*<Box className={styles.mintCardValue}>{data ? formatNetWorth(data) : 0}</Box>*/}
-    </MintCard>
-  );
 }

@@ -1,5 +1,5 @@
 import { alpha, styled, useTheme } from '@mui/material/styles';
-import { Card, SxProps, Theme, Typography } from '@mui/material';
+import { Card, Grid, Skeleton, SxProps, Theme, Typography, Box } from '@mui/material';
 
 import { useTranslation } from 'react-i18next';
 import useWallet from '../../hooks/useWallet';
@@ -13,6 +13,7 @@ import { useQuery } from 'react-query';
 import { formatNetWorth, formatNum, toNum } from '../../wallet/helpers/utilities';
 import BaseIconFont from '../BaseIconFont';
 import { TOKEN_TYPE } from '../../wallet/helpers/constant';
+import { InlineSkeleton } from '../Skeleton';
 
 const StyledIcon = styled('div')(({ theme }) => ({
   margin: 'auto',
@@ -64,7 +65,7 @@ export default function HomeCard({
     treasury: 'icon-zuanshi',
     rate: 'icon-weidaizijinchilixichaxun',
   };
-  const { data } = useQuery(['totalSupply', type], () => api[type](ethersProvider!.getSigner()), {
+  const { data, isLoading } = useQuery(['totalSupply', type], () => api[type](ethersProvider!.getSigner()), {
     enabled: !!ethersProvider,
     onSuccess: data1 => {
       // if (type === VALUE_TYPE.rate) {
@@ -114,9 +115,13 @@ export default function HomeCard({
       </StyledIcon>
 
       {type === VALUE_TYPE.rate ? (
-        <Typography variant="h3">{data ? (parseFloat(formatNetWorth(data)) / 10000).toFixed(2) : 0} ‱</Typography>
+        <Typography variant="h3">
+          {!isLoading ? (parseFloat(formatNetWorth(data)) / 10000).toFixed(2) + '‱' : <InlineSkeleton />}
+        </Typography>
       ) : (
-        <Typography variant="h3">{data ? formatNum(data, TOKEN_TYPE.USDC).toUnsafeFloat().toFixed(2) : 0}</Typography>
+        <Typography variant="h3">
+          {!isLoading ? formatNum(data, TOKEN_TYPE.USDC).toUnsafeFloat().toFixed(2) : <InlineSkeleton />}
+        </Typography>
       )}
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
         {title[type]}

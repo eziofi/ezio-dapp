@@ -93,7 +93,8 @@ export default function MarketApexChart() {
     <Card>
       <CardHeader title={t('home.treasuryValue') as string} />
 
-      <Box sx={{ p: 3, pb: 1 }} dir="ltr">
+      <Box dir="ltr">
+        {/*<Box sx={{ p: 3, pb: 1 }} dir="ltr">*/}
         {option && <ReactApexChart options={option.options} series={option.series} type="line" height={350} />}
       </Box>
     </Card>

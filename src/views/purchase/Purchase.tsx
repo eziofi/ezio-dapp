@@ -1,19 +1,3 @@
-// export default function Purchase() {
-//   const { t } = useTranslation();
-//   const [tab, setTab] = useState(0);
-//   const [tipDrawerOpened, setTipDrawerOpened] = useState(false);
-//   return (
-//     <div className={styles.purchaseTab}>
-//       <TokenTabs tab={tab} tabChange={tab => setTab(tab)} />
-//       <TransactionForm
-//         transactionType={TRANSFER_TYPE.PURCHASE}
-//         tokenType={tab === 0 ? TOKEN_TYPE.EZAT : TOKEN_TYPE.EZBT}
-//         setTipDrawerOpened={setTipDrawerOpened}
-//       />
-//       <PurchaseDrawer opened={tipDrawerOpened} close={() => setTipDrawerOpened(false)} />
-//     </div>
-//   );
-// }
 import React, { useEffect, useState } from 'react';
 import './animation.less';
 import { Button, CardContent, IconButton, Link, Snackbar, Toolbar, Typography, useTheme } from '@mui/material';
@@ -141,13 +125,7 @@ export default function Purchase() {
     },
   );
 
-  const { balance, refetchBalance } = useBalance(
-    type === TRANSFER_TYPE.PURCHASE
-      ? redeemTokenType
-      : tokenType === TOKEN_TYPE.EZAT
-      ? TOKEN_TYPE.EZAT
-      : TOKEN_TYPE.EZBT,
-  );
+  const { balance, refetchBalance } = useBalance(type === TRANSFER_TYPE.PURCHASE ? redeemTokenType : tokenType);
 
   const { ethersProvider, account } = useWallet();
   const { data: rate } = useQuery(['EZATrate'], () => treasuryInterestRate(ethersProvider!.getSigner()), {
@@ -160,6 +138,7 @@ export default function Purchase() {
 
   // 购买
   const doPurchase = () => {
+    console.log('refetchBalance');
     refetchBalance().then(({ data }) => {
       const balance = formatNum(data, redeemTokenType).toUnsafeFloat();
       if (parseInt(inputValue1) > balance) {

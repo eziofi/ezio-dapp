@@ -10,7 +10,7 @@ import AccountDetail from './AccountDetail';
 import styles from './account.module.less';
 import useWallet from '../hooks/useWallet';
 import { TOKEN_TYPE } from '../wallet/helpers/constant';
-import { formatNum, toNum } from '../wallet/helpers/utilities';
+import { formatNum } from '../wallet/helpers/utilities';
 import { useTranslation } from 'react-i18next';
 import { useBalance } from '../../hooks/useBalance';
 import { useNetWorth } from '../../hooks/useNetWorth';
@@ -19,6 +19,7 @@ import { AccountCard, AccountCardBox, AccountToolBar, Content } from './AccountS
 import UndoIcon from '@mui/icons-material/Undo';
 import ReplyIcon from '@mui/icons-material/Reply';
 import BaseIconFont from '../components/BaseIconFont';
+import { InlineSkeleton } from '../components/Skeleton';
 
 export default function Account() {
   const [page, setPage] = useState('account');
@@ -42,6 +43,7 @@ export default function Account() {
 
   const TokenCard = ({ type }: { type: TOKEN_TYPE }) => {
     const { balance } = useBalance(type);
+    const { netWorth } = useNetWorth(type);
 
     const iconDiv = {
       width: 50,
@@ -82,14 +84,22 @@ export default function Account() {
               <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box>
                   <div style={{ fontSize: 20 }}>{TOKEN_TYPE[type]}</div>
-                  <div style={{ fontSize: 12, color: 'rgba(76, 80, 97, 1)' }}>
-                    {t('account.netWorth')}: ${formatNum(balance, type).toUnsafeFloat().toFixed(2)}
-                  </div>
+                  {/*{netWorth ? (*/}
+                  {/*  <div style={{ fontSize: 12, color: 'rgba(76, 80, 97, 1)' }}>*/}
+                  {/*    {t('account.netWorth')}: ${formatNum(netWorth, type).toUnsafeFloat().toFixed(2)}*/}
+                  {/*  </div>*/}
+                  {/*) : (*/}
+                  {/*  <InlineSkeleton width={70} />*/}
+                  {/*)}*/}
                 </Box>
                 <div>
-                  <div style={{ fontSize: 28, color: 'rgba(67, 207, 124, 1)' }}>
-                    {formatNum(balance, type).toUnsafeFloat().toFixed(2)}
-                  </div>
+                  {balance ? (
+                    <div style={{ fontSize: 28, color: 'rgba(67, 207, 124, 1)' }}>
+                      {formatNum(balance, type).toUnsafeFloat().toFixed(2)}
+                    </div>
+                  ) : (
+                    <InlineSkeleton width={70} />
+                  )}
                 </div>
               </Box>
             </>
@@ -113,12 +123,22 @@ export default function Account() {
               <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box>
                   <div style={{ fontSize: 20 }}>{TOKEN_TYPE[type]}</div>
-                  <div style={{ fontSize: 12, color: 'rgba(76, 80, 97, 1)' }}>
-                    {t('account.netWorth')}: ${formatNum(balance).toUnsafeFloat().toFixed(2)}
-                  </div>
+                  {netWorth ? (
+                    <div style={{ fontSize: 12, color: 'rgba(76, 80, 97, 1)' }}>
+                      {t('account.netWorth')}: ${formatNum(netWorth).toUnsafeFloat().toFixed(2)}
+                    </div>
+                  ) : (
+                    <InlineSkeleton width={70} />
+                  )}
                 </Box>
                 <div>
-                  <div style={{ fontSize: 28, color: 'rgba(67, 207, 124, 1)' }}>{toNum(balance)}</div>
+                  {balance ? (
+                    <div style={{ fontSize: 28, color: 'rgba(67, 207, 124, 1)' }}>
+                      {formatNum(balance, type).toUnsafeFloat().toFixed(2)}
+                    </div>
+                  ) : (
+                    <InlineSkeleton width={70} />
+                  )}
                 </div>
               </Box>
             </>
@@ -129,48 +149,6 @@ export default function Account() {
   };
 
   return (
-    // <Box sx={{ flexGrow: 1 }}>
-    //   <AppBar position="static">
-    //     <Toolbar>
-    //       <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-    //         {page === 'account' ? t('account.balance') : t('account.detail')}
-    //       </Typography>
-    //       {page === 'account' ? (
-    //         <Button color="inherit" onClick={() => setPage('detail')}>
-    //           {t('account.checkDetail')}
-    //         </Button>
-    //       ) : (
-    //         <IconButton size="large" edge="start" color="inherit" onClick={() => setPage('account')}>
-    //           <img src={rollbackIcon} width="24" />
-    //         </IconButton>
-    //       )}
-    //     </Toolbar>
-    //   </AppBar>
-    //   {page === 'account' ? (
-    //     <>
-    //       <div className={styles.accountBox}>
-    //         <div className={styles.tokenCardBox}>
-    //           <TokenCard type="USDT" />
-    //           <TokenCard type="EZAT" />
-    //           <TokenCard type="EZBT" />
-    //         </div>
-    //       </div>
-    //       {/*<div style={{ paddingLeft: '14px', paddingRight: '14px', width: '100%' }}>*/}
-    //       {/*  <Button*/}
-    //       {/*    variant="contained"*/}
-    //       {/*    disableElevation*/}
-    //       {/*    sx={{ width: '100%', marginTop: '20px' }}*/}
-    //       {/*    onClick={extractEzio}*/}
-    //       {/*    disabled={!(purchaseInvitation && purchaseInvitation[4])}*/}
-    //       {/*  >*/}
-    //       {/*    {t('account.extractAction')}*/}
-    //       {/*  </Button>*/}
-    //       {/*</div>*/}
-    //     </>
-    //   ) : (
-    //     <AccountDetail />
-    //   )}
-    // </Box>
     <PurchaseContainer>
       <AccountToolBar>
         <Typography variant="h6" component="div">

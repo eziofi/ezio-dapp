@@ -9,6 +9,7 @@ import { TOKEN_TYPE, TRANSFER_TYPE } from '../../views/wallet/helpers/constant';
 import BaseIconFont from './BaseIconFont';
 import { useNetWorth } from '../../hooks/useNetWorth';
 import { BigNumber } from 'ethers';
+import { InlineSkeleton } from './Skeleton';
 
 interface IProps {
   isBuy?: boolean;
@@ -147,7 +148,8 @@ function RanderOptions(
             marginTop: 5,
           }}
         >
-          {translate('purchase.leftBalance')}: {balance ? formatNum(balance, tokenType).toUnsafeFloat().toFixed(2) : 0}
+          {translate('purchase.leftBalance') + ': '}
+          {balance ? formatNum(balance, tokenType).toUnsafeFloat().toFixed(2) : <InlineSkeleton width={40} />}
         </span>
       ) : (
         <div style={{ height: 18, visibility: 'hidden' }} />
@@ -278,13 +280,6 @@ function MyCardContentSecond({
 
   const theme = useTheme();
   const { t } = useTranslation();
-  // const { balance, refetchBalance } = useBalance(
-  //   transactionType === TRANSFER_TYPE.PURCHASE
-  //     ? TOKEN_BALANCE_TYPE.USDT
-  //     : currency === 'EZAT'
-  //     ? TOKEN_BALANCE_TYPE.EZAT
-  //     : TOKEN_BALANCE_TYPE.EZBT,
-  // );
 
   return (
     <BodyContent>
@@ -328,7 +323,7 @@ function MyCardContentSecond({
                 style={redeemOptions[redeemOptions.findIndex(item => item.value === TOKEN_TYPE.USDC)].iconStyle}
               />
             </div>
-            {TOKEN_TYPE.USDC}
+            {TOKEN_TYPE[TOKEN_TYPE.USDC]}
           </div>
           <div style={{ height: 18, visibility: 'hidden' }} />
         </div>

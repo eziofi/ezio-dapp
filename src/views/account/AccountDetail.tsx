@@ -12,7 +12,8 @@ import Divider from '@mui/material/Divider';
 import { Box } from '@mui/system';
 import BaseIconFont from '../components/BaseIconFont';
 export default function AccountDetail() {
-  const recordList = useRecord();
+  // const recordList = useRecord();
+  const recordList: (RedeemRecord | PurchaseRecord)[] = [];
 
   return (
     <>

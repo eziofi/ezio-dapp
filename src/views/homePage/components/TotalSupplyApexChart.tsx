@@ -87,8 +87,7 @@ export default function TotalSupplyApexChart() {
     <Card>
       <CardHeader title={t('home.totalSupplyTitle') as string} />
 
-      <Box sx={{ p: 3, pb: 1 }} dir="ltr">
-        {/*@ts-ignore*/}
+      <Box sx={{ p: 2, pb: 1 }} dir="ltr">
         {option && <ReactApexChart options={option.options} series={option.series} type="line" height={350} />}
       </Box>
     </Card>

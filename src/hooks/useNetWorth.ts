@@ -1,6 +1,5 @@
 import { TOKEN_TYPE } from '../views/wallet/helpers/constant';
 import { ezatNetWorth, ezbtNetWorth } from '../views/wallet/helpers/contract_call';
-import { BigNumber } from 'ethers';
 import { useQuery } from 'react-query';
 import useWallet from '../views/hooks/useWallet';
 
@@ -16,7 +15,7 @@ export function useNetWorth(tokenType: TOKEN_TYPE) {
     ['networth', tokenType],
     () => netWorthApi[tokenType](ethersProvider!.getSigner()),
     {
-      enabled: !!ethersProvider,
+      enabled: !!ethersProvider && (tokenType === TOKEN_TYPE.EZAT || tokenType === TOKEN_TYPE.EZBT),
     },
   );
   return { netWorth };

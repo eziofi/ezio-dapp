@@ -336,7 +336,6 @@ export async function getOneInchQuoteResponse(quoteParams: OneInchQuoteParams) {
 }
 
 export async function getJson(url: RequestInfo | URL) {
-  console.log('=======url=', url);
   const res = await fetch(url);
   const json = await res.json();
   if (!json) {
