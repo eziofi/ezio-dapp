@@ -259,6 +259,7 @@ export async function purchaseB(
   const pooledA = await ezio.pooledA();
 
   if (quoteNetWorth.lte(pooledA)) {
+    console.log('使用金库USDC');
     // 如果金库USDC足够，用USDC转换成stmatic
     let convertSellAmount =
       fromType === TOKEN_TYPE.USDT
@@ -278,27 +279,18 @@ export async function purchaseB(
     console.log(convertSellAmount.toString());
     let quoteResponse2 = await get1InchQuote(USDC_ADDRESS, STMATIC_ADDRESS, convertSellAmount.toString(), slippage);
     quotes = [quoteResponse, quoteResponse2];
-  } else if (pooledA.gt(0)) {
-    // 如果金库储量大于0
-    let convertSellAmount =
-      // 这是是否要转换小数位
-      fromType === TOKEN_TYPE.USDT ? await ezio.convertAmt(fromTokenAddress, USDC_ADDRESS, pooledA) : pooledA;
-    // let quoteParams2: OneInchQuoteParams = {
-    //   fromTokenAddress: USDC_ADDRESS,
-    //   toTokenAddress: STMATIC_ADDRESS,
-    //   amount: convertSellAmount.toString(),
-    //   fromAddress: ezioJson.address,
-    //   slippage,
-    //   disableEstimate: true,
-    // };
-    // let quoteResponse2 = await getOneInchQuoteResponse(quoteParams2);
-    let quoteResponse2 = await get1InchQuote(USDC_ADDRESS, STMATIC_ADDRESS, convertSellAmount.toString(), slippage);
-    quotes = [quoteResponse, quoteResponse2];
-  } else {
+  }
+  // else if (pooledA.gt(0)) {
+  //   let convertSellAmount =
+  //     fromType === TOKEN_TYPE.USDT ? await ezio.convertAmt(fromTokenAddress, USDC_ADDRESS, pooledA) : pooledA;
+  //   let quoteResponse2 = await get1InchQuote(USDC_ADDRESS, STMATIC_ADDRESS, convertSellAmount.toString(), slippage);
+  //   quotes = [quoteResponse, quoteResponse2];
+  // }
+  else {
+    console.log('直接购买');
     quotes = [quoteResponse];
   }
   console.log(quotes);
-  console.log(JSON.stringify(quotes));
   await ezio.purchase(TOKEN_TYPE.EZBT, quotes);
 }
 
@@ -400,30 +392,39 @@ export async function queryRedeemRecord(
   return records;
 }
 
-let getRedeemQuoteQty = async (type: number, qty: BigNumber, signerOrProvider: Signer | Provider) => {
+let getRedeemQuoteQty = async (
+  type: number,
+  qty: BigNumber,
+  token: TOKEN_TYPE.USDC | TOKEN_TYPE.StMatic,
+  signerOrProvider: Signer | Provider,
+) => {
   let amt: BigNumber;
-  let needConvert: boolean = true;
+  let quoteQty: BigNumber = BigNumber.from('0');
   const aToken = EzatConnect(signerOrProvider);
   const bToken = EzbtConnect(signerOrProvider);
   const ezio = EzioConnect(signerOrProvider);
   const stMatic = stMaticConnect(signerOrProvider);
-  let quoteQty: BigNumber = BigNumber.from('0');
-  if (type == 0) {
-    amt = qty.mul(await aToken.netWorth()).div(BigNumber.from('10').pow(await aToken.decimals()));
-    if (amt.gte(await ezio.pooledA())) {
-      quoteQty = amt
-        .sub(await ezio.pooledA())
-        .mul(BigNumber.from('10').pow(await stMatic.decimals()))
-        .div(await ezio.getPrice(STMATIC_ADDRESS));
+  if (type === TOKEN_TYPE.EZAT) {
+    if (token === TOKEN_TYPE.USDC) {
+      amt = qty.mul(await aToken.netWorth()).div(BigNumber.from('10').pow(await aToken.decimals()));
+      if (amt.gt(await ezio.pooledA())) {
+        quoteQty = amt
+          .sub(await ezio.pooledA())
+          .mul(BigNumber.from('10').pow(await stMatic.decimals()))
+          .div(await ezio.getPrice(STMATIC_ADDRESS));
+      }
     }
   } else {
     amt = qty.mul(await bToken.netWorth()).div(BigNumber.from('10').pow(await bToken.decimals()));
-    let quoteAmt = qty.mul(await ezio.totalNetWorth()).div(await bToken.totalSupply());
-    quoteQty = quoteAmt
-      .mul(BigNumber.from('10').pow(await stMatic.decimals()))
-      .div(await ezio.getPrice(STMATIC_ADDRESS));
+    if (token === TOKEN_TYPE.USDC) {
+      quoteQty = qty.mul(await ezio.totalReserve()).div(await bToken.totalSupply());
+    } else if (token === TOKEN_TYPE.StMatic) {
+      let redeemReserveQty = qty.mul(await ezio.totalReserve()).div(await bToken.totalSupply());
+      let leverage: BigNumber = await ezio.leverage();
+      quoteQty = redeemReserveQty.mul(leverage.sub(await ezio.LEVERAGE_DENOMINATOR())).div(leverage);
+    }
   }
-  return { quoteQty, needConvert };
+  return quoteQty;
 };
 
 /**
@@ -458,8 +459,11 @@ export async function redeemToUSDC(
   slippage: number,
 ) {
   let redeemAmount = ethers.utils.parseEther(String(amount));
-  let { quoteQty: convertSellAmount, needConvert } = await getRedeemQuoteQty(fromType, redeemAmount, signerOrProvider);
-  if (needConvert) {
+  let convertSellAmount = await getRedeemQuoteQty(fromType, redeemAmount, TOKEN_TYPE.USDC, signerOrProvider);
+  const convertSellAmountStr = convertSellAmount.toString();
+  debugger;
+  if (convertSellAmount) {
+    debugger;
     //如果金库USDC储量不够，动用stMatic换成USDC
     let quoteParams: OneInchQuoteParams = {
       fromTokenAddress: STMATIC_ADDRESS,
@@ -470,10 +474,12 @@ export async function redeemToUSDC(
       disableEstimate: true,
     };
     const quoteResponse = await getOneInchQuoteResponse(quoteParams);
+    debugger;
     await EzioConnect(signerOrProvider)
       .connect(signerOrProvider)
       .redeem(fromType, redeemAmount, USDC_ADDRESS, quoteResponse);
   } else {
+    debugger;
     // 把USDC直接转给用户
     const quoteResponse = {
       sellToken: USDC_ADDRESS,
@@ -501,7 +507,7 @@ export async function redeemToStMatic(
   slippage: number,
 ) {
   let redeemAmount = ethers.utils.parseEther(String(amount));
-  let convertSellAmount2 = await getRedeemQuoteQty(fromType, redeemAmount, signerOrProvider);
+  let convertSellAmount2 = await getRedeemQuoteQty(fromType, redeemAmount, TOKEN_TYPE.StMatic, signerOrProvider);
   let quoteParams6: OneInchQuoteParams = {
     fromTokenAddress: STMATIC_ADDRESS,
     toTokenAddress: USDC_ADDRESS,
