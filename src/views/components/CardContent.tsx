@@ -20,7 +20,7 @@ interface IProps {
   inputValue2: string;
   tokenType: TOKEN_TYPE;
   redeemTokenType: TOKEN_TYPE;
-  setredeemTokenType: (redeemTokenType: TOKEN_TYPE) => void;
+  setRedeemTokenType: (redeemTokenType: TOKEN_TYPE) => void;
 }
 
 interface IOptions {
@@ -32,11 +32,11 @@ interface IOptions {
 
 type CardContentOneProps = Pick<
   IProps,
-  'isBuy' | 'transactionType' | 'getInputVal1' | 'getTokenType' | 'tokenType' | 'redeemTokenType' | 'setredeemTokenType'
+  'isBuy' | 'transactionType' | 'getInputVal1' | 'getTokenType' | 'tokenType' | 'redeemTokenType' | 'setRedeemTokenType'
 >;
 type CardContentSencoedProps = Pick<
   IProps,
-  'transactionType' | 'inputValue2' | 'getTokenType' | 'tokenType' | 'redeemTokenType' | 'setredeemTokenType'
+  'transactionType' | 'inputValue2' | 'getTokenType' | 'tokenType' | 'redeemTokenType' | 'setRedeemTokenType'
 >;
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
@@ -200,7 +200,7 @@ function MyCardContentOne({
   getInputVal1,
   tokenType,
   redeemTokenType,
-  setredeemTokenType,
+  setRedeemTokenType,
   isBuy,
 }: CardContentOneProps) {
   const { netWorth } = useNetWorth(tokenType);
@@ -212,7 +212,7 @@ function MyCardContentOne({
   };
 
   const redeemChange = (value: TOKEN_TYPE) => {
-    setredeemTokenType(value);
+    setRedeemTokenType(value);
   };
 
   const { balance } = useBalance(
@@ -266,7 +266,7 @@ function MyCardContentSecond({
   inputValue2,
   tokenType,
   redeemTokenType,
-  setredeemTokenType,
+  setRedeemTokenType,
 }: CardContentSencoedProps) {
   // const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
   const handleChange = (value: TOKEN_TYPE) => {
@@ -275,7 +275,7 @@ function MyCardContentSecond({
   };
 
   const redeemChange = (value: TOKEN_TYPE) => {
-    setredeemTokenType(value);
+    setRedeemTokenType(value);
   };
 
   const theme = useTheme();

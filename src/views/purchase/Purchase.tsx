@@ -81,7 +81,8 @@ export default function Purchase() {
   function setAnimation() {
     setInputValue1('');
     setInputValue2('');
-    setType(type === TRANSFER_TYPE.PURCHASE ? TRANSFER_TYPE.REDEEM : TRANSFER_TYPE.PURCHASE);
+    setType(type === TRANSFER_TYPE.PURCHASE ? TRANSFER_TYPE.REDEEM : TRANSFER_TYPE.PURCHASE); // 改变购买 / 赎回 状态
+
     // setIsClick(true);
     // const contentBottom: any = document.querySelector('.contentBottom');
     // contentBottom.style.animation = 'move_down 1.5s ease-out alternate';
@@ -186,6 +187,13 @@ export default function Purchase() {
 
   const handleClickOpen = () => setOpen(true);
 
+  useEffect(() => {
+    // type 为赎回时 redeemTokenType 为 USDC
+    if (type === TRANSFER_TYPE.REDEEM) {
+      setRedeemTokenType(TOKEN_TYPE.USDC);
+    }
+  }, [type]);
+
   return (
     <PurchaseContainer>
       <Snackbar
@@ -233,7 +241,7 @@ export default function Purchase() {
               getTokenType={getTokenType}
               getInputVal1={getInputVal1}
               redeemTokenType={redeemTokenType}
-              setredeemTokenType={setRedeemTokenType}
+              setRedeemTokenType={setRedeemTokenType}
             />
           </CardContent>
         ) : (
@@ -271,7 +279,7 @@ export default function Purchase() {
               getTokenType={getTokenType}
               inputValue2={inputValue2}
               redeemTokenType={redeemTokenType}
-              setredeemTokenType={setRedeemTokenType}
+              setRedeemTokenType={setRedeemTokenType}
             />
           </CardContent>
         ) : (
