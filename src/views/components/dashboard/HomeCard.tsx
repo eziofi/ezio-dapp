@@ -1,5 +1,5 @@
 import { alpha, styled, useTheme } from '@mui/material/styles';
-import { Card, Grid, Skeleton, SxProps, Theme, Typography, Box } from '@mui/material';
+import { Card, SxProps, Theme, Typography } from '@mui/material';
 
 import { useTranslation } from 'react-i18next';
 import useWallet from '../../hooks/useWallet';
@@ -10,7 +10,7 @@ import {
   treasuryTotalNetWorth,
 } from '../../wallet/helpers/contract_call';
 import { useQuery } from 'react-query';
-import { formatNetWorth, formatNum, toNum } from '../../wallet/helpers/utilities';
+import { formatNetWorth, formatNum } from '../../wallet/helpers/utilities';
 import BaseIconFont from '../BaseIconFont';
 import { TOKEN_TYPE } from '../../wallet/helpers/constant';
 import { InlineSkeleton } from '../Skeleton';
@@ -116,11 +116,17 @@ export default function HomeCard({
 
       {type === VALUE_TYPE.rate ? (
         <Typography variant="h3">
-          {!isLoading ? (parseFloat(formatNetWorth(data)) / 10000).toFixed(2) + '‱' : <InlineSkeleton />}
+          {!isLoading ? (parseFloat(formatNetWorth(data)) / 1000).toFixed(3) + '‰' : <InlineSkeleton />}
         </Typography>
       ) : (
         <Typography variant="h3">
-          {!isLoading ? formatNum(data, TOKEN_TYPE.USDC).toUnsafeFloat().toFixed(2) : <InlineSkeleton />}
+          {!isLoading ? (
+            formatNum(data, type === 'treasury' ? TOKEN_TYPE.USDC : TOKEN_TYPE.ezUSD)
+              .toUnsafeFloat()
+              .toFixed(2)
+          ) : (
+            <InlineSkeleton />
+          )}
         </Typography>
       )}
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>

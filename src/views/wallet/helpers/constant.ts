@@ -14,10 +14,10 @@ export const ETH_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 export const EXCHANGE_PROXY_ADDRESS = '0xdef1c0ded9bec7f1a1670819833240f027b25eff';
 
 export enum TOKEN_TYPE {
-  EZAT,
-  EZBT,
+  ezUSD,
+  ezMatic,
   USDC,
-  StMatic,
+  stMatic,
   USDT,
 }
 

@@ -6,8 +6,8 @@ import { TOKEN_TYPE } from '../views/wallet/helpers/constant';
 export function useRecord() {
   const { account, ethersProvider } = useWallet();
   const { data: purchaseEzatRecords } = useQuery(
-    ['queryPurchaseRecord', account, TOKEN_TYPE.EZAT],
-    () => queryPurchaseRecord(ethersProvider!.getSigner(), account, TOKEN_TYPE.EZAT),
+    ['queryPurchaseRecord', account, TOKEN_TYPE.ezUSD],
+    () => queryPurchaseRecord(ethersProvider!.getSigner(), account, TOKEN_TYPE.ezUSD),
     {
       enabled: !!ethersProvider,
       onSuccess: data => {
@@ -16,8 +16,8 @@ export function useRecord() {
     },
   );
   const { data: purchaseEzbtRecords } = useQuery(
-    ['queryPurchaseRecord', account, TOKEN_TYPE.EZBT],
-    () => queryPurchaseRecord(ethersProvider!.getSigner(), account, TOKEN_TYPE.EZBT),
+    ['queryPurchaseRecord', account, TOKEN_TYPE.ezMatic],
+    () => queryPurchaseRecord(ethersProvider!.getSigner(), account, TOKEN_TYPE.ezMatic),
     {
       enabled: !!ethersProvider,
       onSuccess: data => {

@@ -7,7 +7,7 @@ import { formatNetWorth, formatNum } from '../../views/wallet/helpers/utilities'
 import TextField from '@mui/material/TextField';
 import { TOKEN_TYPE, TRANSFER_TYPE } from '../../views/wallet/helpers/constant';
 import BaseIconFont from './BaseIconFont';
-import { useNetWorth } from '../../hooks/useNetWorth';
+import { usePrice } from '../../hooks/usePrice';
 import { BigNumber } from 'ethers';
 import { InlineSkeleton } from './Skeleton';
 
@@ -160,13 +160,13 @@ function RanderOptions(
 
 const PurchasenOptions: IOptions[] = [
   {
-    value: TOKEN_TYPE.EZAT,
+    value: TOKEN_TYPE.ezUSD,
     style: { margin: '0 10px', background: 'rgba(95, 69, 186, 1)' },
     iconName: 'icon-A',
     iconStyle: { width: 20, height: 20, fill: 'white' },
   },
   {
-    value: TOKEN_TYPE.EZBT,
+    value: TOKEN_TYPE.ezMatic,
     style: { margin: '0 10px', background: 'rgba(26, 107, 173, 1)' },
     iconName: 'icon-B',
     iconStyle: { width: 20, height: 20, fill: 'white' },
@@ -187,7 +187,7 @@ const redeemOptions: IOptions[] = [
     iconStyle: { width: 20, height: 20, fill: 'white' },
   },
   {
-    value: TOKEN_TYPE.StMatic,
+    value: TOKEN_TYPE.stMatic,
     style: { margin: '0 10px', background: 'rgba(239, 89, 114)' },
     iconName: 'icon-stMatic-white',
     iconStyle: { width: 20, height: 20, fill: 'white' },
@@ -203,7 +203,7 @@ function MyCardContentOne({
   setRedeemTokenType,
   isBuy,
 }: CardContentOneProps) {
-  const { netWorth } = useNetWorth(tokenType);
+  const { netWorth } = usePrice(tokenType);
 
   // const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
   const handleChange = (value: TOKEN_TYPE) => {
@@ -218,9 +218,9 @@ function MyCardContentOne({
   const { balance } = useBalance(
     transactionType === TRANSFER_TYPE.PURCHASE
       ? redeemTokenType
-      : tokenType === TOKEN_TYPE.EZAT
-      ? TOKEN_TYPE.EZAT
-      : TOKEN_TYPE.EZBT,
+      : tokenType === TOKEN_TYPE.ezUSD
+      ? TOKEN_TYPE.ezUSD
+      : TOKEN_TYPE.ezMatic,
   );
 
   const theme = useTheme();
@@ -249,7 +249,7 @@ function MyCardContentOne({
       </div>
       {transactionType === TRANSFER_TYPE.PURCHASE
         ? RanderOptions(
-            redeemOptions.filter(item => item.value !== TOKEN_TYPE.StMatic),
+            redeemOptions.filter(item => item.value !== TOKEN_TYPE.stMatic),
             redeemTokenType,
             redeemChange,
             true,
@@ -307,7 +307,7 @@ function MyCardContentSecond({
         : RanderOptions(redeemOptions, redeemTokenType, redeemChange)} */}
       {transactionType === TRANSFER_TYPE.PURCHASE ? (
         RanderOptions(PurchasenOptions, tokenType, handleChange)
-      ) : tokenType === TOKEN_TYPE.EZAT ? (
+      ) : tokenType === TOKEN_TYPE.ezUSD ? (
         <div>
           <div style={{ display: 'flex', alignItems: 'center', marginRight: 5, height: 46 }}>
             <div

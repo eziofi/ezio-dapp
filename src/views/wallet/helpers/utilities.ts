@@ -224,9 +224,10 @@ export function formatNetWorth(value: BigNumberish | string | undefined, format1
  * 格式化数值，
  * @param value wei 单位的数值
  * @param tokenType
+ * @param decimal 小数位数
  * @returns
  */
-export function formatNum(value?: BigNumber, tokenType?: TOKEN_TYPE): FixedNumber {
+export function formatNum(value?: BigNumber, tokenType?: TOKEN_TYPE, decimal: number = 2): FixedNumber {
   if (!value) {
     return FixedNumber.from(0);
   }
@@ -240,7 +241,7 @@ export function formatNum(value?: BigNumber, tokenType?: TOKEN_TYPE): FixedNumbe
     return FixedNumber.from(numArr[0]);
   }
 
-  return FixedNumber.from(`${numArr[0]}.${numArr[1].length > 2 ? numArr[1].substring(0, 2) : numArr[1]}`);
+  return FixedNumber.from(`${numArr[0]}.${numArr[1].length > decimal ? numArr[1].substring(0, decimal) : numArr[1]}`);
 }
 
 /**

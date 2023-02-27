@@ -32,14 +32,14 @@ export default function PriceTable() {
       const bTodayWorth = formatNetWorth(data.data.data[0].ezbtNetWorth);
       const bYestdayWorth = formatNetWorth(data.data.data[1].ezbtNetWorth);
       const EZATInfo: ITokenInfo = {
-        type: TOKEN_TYPE.EZAT,
+        type: TOKEN_TYPE.ezUSD,
         netWorth: aTodayWorth,
         oneDayChange: numeral((parseFloat(aTodayWorth) - parseFloat(aYestdayWorth)) / parseFloat(aYestdayWorth)).format(
           '0.00%',
         ),
       };
       const EZBTInfo: ITokenInfo = {
-        type: TOKEN_TYPE.EZBT,
+        type: TOKEN_TYPE.ezMatic,
         netWorth: bTodayWorth,
         oneDayChange: numeral((parseFloat(bTodayWorth) - parseFloat(bYestdayWorth)) / parseFloat(bYestdayWorth)).format(
           '0.00%',

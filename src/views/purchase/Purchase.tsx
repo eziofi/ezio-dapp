@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { ContentBottom, ContentTop, ConverBtn, DateNow, FooterContent, PurchaseContainer } from './PurchaseStyle';
 import CachedIcon from '@mui/icons-material/Cached';
 import { MyCardContentOne, MyCardContentSecond } from '../components/CardContent';
-import { useNetWorth } from '../../hooks/useNetWorth';
+import { usePrice } from '../../hooks/usePrice';
 import { useBalance } from '../../hooks/useBalance';
 import FormDialog from './components/FormDialog';
 import BaseIconFont from '../components/BaseIconFont';
@@ -20,15 +20,15 @@ import { Provider } from '@ethersproject/providers';
 
 interface IPurchaseArg {
   fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC;
-  toType: TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT;
+  toType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMatic;
   amount: number;
   slippage: number;
   signerOrProvider: Signer | Provider;
 }
 
 interface IRedeemArg {
-  fromType: TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT;
-  toType: TOKEN_TYPE.USDC | TOKEN_TYPE.StMatic;
+  fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMatic;
+  toType: TOKEN_TYPE.USDC | TOKEN_TYPE.stMatic;
   amount: number;
   slippage: number;
   signerOrProvider: Signer | Provider;
@@ -41,7 +41,7 @@ export default function Purchase() {
   const [inputValue1, setInputValue1] = useState('');
   const [inputValue2, setInputValue2] = useState('');
   const [isClick, setIsClick] = useState(false);
-  const [tokenType, setTokenType] = useState<TOKEN_TYPE>(TOKEN_TYPE.EZAT); // 下拉框value
+  const [tokenType, setTokenType] = useState<TOKEN_TYPE>(TOKEN_TYPE.ezUSD); // 下拉框value
   const [redeemTokenType, setRedeemTokenType] = useState<TOKEN_TYPE>(TOKEN_TYPE.USDT); // 下拉框value
   const theme = useTheme();
   const [slippage, setSlippage] = useState<number>(1);
@@ -53,7 +53,7 @@ export default function Purchase() {
     return () => clearInterval(timer);
   }, []);
 
-  const { netWorth } = useNetWorth(tokenType);
+  const { netWorth } = usePrice(tokenType);
 
   const { t } = useTranslation();
   const style = {
@@ -148,7 +148,7 @@ export default function Purchase() {
       } else {
         const args: IPurchaseArg = {
           fromType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.USDT,
-          toType: tokenType as TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
+          toType: tokenType as TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMatic,
           amount: Number(inputValue1),
           slippage,
           signerOrProvider: ethersProvider!.getSigner(),
@@ -169,13 +169,12 @@ export default function Purchase() {
         setMsgOpen(true);
       } else {
         const args: IRedeemArg = {
-          fromType: tokenType as TOKEN_TYPE.EZAT | TOKEN_TYPE.EZBT,
-          toType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.StMatic,
+          fromType: tokenType as TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMatic,
+          toType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.stMatic,
           amount: Number(inputValue1),
           signerOrProvider: ethersProvider!.getSigner(),
           slippage,
         };
-        debugger;
         redeemMutate(args);
         setInputValue1('');
         setInputValue2('');
