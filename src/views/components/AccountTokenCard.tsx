@@ -4,12 +4,12 @@ import { usePrice } from '../../hooks/usePrice';
 import { AccountCard, Content } from '../account/AccountStyle';
 import BaseIconFont from './BaseIconFont';
 import Box from '@mui/material/Box';
-import { formatNum } from '../wallet/helpers/utilities';
+import { formatDecimal } from '../wallet/helpers/utilities';
 import { InlineSkeleton } from './Skeleton';
 import { useTranslation } from 'react-i18next';
 import { Tooltip } from '@mui/material';
 
-export default function TokenCard({ type }: { type: TOKEN_TYPE }) {
+export default function AccountTokenCard({ type }: { type: TOKEN_TYPE }) {
   const { balance } = useBalance(type);
   const { netWorth } = usePrice(type);
   const { t } = useTranslation();
@@ -64,19 +64,19 @@ export default function TokenCard({ type }: { type: TOKEN_TYPE }) {
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <Box>
                 <div style={{ fontSize: 20 }}>{TOKEN_TYPE[type]}</div>
-                {/*{netWorth ? (*/}
-                {/*  <div style={{ fontSize: 12, color: 'rgba(76, 80, 97, 1)' }}>*/}
-                {/*    {t('account.netWorth')}: ${formatNum(netWorth, type).toUnsafeFloat().toFixed(2)}*/}
-                {/*  </div>*/}
-                {/*) : (*/}
-                {/*  <InlineSkeleton width={70} />*/}
-                {/*)}*/}
+                {netWorth ? (
+                  <div style={{ fontSize: 12, color: 'rgba(76, 80, 97, 1)' }}>
+                    {t('account.netWorth')}: {formatDecimal(netWorth, type, 6).toString()} USDC
+                  </div>
+                ) : (
+                  <InlineSkeleton width={70} />
+                )}
               </Box>
               <div>
                 {balance ? (
-                  <Tooltip title={formatNum(balance, type, 6).toString()} placement="top">
+                  <Tooltip title={formatDecimal(balance, type, 6).toString()} placement="top">
                     <div style={{ fontSize: 28, color: 'rgba(67, 207, 124, 1)' }}>
-                      {formatNum(balance, type).toUnsafeFloat().toFixed(2)}
+                      {formatDecimal(balance, type).toString()}
                     </div>
                   </Tooltip>
                 ) : (
@@ -107,7 +107,8 @@ export default function TokenCard({ type }: { type: TOKEN_TYPE }) {
                 <div style={{ fontSize: 20 }}>{TOKEN_TYPE[type]}</div>
                 {netWorth ? (
                   <div style={{ fontSize: 12, color: 'rgba(76, 80, 97, 1)' }}>
-                    {t('account.netWorth')}: ${formatNum(netWorth).toUnsafeFloat().toFixed(2)}
+                    {t('account.netWorth')}: {formatDecimal(netWorth, TOKEN_TYPE.USDC, 6).toString()} USDC
+                    {/*{netWorth.toString()} USDC*/}
                   </div>
                 ) : (
                   <InlineSkeleton width={70} />
@@ -115,10 +116,10 @@ export default function TokenCard({ type }: { type: TOKEN_TYPE }) {
               </Box>
               <div>
                 {balance ? (
-                  <Tooltip title={formatNum(balance, type, 18).toString()} placement="top">
+                  <Tooltip title={formatDecimal(balance, type, 18).toString()} placement="top">
                     <div style={{ fontSize: 28, color: 'rgba(67, 207, 124, 1)' }}>
                       {/*{formatNum(balance, type).toUnsafeFloat().toFixed(2)}*/}
-                      {formatNum(balance, type).toString()}
+                      {formatDecimal(balance, type).toString()}
                     </div>
                   </Tooltip>
                 ) : (

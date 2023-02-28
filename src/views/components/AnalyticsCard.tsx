@@ -2,18 +2,20 @@ import { alpha, styled, useTheme } from '@mui/material/styles';
 import { Card, SxProps, Theme, Typography } from '@mui/material';
 
 import { useTranslation } from 'react-i18next';
-import useWallet from '../../hooks/useWallet';
+import useWallet from '../hooks/useWallet';
 import {
   ezatTotalSupply,
   ezbtTotalSupply,
+  ezMATICTotalNetWorth,
+  ezUSDTotalNetWorth,
   treasuryInterestRate,
   treasuryTotalNetWorth,
-} from '../../wallet/helpers/contract_call';
+} from '../wallet/helpers/contract_call';
 import { useQuery } from 'react-query';
-import { formatNetWorth, formatNum } from '../../wallet/helpers/utilities';
-import BaseIconFont from '../BaseIconFont';
-import { TOKEN_TYPE } from '../../wallet/helpers/constant';
-import { InlineSkeleton } from '../Skeleton';
+import { formatNetWorth, formatDecimal } from '../wallet/helpers/utilities';
+import BaseIconFont from './BaseIconFont';
+import { TOKEN_TYPE } from '../wallet/helpers/constant';
+import { InlineSkeleton } from './Skeleton';
 
 const StyledIcon = styled('div')(({ theme }) => ({
   margin: 'auto',
@@ -26,19 +28,18 @@ const StyledIcon = styled('div')(({ theme }) => ({
   marginBottom: theme.spacing(3),
 }));
 
-enum VALUE_TYPE {
-  EZAT = 'EZAT',
-  EZBT = 'EZBT',
-  treasury = 'treasury',
-  rate = 'rate',
+export enum ANALYTICS_CARD_TYPE {
+  USDC,
+  stMATIC,
+  FEE,
 }
-export default function HomeCard({
+export default function AnalyticsCard({
   type,
   color = 'primary',
   sx,
   ...other
 }: {
-  type: keyof typeof VALUE_TYPE;
+  type: ANALYTICS_CARD_TYPE;
   color?: 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
   sx?: SxProps<Theme>;
 }) {
@@ -48,27 +49,24 @@ export default function HomeCard({
   const theme = useTheme();
 
   const api = {
-    EZAT: ezatTotalSupply,
-    EZBT: ezbtTotalSupply,
-    treasury: treasuryTotalNetWorth,
-    rate: treasuryInterestRate,
+    [ANALYTICS_CARD_TYPE.USDC]: ezUSDTotalNetWorth,
+    [ANALYTICS_CARD_TYPE.stMATIC]: ezMATICTotalNetWorth,
+    [ANALYTICS_CARD_TYPE.FEE]: ezMATICTotalNetWorth,
   };
   const title = {
-    EZAT: t('home.EZAT_totalSupply'),
-    EZBT: t('home.EZBT_totalSupply'),
-    treasury: t('home.treasury_totalValue'),
-    rate: t('home.EZAT_Rate'),
+    [ANALYTICS_CARD_TYPE.USDC]: t('analytics.title.usdc'),
+    [ANALYTICS_CARD_TYPE.stMATIC]: t('analytics.title.stMATIC'),
+    [ANALYTICS_CARD_TYPE.FEE]: t('analytics.title.fee'),
   };
   const icon = {
-    EZAT: 'icon-A',
-    EZBT: 'icon-B',
-    treasury: 'icon-zuanshi',
-    rate: 'icon-weidaizijinchilixichaxun',
+    [ANALYTICS_CARD_TYPE.USDC]: 'icon-A',
+    [ANALYTICS_CARD_TYPE.stMATIC]: 'icon-B',
+    [ANALYTICS_CARD_TYPE.FEE]: 'icon-zuanshi',
   };
-  const { data, isLoading } = useQuery(['totalSupply', type], () => api[type](ethersProvider!.getSigner()), {
+  const { data, isLoading } = useQuery(['AnalyticsCard', type], () => api[type](ethersProvider!.getSigner()), {
     enabled: !!ethersProvider,
     onSuccess: data1 => {
-      // if (type === VALUE_TYPE.rate) {
+      // if (type === ANALYSIS_CARD_TYPE.rate) {
       //   const res = formatNetWorth(data1);
       //   debugger;
       // }
@@ -113,22 +111,17 @@ export default function HomeCard({
 
         {/*<Iconify icon={icon[type]} width={24} height={24} />*/}
       </StyledIcon>
-
-      {type === VALUE_TYPE.rate ? (
-        <Typography variant="h3">
-          {!isLoading ? (parseFloat(formatNetWorth(data)) / 1000).toFixed(3) + '‰' : <InlineSkeleton />}
-        </Typography>
-      ) : (
-        <Typography variant="h3">
-          {!isLoading ? (
-            formatNum(data, type === 'treasury' ? TOKEN_TYPE.USDC : TOKEN_TYPE.ezUSD)
-              .toUnsafeFloat()
-              .toFixed(2)
+      <Typography variant="h3">
+        {!isLoading ? (
+          type === ANALYTICS_CARD_TYPE.FEE ? (
+            'feeValue'
           ) : (
-            <InlineSkeleton />
-          )}
-        </Typography>
-      )}
+            formatDecimal(data, TOKEN_TYPE.USDC).toString()
+          )
+        ) : (
+          <InlineSkeleton />
+        )}
+      </Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
         {title[type]}
       </Typography>

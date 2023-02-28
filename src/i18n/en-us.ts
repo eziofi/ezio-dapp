@@ -5,6 +5,7 @@ export default {
     purchase: 'Purchase',
     redeem: 'Redeem',
     account: 'Account',
+    analytics: 'Analytics',
     wallet: '连接钱包',
   },
   home: {
@@ -86,9 +87,16 @@ export default {
     balance: 'Balance',
     detail: 'Transaction Detail',
     checkDetail: 'Detail>>',
-    netWorth: 'value',
+    netWorth: 'price',
     recordPurchaseAction: 'Purchase',
     recordRedeemAction: 'Redeem',
+  },
+  analytics: {
+    title: {
+      usdc: 'Treasury USDC value',
+      stMATIC: 'Treasury stMATIC value',
+      fee: 'Fees earned by Ezio (last 24hrs)',
+    },
   },
   tips: {
     line1: "The big decline of stEth may cause risks to EzUSD's investors.",

@@ -5,7 +5,7 @@ import { BigNumber, BigNumberish, FixedNumber, utils } from 'ethers';
 import numeral from 'numeral';
 import qs from 'qs';
 import { formatUnits } from 'ethers/lib/utils';
-import { TOKEN_TYPE } from './constant';
+import { TOKEN_DECIMAL, TOKEN_TYPE } from './constant';
 import { SwapQuoteStruct } from '../contract/contracts/interfaces/v1/IEzio';
 // import { apiGetGasPrices, apiGetAccountNonce } from "./api";
 // import { convertAmountToRawNumber, convertStringToHex } from "./bignumber";
@@ -150,67 +150,8 @@ export function recoverPersonalSignature(sig: string, msg: string): string {
   return signer;
 }
 
-// export async function formatTestTransaction(address: string, chainId: number) {
-//   // from
-//   const from = address;
-
-//   // to
-//   const to = address;
-
-//   // nonce
-//   const _nonce = await apiGetAccountNonce(address, chainId);
-//   const nonce = sanitizeHex(convertStringToHex(_nonce));
-
-//   // gasPrice
-//   const gasPrices = await apiGetGasPrices();
-//   const _gasPrice = gasPrices.slow.price;
-//   const gasPrice = sanitizeHex(
-//     convertStringToHex(convertAmountToRawNumber(_gasPrice, 9))
-//   );
-
-//   // gasLimit
-//   const _gasLimit = 21000;
-//   const gasLimit = sanitizeHex(convertStringToHex(_gasLimit));
-
-//   // value
-//   const _value = 0;
-//   const value = sanitizeHex(convertStringToHex(_value));
-
-//   // data
-//   const data = "0x";
-
-//   // test transaction
-//   const tx = {
-//     from,
-//     to,
-//     nonce,
-//     gasPrice,
-//     gasLimit,
-//     value,
-//     data
-//   };
-
-//   return tx;
-// }
-
 export function isObject(obj: any): boolean {
   return typeof obj === 'object' && !!Object.keys(obj).length;
-}
-
-export function toNum(value?: BigNumber) {
-  if (!value) {
-    return 0;
-  }
-  const ether = utils.formatEther(value);
-  const numArr = ether.split('.');
-
-  if (numArr.length == 1) {
-    return parseFloat(numArr[0]);
-  }
-  if (numArr[1] === '0') {
-    return parseFloat(numArr[0]);
-  }
-  return parseFloat(`${numArr[0]}.${numArr[1].length > 2 ? numArr[1].substring(0, 2) : numArr[1]}`);
 }
 
 export function formatNetWorth(value: BigNumberish | string | undefined, format18?: boolean) {
@@ -221,17 +162,17 @@ export function formatNetWorth(value: BigNumberish | string | undefined, format1
 }
 
 /**
- * 格式化数值，
+ * 格式化数值，转换小数位数
  * @param value wei 单位的数值
- * @param tokenType
- * @param decimal 小数位数
- * @returns
+ * @param tokenType token种类，影响计算位数
+ * @param decimal 最多显示多少位小数，默认2位
+ * @returns 带小数的FixedNumber
  */
-export function formatNum(value?: BigNumber, tokenType?: TOKEN_TYPE, decimal: number = 2): FixedNumber {
+export function formatDecimal(value: BigNumber | undefined, tokenType: TOKEN_TYPE, decimal: number = 2): FixedNumber {
   if (!value) {
     return FixedNumber.from(0);
   }
-  const ether = formatUnits(value, tokenType === TOKEN_TYPE.USDT || tokenType === TOKEN_TYPE.USDC ? 6 : 18);
+  const ether = formatUnits(value, TOKEN_DECIMAL[tokenType]);
   const numArr = ether.split('.');
 
   if (numArr.length == 1) {
@@ -242,39 +183,6 @@ export function formatNum(value?: BigNumber, tokenType?: TOKEN_TYPE, decimal: nu
   }
 
   return FixedNumber.from(`${numArr[0]}.${numArr[1].length > decimal ? numArr[1].substring(0, decimal) : numArr[1]}`);
-}
-
-/**
- * 转换为 ether 的字符串
- * todo abstract functions
- * @param value wei 单位的数值
- * @returns
- */
-export function formatNumToString(value: BigNumber): string {
-  return numToString(formatNum(value));
-}
-
-/**
- * 数字类型转换为字符串
- * @param value
- * @returns
- */
-export function numToString(value?: BigNumber | FixedNumber, decimals?: number): string {
-  if (!value) {
-    return '0';
-  }
-  const numArr = value.toString().split('.');
-
-  if (numArr.length == 1) {
-    return numArr[0];
-  }
-  if (numArr[1] === '0') {
-    return numArr[0];
-  }
-  if (!decimals) {
-    decimals = 2;
-  }
-  return `${numArr[0]}.${numArr[1].length > decimals ? numArr[1].substring(0, decimals) : numArr[1]}`;
 }
 
 export function timestampFormat(timestamp: number) {

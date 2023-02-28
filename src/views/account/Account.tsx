@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { PurchaseContainer } from '../purchase/PurchaseStyle';
 import { AccountCard, AccountCardBox, AccountToolBar, Content } from './AccountStyle';
 import BaseIconFont from '../components/BaseIconFont';
-import TokenCard from '../components/AccountTokenCard';
+import AccountTokenCard from '../components/AccountTokenCard';
 
 export default function Account() {
   const [page, setPage] = useState('account');
@@ -40,11 +40,11 @@ export default function Account() {
 
       {page === 'account' ? (
         <AccountCardBox>
-          <TokenCard type={TOKEN_TYPE.USDT} />
-          <TokenCard type={TOKEN_TYPE.USDC} />
-          <TokenCard type={TOKEN_TYPE.stMatic} />
-          <TokenCard type={TOKEN_TYPE.ezUSD} />
-          <TokenCard type={TOKEN_TYPE.ezMatic} />
+          <AccountTokenCard type={TOKEN_TYPE.USDT} />
+          <AccountTokenCard type={TOKEN_TYPE.USDC} />
+          <AccountTokenCard type={TOKEN_TYPE.stMatic} />
+          <AccountTokenCard type={TOKEN_TYPE.ezUSD} />
+          <AccountTokenCard type={TOKEN_TYPE.ezMatic} />
         </AccountCardBox>
       ) : (
         <AccountDetail />

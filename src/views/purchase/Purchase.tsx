@@ -4,10 +4,10 @@ import { Button, CardContent, IconButton, Link, Snackbar, Toolbar, Typography, u
 import PurchaseDrawer from './components/PurchaseDrawer';
 import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
 import { purchase, redeem, treasuryInterestRate } from '../wallet/helpers/contract_call';
-import { Signer } from 'ethers';
-import { TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
+import { BigNumber, Signer } from 'ethers';
+import { TOKEN_DECIMAL, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
 import useWallet from '../hooks/useWallet';
-import { formatNetWorth, formatNum, timestampFormat } from '../wallet/helpers/utilities';
+import { formatDecimal, formatNetWorth, timestampFormat } from '../wallet/helpers/utilities';
 import { useTranslation } from 'react-i18next';
 import { ContentBottom, ContentTop, ConverBtn, DateNow, FooterContent, PurchaseContainer } from './PurchaseStyle';
 import CachedIcon from '@mui/icons-material/Cached';
@@ -139,10 +139,10 @@ export default function Purchase() {
 
   // 购买
   const doPurchase = () => {
-    console.log('refetchBalance');
     refetchBalance().then(({ data }) => {
-      const balance = formatNum(data, redeemTokenType).toUnsafeFloat();
-      if (parseInt(inputValue1) > balance) {
+      if (!data) return Promise.reject();
+      const balance = formatDecimal(data, redeemTokenType, TOKEN_DECIMAL[redeemTokenType]).toUnsafeFloat();
+      if (parseFloat(inputValue1) > balance) {
         setMsg(t('purchase.moreThanBalanceMsg'));
         setMsgOpen(true);
       } else {
@@ -163,8 +163,9 @@ export default function Purchase() {
 
   const doRedeem = () => {
     refetchBalance().then(({ data }) => {
-      const balance = formatNum(data).toUnsafeFloat();
-      if (parseInt(inputValue1) > balance) {
+      if (!data) return Promise.reject();
+      const balance = formatDecimal(data, tokenType, TOKEN_DECIMAL[tokenType]).toUnsafeFloat();
+      if (parseFloat(inputValue1) > balance) {
         setMsg(t('redeem.moreThanBalanceMsg'));
         setMsgOpen(true);
       } else {

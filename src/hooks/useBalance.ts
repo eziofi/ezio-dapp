@@ -9,7 +9,7 @@ import { useQuery } from 'react-query';
 import useWallet from '../views/hooks/useWallet';
 import { TOKEN_TYPE } from '../views/wallet/helpers/constant';
 import { formatUnits } from 'ethers/lib/utils';
-import { formatNum } from '../views/wallet/helpers/utilities';
+import { formatDecimal } from '../views/wallet/helpers/utilities';
 
 export function useBalance(tokenType: TOKEN_TYPE) {
   const { account, ethersProvider } = useWallet();
@@ -26,7 +26,7 @@ export function useBalance(tokenType: TOKEN_TYPE) {
     {
       enabled: !!ethersProvider && !!account,
       onSuccess: data => {
-        const res = formatNum(data, tokenType, 6).toString();
+        const res = formatDecimal(data, tokenType, 6).toString();
         console.log(res);
       },
     },

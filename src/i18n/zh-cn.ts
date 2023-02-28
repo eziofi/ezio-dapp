@@ -5,6 +5,7 @@ export default {
     // purchase: '购买',
     // redeem: '赎回',
     account: '账户',
+    analytics: '分析',
     wallet: '连接钱包',
   },
   home: {
@@ -85,9 +86,16 @@ export default {
     balance: '余额',
     detail: '交易记录',
     checkDetail: '查看明细>>',
-    netWorth: '总价值',
+    netWorth: '单价',
     recordPurchaseAction: '购买',
     recordRedeemAction: '赎回',
+  },
+  analytics: {
+    title: {
+      usdc: '金库USDC价值',
+      stMATIC: '金库stMATIC价值',
+      fee: '手续费收入',
+    },
   },
   tips: {
     line1: '由于stETH大幅下跌可能会给TokenA的投资人带来风险。',

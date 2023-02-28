@@ -2,7 +2,6 @@ import styles from './account.module.less';
 import { TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
 import { timestampFormat } from '../wallet/helpers/utilities';
 import { t } from 'i18next';
-import { useRecord } from '../../hooks/useRecord';
 import { PurchaseRecord, RedeemRecord } from '../wallet/helpers/contract_call';
 import { Avatar, CardContent, List, ListItem, ListItemAvatar, ListItemText, useTheme } from '@mui/material';
 import WorkIcon from '@mui/icons-material/Work';

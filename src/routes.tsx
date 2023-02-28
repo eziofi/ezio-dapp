@@ -5,6 +5,7 @@ import DashboardLayout from './layouts/dashboard';
 import HomePage from './views/homePage/HomePage';
 import Purchase from './views/purchase/Purchase';
 import Account from './views/account/Account';
+import Analytics from './views/analytics/Analytics';
 // import SimpleLayout from './layouts/simple';
 //
 // import BlogPage from './pages/BlogPage';
@@ -32,6 +33,7 @@ export default function Router() {
         { path: 'purchase', element: <Purchase /> },
         // { path: 'redeem', element: <Redeem /> },
         { path: 'account', element: <Account /> },
+        { path: 'analytics', element: <Analytics /> },
         // { path: 'user', element: <UserPage /> },
         // { path: 'products', element: <ProductsPage /> },
         // { path: 'blog', element: <BlogPage /> },

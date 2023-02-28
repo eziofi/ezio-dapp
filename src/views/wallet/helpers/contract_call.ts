@@ -3,7 +3,7 @@ import { EzioV1__factory, EzMATICV1, EzMATICV1__factory, EzUSDV1__factory } from
 import { ERC20_ABI, POLYGON_TOKENS, TOKEN_TYPE, TRANSFER_TYPE } from './constant';
 import { BigNumber, ethers, Signer } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
-import { formatNetWorth, formatNumToString, getOneInchQuoteResponse } from './utilities';
+import { formatDecimal, getOneInchQuoteResponse } from './utilities';
 import { OneInchQuoteParams } from './types';
 import { SwapQuoteStruct } from '../contract/contracts/interfaces/v1/IEzio';
 // import { Treasury__factory } from '../contract/factories/contracts/Treasury__factory';
@@ -86,6 +86,22 @@ export async function treasuryTotalNetWorth(signerOrProvider: Signer | Provider)
 }
 
 /**
+ * 获取 金库储量
+ * @returns ezUSD总净值
+ */
+export async function ezUSDTotalNetWorth(signerOrProvider: Signer | Provider): Promise<BigNumber> {
+  return await EzatConnect(signerOrProvider).totalNetWorth();
+}
+
+/**
+ * 获取 金库储量
+ * @returns ezMATIC总净值
+ */
+export async function ezMATICTotalNetWorth(signerOrProvider: Signer | Provider): Promise<BigNumber> {
+  return await EzbtConnect(signerOrProvider).totalNetWorth();
+}
+
+/**
  * 获取 日利息
  * @returns 日利息
  */
@@ -160,6 +176,28 @@ export async function ezUSDPrice(signerOrProvider: Signer | Provider): Promise<B
  */
 export async function ezMaticPrice(signerOrProvider: Signer | Provider): Promise<BigNumber> {
   return EzbtConnect(signerOrProvider).netWorth();
+}
+
+/**
+ * 获取 stMatic 净值
+ * @returns ezbt 净值
+ */
+export async function stMaticPrice(signerOrProvider: Signer | Provider): Promise<BigNumber> {
+  return EzioConnect(signerOrProvider).getPrice(STMATIC_ADDRESS);
+}
+/**
+ * 获取 USDT 净值
+ * @returns ezbt 净值
+ */
+export async function usdtPrice(signerOrProvider: Signer | Provider): Promise<BigNumber> {
+  return EzioConnect(signerOrProvider).getPrice(USDT_ADDRESS);
+}
+/**
+ * 获取 USDC 净值
+ * @returns ezbt 净值
+ */
+export async function usdcPrice(signerOrProvider: Signer | Provider): Promise<BigNumber> {
+  return EzioConnect(signerOrProvider).getPrice(USDC_ADDRESS);
 }
 
 /**
@@ -308,6 +346,8 @@ export interface PurchaseRecord {
 /**
  * 申购记录
  * @param signerOrProvider signerOrProvider
+ * @param address
+ * @param tokenType
  * @returns 申购记录
  */
 export async function queryPurchaseRecord(
@@ -325,8 +365,8 @@ export async function queryPurchaseRecord(
       transferType: TRANSFER_TYPE.PURCHASE,
       timestamp: block.timestamp * 1000,
       tokenType,
-      amt: formatNumToString(amt),
-      qty: formatNumToString(qty),
+      amt: formatDecimal(amt, tokenType).toString(), // 需要修改
+      qty: formatDecimal(qty, tokenType).toString(), // 需要修改
     });
   }
   // return records.sort((a, b) => b.timestamp - a.timestamp);
@@ -387,8 +427,8 @@ export async function queryRedeemRecord(
       transferType: TRANSFER_TYPE.REDEEM,
       timestamp: block.timestamp * 1000,
       tokenType: type,
-      qty: formatNumToString(qty),
-      amt: formatNumToString(amt),
+      qty: formatDecimal(qty, TOKEN_TYPE.USDC).toString(), // 需要修改
+      amt: formatDecimal(amt, TOKEN_TYPE.USDC).toString(), // 需要修改
     });
   }
   // return records.sort((a, b) => b.timestamp - a.timestamp);

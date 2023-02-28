@@ -3,9 +3,9 @@ import React from 'react';
 import { BalanceContent, BodyContent } from '../purchase/PurchaseStyle';
 import { useTranslation } from 'react-i18next';
 import { useBalance } from '../../hooks/useBalance';
-import { formatNetWorth, formatNum } from '../../views/wallet/helpers/utilities';
+import { formatNetWorth, formatDecimal } from '../wallet/helpers/utilities';
 import TextField from '@mui/material/TextField';
-import { TOKEN_TYPE, TRANSFER_TYPE } from '../../views/wallet/helpers/constant';
+import { TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
 import BaseIconFont from './BaseIconFont';
 import { usePrice } from '../../hooks/usePrice';
 import { BigNumber } from 'ethers';
@@ -157,7 +157,7 @@ function RanderOptions(
           }}
         >
           {translate('purchase.leftBalance') + ': '}
-          {balance ? formatNum(balance, tokenType).toUnsafeFloat().toFixed(2) : <InlineSkeleton width={40} />}
+          {balance ? formatDecimal(balance, tokenType, 6).toString() : <InlineSkeleton width={40} />}
         </span>
       ) : (
         <div style={{ height: 18, visibility: 'hidden' }} />

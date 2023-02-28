@@ -26,6 +26,14 @@ export enum TRANSFER_TYPE {
   REDEEM = 1,
 }
 
+export const TOKEN_DECIMAL = {
+  [TOKEN_TYPE.ezUSD]: 18,
+  [TOKEN_TYPE.ezMatic]: 18,
+  [TOKEN_TYPE.USDT]: 6,
+  [TOKEN_TYPE.USDC]: 6,
+  [TOKEN_TYPE.stMatic]: 6,
+};
+
 // Mainnet tokens
 // Not an exhaustive list, just enough so we don't repeat ourselves
 export const MAINNET_TOKENS = {
