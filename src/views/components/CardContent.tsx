@@ -242,17 +242,14 @@ function MyCardContentOne({
           id="custom-css-outlined-input"
           size="small"
           placeholder="0"
-          onInput={e => {
-            // @ts-ignore
+          onInput={(e: any) => {
             if (e.target.value !== '') {
-              // @ts-ignore
               // 限制输入小数点后六位
               getInputVal1(e.target.value.replace(/^\D*(\d*(?:\.\d{0,6})?).*$/g, '$1'));
             } else {
               // 禁止输入框输入 e + -符号
-              // @ts-ignore
               e.target.value = e.target.value.replace(/[e\+\-]/, '');
-              getInputVal1('');
+              getInputVal1(e.target.value);
             }
           }}
           type="number"

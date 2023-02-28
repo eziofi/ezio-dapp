@@ -24,6 +24,7 @@ export default function FormDialog({
 }) {
   const handleClose = () => {
     setOpen(false);
+    setSlippage(1);
   };
 
   const handleOk = () => {
@@ -60,7 +61,14 @@ export default function FormDialog({
           variant="standard"
           type="number"
           value={slippage}
-          onChange={(e: any) => setSlippage(e.target.value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1'))}
+          onInput={(e: any) => {
+            if (e.target.value !== '') {
+              setSlippage(e.target.value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1'));
+            } else {
+              e.target.value = e.target.value.replace(/[e\+\-]/, '');
+              setSlippage(e.target.value);
+            }
+          }}
           InputProps={{
             endAdornment: <InputAdornment position="end">%</InputAdornment>,
           }}
