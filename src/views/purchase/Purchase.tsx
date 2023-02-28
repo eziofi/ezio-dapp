@@ -3,7 +3,7 @@ import './animation.less';
 import { Button, CardContent, IconButton, Link, Snackbar, Toolbar, Typography, useTheme } from '@mui/material';
 import PurchaseDrawer from './components/PurchaseDrawer';
 import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
-import { purchase, redeem, treasuryInterestRate } from '../wallet/helpers/contract_call';
+import { purchase, redeem } from '../wallet/helpers/functions';
 import { BigNumber, Signer } from 'ethers';
 import { TOKEN_DECIMAL, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
 import useWallet from '../hooks/useWallet';
@@ -17,6 +17,7 @@ import { useBalance } from '../../hooks/useBalance';
 import FormDialog from './components/FormDialog';
 import BaseIconFont from '../components/BaseIconFont';
 import { Provider } from '@ethersproject/providers';
+import { treasuryInterestRate } from '../wallet/helpers/contract_call';
 
 interface IPurchaseArg {
   fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC;

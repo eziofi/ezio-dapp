@@ -6,34 +6,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useTranslation } from 'react-i18next';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
-import { queryPurchaseRecord } from '../../wallet/helpers/contract_call';
-import useWallet from '../../hooks/useWallet';
 import { TOKEN_TYPE } from '../../wallet/helpers/constant';
-import { timestampFormat } from '../../wallet/helpers/utilities';
-import { useState } from 'react';
-import { Box, Button, Collapse, IconButton, Link, Typography } from '@mui/material';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 export default function PurchaseRecordTable({ tokenType }: { tokenType: TOKEN_TYPE }) {
-  const { ethersProvider, account } = useWallet();
-
-  const queryClient: QueryClient = useQueryClient();
-
-  // const [allPurchaseRecord, setAllPurchaseRecord] = useState<PurchaseGroupRecord[]>([]);
-  // useQuery(
-  //   ['queryPurchaseRecord', tokenType, account],
-  //   () => queryPurchaseRecord(ethersProvider!.getSigner(), account, tokenType),
-  //   {
-  //     enabled: !!ethersProvider,
-  //     onSuccess: data => {
-  //       console.log(data);
-  //       setAllPurchaseRecord(data);
-  //     },
-  //   },
-  // );
-  const [openIndex, setOpenIndex] = useState(-1);
   const { t } = useTranslation();
   return (
     <TableContainer component={Paper} sx={{ maxHeight: '500px' }}>

@@ -13,6 +13,8 @@ import { SwapQuoteStruct } from '../contract/contracts/interfaces/v1/IEzio';
 const ZEROEX_API_QUOTE_URL = 'https://polygon.api.0x.org/swap/v1/quote';
 const ONEINCH_API_QUOTE_URL = 'https://api.1inch.io/v5.0/137/swap';
 
+const ezioJson = require('../contract/abi/EzioV1.json');
+
 export function capitalize(string: string): string {
   return string
     .split(' ')
@@ -255,4 +257,33 @@ export async function getJson(url: RequestInfo | URL) {
     throw new Error(json.description || json.error);
   }
   return json;
+}
+
+export async function get1InchQuote(
+  fromTokenAddress: string,
+  toTokenAddress: string,
+  amount: string,
+  slippage: number,
+) {
+  try {
+    const quoteParams: OneInchQuoteParams = {
+      fromTokenAddress,
+      toTokenAddress,
+      amount,
+      fromAddress: ezioJson.address,
+      slippage,
+      disableEstimate: true,
+    };
+    console.log('get1InchQuote');
+    const quoteResponse = await getOneInchQuoteResponse(quoteParams);
+    return quoteResponse;
+  } catch (e) {
+    console.error(e);
+    return {
+      buyToken: '',
+      sellAmount: 0,
+      sellToken: '',
+      swapCallData: '',
+    };
+  }
 }

@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { queryPurchaseRecord, queryRedeemRecord } from '../views/wallet/helpers/contract_call';
+import { queryPurchaseRecord, queryRedeemRecord } from '../views/wallet/helpers/functions';
 import useWallet from '../views/hooks/useWallet';
 import { TOKEN_TYPE } from '../views/wallet/helpers/constant';
 
