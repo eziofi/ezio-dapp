@@ -241,6 +241,7 @@ export default function Purchase() {
               getInputVal1={getInputVal1}
               redeemTokenType={redeemTokenType}
               setRedeemTokenType={setRedeemTokenType}
+              inputValue1={inputValue1}
             />
           </CardContent>
         ) : (

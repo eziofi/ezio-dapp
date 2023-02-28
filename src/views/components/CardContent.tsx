@@ -21,6 +21,7 @@ interface IProps {
   tokenType: TOKEN_TYPE;
   redeemTokenType: TOKEN_TYPE;
   setRedeemTokenType: (redeemTokenType: TOKEN_TYPE) => void;
+  inputValue1: string;
 }
 
 interface IOptions {
@@ -32,7 +33,14 @@ interface IOptions {
 
 type CardContentOneProps = Pick<
   IProps,
-  'isBuy' | 'transactionType' | 'getInputVal1' | 'getTokenType' | 'tokenType' | 'redeemTokenType' | 'setRedeemTokenType'
+  | 'isBuy'
+  | 'transactionType'
+  | 'getInputVal1'
+  | 'getTokenType'
+  | 'tokenType'
+  | 'redeemTokenType'
+  | 'setRedeemTokenType'
+  | 'inputValue1'
 >;
 type CardContentSencoedProps = Pick<
   IProps,
@@ -202,6 +210,7 @@ function MyCardContentOne({
   redeemTokenType,
   setRedeemTokenType,
   isBuy,
+  inputValue1,
 }: CardContentOneProps) {
   const { netWorth } = usePrice(tokenType);
 
@@ -233,8 +242,21 @@ function MyCardContentOne({
           id="custom-css-outlined-input"
           size="small"
           placeholder="0"
-          onChange={e => getInputVal1(e.target.value)}
+          onInput={e => {
+            // @ts-ignore
+            if (e.target.value !== '') {
+              // @ts-ignore
+              // 限制输入小数点后六位
+              getInputVal1(e.target.value.replace(/^\D*(\d*(?:\.\d{0,6})?).*$/g, '$1'));
+            } else {
+              // 禁止输入框输入 e + -符号
+              // @ts-ignore
+              e.target.value = e.target.value.replace(/[e\+\-]/, '');
+              getInputVal1('');
+            }
+          }}
           type="number"
+          value={inputValue1}
         />
         <div
           style={{
