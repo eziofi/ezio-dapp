@@ -2,7 +2,7 @@ import { Container, Grid } from '@mui/material';
 import PriceTable from './components/PriceTable';
 
 import MarketApexChart from './components/MarketApexChart';
-import HomeCard from '../components/HomeCard';
+import HomeCard, { HOME_CARD_TYPE } from '../components/HomeCard';
 import NetWorthApexChart from './components/NetWorthApexChart';
 import TotalSupplyApexChart from './components/TotalSupplyApexChart';
 
@@ -12,20 +12,21 @@ export default function HomePage() {
       <Container maxWidth="xl">
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <HomeCard type={HOME_CARD_TYPE.treasury} color="warning" />
+            <HomeCard type={HOME_CARD_TYPE.Rate} color="warning" />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <HomeCard type={HOME_CARD_TYPE.rate} color="error" />
+            <HomeCard type={HOME_CARD_TYPE.FundCost} color="error" />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <HomeCard type={HOME_CARD_TYPE.EZAT} />
+            <HomeCard type={HOME_CARD_TYPE.RebalancePrice} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <HomeCard type={HOME_CARD_TYPE.EZBT} />
+            <HomeCard type={HOME_CARD_TYPE.Leverage} />
           </Grid>
+
           <Grid item xs={12} md={12} lg={12}>
             <PriceTable />
           </Grid>
@@ -42,11 +43,4 @@ export default function HomePage() {
       </Container>
     </>
   );
-}
-
-enum HOME_CARD_TYPE {
-  EZAT = 'EZAT',
-  EZBT = 'EZBT',
-  treasury = 'treasury',
-  rate = 'rate',
 }

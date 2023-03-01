@@ -87,6 +87,14 @@ export async function ezMATICTotalNetWorth(signerOrProvider: Signer | Provider):
 export async function treasuryInterestRate(signerOrProvider: Signer | Provider): Promise<BigNumber> {
   return EzioConnect(signerOrProvider).interestRate();
 }
+/**
+ * 获取 杠杆率
+ * @returns 杠杆率
+ */
+export async function getLeverage(signerOrProvider: Signer | Provider): Promise<BigNumber> {
+  const res = (await EzioConnect(signerOrProvider).leverage()).toString();
+  return EzioConnect(signerOrProvider).leverage();
+}
 
 /**
  * 获取 ezat token 数量

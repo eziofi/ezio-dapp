@@ -12,6 +12,19 @@ import type {
 const _abi = [
   {
     inputs: [],
+    name: "convertDownPrice",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "interestRate",
     outputs: [
       {
@@ -70,6 +83,11 @@ const _abi = [
         type: "uint8",
       },
       {
+        internalType: "uint8",
+        name: "channel_",
+        type: "uint8",
+      },
+      {
         components: [
           {
             internalType: "address",
@@ -107,6 +125,11 @@ const _abi = [
       {
         internalType: "enum IEzio.TYPE",
         name: "type_",
+        type: "uint8",
+      },
+      {
+        internalType: "uint8",
+        name: "channel_",
         type: "uint8",
       },
       {

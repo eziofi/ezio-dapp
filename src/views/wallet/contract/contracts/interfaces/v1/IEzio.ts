@@ -39,17 +39,19 @@ export type SwapQuoteStructOutput = [string, string, BigNumber, string] & {
 
 export interface IEzioInterface extends utils.Interface {
   functions: {
+    "convertDownPrice()": FunctionFragment;
     "interestRate()": FunctionFragment;
     "leverage()": FunctionFragment;
     "matchedA()": FunctionFragment;
     "pooledA()": FunctionFragment;
-    "purchase(uint8,(address,address,uint256,bytes)[])": FunctionFragment;
-    "redeem(uint8,uint256,address,(address,address,uint256,bytes))": FunctionFragment;
+    "purchase(uint8,uint8,(address,address,uint256,bytes)[])": FunctionFragment;
+    "redeem(uint8,uint8,uint256,address,(address,address,uint256,bytes))": FunctionFragment;
     "totalNetWorth()": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "convertDownPrice"
       | "interestRate"
       | "leverage"
       | "matchedA"
@@ -60,6 +62,10 @@ export interface IEzioInterface extends utils.Interface {
   ): FunctionFragment;
 
   encodeFunctionData(
+    functionFragment: "convertDownPrice",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "interestRate",
     values?: undefined
   ): string;
@@ -68,11 +74,16 @@ export interface IEzioInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "pooledA", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "purchase",
-    values: [PromiseOrValue<BigNumberish>, SwapQuoteStruct[]]
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      SwapQuoteStruct[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "redeem",
     values: [
+      PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<string>,
@@ -84,6 +95,10 @@ export interface IEzioInterface extends utils.Interface {
     values?: undefined
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "convertDownPrice",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "interestRate",
     data: BytesLike
@@ -128,6 +143,8 @@ export interface IEzio extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    convertDownPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     interestRate(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     leverage(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -138,12 +155,14 @@ export interface IEzio extends BaseContract {
 
     purchase(
       type_: PromiseOrValue<BigNumberish>,
+      channel_: PromiseOrValue<BigNumberish>,
       quotes_: SwapQuoteStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     redeem(
       type_: PromiseOrValue<BigNumberish>,
+      channel_: PromiseOrValue<BigNumberish>,
       qty_: PromiseOrValue<BigNumberish>,
       token_: PromiseOrValue<string>,
       quote_: SwapQuoteStruct,
@@ -152,6 +171,8 @@ export interface IEzio extends BaseContract {
 
     totalNetWorth(overrides?: CallOverrides): Promise<[BigNumber]>;
   };
+
+  convertDownPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
   interestRate(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -163,12 +184,14 @@ export interface IEzio extends BaseContract {
 
   purchase(
     type_: PromiseOrValue<BigNumberish>,
+    channel_: PromiseOrValue<BigNumberish>,
     quotes_: SwapQuoteStruct[],
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   redeem(
     type_: PromiseOrValue<BigNumberish>,
+    channel_: PromiseOrValue<BigNumberish>,
     qty_: PromiseOrValue<BigNumberish>,
     token_: PromiseOrValue<string>,
     quote_: SwapQuoteStruct,
@@ -178,6 +201,8 @@ export interface IEzio extends BaseContract {
   totalNetWorth(overrides?: CallOverrides): Promise<BigNumber>;
 
   callStatic: {
+    convertDownPrice(overrides?: CallOverrides): Promise<BigNumber>;
+
     interestRate(overrides?: CallOverrides): Promise<BigNumber>;
 
     leverage(overrides?: CallOverrides): Promise<BigNumber>;
@@ -188,12 +213,14 @@ export interface IEzio extends BaseContract {
 
     purchase(
       type_: PromiseOrValue<BigNumberish>,
+      channel_: PromiseOrValue<BigNumberish>,
       quotes_: SwapQuoteStruct[],
       overrides?: CallOverrides
     ): Promise<void>;
 
     redeem(
       type_: PromiseOrValue<BigNumberish>,
+      channel_: PromiseOrValue<BigNumberish>,
       qty_: PromiseOrValue<BigNumberish>,
       token_: PromiseOrValue<string>,
       quote_: SwapQuoteStruct,
@@ -206,6 +233,8 @@ export interface IEzio extends BaseContract {
   filters: {};
 
   estimateGas: {
+    convertDownPrice(overrides?: CallOverrides): Promise<BigNumber>;
+
     interestRate(overrides?: CallOverrides): Promise<BigNumber>;
 
     leverage(overrides?: CallOverrides): Promise<BigNumber>;
@@ -216,12 +245,14 @@ export interface IEzio extends BaseContract {
 
     purchase(
       type_: PromiseOrValue<BigNumberish>,
+      channel_: PromiseOrValue<BigNumberish>,
       quotes_: SwapQuoteStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     redeem(
       type_: PromiseOrValue<BigNumberish>,
+      channel_: PromiseOrValue<BigNumberish>,
       qty_: PromiseOrValue<BigNumberish>,
       token_: PromiseOrValue<string>,
       quote_: SwapQuoteStruct,
@@ -232,6 +263,8 @@ export interface IEzio extends BaseContract {
   };
 
   populateTransaction: {
+    convertDownPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     interestRate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     leverage(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -242,12 +275,14 @@ export interface IEzio extends BaseContract {
 
     purchase(
       type_: PromiseOrValue<BigNumberish>,
+      channel_: PromiseOrValue<BigNumberish>,
       quotes_: SwapQuoteStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     redeem(
       type_: PromiseOrValue<BigNumberish>,
+      channel_: PromiseOrValue<BigNumberish>,
       qty_: PromiseOrValue<BigNumberish>,
       token_: PromiseOrValue<string>,
       quote_: SwapQuoteStruct,

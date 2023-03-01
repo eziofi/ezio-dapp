@@ -34,6 +34,11 @@ export const TOKEN_DECIMAL = {
   [TOKEN_TYPE.stMatic]: 6,
 };
 
+export enum QUOTE_CHANNEL {
+  ZeroEx,
+  OneInch,
+}
+
 // Mainnet tokens
 // Not an exhaustive list, just enough so we don't repeat ourselves
 export const MAINNET_TOKENS = {

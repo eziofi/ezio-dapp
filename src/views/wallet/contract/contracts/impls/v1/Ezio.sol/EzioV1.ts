@@ -51,7 +51,8 @@ export interface EzioV1Interface extends utils.Interface {
     "aggregatorAction(address)": FunctionFragment;
     "check()": FunctionFragment;
     "convertAmt(address,address,uint256)": FunctionFragment;
-    "convertDown((address,address,uint256,bytes))": FunctionFragment;
+    "convertDown(uint8,(address,address,uint256,bytes))": FunctionFragment;
+    "convertDownPrice()": FunctionFragment;
     "getPrice(address)": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
     "getRoleMember(bytes32,uint256)": FunctionFragment;
@@ -64,9 +65,9 @@ export interface EzioV1Interface extends utils.Interface {
     "leverage()": FunctionFragment;
     "matchedA()": FunctionFragment;
     "pooledA()": FunctionFragment;
-    "purchase(uint8,(address,address,uint256,bytes)[])": FunctionFragment;
+    "purchase(uint8,uint8,(address,address,uint256,bytes)[])": FunctionFragment;
     "rebase()": FunctionFragment;
-    "redeem(uint8,uint256,address,(address,address,uint256,bytes))": FunctionFragment;
+    "redeem(uint8,uint8,uint256,address,(address,address,uint256,bytes))": FunctionFragment;
     "redeemFeeRate()": FunctionFragment;
     "renounceRole(bytes32,address)": FunctionFragment;
     "revokeRole(bytes32,address)": FunctionFragment;
@@ -91,6 +92,7 @@ export interface EzioV1Interface extends utils.Interface {
       | "check"
       | "convertAmt"
       | "convertDown"
+      | "convertDownPrice"
       | "getPrice"
       | "getRoleAdmin"
       | "getRoleMember"
@@ -154,7 +156,11 @@ export interface EzioV1Interface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "convertDown",
-    values: [SwapQuoteStruct]
+    values: [PromiseOrValue<BigNumberish>, SwapQuoteStruct]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "convertDownPrice",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "getPrice",
@@ -205,12 +211,17 @@ export interface EzioV1Interface extends utils.Interface {
   encodeFunctionData(functionFragment: "pooledA", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "purchase",
-    values: [PromiseOrValue<BigNumberish>, SwapQuoteStruct[]]
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      SwapQuoteStruct[]
+    ]
   ): string;
   encodeFunctionData(functionFragment: "rebase", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "redeem",
     values: [
+      PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<string>,
@@ -292,6 +303,10 @@ export interface EzioV1Interface extends utils.Interface {
     functionFragment: "convertDown",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "convertDownPrice",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "getPrice", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getRoleAdmin",
@@ -362,16 +377,16 @@ export interface EzioV1Interface extends utils.Interface {
   ): Result;
 
   events: {
-    "CheckConvertDown(uint256,uint256,uint256)": EventFragment;
+    "ConvertDown(uint256,uint256,uint256)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "Purchase(address,uint8,uint256,uint256)": EventFragment;
-    "Redeem(address,uint8,uint256,uint256)": EventFragment;
+    "Redeem(address,uint8,uint256,uint256,uint256)": EventFragment;
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
     "RoleGranted(bytes32,address,address)": EventFragment;
     "RoleRevoked(bytes32,address,address)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "CheckConvertDown"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ConvertDown"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Purchase"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Redeem"): EventFragment;
@@ -380,18 +395,17 @@ export interface EzioV1Interface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
 }
 
-export interface CheckConvertDownEventObject {
-  matchedB: BigNumber;
-  totalNetWorth: BigNumber;
-  time: BigNumber;
+export interface ConvertDownEventObject {
+  matchedA_: BigNumber;
+  totalNetWorth_: BigNumber;
+  time_: BigNumber;
 }
-export type CheckConvertDownEvent = TypedEvent<
+export type ConvertDownEvent = TypedEvent<
   [BigNumber, BigNumber, BigNumber],
-  CheckConvertDownEventObject
+  ConvertDownEventObject
 >;
 
-export type CheckConvertDownEventFilter =
-  TypedEventFilter<CheckConvertDownEvent>;
+export type ConvertDownEventFilter = TypedEventFilter<ConvertDownEvent>;
 
 export interface InitializedEventObject {
   version: number;
@@ -418,9 +432,10 @@ export interface RedeemEventObject {
   type_: number;
   qty_: BigNumber;
   amt_: BigNumber;
+  commission_: BigNumber;
 }
 export type RedeemEvent = TypedEvent<
-  [string, number, BigNumber, BigNumber],
+  [string, number, BigNumber, BigNumber, BigNumber],
   RedeemEventObject
 >;
 
@@ -517,9 +532,12 @@ export interface EzioV1 extends BaseContract {
     ): Promise<[BigNumber]>;
 
     convertDown(
+      channel_: PromiseOrValue<BigNumberish>,
       quote_: SwapQuoteStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    convertDownPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getPrice(
       tokenAddress: PromiseOrValue<string>,
@@ -577,6 +595,7 @@ export interface EzioV1 extends BaseContract {
 
     purchase(
       type_: PromiseOrValue<BigNumberish>,
+      channel_: PromiseOrValue<BigNumberish>,
       quotes_: SwapQuoteStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -587,6 +606,7 @@ export interface EzioV1 extends BaseContract {
 
     redeem(
       type_: PromiseOrValue<BigNumberish>,
+      channel_: PromiseOrValue<BigNumberish>,
       qty_: PromiseOrValue<BigNumberish>,
       token_: PromiseOrValue<string>,
       quote_: SwapQuoteStruct,
@@ -665,9 +685,12 @@ export interface EzioV1 extends BaseContract {
   ): Promise<BigNumber>;
 
   convertDown(
+    channel_: PromiseOrValue<BigNumberish>,
     quote_: SwapQuoteStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
+
+  convertDownPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
   getPrice(
     tokenAddress: PromiseOrValue<string>,
@@ -725,6 +748,7 @@ export interface EzioV1 extends BaseContract {
 
   purchase(
     type_: PromiseOrValue<BigNumberish>,
+    channel_: PromiseOrValue<BigNumberish>,
     quotes_: SwapQuoteStruct[],
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -735,6 +759,7 @@ export interface EzioV1 extends BaseContract {
 
   redeem(
     type_: PromiseOrValue<BigNumberish>,
+    channel_: PromiseOrValue<BigNumberish>,
     qty_: PromiseOrValue<BigNumberish>,
     token_: PromiseOrValue<string>,
     quote_: SwapQuoteStruct,
@@ -813,9 +838,12 @@ export interface EzioV1 extends BaseContract {
     ): Promise<BigNumber>;
 
     convertDown(
+      channel_: PromiseOrValue<BigNumberish>,
       quote_: SwapQuoteStruct,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    convertDownPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
     getPrice(
       tokenAddress: PromiseOrValue<string>,
@@ -873,6 +901,7 @@ export interface EzioV1 extends BaseContract {
 
     purchase(
       type_: PromiseOrValue<BigNumberish>,
+      channel_: PromiseOrValue<BigNumberish>,
       quotes_: SwapQuoteStruct[],
       overrides?: CallOverrides
     ): Promise<void>;
@@ -881,6 +910,7 @@ export interface EzioV1 extends BaseContract {
 
     redeem(
       type_: PromiseOrValue<BigNumberish>,
+      channel_: PromiseOrValue<BigNumberish>,
       qty_: PromiseOrValue<BigNumberish>,
       token_: PromiseOrValue<string>,
       quote_: SwapQuoteStruct,
@@ -935,16 +965,16 @@ export interface EzioV1 extends BaseContract {
   };
 
   filters: {
-    "CheckConvertDown(uint256,uint256,uint256)"(
-      matchedB?: PromiseOrValue<BigNumberish> | null,
-      totalNetWorth?: PromiseOrValue<BigNumberish> | null,
-      time?: null
-    ): CheckConvertDownEventFilter;
-    CheckConvertDown(
-      matchedB?: PromiseOrValue<BigNumberish> | null,
-      totalNetWorth?: PromiseOrValue<BigNumberish> | null,
-      time?: null
-    ): CheckConvertDownEventFilter;
+    "ConvertDown(uint256,uint256,uint256)"(
+      matchedA_?: PromiseOrValue<BigNumberish> | null,
+      totalNetWorth_?: PromiseOrValue<BigNumberish> | null,
+      time_?: PromiseOrValue<BigNumberish> | null
+    ): ConvertDownEventFilter;
+    ConvertDown(
+      matchedA_?: PromiseOrValue<BigNumberish> | null,
+      totalNetWorth_?: PromiseOrValue<BigNumberish> | null,
+      time_?: PromiseOrValue<BigNumberish> | null
+    ): ConvertDownEventFilter;
 
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
     Initialized(version?: null): InitializedEventFilter;
@@ -962,17 +992,19 @@ export interface EzioV1 extends BaseContract {
       qty_?: null
     ): PurchaseEventFilter;
 
-    "Redeem(address,uint8,uint256,uint256)"(
+    "Redeem(address,uint8,uint256,uint256,uint256)"(
       account?: PromiseOrValue<string> | null,
       type_?: PromiseOrValue<BigNumberish> | null,
       qty_?: PromiseOrValue<BigNumberish> | null,
-      amt_?: null
+      amt_?: null,
+      commission_?: null
     ): RedeemEventFilter;
     Redeem(
       account?: PromiseOrValue<string> | null,
       type_?: PromiseOrValue<BigNumberish> | null,
       qty_?: PromiseOrValue<BigNumberish> | null,
-      amt_?: null
+      amt_?: null,
+      commission_?: null
     ): RedeemEventFilter;
 
     "RoleAdminChanged(bytes32,bytes32,bytes32)"(
@@ -1035,9 +1067,12 @@ export interface EzioV1 extends BaseContract {
     ): Promise<BigNumber>;
 
     convertDown(
+      channel_: PromiseOrValue<BigNumberish>,
       quote_: SwapQuoteStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
+
+    convertDownPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
     getPrice(
       tokenAddress: PromiseOrValue<string>,
@@ -1095,6 +1130,7 @@ export interface EzioV1 extends BaseContract {
 
     purchase(
       type_: PromiseOrValue<BigNumberish>,
+      channel_: PromiseOrValue<BigNumberish>,
       quotes_: SwapQuoteStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -1105,6 +1141,7 @@ export interface EzioV1 extends BaseContract {
 
     redeem(
       type_: PromiseOrValue<BigNumberish>,
+      channel_: PromiseOrValue<BigNumberish>,
       qty_: PromiseOrValue<BigNumberish>,
       token_: PromiseOrValue<string>,
       quote_: SwapQuoteStruct,
@@ -1192,9 +1229,12 @@ export interface EzioV1 extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     convertDown(
+      channel_: PromiseOrValue<BigNumberish>,
       quote_: SwapQuoteStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
+
+    convertDownPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getPrice(
       tokenAddress: PromiseOrValue<string>,
@@ -1252,6 +1292,7 @@ export interface EzioV1 extends BaseContract {
 
     purchase(
       type_: PromiseOrValue<BigNumberish>,
+      channel_: PromiseOrValue<BigNumberish>,
       quotes_: SwapQuoteStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
@@ -1262,6 +1303,7 @@ export interface EzioV1 extends BaseContract {
 
     redeem(
       type_: PromiseOrValue<BigNumberish>,
+      channel_: PromiseOrValue<BigNumberish>,
       qty_: PromiseOrValue<BigNumberish>,
       token_: PromiseOrValue<string>,
       quote_: SwapQuoteStruct,

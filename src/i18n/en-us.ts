@@ -9,6 +9,12 @@ export default {
     wallet: '连接钱包',
   },
   home: {
+    card: {
+      rate: 'ezUSD interest rate',
+      fundCost: 'ezMATIC funding cost',
+      rebalancePrice: 'ezMATIC Rebalancing price',
+      leverage: 'ezMATIC Leverage Ratio',
+    },
     coin: 'Coin',
     price: 'Price',
     one_day_change: '24H Change',

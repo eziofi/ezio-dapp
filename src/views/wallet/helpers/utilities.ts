@@ -5,7 +5,7 @@ import { BigNumber, BigNumberish, FixedNumber, utils } from 'ethers';
 import numeral from 'numeral';
 import qs from 'qs';
 import { formatUnits } from 'ethers/lib/utils';
-import { TOKEN_DECIMAL, TOKEN_TYPE } from './constant';
+import { QUOTE_CHANNEL, TOKEN_DECIMAL, TOKEN_TYPE } from './constant';
 import { SwapQuoteStruct } from '../contract/contracts/interfaces/v1/IEzio';
 // import { apiGetGasPrices, apiGetAccountNonce } from "./api";
 // import { convertAmountToRawNumber, convertStringToHex } from "./bignumber";
@@ -212,26 +212,6 @@ export function getYMax(data: number[]) {
   return maxYValue;
 }
 
-export async function getZeroExQuoteResponse(quoteParams: ZeroExQuoteParams) {
-  let quoteResponse: SwapQuoteStruct;
-  let quoteUrl = `${ZEROEX_API_QUOTE_URL}?${qs.stringify(quoteParams)}`;
-  let response = await fetch(quoteUrl);
-  // Check for error from 0x API
-  if (response.status !== 200) {
-    const body = await response.text();
-    throw new Error(body);
-  }
-  let quote = await response.json();
-  //console.log("=======quote=",quote);
-  quoteResponse = {
-    buyToken: quote.buyTokenAddress,
-    sellAmount: quote.sellAmount,
-    sellToken: quote.sellTokenAddress,
-    swapCallData: quote.data,
-  };
-  return quoteResponse;
-}
-
 export async function getOneInchQuoteResponse(quoteParams: OneInchQuoteParams) {
   let quote: SwapQuoteStruct;
   let quoteUrl = `${ONEINCH_API_QUOTE_URL}?${qs.stringify(quoteParams)}`;
@@ -244,6 +224,19 @@ export async function getOneInchQuoteResponse(quoteParams: OneInchQuoteParams) {
     swapCallData: response.tx.data,
   };
   return quote;
+}
+
+export async function getZeroExQuoteResponse(quoteParams: ZeroExQuoteParams) {
+  let quoteResponse: SwapQuoteStruct;
+  let quoteUrl = `${ZEROEX_API_QUOTE_URL}?${qs.stringify(quoteParams)}`;
+  let response = await getJson(quoteUrl);
+  quoteResponse = {
+    buyToken: quoteParams.buyToken,
+    sellAmount: quoteParams.sellAmount,
+    sellToken: quoteParams.sellToken,
+    swapCallData: response.data,
+  };
+  return quoteResponse;
 }
 
 export async function getJson(url: RequestInfo | URL) {
@@ -259,31 +252,43 @@ export async function getJson(url: RequestInfo | URL) {
   return json;
 }
 
-export async function get1InchQuote(
+export async function getQuote(
+  channel: QUOTE_CHANNEL,
   fromTokenAddress: string,
   toTokenAddress: string,
   amount: string,
   slippage: number,
 ) {
+  const blankRes = {
+    buyToken: '',
+    sellAmount: 0,
+    sellToken: '',
+    swapCallData: '',
+  };
   try {
-    const quoteParams: OneInchQuoteParams = {
-      fromTokenAddress,
-      toTokenAddress,
-      amount,
-      fromAddress: ezioJson.address,
-      slippage,
-      disableEstimate: true,
-    };
-    console.log('get1InchQuote');
-    const quoteResponse = await getOneInchQuoteResponse(quoteParams);
-    return quoteResponse;
+    if (channel === QUOTE_CHANNEL.OneInch) {
+      const quoteParams: OneInchQuoteParams = {
+        fromTokenAddress,
+        toTokenAddress,
+        amount,
+        fromAddress: ezioJson.address,
+        slippage,
+        disableEstimate: true,
+      };
+      return await getOneInchQuoteResponse(quoteParams);
+    }
+    if (channel === QUOTE_CHANNEL.ZeroEx) {
+      const quoteParams: ZeroExQuoteParams = {
+        sellToken: fromTokenAddress,
+        buyToken: toTokenAddress,
+        sellAmount: amount,
+        slippagePercentage: String(slippage / 100),
+      };
+      return await getZeroExQuoteResponse(quoteParams);
+    }
+    return blankRes;
   } catch (e) {
     console.error(e);
-    return {
-      buyToken: '',
-      sellAmount: 0,
-      sellToken: '',
-      swapCallData: '',
-    };
+    return blankRes;
   }
 }

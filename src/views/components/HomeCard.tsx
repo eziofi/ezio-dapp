@@ -6,6 +6,7 @@ import useWallet from '../hooks/useWallet';
 import {
   ezatTotalSupply,
   ezbtTotalSupply,
+  getLeverage,
   treasuryInterestRate,
   treasuryTotalNetWorth,
 } from '../wallet/helpers/contract_call';
@@ -14,6 +15,8 @@ import { formatNetWorth, formatDecimal } from '../wallet/helpers/utilities';
 import BaseIconFont from './BaseIconFont';
 import { TOKEN_TYPE } from '../wallet/helpers/constant';
 import { InlineSkeleton } from './Skeleton';
+import { interestRateYear } from '../wallet/helpers/functions';
+import { BigNumber } from 'ethers';
 
 const StyledIcon = styled('div')(({ theme }) => ({
   margin: 'auto',
@@ -26,11 +29,11 @@ const StyledIcon = styled('div')(({ theme }) => ({
   marginBottom: theme.spacing(3),
 }));
 
-enum VALUE_TYPE {
-  EZAT = 'EZAT',
-  EZBT = 'EZBT',
-  treasury = 'treasury',
-  rate = 'rate',
+export enum HOME_CARD_TYPE {
+  Rate,
+  FundCost,
+  RebalancePrice,
+  Leverage,
 }
 export default function HomeCard({
   type,
@@ -38,7 +41,7 @@ export default function HomeCard({
   sx,
   ...other
 }: {
-  type: keyof typeof VALUE_TYPE;
+  type: HOME_CARD_TYPE;
   color?: 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
   sx?: SxProps<Theme>;
 }) {
@@ -48,23 +51,24 @@ export default function HomeCard({
   const theme = useTheme();
 
   const api = {
-    EZAT: ezatTotalSupply,
-    EZBT: ezbtTotalSupply,
-    treasury: treasuryTotalNetWorth,
-    rate: treasuryInterestRate,
+    [HOME_CARD_TYPE.Rate]: interestRateYear,
+    [HOME_CARD_TYPE.FundCost]: getLeverage,
+    [HOME_CARD_TYPE.RebalancePrice]: getLeverage,
+    [HOME_CARD_TYPE.Leverage]: getLeverage,
   };
   const title = {
-    EZAT: t('home.EZAT_totalSupply'),
-    EZBT: t('home.EZBT_totalSupply'),
-    treasury: t('home.treasury_totalValue'),
-    rate: t('home.EZAT_Rate'),
+    [HOME_CARD_TYPE.Rate]: t('home.card.rate'),
+    [HOME_CARD_TYPE.FundCost]: t('home.card.fundCost'),
+    [HOME_CARD_TYPE.RebalancePrice]: t('home.card.rebalancePrice'),
+    [HOME_CARD_TYPE.Leverage]: t('home.card.leverage'),
   };
   const icon = {
-    EZAT: 'icon-A',
-    EZBT: 'icon-B',
-    treasury: 'icon-zuanshi',
-    rate: 'icon-weidaizijinchilixichaxun',
+    [HOME_CARD_TYPE.Rate]: 'icon-A',
+    [HOME_CARD_TYPE.FundCost]: 'icon-A',
+    [HOME_CARD_TYPE.RebalancePrice]: 'icon-A',
+    [HOME_CARD_TYPE.Leverage]: 'icon-A',
   };
+  // @ts-ignore
   const { data, isLoading } = useQuery(['totalSupply', type], () => api[type](ethersProvider!.getSigner()), {
     enabled: !!ethersProvider,
     onSuccess: data1 => {
@@ -77,6 +81,7 @@ export default function HomeCard({
       // debugger;
     },
   });
+  // @ts-ignore
   return (
     <Card
       sx={{
@@ -114,21 +119,18 @@ export default function HomeCard({
         {/*<Iconify icon={icon[type]} width={24} height={24} />*/}
       </StyledIcon>
 
-      {type === VALUE_TYPE.rate ? (
-        <Typography variant="h3">
-          {!isLoading ? (parseFloat(formatNetWorth(data)) / 1000).toFixed(3) + '‰' : <InlineSkeleton />}
-        </Typography>
-      ) : (
-        <Typography variant="h3">
-          {!isLoading ? (
-            formatDecimal(data, type === 'treasury' ? TOKEN_TYPE.USDC : TOKEN_TYPE.ezUSD)
-              .toUnsafeFloat()
-              .toFixed(2)
+      <Typography variant="h3">
+        {!isLoading ? (
+          type === HOME_CARD_TYPE.Rate ? (
+            data + '%'
           ) : (
-            <InlineSkeleton />
-          )}
-        </Typography>
-      )}
+            // @ts-ignore
+            formatDecimal(data, TOKEN_TYPE.USDC).toString()
+          )
+        ) : (
+          <InlineSkeleton />
+        )}
+      </Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
         {title[type]}
       </Typography>
