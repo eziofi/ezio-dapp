@@ -1,5 +1,5 @@
 import { alpha, styled, useTheme } from '@mui/material/styles';
-import { Card, SxProps, Theme, Typography } from '@mui/material';
+import { Box, Card, SxProps, Theme, Typography } from '@mui/material';
 
 import { useTranslation } from 'react-i18next';
 import useWallet from '../hooks/useWallet';
@@ -22,14 +22,15 @@ import USDCIcon from '../../assets/analytics/usdc.png';
 import FeeValueIcon from '../../assets/analytics/feeValue.png';
 
 const StyledIcon = styled('div')(({ theme }) => ({
-  margin: 'auto',
+  // margin: 'auto',
   display: 'flex',
   borderRadius: '50%',
-  alignItems: 'center',
-  width: theme.spacing(8),
-  height: theme.spacing(8),
+  // alignItems: 'center',
+  width: theme.spacing(10),
+  height: theme.spacing(10),
   justifyContent: 'center',
-  marginBottom: theme.spacing(3),
+  // marginBottom: theme.spacing(3),
+  marginRight: theme.spacing(4),
 }));
 
 export enum ANALYTICS_CARD_TYPE {
@@ -85,6 +86,8 @@ export default function AnalyticsCard({
         py: 5,
         boxShadow: 0,
         textAlign: 'center',
+        display: 'flex',
+        justifyContent: 'space-between',
         // @ts-ignore
         // color: theme => theme.palette[color][theme.palette.mode === 'light' ? 'darker' : 'lighter'],
         // @ts-ignore
@@ -93,6 +96,22 @@ export default function AnalyticsCard({
       }}
       {...other}
     >
+      <Box style={{ display: 'flex', flexDirection: 'column', lineHeight: 0, marginLeft: theme.spacing(4) }}>
+        <Typography sx={{ fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>
+          {!isLoading ? (
+            type === ANALYTICS_CARD_TYPE.FEE ? (
+              'feeValue'
+            ) : (
+              formatDecimal(data, TOKEN_TYPE.USDC).toString()
+            )
+          ) : (
+            <InlineSkeleton />
+          )}
+        </Typography>
+        <Typography sx={{ opacity: 0.72, fontSize: 14, marginTop: '5px', display: 'flex', justifyItems: 'flex-start' }}>
+          {title[type]}
+        </Typography>
+      </Box>
       <StyledIcon
       // sx={{
       //   // color: theme => theme.palette[color][theme.palette.mode === 'light' ? 'dark' : 'light'],
@@ -112,24 +131,10 @@ export default function AnalyticsCard({
             fill: theme.palette[color][theme.palette.mode === 'light' ? 'darker' : 'lighter'],
           }}
         /> */}
-        <img src={icon[type]} style={{ width: '100%', height: '100%' }} />
+        <img src={icon[type]} />
 
         {/*<Iconify icon={icon[type]} width={24} height={24} />*/}
       </StyledIcon>
-      <Typography variant="h3">
-        {!isLoading ? (
-          type === ANALYTICS_CARD_TYPE.FEE ? (
-            'feeValue'
-          ) : (
-            formatDecimal(data, TOKEN_TYPE.USDC).toString()
-          )
-        ) : (
-          <InlineSkeleton />
-        )}
-      </Typography>
-      <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-        {title[type]}
-      </Typography>
     </Card>
   );
 }
