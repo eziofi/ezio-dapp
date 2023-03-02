@@ -26,8 +26,8 @@ const StyledIcon = styled('div')(({ theme }) => ({
   display: 'flex',
   borderRadius: '50%',
   // alignItems: 'center',
-  width: theme.spacing(10),
-  height: theme.spacing(10),
+  width: theme.spacing(12),
+  height: theme.spacing(12),
   justifyContent: 'center',
   // marginBottom: theme.spacing(3),
   marginRight: theme.spacing(4),
@@ -96,8 +96,8 @@ export default function AnalyticsCard({
       }}
       {...other}
     >
-      <Box style={{ display: 'flex', flexDirection: 'column', lineHeight: 0, marginLeft: theme.spacing(4) }}>
-        <Typography sx={{ fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>
+      <Box style={{ display: 'flex', flexDirection: 'column', marginLeft: theme.spacing(4) }}>
+        <div style={{ fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>
           {!isLoading ? (
             type === ANALYTICS_CARD_TYPE.FEE ? (
               'feeValue'
@@ -107,10 +107,18 @@ export default function AnalyticsCard({
           ) : (
             <InlineSkeleton />
           )}
-        </Typography>
-        <Typography sx={{ opacity: 0.72, fontSize: 14, marginTop: '5px', display: 'flex', justifyItems: 'flex-start' }}>
+        </div>
+        <div
+          style={{
+            opacity: 0.72,
+            fontSize: 14,
+            marginTop: '5px',
+            display: 'flex',
+            justifyItems: 'flex-start',
+          }}
+        >
           {title[type]}
-        </Typography>
+        </div>
       </Box>
       <StyledIcon
       // sx={{
