@@ -17,6 +17,10 @@ import BaseIconFont from './BaseIconFont';
 import { TOKEN_TYPE } from '../wallet/helpers/constant';
 import { InlineSkeleton } from './Skeleton';
 
+import StMaticIcon from '../../assets/analytics/stMatic.png';
+import USDCIcon from '../../assets/analytics/usdc.png';
+import FeeValueIcon from '../../assets/analytics/feeValue.png';
+
 const StyledIcon = styled('div')(({ theme }) => ({
   margin: 'auto',
   display: 'flex',
@@ -59,9 +63,9 @@ export default function AnalyticsCard({
     [ANALYTICS_CARD_TYPE.FEE]: t('analytics.title.fee'),
   };
   const icon = {
-    [ANALYTICS_CARD_TYPE.USDC]: 'icon-A',
-    [ANALYTICS_CARD_TYPE.stMATIC]: 'icon-B',
-    [ANALYTICS_CARD_TYPE.FEE]: 'icon-zuanshi',
+    [ANALYTICS_CARD_TYPE.USDC]: USDCIcon,
+    [ANALYTICS_CARD_TYPE.stMATIC]: StMaticIcon,
+    [ANALYTICS_CARD_TYPE.FEE]: FeeValueIcon,
   };
   const { data, isLoading } = useQuery(['AnalyticsCard', type], () => api[type](ethersProvider!.getSigner()), {
     enabled: !!ethersProvider,
@@ -82,24 +86,24 @@ export default function AnalyticsCard({
         boxShadow: 0,
         textAlign: 'center',
         // @ts-ignore
-        color: theme => theme.palette[color][theme.palette.mode === 'light' ? 'darker' : 'lighter'],
+        // color: theme => theme.palette[color][theme.palette.mode === 'light' ? 'darker' : 'lighter'],
         // @ts-ignore
-        bgcolor: theme => theme.palette[color][theme.palette.mode === 'light' ? 'lighter' : 'darker'],
+        // bgcolor: theme => theme.palette[color][theme.palette.mode === 'light' ? 'lighter' : 'darker'],
         ...sx,
       }}
       {...other}
     >
       <StyledIcon
-        sx={{
-          // color: theme => theme.palette[color][theme.palette.mode === 'light' ? 'dark' : 'light'],
-          backgroundImage: theme =>
-            `linear-gradient(${theme.palette.mode === 'light' ? '135deg' : '-45deg'}, ${alpha(
-              theme.palette[color][theme.palette.mode === 'light' ? 'dark' : 'light'],
-              0,
-            )} 0%, ${alpha(theme.palette[color][theme.palette.mode === 'light' ? 'dark' : 'light'], 0.24)} 100%)`,
-        }}
+      // sx={{
+      //   // color: theme => theme.palette[color][theme.palette.mode === 'light' ? 'dark' : 'light'],
+      //   backgroundImage: theme =>
+      //     `linear-gradient(${theme.palette.mode === 'light' ? '135deg' : '-45deg'}, ${alpha(
+      //       theme.palette[color][theme.palette.mode === 'light' ? 'dark' : 'light'],
+      //       0,
+      //     )} 0%, ${alpha(theme.palette[color][theme.palette.mode === 'light' ? 'dark' : 'light'], 0.24)} 100%)`,
+      // }}
       >
-        <BaseIconFont
+        {/* <BaseIconFont
           name={icon[type]}
           style={{
             width: 22,
@@ -107,7 +111,8 @@ export default function AnalyticsCard({
             // @ts-ignore
             fill: theme.palette[color][theme.palette.mode === 'light' ? 'darker' : 'lighter'],
           }}
-        />
+        /> */}
+        <img src={icon[type]} style={{ width: '100%', height: '100%' }} />
 
         {/*<Iconify icon={icon[type]} width={24} height={24} />*/}
       </StyledIcon>

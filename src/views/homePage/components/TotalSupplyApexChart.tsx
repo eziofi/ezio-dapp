@@ -7,6 +7,7 @@ import { getYMax } from '../../wallet/helpers/utilities';
 import { useContext, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { ColorModeContext } from '../../../theme';
+import RenderSkeleton from './RenderSkeleton';
 
 export default function TotalSupplyApexChart() {
   const [option, setOption] = useState<any>(null);
@@ -88,7 +89,11 @@ export default function TotalSupplyApexChart() {
       <CardHeader title={t('home.totalSupplyTitle') as string} />
 
       <Box sx={{ p: 2, pb: 1 }} dir="ltr">
-        {option && <ReactApexChart options={option.options} series={option.series} type="line" height={350} />}
+        {option ? (
+          <ReactApexChart options={option.options} series={option.series} type="line" height={350} />
+        ) : (
+          <RenderSkeleton />
+        )}
       </Box>
     </Card>
   );

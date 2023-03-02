@@ -7,6 +7,7 @@ import { getYMax } from '../../wallet/helpers/utilities';
 import { useContext, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { ColorModeContext } from '../../../theme';
+import RenderSkeleton from './RenderSkeleton';
 
 export default function MarketApexChart() {
   const [option, setOption] = useState<any>(null);
@@ -95,7 +96,11 @@ export default function MarketApexChart() {
 
       <Box dir="ltr">
         {/*<Box sx={{ p: 3, pb: 1 }} dir="ltr">*/}
-        {option && <ReactApexChart options={option.options} series={option.series} type="line" height={350} />}
+        {option ? (
+          <ReactApexChart options={option.options} series={option.series} type="line" height={350} />
+        ) : (
+          <RenderSkeleton />
+        )}
       </Box>
     </Card>
   );

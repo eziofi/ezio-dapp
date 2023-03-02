@@ -55,7 +55,7 @@ export default function AccountTokenCard({ type }: { type: TOKEN_TYPE }) {
                   type === TOKEN_TYPE.USDT
                     ? 'icon-USDT-white'
                     : type === TOKEN_TYPE.USDC
-                    ? 'icon-USDT-white'
+                    ? 'icon-USDC-white'
                     : 'icon-stMatic-white'
                 }
                 style={{ ...IconStyle }}

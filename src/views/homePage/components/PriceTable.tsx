@@ -14,6 +14,7 @@ import numeral from 'numeral';
 import { formatNetWorth } from '../../wallet/helpers/utilities';
 import { Card } from '@mui/material';
 import Scrollbar from '../../../components/scrollbar';
+import Skeleton from '@mui/material/Skeleton';
 
 interface ITokenInfo {
   type: TOKEN_TYPE;
@@ -91,21 +92,48 @@ export default function PriceTable() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {tokenList.map(row => (
-                  <TableRow key={row.type} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell align="center" component="th" scope="row">
-                      {row.type === 0 ? 'EZAT' : 'EZBT'}
-                    </TableCell>
-                    <TableCell align="center">${row.netWorth}</TableCell>
-                    <TableCell align="center">{row.totalPurchase}</TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ color: row.oneDayChange.startsWith('-') ? 'rgba(255, 47, 0, 1)' : 'rgba(18, 230, 103, 1)' }}
-                    >
-                      {row.oneDayChange}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {tokenList?.length >= 1 ? (
+                  <>
+                    {tokenList.map(row => (
+                      <TableRow key={row.type} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                        <TableCell align="center" component="th" scope="row">
+                          {row.type === 0 ? 'EZAT' : 'EZBT'}
+                        </TableCell>
+                        <TableCell align="center">${row.netWorth}</TableCell>
+                        <TableCell align="center">{row.totalPurchase}</TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            color: row.oneDayChange.startsWith('-') ? 'rgba(255, 47, 0, 1)' : 'rgba(18, 230, 103, 1)',
+                          }}
+                        >
+                          {row.oneDayChange}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </>
+                ) : (
+                  <>
+                    {[1, 2].map(item => {
+                      return (
+                        <TableRow key={item}>
+                          <TableCell>
+                            <Skeleton animation={'pulse'} />
+                          </TableCell>
+                          <TableCell>
+                            <Skeleton animation="pulse" />
+                          </TableCell>
+                          <TableCell>
+                            <Skeleton animation={'pulse'} />
+                          </TableCell>
+                          <TableCell>
+                            <Skeleton animation={'pulse'} />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </>
+                )}
               </TableBody>
             </Table>
           </TableContainer>
