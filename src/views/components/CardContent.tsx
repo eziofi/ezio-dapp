@@ -1,9 +1,9 @@
-import { InputBase, MenuItem, Select, SelectChangeEvent, styled, useTheme } from '@mui/material';
+import { InputBase, MenuItem, Select, Skeleton, styled, useTheme } from '@mui/material';
 import React from 'react';
 import { BalanceContent, BodyContent } from '../purchase/PurchaseStyle';
 import { useTranslation } from 'react-i18next';
 import { useBalance } from '../../hooks/useBalance';
-import { formatNetWorth, formatDecimal } from '../wallet/helpers/utilities';
+import { formatDecimal } from '../wallet/helpers/utilities';
 import TextField from '@mui/material/TextField';
 import { TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
 import BaseIconFont from './BaseIconFont';
@@ -212,7 +212,7 @@ function MyCardContentOne({
   isBuy,
   inputValue1,
 }: CardContentOneProps) {
-  const { netWorth } = usePrice(tokenType);
+  const { price } = usePrice(tokenType);
 
   // const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
   const handleChange = (value: TOKEN_TYPE) => {
@@ -263,7 +263,7 @@ function MyCardContentOne({
             height: 18,
           }}
         >
-          {isBuy ? '' : t('purchase.unitPrice') + ' $' + formatNetWorth(netWorth, true)}
+          {price ? t('purchase.unitPrice') + ': ' + price + ' USDC' : <Skeleton width={100} />}
         </div>
       </div>
       {transactionType === TRANSFER_TYPE.PURCHASE

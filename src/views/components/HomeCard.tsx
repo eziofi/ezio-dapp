@@ -3,13 +3,7 @@ import { Card, SxProps, Theme, Typography } from '@mui/material';
 
 import { useTranslation } from 'react-i18next';
 import useWallet from '../hooks/useWallet';
-import {
-  ezatTotalSupply,
-  ezbtTotalSupply,
-  getLeverage,
-  treasuryInterestRate,
-  treasuryTotalNetWorth,
-} from '../wallet/helpers/contract_call';
+import { getLeverage } from '../wallet/helpers/contract_call';
 import { useQuery } from 'react-query';
 import { formatNetWorth, formatDecimal } from '../wallet/helpers/utilities';
 import BaseIconFont from './BaseIconFont';
@@ -120,16 +114,7 @@ export default function HomeCard({
       </StyledIcon>
 
       <Typography variant="h3">
-        {!isLoading ? (
-          type === HOME_CARD_TYPE.Rate ? (
-            data + '%'
-          ) : (
-            // @ts-ignore
-            formatDecimal(data, TOKEN_TYPE.USDC).toString()
-          )
-        ) : (
-          <InlineSkeleton />
-        )}
+        {!isLoading ? type === HOME_CARD_TYPE.Rate ? data + '%' : data : <InlineSkeleton />}
       </Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
         {title[type]}

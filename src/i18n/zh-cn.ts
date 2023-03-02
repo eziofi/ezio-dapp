@@ -76,6 +76,7 @@ export default {
     slippage: '滑点',
     cancel: '取消',
     ok: '确定',
+    purchaseTip: '交易中，请在metamask中操作',
   },
   redeem: {
     redeemValue: '赎回',

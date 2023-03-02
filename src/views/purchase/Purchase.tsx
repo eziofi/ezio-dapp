@@ -1,9 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './animation.less';
-import { Button, CardContent, IconButton, Link, Snackbar, Toolbar, Typography, useTheme } from '@mui/material';
+import {
+  Backdrop,
+  Button,
+  CardContent,
+  CircularProgress,
+  IconButton,
+  Link,
+  Snackbar,
+  Toolbar,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import PurchaseDrawer from './components/PurchaseDrawer';
 import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
-import { purchase, redeem } from '../wallet/helpers/functions';
+import { interestRateDay, purchase, redeem } from '../wallet/helpers/functions';
 import { BigNumber, Signer } from 'ethers';
 import { TOKEN_DECIMAL, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
 import useWallet from '../hooks/useWallet';
@@ -18,6 +29,7 @@ import FormDialog from './components/FormDialog';
 import BaseIconFont from '../components/BaseIconFont';
 import { Provider } from '@ethersproject/providers';
 import { treasuryInterestRate } from '../wallet/helpers/contract_call';
+import { UIContext } from '../../layouts/dashboard/DashboardLayout';
 
 interface IPurchaseArg {
   fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC;
@@ -48,13 +60,15 @@ export default function Purchase() {
   const [slippage, setSlippage] = useState<number>(1);
   const [time, setTime] = useState<string>();
 
+  const { openBackLoading, closeBackLoading, setBackLoadingText } = useContext(UIContext);
+
   useEffect(() => {
     // 定时时间
     const timer = setInterval(() => setTime(timestampFormat(new Date().getTime())), 1000);
     return () => clearInterval(timer);
   }, []);
 
-  const { netWorth } = usePrice(tokenType);
+  // const { price } = usePrice(tokenType);
 
   const { t } = useTranslation();
   const style = {
@@ -103,7 +117,7 @@ export default function Purchase() {
   const [msgOpen, setMsgOpen] = useState(false);
   const [msg, setMsg] = useState('');
 
-  const { mutate: purchaseMutate } = useMutation(
+  const { mutateAsync: purchaseMutate } = useMutation(
     (arg: IPurchaseArg) => purchase(arg.fromType, arg.toType, arg.amount, arg.slippage, arg.signerOrProvider),
     {
       onSuccess: () => {
@@ -115,7 +129,7 @@ export default function Purchase() {
     },
   );
 
-  const { mutate: redeemMutate } = useMutation(
+  const { mutateAsync: redeemMutate } = useMutation(
     (arg: IRedeemArg) => redeem(arg.fromType, arg.toType, arg.amount, arg.signerOrProvider, arg.slippage),
     {
       onSuccess: () => {
@@ -130,7 +144,7 @@ export default function Purchase() {
   const { balance, refetchBalance } = useBalance(type === TRANSFER_TYPE.PURCHASE ? redeemTokenType : tokenType);
 
   const { ethersProvider, account } = useWallet();
-  const { data: rate } = useQuery(['EZATrate'], () => treasuryInterestRate(ethersProvider!.getSigner()), {
+  const { data: rate } = useQuery(['ezUSDDayRate'], () => interestRateDay(ethersProvider!.getSigner()), {
     enabled: !!ethersProvider,
     // onSuccess: data => {
     //   const res = formatNetWorth(data);
@@ -140,48 +154,64 @@ export default function Purchase() {
 
   // 购买
   const doPurchase = () => {
-    refetchBalance().then(({ data }) => {
-      if (!data) return Promise.reject();
-      const balance = formatDecimal(data, redeemTokenType, TOKEN_DECIMAL[redeemTokenType]).toUnsafeFloat();
-      if (parseFloat(inputValue1) > balance) {
-        setMsg(t('purchase.moreThanBalanceMsg'));
-        setMsgOpen(true);
-      } else {
-        const args: IPurchaseArg = {
-          fromType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.USDT,
-          toType: tokenType as TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMatic,
-          amount: Number(inputValue1),
-          slippage,
-          signerOrProvider: ethersProvider!.getSigner(),
-        };
+    openBackLoading();
+    setBackLoadingText(t('purchase.purchaseTip'));
+    refetchBalance()
+      .then(({ data }) => {
+        if (!data) return Promise.reject();
+        const balance = formatDecimal(data, redeemTokenType, TOKEN_DECIMAL[redeemTokenType]).toUnsafeFloat();
+        if (parseFloat(inputValue1) > balance) {
+          setMsg(t('purchase.moreThanBalanceMsg'));
+          setMsgOpen(true);
+        } else {
+          const args: IPurchaseArg = {
+            fromType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.USDT,
+            toType: tokenType as TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMatic,
+            amount: Number(inputValue1),
+            slippage,
+            signerOrProvider: ethersProvider!.getSigner(),
+          };
 
-        purchaseMutate(args);
-        setInputValue1('');
-        setInputValue2('');
-      }
-    });
+          return purchaseMutate(args);
+        }
+      })
+      .then(() => {})
+      .finally(() => {
+        onTransferOver();
+      });
   };
 
   const doRedeem = () => {
-    refetchBalance().then(({ data }) => {
-      if (!data) return Promise.reject();
-      const balance = formatDecimal(data, tokenType, TOKEN_DECIMAL[tokenType]).toUnsafeFloat();
-      if (parseFloat(inputValue1) > balance) {
-        setMsg(t('redeem.moreThanBalanceMsg'));
-        setMsgOpen(true);
-      } else {
-        const args: IRedeemArg = {
-          fromType: tokenType as TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMatic,
-          toType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.stMatic,
-          amount: Number(inputValue1),
-          signerOrProvider: ethersProvider!.getSigner(),
-          slippage,
-        };
-        redeemMutate(args);
-        setInputValue1('');
-        setInputValue2('');
-      }
-    });
+    openBackLoading();
+    setBackLoadingText(t('purchase.purchaseTip'));
+    refetchBalance()
+      .then(({ data }) => {
+        if (!data) return Promise.reject();
+        const balance = formatDecimal(data, tokenType, TOKEN_DECIMAL[tokenType]).toUnsafeFloat();
+        if (parseFloat(inputValue1) > balance) {
+          setMsg(t('redeem.moreThanBalanceMsg'));
+          setMsgOpen(true);
+        } else {
+          const args: IRedeemArg = {
+            fromType: tokenType as TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMatic,
+            toType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.stMatic,
+            amount: Number(inputValue1),
+            signerOrProvider: ethersProvider!.getSigner(),
+            slippage,
+          };
+          return redeemMutate(args);
+        }
+      })
+      .finally(() => {
+        onTransferOver();
+      });
+  };
+
+  const onTransferOver = () => {
+    setInputValue1('');
+    setInputValue2('');
+    closeBackLoading();
+    setBackLoadingText('');
   };
 
   const [open, setOpen] = React.useState(false);
@@ -308,21 +338,21 @@ export default function Purchase() {
       >
         {type === TRANSFER_TYPE.PURCHASE ? t('purchase.purchaseAction') : t('redeem.redeemAction')}
       </Button>
-      <>
-        <Link
-          href="#"
-          underline="none"
-          onClick={() => setTipDrawerOpened(true)}
-          sx={{ fontSize: 12, color: 'rgba(110, 76, 248, 1)' }}
-        >
-          {t('purchase.checkTips')}
-        </Link>
-        {tipDrawerOpened ? <PurchaseDrawer opened={tipDrawerOpened} close={() => setTipDrawerOpened(false)} /> : <></>}
-      </>
+      {/*<>*/}
+      {/*  <Link*/}
+      {/*    href="#"*/}
+      {/*    underline="none"*/}
+      {/*    onClick={() => setTipDrawerOpened(true)}*/}
+      {/*    sx={{ fontSize: 12, color: 'rgba(110, 76, 248, 1)' }}*/}
+      {/*  >*/}
+      {/*    {t('purchase.checkTips')}*/}
+      {/*  </Link>*/}
+      {/*  {tipDrawerOpened ? <PurchaseDrawer opened={tipDrawerOpened} close={() => setTipDrawerOpened(false)} /> : <></>}*/}
+      {/*</>*/}
       <FooterContent>
         {/*<span>{t('purchase.unitPrice') + ' $' + formatNetWorth(netWorth, true)}</span>*/}
         <span style={{ color: theme.palette.text.secondary }}>
-          {t('purchase.EZATRate')} {(rate ? (parseFloat(formatNetWorth(rate)) / 10000).toFixed(2) : 0) + ' ‱'}
+          {t('purchase.EZATRate')} {rate}
         </span>
       </FooterContent>
     </PurchaseContainer>

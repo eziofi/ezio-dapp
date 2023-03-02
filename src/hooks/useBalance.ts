@@ -26,8 +26,8 @@ export function useBalance(tokenType: TOKEN_TYPE) {
     {
       enabled: !!ethersProvider && !!account,
       onSuccess: data => {
-        const res = formatDecimal(data, tokenType, 6).toString();
-        console.log(res);
+        // const res = formatDecimal(data, tokenType, 6).toString();
+        // console.log(res);
       },
     },
   );

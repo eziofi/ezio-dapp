@@ -3,14 +3,7 @@ import { Box, Card, SxProps, Theme, Typography } from '@mui/material';
 
 import { useTranslation } from 'react-i18next';
 import useWallet from '../hooks/useWallet';
-import {
-  ezatTotalSupply,
-  ezbtTotalSupply,
-  ezMATICTotalNetWorth,
-  ezUSDTotalNetWorth,
-  treasuryInterestRate,
-  treasuryTotalNetWorth,
-} from '../wallet/helpers/contract_call';
+import { ezMATICTotalNetWorth, ezUSDTotalNetWorth } from '../wallet/helpers/contract_call';
 import { useQuery } from 'react-query';
 import { formatNetWorth, formatDecimal } from '../wallet/helpers/utilities';
 import BaseIconFont from './BaseIconFont';
@@ -135,6 +128,24 @@ export default function AnalyticsCard({
 
         {/*<Iconify icon={icon[type]} width={24} height={24} />*/}
       </StyledIcon>
+      <Typography variant="h3">
+        {!isLoading ? (
+          type === ANALYTICS_CARD_TYPE.FEE ? (
+            data ? (
+              data.toString()
+            ) : (
+              0
+            )
+          ) : (
+            formatDecimal(data, TOKEN_TYPE.USDC).toString()
+          )
+        ) : (
+          <InlineSkeleton />
+        )}
+      </Typography>
+      <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
+        {title[type]}
+      </Typography>
     </Card>
   );
 }

@@ -2,7 +2,7 @@ import { BigNumber, ethers, FixedNumber, Signer } from 'ethers';
 import { Provider } from '@ethersproject/providers';
 import { POLYGON_TOKENS, QUOTE_CHANNEL, TOKEN_TYPE, TRANSFER_TYPE } from './constant';
 import { SwapQuoteStruct } from '../contract/contracts/interfaces/v1/IEzio';
-import { formatDecimal, getQuote, getOneInchQuoteResponse } from './utilities';
+import { formatDecimal, getQuote, getOneInchQuoteResponse, formatString } from './utilities';
 import { OneInchQuoteParams } from './types';
 import {
   EzatConnect,
@@ -337,6 +337,12 @@ export async function redeemToStMatic(
 
 export async function interestRateYear(signerOrProvider: Signer | Provider) {
   const rate = await treasuryInterestRate(signerOrProvider);
-  const yearRate = (1 + rate.toNumber() / 100) * (10 ^ 365);
-  return yearRate;
+  const yearRate = '' + ((1 + rate.toNumber() / 1000000) * (10 ^ 365)) / 100;
+  return formatString(yearRate);
+}
+
+export async function interestRateDay(signerOrProvider: Signer | Provider) {
+  const rate = await treasuryInterestRate(signerOrProvider);
+  const dayRate = formatString('' + (rate.toNumber() / 1000000) * 10000, 3) + '‱';
+  return dayRate;
 }

@@ -1,8 +1,9 @@
 import { EzioV1__factory, EzMATICV1, EzMATICV1__factory, EzUSDV1__factory } from '../contract';
 
-import { ERC20_ABI, POLYGON_TOKENS, TOKEN_TYPE, TRANSFER_TYPE } from './constant';
+import { ERC20_ABI, POLYGON_TOKENS, TOKEN_TYPE } from './constant';
 import { BigNumber, ethers, Signer } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
+import { formatDecimal } from './utilities';
 
 const ezatJson = require('../contract/abi/EzUSDV1.json');
 const ezbtJson = require('../contract/abi/EzMATICV1.json');
@@ -61,7 +62,9 @@ export function stMaticConnect(signerOrProvider: Signer | Provider) {
  * @returns 金库储量
  */
 export async function treasuryTotalNetWorth(signerOrProvider: Signer | Provider): Promise<BigNumber> {
-  return await EzioConnect(signerOrProvider).totalNetWorth();
+  const res = await EzioConnect(signerOrProvider).totalNetWorth();
+  console.log('treasury Total NetWorth = ' + res.toString());
+  return res;
 }
 
 /**
@@ -69,7 +72,9 @@ export async function treasuryTotalNetWorth(signerOrProvider: Signer | Provider)
  * @returns ezUSD总净值
  */
 export async function ezUSDTotalNetWorth(signerOrProvider: Signer | Provider): Promise<BigNumber> {
-  return await EzatConnect(signerOrProvider).totalNetWorth();
+  const res = await EzatConnect(signerOrProvider).totalNetWorth();
+  console.log('ezUSD Total NetWorth = ' + res.toString());
+  return res;
 }
 
 /**
@@ -77,7 +82,9 @@ export async function ezUSDTotalNetWorth(signerOrProvider: Signer | Provider): P
  * @returns ezMATIC总净值
  */
 export async function ezMATICTotalNetWorth(signerOrProvider: Signer | Provider): Promise<BigNumber> {
-  return await EzbtConnect(signerOrProvider).totalNetWorth();
+  const res = await EzbtConnect(signerOrProvider).totalNetWorth();
+  console.log('ezMATIC Total NetWorth = ' + res.toString());
+  return res;
 }
 
 /**
@@ -85,15 +92,18 @@ export async function ezMATICTotalNetWorth(signerOrProvider: Signer | Provider):
  * @returns 日利息
  */
 export async function treasuryInterestRate(signerOrProvider: Signer | Provider): Promise<BigNumber> {
-  return EzioConnect(signerOrProvider).interestRate();
+  const res = await EzioConnect(signerOrProvider).interestRate();
+  console.log('interestRate = ' + res.toString());
+  return res;
 }
 /**
  * 获取 杠杆率
  * @returns 杠杆率
  */
-export async function getLeverage(signerOrProvider: Signer | Provider): Promise<BigNumber> {
-  const res = (await EzioConnect(signerOrProvider).leverage()).toString();
-  return EzioConnect(signerOrProvider).leverage();
+export async function getLeverage(signerOrProvider: Signer | Provider) {
+  const res = formatDecimal(await EzioConnect(signerOrProvider).leverage(), TOKEN_TYPE.USDC).toString();
+  console.log('leverage = ' + res.toString());
+  return res;
 }
 
 /**
@@ -103,7 +113,9 @@ export async function getLeverage(signerOrProvider: Signer | Provider): Promise<
  * @returns ezat token 数量
  */
 export async function ezatBalanceOf(signerOrProvider: Signer | Provider, address: string): Promise<BigNumber> {
-  return EzatConnect(signerOrProvider).balanceOf(address);
+  const res = await EzatConnect(signerOrProvider).balanceOf(address);
+  // console.log('ezat Balance = ' + res.toString());
+  return res;
 }
 
 /**
@@ -113,7 +125,9 @@ export async function ezatBalanceOf(signerOrProvider: Signer | Provider, address
  * @returns ezbt token 数量
  */
 export async function ezbtBalanceOf(signerOrProvider: Signer | Provider, address: string): Promise<BigNumber> {
-  return EzbtConnect(signerOrProvider).balanceOf(address);
+  const res = await EzbtConnect(signerOrProvider).balanceOf(address);
+  // console.log('ezbt Balance = ' + res.toString());
+  return res;
 }
 
 /**
@@ -143,45 +157,62 @@ export async function usdcBalanceOf(signerOrProvider: Signer | Provider, address
  * @returns stMatic token 数量
  */
 export async function stMaticBalanceOf(signerOrProvider: Signer | Provider, address: string): Promise<BigNumber> {
-  return await stMaticConnect(signerOrProvider).balanceOf(address);
+  const res = await stMaticConnect(signerOrProvider).balanceOf(address);
+  console.log('stMatic Balance = ' + res.toString());
+  return res;
 }
 
 /**
  * 获取 ezat 净值
  * @returns ezat 净值
  */
-export async function ezUSDPrice(signerOrProvider: Signer | Provider): Promise<BigNumber> {
-  return EzatConnect(signerOrProvider).netWorth();
+export async function ezUSDPrice(signerOrProvider: Signer | Provider) {
+  const data = await EzatConnect(signerOrProvider).netWorth();
+  const res = formatDecimal(data, TOKEN_TYPE.USDC, 6).toString();
+  console.log('ezUSD netWorth = ' + res);
+  return res;
 }
 
 /**
  * 获取 ezbt 净值
  * @returns ezbt 净值
  */
-export async function ezMaticPrice(signerOrProvider: Signer | Provider): Promise<BigNumber> {
-  return EzbtConnect(signerOrProvider).netWorth();
+export async function ezMaticPrice(signerOrProvider: Signer | Provider) {
+  const data = await EzbtConnect(signerOrProvider).netWorth();
+  const res = formatDecimal(data, TOKEN_TYPE.USDC, 6).toString();
+  console.log('ezMatic netWorth = ' + res);
+  return res;
 }
 
 /**
  * 获取 stMatic 净值
  * @returns ezbt 净值
  */
-export async function stMaticPrice(signerOrProvider: Signer | Provider): Promise<BigNumber> {
-  return EzioConnect(signerOrProvider).getPrice(STMATIC_ADDRESS);
+export async function stMaticPrice(signerOrProvider: Signer | Provider) {
+  const data = await EzioConnect(signerOrProvider).getPrice(STMATIC_ADDRESS);
+  const res = formatDecimal(data, TOKEN_TYPE.USDC, 6).toString();
+  console.log('stMatic Price = ' + res);
+  return res;
 }
 /**
  * 获取 USDT 净值
  * @returns ezbt 净值
  */
-export async function usdtPrice(signerOrProvider: Signer | Provider): Promise<BigNumber> {
-  return EzioConnect(signerOrProvider).getPrice(USDT_ADDRESS);
+export async function usdtPrice(signerOrProvider: Signer | Provider) {
+  const data = await EzioConnect(signerOrProvider).getPrice(USDT_ADDRESS);
+  const res = formatDecimal(data, TOKEN_TYPE.USDC, 6).toString();
+  console.log('usdt Price = ' + res);
+  return res;
 }
 /**
  * 获取 USDC 净值
  * @returns ezbt 净值
  */
-export async function usdcPrice(signerOrProvider: Signer | Provider): Promise<BigNumber> {
-  return EzioConnect(signerOrProvider).getPrice(USDC_ADDRESS);
+export async function usdcPrice(signerOrProvider: Signer | Provider) {
+  const data = await EzioConnect(signerOrProvider).getPrice(USDC_ADDRESS);
+  const res = formatDecimal(data, TOKEN_TYPE.USDC, 6).toString();
+  console.log('usdc Price = ' + res);
+  return res;
 }
 
 /**
@@ -189,7 +220,9 @@ export async function usdcPrice(signerOrProvider: Signer | Provider): Promise<Bi
  * @returns ezat totalSupply
  */
 export async function ezatTotalSupply(signerOrProvider: Signer | Provider): Promise<BigNumber> {
-  return EzatConnect(signerOrProvider).totalSupply();
+  const res = await EzatConnect(signerOrProvider).totalSupply();
+  console.log('ezatTotalSupply = ' + res.toString());
+  return res;
 }
 
 /**
@@ -197,5 +230,7 @@ export async function ezatTotalSupply(signerOrProvider: Signer | Provider): Prom
  * @returns ezbt totalSupply
  */
 export async function ezbtTotalSupply(signerOrProvider: Signer | Provider): Promise<BigNumber> {
-  return EzbtConnect(signerOrProvider).totalSupply();
+  const res = await EzbtConnect(signerOrProvider).totalSupply();
+  console.log('ezbtTotalSupply = ' + res.toString());
+  return res;
 }

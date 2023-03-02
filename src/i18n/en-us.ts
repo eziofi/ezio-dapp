@@ -10,9 +10,9 @@ export default {
   },
   home: {
     card: {
-      rate: 'ezUSD interest rate',
-      fundCost: 'ezMATIC funding cost',
-      rebalancePrice: 'ezMATIC Rebalancing price',
+      rate: 'ezUSD Interest Rate',
+      fundCost: 'ezMATIC Funding Cost',
+      rebalancePrice: 'ezMATIC Rebalancing Price',
       leverage: 'ezMATIC Leverage Ratio',
     },
     coin: 'Coin',
@@ -77,6 +77,7 @@ export default {
     slippage: 'slippage',
     cancel: 'cancel',
     ok: 'ok',
+    purchaseTip: 'in transaction，please operate in metamask',
   },
   redeem: {
     redeemValue: 'Redeem',

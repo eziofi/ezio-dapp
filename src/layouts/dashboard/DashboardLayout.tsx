@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 // @mui
 import { css, styled } from '@mui/material/styles';
 //
 import Header from './header';
 import Nav from './nav';
+import { Backdrop, Box, CircularProgress } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -31,20 +32,58 @@ const Main = styled('div')(({ theme }) => ({
   },
 }));
 
+const BackDropContent = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+});
+
 // ----------------------------------------------------------------------
+interface IUIContext {
+  openBackLoading: () => void;
+  closeBackLoading: () => void;
+  setBackLoadingText: (text: string) => void;
+}
+
+export const UIContext = React.createContext<IUIContext>({} as IUIContext);
 
 export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
 
+  // 控制loading遮罩层
+  const [backLoadingOpen, setBackLoadingOpen] = useState(false);
+  //控制loading遮罩层文字
+  const [backLoadingText, setBackLoadingText] = useState('');
+
+  const openBackLoading = () => {
+    setBackLoadingOpen(true);
+  };
+  const closeBackLoading = () => {
+    setBackLoadingOpen(false);
+  };
+  const _setBackLoadingText = (text: string) => {
+    setBackLoadingText(text);
+  };
+
+  const UIContextValue = { openBackLoading, closeBackLoading, setBackLoadingText: _setBackLoadingText };
+
   return (
-    <StyledRoot>
-      <Header onOpenNav={() => setOpen(true)} />
+    <UIContext.Provider value={UIContextValue}>
+      <StyledRoot>
+        <Backdrop sx={{ color: '#fff', zIndex: 2001 }} open={backLoadingOpen} onClick={closeBackLoading}>
+          <BackDropContent>
+            <CircularProgress color="inherit" />
+            <Box sx={{ marginTop: 1 }}>{backLoadingText}</Box>
+          </BackDropContent>
+        </Backdrop>
+        <Header onOpenNav={() => setOpen(true)} />
 
-      <Nav openNav={open} onCloseNav={() => setOpen(false)} />
+        <Nav openNav={open} onCloseNav={() => setOpen(false)} />
 
-      <Main>
-        <Outlet />
-      </Main>
-    </StyledRoot>
+        <Main>
+          <Outlet />
+        </Main>
+      </StyledRoot>
+    </UIContext.Provider>
   );
 }

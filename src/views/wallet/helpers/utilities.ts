@@ -175,7 +175,11 @@ export function formatDecimal(value: BigNumber | undefined, tokenType: TOKEN_TYP
     return FixedNumber.from(0);
   }
   const ether = formatUnits(value, TOKEN_DECIMAL[tokenType]);
-  const numArr = ether.split('.');
+  return formatString(ether, decimal);
+}
+
+export const formatString = (str: string, decimal: number = 2) => {
+  const numArr = str.split('.');
 
   if (numArr.length == 1) {
     return FixedNumber.from(numArr[0]);
@@ -185,7 +189,7 @@ export function formatDecimal(value: BigNumber | undefined, tokenType: TOKEN_TYP
   }
 
   return FixedNumber.from(`${numArr[0]}.${numArr[1].length > decimal ? numArr[1].substring(0, decimal) : numArr[1]}`);
-}
+};
 
 export function timestampFormat(timestamp: number) {
   let date = new Date(timestamp);

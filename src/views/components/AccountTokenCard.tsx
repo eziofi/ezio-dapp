@@ -11,7 +11,7 @@ import { Tooltip } from '@mui/material';
 
 export default function AccountTokenCard({ type }: { type: TOKEN_TYPE }) {
   const { balance } = useBalance(type);
-  const { netWorth } = usePrice(type);
+  const { price } = usePrice(type);
   const { t } = useTranslation();
 
   const iconDiv = {
@@ -64,9 +64,9 @@ export default function AccountTokenCard({ type }: { type: TOKEN_TYPE }) {
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <Box>
                 <div style={{ fontSize: 20 }}>{TOKEN_TYPE[type]}</div>
-                {netWorth ? (
+                {price ? (
                   <div style={{ fontSize: 12, color: 'rgba(76, 80, 97, 1)' }}>
-                    {t('account.netWorth')}: {formatDecimal(netWorth, type, 6).toString()} USDC
+                    {t('account.netWorth')}: {price} USDC
                   </div>
                 ) : (
                   <InlineSkeleton width={70} />
@@ -105,9 +105,9 @@ export default function AccountTokenCard({ type }: { type: TOKEN_TYPE }) {
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <Box>
                 <div style={{ fontSize: 20 }}>{TOKEN_TYPE[type]}</div>
-                {netWorth ? (
+                {price ? (
                   <div style={{ fontSize: 12, color: 'rgba(76, 80, 97, 1)' }}>
-                    {t('account.netWorth')}: {formatDecimal(netWorth, TOKEN_TYPE.USDC, 6).toString()} USDC
+                    {t('account.netWorth')}: {price} USDC
                     {/*{netWorth.toString()} USDC*/}
                   </div>
                 ) : (

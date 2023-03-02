@@ -31,7 +31,7 @@ export const TOKEN_DECIMAL = {
   [TOKEN_TYPE.ezMatic]: 18,
   [TOKEN_TYPE.USDT]: 6,
   [TOKEN_TYPE.USDC]: 6,
-  [TOKEN_TYPE.stMatic]: 6,
+  [TOKEN_TYPE.stMatic]: 18,
 };
 
 export enum QUOTE_CHANNEL {
