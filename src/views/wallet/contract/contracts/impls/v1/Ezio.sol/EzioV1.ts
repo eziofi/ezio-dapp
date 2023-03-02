@@ -79,6 +79,7 @@ export interface EzioV1Interface extends utils.Interface {
     "tokenAggregators(address)": FunctionFragment;
     "totalNetWorth()": FunctionFragment;
     "totalReserve()": FunctionFragment;
+    "withdraw(address,uint256)": FunctionFragment;
   };
 
   getFunction(
@@ -119,6 +120,7 @@ export interface EzioV1Interface extends utils.Interface {
       | "tokenAggregators"
       | "totalNetWorth"
       | "totalReserve"
+      | "withdraw"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -272,6 +274,10 @@ export interface EzioV1Interface extends utils.Interface {
     functionFragment: "totalReserve",
     values?: undefined
   ): string;
+  encodeFunctionData(
+    functionFragment: "withdraw",
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+  ): string;
 
   decodeFunctionResult(
     functionFragment: "DEFAULT_ADMIN_ROLE",
@@ -375,6 +381,7 @@ export interface EzioV1Interface extends utils.Interface {
     functionFragment: "totalReserve",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
   events: {
     "ConvertDown(uint256,uint256,uint256)": EventFragment;
@@ -658,6 +665,12 @@ export interface EzioV1 extends BaseContract {
     totalNetWorth(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     totalReserve(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    withdraw(
+      token: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
   };
 
   DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
@@ -812,6 +825,12 @@ export interface EzioV1 extends BaseContract {
 
   totalReserve(overrides?: CallOverrides): Promise<BigNumber>;
 
+  withdraw(
+    token: PromiseOrValue<string>,
+    amount: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
@@ -962,6 +981,12 @@ export interface EzioV1 extends BaseContract {
     totalNetWorth(overrides?: CallOverrides): Promise<BigNumber>;
 
     totalReserve(overrides?: CallOverrides): Promise<BigNumber>;
+
+    withdraw(
+      token: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {
@@ -1193,6 +1218,12 @@ export interface EzioV1 extends BaseContract {
     totalNetWorth(overrides?: CallOverrides): Promise<BigNumber>;
 
     totalReserve(overrides?: CallOverrides): Promise<BigNumber>;
+
+    withdraw(
+      token: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -1355,5 +1386,11 @@ export interface EzioV1 extends BaseContract {
     totalNetWorth(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     totalReserve(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    withdraw(
+      token: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
   };
 }
