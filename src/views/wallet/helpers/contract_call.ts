@@ -163,6 +163,28 @@ export async function stMaticBalanceOf(signerOrProvider: Signer | Provider, addr
 }
 
 /**
+ * 获取 ezMATIC 资产成本
+ * @returns ezMATIC 资产成本
+ */
+export async function ezMATICFundCost(signerOrProvider: Signer | Provider) {
+  const data = await EzioConnect(signerOrProvider).rewardRate();
+  const res = '' + data;
+  console.log('ezMATIC Fund Cost = ' + res);
+  return res;
+}
+
+/**
+ * 获取 ezMATIC 下折价格
+ * @returns ezMATIC 下折价格
+ */
+export async function convertDownPrice(signerOrProvider: Signer | Provider) {
+  const data = await EzioConnect(signerOrProvider).convertDownPrice();
+  const res = formatDecimal(data, TOKEN_TYPE.ezMatic, 6).toString();
+  console.log('convertDown Price = ' + res);
+  return res;
+}
+
+/**
  * 获取 ezat 净值
  * @returns ezat 净值
  */
@@ -202,7 +224,6 @@ export async function usdtPrice(signerOrProvider: Signer | Provider) {
   const data = await EzioConnect(signerOrProvider).getPrice(USDT_ADDRESS);
   const res = formatDecimal(data, TOKEN_TYPE.USDC, 6).toString();
   console.log('usdt Price = ' + res);
-  debugger;
   return res;
 }
 /**
