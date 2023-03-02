@@ -202,6 +202,7 @@ export async function usdtPrice(signerOrProvider: Signer | Provider) {
   const data = await EzioConnect(signerOrProvider).getPrice(USDT_ADDRESS);
   const res = formatDecimal(data, TOKEN_TYPE.USDC, 6).toString();
   console.log('usdt Price = ' + res);
+  debugger;
   return res;
 }
 /**

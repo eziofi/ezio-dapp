@@ -212,7 +212,7 @@ function MyCardContentOne({
   isBuy,
   inputValue1,
 }: CardContentOneProps) {
-  const { price } = usePrice(tokenType);
+  const { price } = usePrice(isBuy ? redeemTokenType : tokenType);
 
   // const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
   const handleChange = (value: TOKEN_TYPE) => {
