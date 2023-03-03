@@ -327,13 +327,13 @@ export default function Purchase() {
         sx={{
           ...style,
           background:
-            !inputValue1 || !parseInt(inputValue1)
+            !inputValue1 || !+inputValue1
               ? 'gray'
               : 'linear-gradient(180deg, rgba(108, 75, 246, 1) 0%, rgba(113, 79, 251, 1) 100%)',
         }}
         variant="contained"
         disableElevation
-        disabled={!inputValue1 || !parseInt(inputValue1)}
+        disabled={!inputValue1 || !+inputValue1}
         onClick={() => (type === 0 ? doPurchase() : type === 1 ? doRedeem() : null)}
       >
         {type === TRANSFER_TYPE.PURCHASE ? t('purchase.purchaseAction') : t('redeem.redeemAction')}
