@@ -221,9 +221,12 @@ export default function Purchase() {
   const handleClickOpen = () => setOpen(true);
 
   useEffect(() => {
-    // type 为赎回时 redeemTokenType 为 USDC
-    if (type === TRANSFER_TYPE.REDEEM) {
+    // type 为赎回时 && redeemTokenType = USDT, redeemTokenType赋值 为 USDC 因为赎回时的下拉框value不存在USDT 会导致value为空
+    if (type === TRANSFER_TYPE.REDEEM && redeemTokenType === 4) {
       setRedeemTokenType(TOKEN_TYPE.USDC);
+    } else if (type === TRANSFER_TYPE.PURCHASE && redeemTokenType === 3) {
+      // type 为购买时 && redeemTokenType = stMatic, redeemTokenType赋值 为 USDT 因为购买时的下拉框value不存stMatic 会导致value为空
+      setRedeemTokenType(TOKEN_TYPE.USDT);
     }
   }, [type]);
 
