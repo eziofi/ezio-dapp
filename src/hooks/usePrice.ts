@@ -14,8 +14,12 @@ export function usePrice(tokenType: TOKEN_TYPE) {
     [TOKEN_TYPE.stMatic]: stMaticPrice,
   };
 
-  const { data: price } = useQuery(['networth', tokenType], () => netWorthApi[tokenType](ethersProvider!.getSigner()), {
+  const {
+    data: price,
+    refetch: refetchPrice,
+    isLoading: priceLoading,
+  } = useQuery(['price', tokenType], () => netWorthApi[tokenType](ethersProvider!.getSigner()), {
     enabled: !!ethersProvider,
   });
-  return { price };
+  return { price, refetchPrice, priceLoading };
 }

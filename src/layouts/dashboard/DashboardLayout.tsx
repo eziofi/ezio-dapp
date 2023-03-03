@@ -5,7 +5,7 @@ import { css, styled } from '@mui/material/styles';
 //
 import Header from './header';
 import Nav from './nav';
-import { Backdrop, Box, CircularProgress } from '@mui/material';
+import { Alert, Backdrop, Box, CircularProgress, Snackbar } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -43,6 +43,9 @@ interface IUIContext {
   openBackLoading: () => void;
   closeBackLoading: () => void;
   setBackLoadingText: (text: string) => void;
+  openMsg: () => void;
+  closeMsg: () => void;
+  setMsg: (msg: string) => void;
 }
 
 export const UIContext = React.createContext<IUIContext>({} as IUIContext);
@@ -65,11 +68,40 @@ export default function DashboardLayout() {
     setBackLoadingText(text);
   };
 
-  const UIContextValue = { openBackLoading, closeBackLoading, setBackLoadingText: _setBackLoadingText };
+  const [msgOpen, setMsgOpen] = useState(false);
+  const [msg, setMsg] = useState('');
+  const openMsg = () => setMsgOpen(true);
+  const closeMsg = () => setMsgOpen(false);
+  const _setMsg = (msg: string) => setMsg(msg);
+
+  const UIContextValue = {
+    openBackLoading,
+    closeBackLoading,
+    setBackLoadingText: _setBackLoadingText,
+    openMsg,
+    setMsg: _setMsg,
+    closeMsg,
+  };
 
   return (
     <UIContext.Provider value={UIContextValue}>
       <StyledRoot>
+        {/*提示信息*/}
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          open={msgOpen}
+          onClose={() => setMsgOpen(false)}
+          message={msg}
+          sx={{ position: 'fixed' }}
+        >
+          <Alert onClose={() => setMsgOpen(false)} severity="error" sx={{ width: '100%' }}>
+            {msg}
+          </Alert>
+        </Snackbar>
+        {/*全局loading遮罩层*/}
         <Backdrop sx={{ color: '#fff', zIndex: 2001 }} open={backLoadingOpen} onClick={closeBackLoading}>
           <BackDropContent>
             <CircularProgress color="inherit" />

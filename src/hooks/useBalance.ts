@@ -20,16 +20,16 @@ export function useBalance(tokenType: TOKEN_TYPE) {
     [TOKEN_TYPE.USDC]: usdcBalanceOf,
     [TOKEN_TYPE.stMatic]: stMaticBalanceOf,
   };
-  const { data: balance, refetch: refetchBalance } = useQuery(
-    ['balanceOf', tokenType],
-    () => balanceApi[tokenType](ethersProvider!.getSigner(), account),
-    {
-      enabled: !!ethersProvider && !!account,
-      onSuccess: data => {
-        // const res = formatDecimal(data, tokenType, 6).toString();
-        // console.log(res);
-      },
+  const {
+    data: balance,
+    refetch: refetchBalance,
+    isLoading,
+  } = useQuery(['balanceOf', tokenType], () => balanceApi[tokenType](ethersProvider!.getSigner(), account), {
+    enabled: !!ethersProvider && !!account,
+    onSuccess: data => {
+      // const res = formatDecimal(data, tokenType, 6).toString();
+      // console.log(res);
     },
-  );
-  return { balance, refetchBalance };
+  });
+  return { balance, refetchBalance, isLoading };
 }

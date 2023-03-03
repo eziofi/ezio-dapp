@@ -2,17 +2,20 @@ import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { Card, CardContent, IconButton, Tooltip } from '@mui/material';
 import AccountDetail from './AccountDetail';
-import useWallet from '../hooks/useWallet';
 import { TOKEN_TYPE } from '../wallet/helpers/constant';
 import { useTranslation } from 'react-i18next';
 import { PurchaseContainer } from '../purchase/PurchaseStyle';
-import { AccountCard, AccountCardBox, AccountToolBar, Content } from './AccountStyle';
+import { AccountCardBox, AccountToolBar, Content } from './AccountStyle';
 import BaseIconFont from '../components/BaseIconFont';
 import AccountTokenCard from '../components/AccountTokenCard';
+import CachedIcon from '@mui/icons-material/Cached';
+import { useQueryClient } from 'react-query';
 
 export default function Account() {
   const [page, setPage] = useState('account');
   const { t } = useTranslation();
+  const [refreshFlag, setRefreshFlag] = useState(0);
+  const queryClient = useQueryClient();
 
   return (
     <PurchaseContainer>
@@ -24,11 +27,22 @@ export default function Account() {
           // <Button color="inherit" >
           //   {t('account.checkDetail')}
           // </Button>
-          <Tooltip title={t('account.detail')} placement="top">
-            <IconButton onClick={() => setPage('detail')}>
-              <BaseIconFont name="icon-jiaofeizhangdan_active" style={{ width: 20, height: 20 }} />
-            </IconButton>
-          </Tooltip>
+          // <Tooltip title={t('account.detail')} placement="top">
+          //   <IconButton onClick={() => setPage('detail')}>
+          //     <BaseIconFont name="icon-jiaofeizhangdan_active" style={{ width: 20, height: 20 }} />
+          //   </IconButton>
+          // </Tooltip>
+          <IconButton
+            aria-label="refresh"
+            onClick={() => {
+              setRefreshFlag(refreshFlag + 1);
+              // queryClient.invalidateQueries(['balanceOf', TOKEN_TYPE.USDC]);
+              // queryClient.invalidateQueries(['balanceOf', TOKEN_TYPE.USDT]);
+              // queryClient.invalidateQueries(['balanceOf', TOKEN_TYPE.stMatic]);
+            }}
+          >
+            <CachedIcon />
+          </IconButton>
         ) : (
           <IconButton onClick={() => setPage('account')}>
             {/* <img src={rollbackIcon} width="24" style={{ background: 'red' }} /> */}
@@ -40,11 +54,11 @@ export default function Account() {
 
       {page === 'account' ? (
         <AccountCardBox>
-          <AccountTokenCard type={TOKEN_TYPE.USDT} />
-          <AccountTokenCard type={TOKEN_TYPE.USDC} />
-          <AccountTokenCard type={TOKEN_TYPE.stMatic} />
-          <AccountTokenCard type={TOKEN_TYPE.ezUSD} />
-          <AccountTokenCard type={TOKEN_TYPE.ezMatic} />
+          <AccountTokenCard type={TOKEN_TYPE.USDT} refreshFlag={refreshFlag} />
+          <AccountTokenCard type={TOKEN_TYPE.USDC} refreshFlag={refreshFlag} />
+          <AccountTokenCard type={TOKEN_TYPE.stMatic} refreshFlag={refreshFlag} />
+          <AccountTokenCard type={TOKEN_TYPE.ezUSD} refreshFlag={refreshFlag} />
+          <AccountTokenCard type={TOKEN_TYPE.ezMatic} refreshFlag={refreshFlag} />
         </AccountCardBox>
       ) : (
         <AccountDetail />

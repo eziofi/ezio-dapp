@@ -60,7 +60,7 @@ export default function Purchase() {
   const [slippage, setSlippage] = useState<number>(1);
   const [time, setTime] = useState<string>();
 
-  const { openBackLoading, closeBackLoading, setBackLoadingText } = useContext(UIContext);
+  const { openBackLoading, closeBackLoading, setBackLoadingText, setMsg, openMsg, closeMsg } = useContext(UIContext);
 
   useEffect(() => {
     // 定时时间
@@ -116,9 +116,6 @@ export default function Purchase() {
     setTokenType(tokenType);
   }
 
-  const [msgOpen, setMsgOpen] = useState(false);
-  const [msg, setMsg] = useState('');
-
   const { mutateAsync: purchaseMutate } = useMutation(
     (arg: IPurchaseArg) => purchase(arg.fromType, arg.toType, arg.amount, arg.slippage, arg.signerOrProvider),
     {
@@ -154,17 +151,29 @@ export default function Purchase() {
     // },
   });
 
+  function handleError(error: any) {
+    if (error.reason) {
+      setMsg(error.reason);
+    } else if (error.code) {
+      setMsg(error.code);
+    } else {
+      setMsg('Error');
+    }
+    openMsg();
+  }
+
   // 购买
   const doPurchase = () => {
     openBackLoading();
     setBackLoadingText(t('purchase.purchaseTip'));
+
     refetchBalance()
       .then(({ data }) => {
         if (!data) return Promise.reject();
         const balance = formatDecimal(data, redeemTokenType, TOKEN_DECIMAL[redeemTokenType]).toUnsafeFloat();
         if (parseFloat(inputValue1) > balance) {
           setMsg(t('purchase.moreThanBalanceMsg'));
-          setMsgOpen(true);
+          openMsg();
         } else {
           const args: IPurchaseArg = {
             fromType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.USDT,
@@ -178,6 +187,9 @@ export default function Purchase() {
         }
       })
       .then(() => {})
+      .catch(error => {
+        handleError(error);
+      })
       .finally(() => {
         onTransferOver();
       });
@@ -192,7 +204,7 @@ export default function Purchase() {
         const balance = formatDecimal(data, tokenType, TOKEN_DECIMAL[tokenType]).toUnsafeFloat();
         if (parseFloat(inputValue1) > balance) {
           setMsg(t('redeem.moreThanBalanceMsg'));
-          setMsgOpen(true);
+          openMsg();
         } else {
           const args: IRedeemArg = {
             fromType: tokenType as TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMatic,
@@ -203,6 +215,9 @@ export default function Purchase() {
           };
           return redeemMutate(args);
         }
+      })
+      .catch(error => {
+        handleError(error);
       })
       .finally(() => {
         onTransferOver();
@@ -232,16 +247,6 @@ export default function Purchase() {
 
   return (
     <PurchaseContainer>
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        open={msgOpen}
-        onClose={() => setMsgOpen(false)}
-        message={msg}
-        sx={{ position: 'fixed' }}
-      />
       <Toolbar sx={{ width: '98%', alignSelf: 'flex-start', margin: '0 auto' }}>
         <Typography
           variant="h6"

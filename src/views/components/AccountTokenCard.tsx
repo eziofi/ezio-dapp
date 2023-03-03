@@ -8,11 +8,19 @@ import { formatDecimal } from '../wallet/helpers/utilities';
 import { InlineSkeleton } from './Skeleton';
 import { useTranslation } from 'react-i18next';
 import { Tooltip } from '@mui/material';
+import { useEffect } from 'react';
 
-export default function AccountTokenCard({ type }: { type: TOKEN_TYPE }) {
-  const { balance } = useBalance(type);
-  const { price } = usePrice(type);
+export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TYPE; refreshFlag: number }) {
+  const { balance, refetchBalance, isLoading } = useBalance(type);
+  const { price, refetchPrice } = usePrice(type);
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (refreshFlag > 0) {
+      refetchBalance();
+      refetchPrice();
+    }
+  }, [refreshFlag]);
 
   const iconDiv = {
     width: 50,
@@ -108,7 +116,6 @@ export default function AccountTokenCard({ type }: { type: TOKEN_TYPE }) {
                 {price ? (
                   <div style={{ fontSize: 12, color: 'rgba(76, 80, 97, 1)' }}>
                     {t('account.netWorth')}: {price} USDC
-                    {/*{netWorth.toString()} USDC*/}
                   </div>
                 ) : (
                   <InlineSkeleton width={70} />
@@ -118,7 +125,6 @@ export default function AccountTokenCard({ type }: { type: TOKEN_TYPE }) {
                 {balance ? (
                   <Tooltip title={formatDecimal(balance, type, 18).toString()} placement="top">
                     <div style={{ fontSize: 28, color: 'rgba(67, 207, 124, 1)' }}>
-                      {/*{formatNum(balance, type).toUnsafeFloat().toFixed(2)}*/}
                       {formatDecimal(balance, type).toString()}
                     </div>
                   </Tooltip>
