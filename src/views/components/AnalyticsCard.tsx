@@ -85,7 +85,7 @@ export default function AnalyticsCard({
       sx={{
         py: 5,
         boxShadow: 0,
-        textAlign: 'center',
+        // textAlign: 'center',
         display: 'flex',
         justifyContent: 'space-between',
         // @ts-ignore
@@ -97,7 +97,7 @@ export default function AnalyticsCard({
       {...other}
     >
       <Box style={{ display: 'flex', flexDirection: 'column', marginLeft: theme.spacing(4) }}>
-        <div style={{ fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>
+        <div style={{ width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>
           {!isLoading ? (
             type === ANALYTICS_CARD_TYPE.FEE ? (
               'feeValue'
