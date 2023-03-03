@@ -44,7 +44,7 @@ type CardContentOneProps = Pick<
 >;
 type CardContentSencoedProps = Pick<
   IProps,
-  'transactionType' | 'inputValue2' | 'getTokenType' | 'tokenType' | 'redeemTokenType' | 'setRedeemTokenType'
+  'transactionType' | 'inputValue2' | 'getTokenType' | 'tokenType' | 'redeemTokenType' | 'setRedeemTokenType' | 'isBuy'
 >;
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
@@ -286,7 +286,10 @@ function MyCardContentSecond({
   tokenType,
   redeemTokenType,
   setRedeemTokenType,
+  isBuy,
 }: CardContentSencoedProps) {
+  const { price } = usePrice(isBuy ? tokenType : redeemTokenType);
+
   // const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
   const handleChange = (value: TOKEN_TYPE) => {
     getTokenType(value);
@@ -310,6 +313,7 @@ function MyCardContentSecond({
           // onChange={e => getInputVal2(e.target.value)}
           type="number"
           value={inputValue2}
+          disabled
         />
         <div
           style={{
@@ -318,7 +322,8 @@ function MyCardContentSecond({
             marginTop: 5,
           }}
         >
-          {t('purchase.estimated')}
+          {/*{t('purchase.estimated')}*/}
+          {price ? t('purchase.unitPrice') + ': ' + price + ' USDC' : <Skeleton width={100} />}
         </div>
       </div>
       {/* {transactionType === TRANSFER_TYPE.PURCHASE

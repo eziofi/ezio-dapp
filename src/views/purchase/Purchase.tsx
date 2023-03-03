@@ -50,7 +50,7 @@ interface IRedeemArg {
 export default function Purchase() {
   const queryClient: QueryClient = useQueryClient();
   const [type, setType] = useState(TRANSFER_TYPE.PURCHASE); // 0是购买 1是赎回
-  const [tipDrawerOpened, setTipDrawerOpened] = useState(false);
+  // const [tipDrawerOpened, setTipDrawerOpened] = useState(false);
   const [inputValue1, setInputValue1] = useState('');
   const [inputValue2, setInputValue2] = useState('');
   const [isClick, setIsClick] = useState(false);
@@ -65,10 +65,12 @@ export default function Purchase() {
   useEffect(() => {
     // 定时时间
     const timer = setInterval(() => setTime(timestampFormat(new Date().getTime())), 1000);
+    9;
     return () => clearInterval(timer);
   }, []);
 
-  // const { price } = usePrice(tokenType);
+  const { price: fromPrice } = usePrice(type === TRANSFER_TYPE.PURCHASE ? redeemTokenType : tokenType);
+  const { price: toPrice } = usePrice(type === TRANSFER_TYPE.PURCHASE ? tokenType : redeemTokenType);
 
   const { t } = useTranslation();
   const style = {
@@ -80,18 +82,18 @@ export default function Purchase() {
   };
   function getInputVal1(value: string) {
     setInputValue1(value);
-    // setInputValue2(
-    //   value
-    //     ? type === TRANSFER_TYPE.PURCHASE
-    //       ? '' + (parseInt(value) / parseFloat(formatNetWorth(netWorth, true))).toFixed(2)
-    //       : '' + (parseInt(value) * parseFloat(formatNetWorth(netWorth, true))).toFixed(2)
-    //     : '0',
-    // );
+    // 计算预计获得
+    console.log('fromPrice=' + fromPrice);
+    console.log('toPrice=' + toPrice);
+    if (fromPrice && toPrice) {
+      const estimatedValue2 = (parseFloat(value) * parseFloat(fromPrice)) / parseFloat(toPrice);
+      setInputValue2(estimatedValue2 + '');
+    }
   }
 
-  function getInputVal2(value: string) {
-    setInputValue2(value);
-  }
+  // function getInputVal2(value: string) {
+  //   setInputValue2(value);
+  // }
 
   function setAnimation() {
     setInputValue1('');
@@ -306,6 +308,7 @@ export default function Purchase() {
         {!isClick ? (
           <CardContent>
             <MyCardContentSecond
+              isBuy={type === TRANSFER_TYPE.PURCHASE}
               transactionType={type}
               tokenType={tokenType}
               getTokenType={getTokenType}

@@ -57,10 +57,10 @@ export default function HomeCard({
     [HOME_CARD_TYPE.Leverage]: t('home.card.leverage'),
   };
   const icon = {
-    [HOME_CARD_TYPE.Rate]: 'icon-A',
-    [HOME_CARD_TYPE.FundCost]: 'icon-A',
-    [HOME_CARD_TYPE.RebalancePrice]: 'icon-A',
-    [HOME_CARD_TYPE.Leverage]: 'icon-A',
+    [HOME_CARD_TYPE.Rate]: theme.palette.mode === 'light' ? 'icon-yuqinianhualishuai' : 'icon-yuqinianhualishuai-copy',
+    [HOME_CARD_TYPE.FundCost]: theme.palette.mode === 'light' ? 'icon-zijinchengben' : 'icon-zijinchengben-copy',
+    [HOME_CARD_TYPE.RebalancePrice]: theme.palette.mode === 'light' ? 'icon-xiaoshoujiage' : 'icon-xiaoshoujiage-copy',
+    [HOME_CARD_TYPE.Leverage]: theme.palette.mode === 'light' ? 'icon-gangganshuai' : 'icon-gangganshuai-copy',
   };
   // @ts-ignore
   const { data, isLoading } = useQuery(['totalSupply', type], () => api[type](ethersProvider!.getSigner()), {
@@ -103,10 +103,10 @@ export default function HomeCard({
         <BaseIconFont
           name={icon[type]}
           style={{
-            width: 22,
-            height: 22,
+            width: 26,
+            height: 26,
             // @ts-ignore
-            fill: theme.palette[color][theme.palette.mode === 'light' ? 'darker' : 'lighter'],
+            // fill: theme.palette[color][theme.palette.mode === 'light' ? 'darker' : 'lighter'],
           }}
         />
 
@@ -114,7 +114,7 @@ export default function HomeCard({
       </StyledIcon>
 
       <Typography variant="h3">
-        {!isLoading ? type === HOME_CARD_TYPE.Rate ? data + '%' : data : <InlineSkeleton />}
+        {data ? type === HOME_CARD_TYPE.Rate ? data + '%' : data : <InlineSkeleton />}
       </Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
         {title[type]}

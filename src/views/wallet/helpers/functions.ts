@@ -69,17 +69,6 @@ export async function purchaseB(
 ) {
   const ezio = EzioConnect(signerOrProvider);
   let quotes: SwapQuoteStruct[];
-  // const quoteParams: OneInchQuoteParams = {
-  //   fromTokenAddress: fromType === TOKEN_TYPE.USDT ? USDT_ADDRESS : USDC_ADDRESS,
-  //   toTokenAddress: STMATIC_ADDRESS,
-  //   amount: String(amount * 1000000),
-  // amount: BigNumber.from(amount).mul(1000000).toString(),
-  // fromAddress: ezioJson.address,
-  // slippage,
-  // disableEstimate: true,
-  // };
-  // const quoteResponse = await getOneInchQuoteResponse(quoteParams);
-
   // 先把USDC/USDT换成stMatic
   const fromTokenAddress = fromType === TOKEN_TYPE.USDT ? USDT_ADDRESS : USDC_ADDRESS;
   const quoteResponse = await getQuote(channel, fromTokenAddress, STMATIC_ADDRESS, String(amount * 1000000), slippage);
@@ -98,10 +87,9 @@ export async function purchaseB(
           .div(BigNumber.from('10').pow(6))
       : BigNumber.from(amount * 1000000);
   const pooledA = await ezio.pooledA();
-
+  console.log('quoteNetWorth=' + quoteNetWorth.toString());
+  console.log('pooledA=' + pooledA.toString());
   if (quoteNetWorth.lte(pooledA)) {
-    console.log('quoteNetWorth=' + quoteNetWorth.toString());
-    console.log('pooledA=' + pooledA.toString());
     console.log('使用金库USDC');
     // 如果金库USDC足够，用USDC转换成stmatic
     const convertSellAmount =
@@ -226,9 +214,9 @@ export async function queryRedeemRecord(
 }
 
 const getRedeemQuoteQty = async (
-  type: number,
+  fromToken: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMatic,
   qty: BigNumber,
-  token: TOKEN_TYPE.USDC | TOKEN_TYPE.stMatic,
+  toToken: TOKEN_TYPE.USDC | TOKEN_TYPE.stMatic,
   signerOrProvider: Signer | Provider,
 ) => {
   let amt: BigNumber;
@@ -237,8 +225,8 @@ const getRedeemQuoteQty = async (
   const bToken = EzbtConnect(signerOrProvider);
   const ezio = EzioConnect(signerOrProvider);
   const stMatic = stMaticConnect(signerOrProvider);
-  if (type === TOKEN_TYPE.ezUSD) {
-    if (token === TOKEN_TYPE.USDC) {
+  if (fromToken === TOKEN_TYPE.ezUSD) {
+    if (toToken === TOKEN_TYPE.USDC) {
       amt = qty.mul(await aToken.netWorth()).div(BigNumber.from('10').pow(await aToken.decimals()));
       console.log('amt=' + amt.toString());
       console.log('pooledA=' + (await ezio.pooledA()).toString());
@@ -251,12 +239,17 @@ const getRedeemQuoteQty = async (
     }
   } else {
     // amt = qty.mul(await bToken.netWorth()).div(BigNumber.from('10').pow(await bToken.decimals()));
-    if (token === TOKEN_TYPE.USDC) {
+    if (toToken === TOKEN_TYPE.USDC) {
       quoteQty = qty.mul(await ezio.totalReserve()).div(await bToken.totalSupply());
-    } else if (token === TOKEN_TYPE.stMatic) {
-      const redeemReserveQty = qty.mul(await ezio.totalReserve()).div(await bToken.totalSupply());
-      const leverage: BigNumber = await ezio.leverage();
-      quoteQty = redeemReserveQty.mul(leverage.sub(await ezio.LEVERAGE_DENOMINATOR())).div(leverage);
+    } else if (toToken === TOKEN_TYPE.stMatic) {
+      let redeemReserveQty = qty.mul(await ezio.totalReserve()).div(await bToken.totalSupply());
+      let leverage: BigNumber = await ezio.leverage();
+      const DENOMINATOR = await ezio.LEVERAGE_DENOMINATOR();
+      const scaledLeverage = leverage.sub(DENOMINATOR);
+      quoteQty = redeemReserveQty.mul(scaledLeverage).div(leverage);
+      const _DENOMINATOR = DENOMINATOR.toString();
+      const _scaledLeverage = scaledLeverage.toString();
+      const _leverage = leverage.toString();
     }
   }
   return quoteQty;
