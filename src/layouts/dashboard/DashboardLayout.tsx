@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-// @mui
-import { css, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 //
 import Header from './header';
 import Nav from './nav';
@@ -102,13 +101,13 @@ export default function DashboardLayout() {
           </Alert>
         </Snackbar>
         {/*全局loading遮罩层*/}
-        <Backdrop sx={{ color: '#fff', zIndex: 2001 }} open={backLoadingOpen} onClick={closeBackLoading}>
-          <BackDropContent>
-            <CircularProgress color="inherit" />
-            <Box sx={{ marginTop: 1 }}>{backLoadingText}</Box>
-          </BackDropContent>
-        </Backdrop>
-        <Header onOpenNav={() => setOpen(true)} />
+        {/*<Backdrop sx={{ color: '#fff', zIndex: 2001 }} open={backLoadingOpen} onClick={closeBackLoading}>*/}
+        {/*  <BackDropContent>*/}
+        {/*    <CircularProgress color="inherit" />*/}
+        {/*    <Box sx={{ marginTop: 1 }}>{backLoadingText}</Box>*/}
+        {/*  </BackDropContent>*/}
+        {/*</Backdrop>*/}
+        <Header onOpenNav={() => setOpen(true)} loadingOpen={backLoadingOpen} loadingText={backLoadingText} />
 
         <Nav openNav={open} onCloseNav={() => setOpen(false)} />
 

@@ -2,11 +2,11 @@ import styles from './account.module.less';
 import { TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
 import { timestampFormat } from '../wallet/helpers/utilities';
 import { t } from 'i18next';
-import { PurchaseRecord, RedeemRecord } from '../wallet/helpers/functions';
 import { Avatar, CardContent, List, ListItem, ListItemAvatar, ListItemText, useTheme } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import { Box } from '@mui/system';
 import BaseIconFont from '../components/BaseIconFont';
+import { PurchaseRecord, RedeemRecord } from '../wallet/helpers/contract_call';
 export default function AccountDetail() {
   // const recordList = useRecord();
   const recordList: (RedeemRecord | PurchaseRecord)[] = [];

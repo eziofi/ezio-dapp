@@ -3,14 +3,10 @@ import { Card, SxProps, Theme, Typography } from '@mui/material';
 
 import { useTranslation } from 'react-i18next';
 import useWallet from '../hooks/useWallet';
-import { convertDownPrice, ezMATICFundCost, getLeverage } from '../wallet/helpers/contract_call';
+import { convertDownPrice, ezMATICFundCost, getLeverage, interestRateYear } from '../wallet/helpers/contract_call';
 import { useQuery } from 'react-query';
-import { formatNetWorth, formatDecimal } from '../wallet/helpers/utilities';
 import BaseIconFont from './BaseIconFont';
-import { TOKEN_TYPE } from '../wallet/helpers/constant';
 import { InlineSkeleton } from './Skeleton';
-import { interestRateYear } from '../wallet/helpers/functions';
-import { BigNumber } from 'ethers';
 
 const StyledIcon = styled('div')(({ theme }) => ({
   margin: 'auto',

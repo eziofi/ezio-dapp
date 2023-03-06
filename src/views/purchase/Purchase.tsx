@@ -14,7 +14,6 @@ import {
 } from '@mui/material';
 import PurchaseDrawer from './components/PurchaseDrawer';
 import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
-import { interestRateDay, purchase, redeem } from '../wallet/helpers/functions';
 import { BigNumber, Signer } from 'ethers';
 import { TOKEN_DECIMAL, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
 import useWallet from '../hooks/useWallet';
@@ -28,8 +27,9 @@ import { useBalance } from '../../hooks/useBalance';
 import FormDialog from './components/FormDialog';
 import BaseIconFont from '../components/BaseIconFont';
 import { Provider } from '@ethersproject/providers';
-import { treasuryInterestRate } from '../wallet/helpers/contract_call';
+import { interestRateDay, treasuryInterestRate } from '../wallet/helpers/contract_call';
 import { UIContext } from '../../layouts/dashboard/DashboardLayout';
+import useTx from '../../hooks/useTx';
 
 interface IPurchaseArg {
   fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC;
@@ -59,6 +59,8 @@ export default function Purchase() {
   const theme = useTheme();
   const [slippage, setSlippage] = useState<number>(1);
   const [time, setTime] = useState<string>();
+
+  const { purchase, redeem } = useTx();
 
   const { openBackLoading, closeBackLoading, setBackLoadingText, setMsg, openMsg, closeMsg } = useContext(UIContext);
 

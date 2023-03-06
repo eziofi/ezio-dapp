@@ -9,12 +9,15 @@ import metamaskBtn from '../../../assets/home/metamask@3x.png';
 import { useBalance } from '../../../hooks/useBalance';
 import { TOKEN_TYPE } from '../../../views/wallet/helpers/constant';
 import { formatDecimal } from '../../../views/wallet/helpers/utilities';
+import useResponsive from '../../../hooks/useResponsive';
 
 export default function AddressPopover() {
   const { connectState, connect, disconnect, account, ethersProvider } = useWallet();
   const [open, setOpen] = useState<(EventTarget & HTMLButtonElement) | null>(null);
   const [copyFlag, setCopyFlag] = useState<boolean>(false);
   const { t } = useTranslation();
+
+  const isDesktop = useResponsive('up', 'lg', 'lg');
 
   const { balance } = useBalance(TOKEN_TYPE.USDT);
 
@@ -64,8 +67,8 @@ export default function AddressPopover() {
           }}
           endIcon={<KeyboardArrowDownOutlinedIcon />}
         >
-          <Avatar src={metamaskBtn} sx={{ width: 24, height: 24, marginRight: 1 }} />
-          {addressToShow}
+          <Avatar src={metamaskBtn} sx={{ width: 24, height: 24, marginRight: isDesktop ? 1 : 0 }} />
+          {isDesktop ? addressToShow : ''}
         </Button>
       ) : connectState === 'connecting' ? (
         <Button variant="outlined">{t('home.connecting')}</Button>

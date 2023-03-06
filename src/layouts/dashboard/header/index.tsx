@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
+import { Box, Stack, AppBar, Toolbar, IconButton, CircularProgress } from '@mui/material';
 // utils
 import { bgBlur } from '../../../utils/cssStyles';
 // components
@@ -13,6 +13,8 @@ import NotificationsPopover from './NotificationsPopover';
 import Iconify from '../../../components/iconify';
 import AddressPopover from './AddressPopover';
 import ThemeSwitcher from './ThemeSwitcher';
+import { useContext } from 'react';
+import { UIContext } from '../DashboardLayout';
 
 // ----------------------------------------------------------------------
 
@@ -45,7 +47,15 @@ Header.propTypes = {
   onOpenNav: PropTypes.func,
 };
 
-export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
+export default function Header({
+  onOpenNav,
+  loadingOpen,
+  loadingText,
+}: {
+  onOpenNav: () => void;
+  loadingOpen: boolean;
+  loadingText: string;
+}) {
   return (
     <StyledRoot>
       <StyledToolbar>
@@ -71,6 +81,12 @@ export default function Header({ onOpenNav }: { onOpenNav: () => void }) {
             sm: 1,
           }}
         >
+          {loadingOpen && (
+            <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
+              <Box sx={{ mr: 1, color: 'text.primary' }}>{loadingText}</Box>
+              <CircularProgress size={32} />
+            </Box>
+          )}
           <ThemeSwitcher />
           <LanguagePopover />
           {/*<NotificationsPopover />*/}
