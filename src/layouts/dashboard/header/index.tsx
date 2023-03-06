@@ -84,7 +84,7 @@ export default function Header({
           {loadingOpen && (
             <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
               <Box sx={{ mr: 1, color: 'text.primary' }}>{loadingText}</Box>
-              <CircularProgress size={32} />
+              <CircularProgress size={24} />
             </Box>
           )}
           <ThemeSwitcher />

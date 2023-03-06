@@ -8,6 +8,13 @@ export default {
     analytics: '分析',
     wallet: '连接钱包',
   },
+  message: {
+    request0x: '请求0x...',
+    approving: '发送授权交易……',
+    approveWaiting: '等待授权结果……',
+    sendingTx: '发送交易……',
+    waitingTx: '等待交易确认……',
+  },
   home: {
     card: {
       rate: 'ezUSD年化利率',

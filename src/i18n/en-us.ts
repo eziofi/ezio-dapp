@@ -6,7 +6,14 @@ export default {
     redeem: 'Redeem',
     account: 'Account',
     analytics: 'Analytics',
-    wallet: '连接钱包',
+    wallet: 'connecting...',
+  },
+  message: {
+    request0x: 'request 0x...',
+    approving: 'sending approve Tx...',
+    approveWaiting: 'waiting approve response...',
+    sendingTx: 'sending Tx...',
+    waitingTx: 'waiting response...',
   },
   home: {
     card: {

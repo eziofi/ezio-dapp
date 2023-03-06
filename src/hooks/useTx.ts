@@ -11,6 +11,9 @@ import {
   USDCConnect,
   USDTConnect,
 } from '../views/wallet/helpers/contract_call';
+import { useContext } from 'react';
+import { UIContext } from '../layouts/dashboard/DashboardLayout';
+import { useTranslation } from 'react-i18next';
 
 const ezatJson = require('../views/wallet/contract/abi/EzUSDV1.json');
 const ezbtJson = require('../views/wallet/contract/abi/EzMATICV1.json');
@@ -28,6 +31,9 @@ const DAI_TAKER_ADDRESS = process.env.POLYGON_DAI_TAKER_ADDRESS || '';
 const channel = process.env.REACT_APP_QUOTE_CHANNEL === '1inch' ? QUOTE_CHANNEL.OneInch : QUOTE_CHANNEL.ZeroEx;
 
 export default function useTx() {
+  const { openBackLoading, closeBackLoading, setBackLoadingText, setMsg, openMsg, closeMsg } = useContext(UIContext);
+  const { t } = useTranslation();
+
   /**
    * 购买
    * @param fromType 花费token类型，USDT或者USDC
@@ -60,6 +66,7 @@ export default function useTx() {
     };
     if (fromType === TOKEN_TYPE.USDT) {
       // 购买A之前，先把USDT换成USDC
+      setBackLoadingText(t('message.request0x'));
       quoteResponse = await getQuote(channel, USDT_ADDRESS, USDC_ADDRESS, String(amount * 1000000), slippage);
     } else if (fromType === TOKEN_TYPE.USDC) {
       // 直接购买，不通过1inch
@@ -71,14 +78,19 @@ export default function useTx() {
       };
     }
     console.log('approve');
+    setBackLoadingText(t('message.approving'));
     const approveTx = await (fromType === TOKEN_TYPE.USDT ? USDTConnect : USDCConnect)(signerOrProvider).approve(
       ezioJson.address,
       quoteResponse.sellAmount,
     );
     console.log('approve waiting');
+    setBackLoadingText(t('message.approveWaiting'));
     await approveTx.wait();
     console.log('approved');
-    await EzioConnect(signerOrProvider).purchase(TOKEN_TYPE.ezUSD, channel, [quoteResponse]);
+    setBackLoadingText(t('message.sendingTx'));
+    const purchaseTx = await EzioConnect(signerOrProvider).purchase(TOKEN_TYPE.ezUSD, channel, [quoteResponse]);
+    setBackLoadingText(t('message.waitingTx'));
+    await purchaseTx.wait();
   }
 
   async function purchaseB(
@@ -91,6 +103,7 @@ export default function useTx() {
     let quotes: SwapQuoteStruct[];
     // 先把USDC/USDT换成stMatic
     const fromTokenAddress = fromType === TOKEN_TYPE.USDT ? USDT_ADDRESS : USDC_ADDRESS;
+    setBackLoadingText(t('message.request0x'));
     const quoteResponse = await getQuote(
       channel,
       fromTokenAddress,
@@ -99,11 +112,13 @@ export default function useTx() {
       slippage,
     );
     console.log('approve');
+    setBackLoadingText(t('message.approving'));
     const approveTx = await (fromType === TOKEN_TYPE.USDT ? USDTConnect : USDCConnect)(signerOrProvider).approve(
       ezioJson.address,
       quoteResponse.sellAmount,
     );
     console.log('approve waiting');
+    setBackLoadingText(t('message.approveWaiting'));
     await approveTx.wait();
     console.log('approved');
     // const quoteNetWorth = BigNumber.from(String(amount * 1000000))
@@ -126,6 +141,7 @@ export default function useTx() {
           ? await ezio.convertAmt(fromTokenAddress, USDC_ADDRESS, BigNumber.from(String(amount * 1000000)))
           : // 这是是否要转换小数位
             String(amount * 1000000);
+      setBackLoadingText(t('message.request0x'));
       const quoteResponse2 = await getQuote(
         channel,
         USDC_ADDRESS,
@@ -139,7 +155,10 @@ export default function useTx() {
       quotes = [quoteResponse];
     }
     console.log(quotes);
-    await ezio.purchase(TOKEN_TYPE.ezMatic, channel, quotes);
+    setBackLoadingText(t('message.sendingTx'));
+    const purchaseTx = await ezio.purchase(TOKEN_TYPE.ezMatic, channel, quotes);
+    setBackLoadingText(t('message.waitingTx'));
+    await purchaseTx.wait();
   }
 
   /**
@@ -176,6 +195,7 @@ export default function useTx() {
     const redeemAmount = ethers.utils.parseEther(String(amount));
     const convertAmount = await getRedeemQuoteQty(fromType, redeemAmount, TOKEN_TYPE.USDC, signerOrProvider);
     if (convertAmount.gt(BigNumber.from(0))) {
+      setBackLoadingText(t('message.request0x'));
       const quoteResponse = await getQuote(channel, STMATIC_ADDRESS, USDC_ADDRESS, convertAmount.toString(), slippage);
       console.log('USDC储量不够，动用stMatic换成USDC');
       await EzioConnect(signerOrProvider)
@@ -190,9 +210,12 @@ export default function useTx() {
         sellAmount: convertAmount,
         swapCallData: ethers.constants.HashZero,
       };
-      await EzioConnect(signerOrProvider)
+      setBackLoadingText(t('message.sendingTx'));
+      const purchaseTx = await EzioConnect(signerOrProvider)
         .connect(signerOrProvider)
         .redeem(fromType, channel, redeemAmount, USDC_ADDRESS, quoteResponse);
+      setBackLoadingText(t('message.waitingTx'));
+      await purchaseTx.wait();
     }
   }
 
@@ -212,6 +235,7 @@ export default function useTx() {
     const redeemAmount = ethers.utils.parseEther(String(amount));
     const convertAmount = await getRedeemQuoteQty(fromType, redeemAmount, TOKEN_TYPE.stMatic, signerOrProvider);
     if (convertAmount.gt(BigNumber.from(0))) {
+      setBackLoadingText(t('message.request0x'));
       const quoteResponse = await getQuote(channel, STMATIC_ADDRESS, USDC_ADDRESS, convertAmount.toString(), slippage);
       await EzioConnect(signerOrProvider).redeem(1, channel, redeemAmount, STMATIC_ADDRESS, quoteResponse);
     } else {
@@ -222,7 +246,15 @@ export default function useTx() {
         sellAmount: convertAmount.toString(),
         swapCallData: ethers.constants.HashZero,
       };
-      await EzioConnect(signerOrProvider).redeem(1, channel, convertAmount, STMATIC_ADDRESS, quoteResponse6);
+      const purchaseTx = await EzioConnect(signerOrProvider).redeem(
+        1,
+        channel,
+        convertAmount,
+        STMATIC_ADDRESS,
+        quoteResponse6,
+      );
+      setBackLoadingText(t('message.waitingTx'));
+      await purchaseTx.wait();
     }
   }
 
