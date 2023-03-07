@@ -57,9 +57,9 @@ export default {
     aTotalSupplySeries: 'EzUSD Supply',
     bTotalSupplySeries: 'EzMATIC Supply',
     copyText: 'Copy Succeeded',
-    ezMaticTotalnetworth: 'EzMatic Total Networth',
+    ezMaticTotalnetworth: 'EzMATIC Total Networth',
     ezUsdTotalnetworth: 'EzUsd Total Networth',
-    abNetworth: 'abNetworth',
+    abNetworth: 'Token Networth',
   },
   purchase: {
     purchaseValue: 'Purchase',
@@ -113,7 +113,7 @@ export default {
     title: {
       usdc: 'Treasury USDC value',
       stMATIC: 'Treasury stMATIC value',
-      fee: 'Fees earned by Ezio (last 24hrs)',
+      fee: 'Fees Earned by Ezio',
     },
     everyday: 'Every Day',
     accumulativeTotal: 'Accumulative Total',
