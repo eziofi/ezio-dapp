@@ -31,7 +31,7 @@ export default function NetWorthApexChart() {
       // @ts-ignore
       const ezMaticPrice = data.data.map(i => +i.ezMaticPrice);
       const stMaticPrice = data.data.map(i => +i.stMaticPrice);
-      const aRate = data.data.map(i => i.ezUsdRate);
+      const aRate = data.data.map(i => i.ezUsdRate * 10000);
 
       setOption({
         series: [
@@ -99,7 +99,7 @@ export default function NetWorthApexChart() {
               decimalsInFloat: 2,
               opposite: true,
               title: {
-                text: t('home.aRateAxis'),
+                text: t('home.aRateAxis') + ' ( ‱ ) ',
               },
               max: getYMax(aRate),
             },
@@ -108,8 +108,8 @@ export default function NetWorthApexChart() {
             shared: true,
             intersect: false,
             y: {
-              formatter: function (val: string) {
-                return val;
+              formatter: function (val: string, { seriesIndex }: any) {
+                return seriesIndex === 2 ? val + '‱' : val;
               },
             },
           },

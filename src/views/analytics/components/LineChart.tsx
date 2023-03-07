@@ -71,7 +71,7 @@ export default function LineChart() {
               },
               decimalsInFloat: 2,
               min: 0,
-              max: getYMax(convertDownPrice),
+              max: getYMax(ezMaticPrice),
             },
             // {
             //   opposite: true,
@@ -98,7 +98,7 @@ export default function LineChart() {
 
   return (
     <Card>
-      <CardHeader title="统计ezMatic的价格和下折价格" />
+      <CardHeader title={t('home.netWorthEzbtAxis') as string} />
 
       <Box dir="ltr" sx={{ pl: 2 }}>
         {/*<Box sx={{ p: 3, pb: 1 }} dir="ltr">*/}

@@ -30,15 +30,16 @@ export default function TotleNetWorthApexChart() {
       setOption({
         series: [
           {
-            name: t('home.ezMaticTotalnetworth'),
-            type: 'area',
-            data: ezMaticTotalnetworth,
-          },
-          {
             name: t('home.ezUsdTotalnetworth'),
             type: 'area',
             data: ezUsdTotalnetworth,
           },
+          {
+            name: t('home.ezMaticTotalnetworth'),
+            type: 'area',
+            data: ezMaticTotalnetworth,
+          },
+
           // {
           //   name: t('home.ethPrice'),
           //   type: 'area',

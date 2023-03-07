@@ -10,6 +10,7 @@ import { StyledChart } from './components/chart';
 // import './App.less';
 import WalletProvider from './views/context/WalletProvider';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import './views/default.less';
 
 const queryClient = new QueryClient({
   defaultOptions: {
