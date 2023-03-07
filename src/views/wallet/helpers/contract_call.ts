@@ -180,7 +180,7 @@ export async function stMaticBalanceOf(signerOrProvider: Signer | Provider, addr
  */
 export async function ezMATICFundCost(signerOrProvider: Signer | Provider) {
   const data = await EzioConnect(signerOrProvider).rewardRate();
-  const res = '' + data;
+  const res = '' + (data / 1000000) * 10000 + '‱';
   console.log('ezMATIC Fund Cost = ' + res);
   return res;
 }
@@ -191,7 +191,7 @@ export async function ezMATICFundCost(signerOrProvider: Signer | Provider) {
  */
 export async function convertDownPrice(signerOrProvider: Signer | Provider) {
   const data = await EzioConnect(signerOrProvider).convertDownPrice();
-  const res = formatDecimal(data, TOKEN_TYPE.ezMatic, 6).toString();
+  const res = formatDecimal(data, TOKEN_TYPE.USDT, 3).toString();
   console.log('convertDown Price = ' + res);
   return res;
 }

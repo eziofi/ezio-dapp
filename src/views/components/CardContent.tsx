@@ -224,13 +224,7 @@ function MyCardContentOne({
     setRedeemTokenType(value);
   };
 
-  const { balance } = useBalance(
-    transactionType === TRANSFER_TYPE.PURCHASE
-      ? redeemTokenType
-      : tokenType === TOKEN_TYPE.ezUSD
-      ? TOKEN_TYPE.ezUSD
-      : TOKEN_TYPE.ezMatic,
-  );
+  const { balance } = useBalance(transactionType === TRANSFER_TYPE.PURCHASE ? redeemTokenType : tokenType);
 
   const theme = useTheme();
   const { t } = useTranslation();
@@ -289,6 +283,7 @@ function MyCardContentSecond({
   isBuy,
 }: CardContentSencoedProps) {
   const { price } = usePrice(isBuy ? tokenType : redeemTokenType);
+  const { balance } = useBalance(transactionType === TRANSFER_TYPE.PURCHASE ? tokenType : redeemTokenType);
 
   // const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
   const handleChange = (value: TOKEN_TYPE) => {

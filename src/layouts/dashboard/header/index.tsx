@@ -15,6 +15,7 @@ import AddressPopover from './AddressPopover';
 import ThemeSwitcher from './ThemeSwitcher';
 import { useContext } from 'react';
 import { UIContext } from '../DashboardLayout';
+import { useLocation } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
@@ -56,6 +57,8 @@ export default function Header({
   loadingOpen: boolean;
   loadingText: string;
 }) {
+  const { pathname } = useLocation();
+
   return (
     <StyledRoot>
       <StyledToolbar>
@@ -81,7 +84,7 @@ export default function Header({
             sm: 1,
           }}
         >
-          {loadingOpen && (
+          {loadingOpen && pathname !== '/dashboard/swap' && (
             <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
               <Box sx={{ mr: 1, color: 'text.primary' }}>{loadingText}</Box>
               <CircularProgress size={24} />
