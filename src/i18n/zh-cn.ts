@@ -52,6 +52,7 @@ export default {
     totalSupplyAxis: '供应量',
     aNetWorthSeries: 'EzUSD价格',
     bNetWorthSeries: 'EzMATIC价格',
+    stMaticPrice: 'StMatic价格',
     aTotalSupplySeries: 'EzUSD供应量',
     bTotalSupplySeries: 'EzMATIC供应量',
     copyText: '复制成功',

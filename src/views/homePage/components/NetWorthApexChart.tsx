@@ -1,7 +1,7 @@
 import { Box, Card, CardHeader } from '@mui/material';
 import ReactApexChart from 'react-apexcharts';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
-import { queryTokenGroup } from '../../../api/api';
+import { queryTokenGroup, queryMaticPrice } from '../../../api/api';
 import { t } from 'i18next';
 import { getYMax } from '../../wallet/helpers/utilities';
 import { useContext, useEffect, useState } from 'react';
@@ -18,27 +18,32 @@ export default function NetWorthApexChart() {
   const queryClient: QueryClient = useQueryClient();
 
   useEffect(() => {
-    queryClient.invalidateQueries('queryTotalNetWorth');
+    queryClient.invalidateQueries('queryTreasuryValue');
   }, [mode]);
 
-  useQuery('queryTokenGroup', queryTokenGroup, {
-    onSuccess: data => {
-      const XData = data.data.data.map(i => parseInt(i.groupTime));
-      const aNetWorth = data.data.data.map(i => i.ezatNetWorth);
-      const bNetWorth = data.data.data.map(i => i.ezbtNetWorth);
-      const aRate = data.data.data.map(i => i.ezatRate);
+  useQuery('queryMaticPrice', queryMaticPrice, {
+    onSuccess: ({ data }) => {
+      // const XData = data.data.data.map(i => parseInt(i.groupTime));
+      // const aNetWorth = data.data.data.map(i => i.ezatNetWorth);
+      // const bNetWorth = data.data.data.map(i => i.ezbtNetWorth);
+      // const aRate = data.data.data.map(i => i.ezatRate);
+
+      const XData = data.data.map(i => i.groupTime);
+      const ezMaticPrice = data.data.map(i => i.ezMaticPrice);
+      const stMaticPrice = data.data.map(i => i.stMaticPrice);
+      const aRate = data.data.map(i => i.ezUsdRate);
 
       setOption({
         series: [
           {
-            name: t('home.aNetWorthSeries'),
+            name: t('home.stMaticPrice'),
             type: 'area',
-            data: aNetWorth,
+            data: stMaticPrice,
           },
           {
             name: t('home.bNetWorthSeries'),
             type: 'area',
-            data: bNetWorth,
+            data: ezMaticPrice,
           },
           {
             name: t('home.aRateAxis'),
@@ -71,20 +76,21 @@ export default function NetWorthApexChart() {
           },
           yaxis: [
             {
-              show: false,
               title: {
                 text: t('home.netWorthEzatAxis'),
               },
-              max: getYMax([...bNetWorth, ...aNetWorth]),
-            },
-            {
-              title: {
-                text: t('home.netWorthAxis'),
-              },
-              max: getYMax([...bNetWorth, ...aNetWorth]),
+              max: getYMax([...stMaticPrice, ...ezMaticPrice]),
             },
             {
               opposite: true,
+              title: {
+                text: t('home.netWorthAxis'),
+              },
+              max: getYMax([...stMaticPrice, ...ezMaticPrice]),
+            },
+
+            {
+              show: false,
               title: {
                 text: t('home.aRateAxis'),
               },

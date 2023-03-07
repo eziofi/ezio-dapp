@@ -1,37 +1,40 @@
-import { Box, Card, CardHeader } from '@mui/material';
+import React, { useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
-import { queryTotalNetWorth, queryTreasuryValue } from '../../../api/api';
 import { t } from 'i18next';
-import { getYMax } from '../../wallet/helpers/utilities';
-import { useContext, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { ColorModeContext } from '../../../theme';
 import RenderSkeleton from './RenderSkeleton';
+import { Box, Card, CardHeader } from '@mui/material';
+import { queryAbTotalnetworth } from '../../../api/api';
+import { getYMax } from '../../wallet/helpers/utilities';
 
-export default function MarketApexChart() {
-  const [option, setOption] = useState<any>(null);
-  const theme = useTheme();
-  const { mode } = useContext(ColorModeContext);
-
+export default function TotleNetWorthApexChart() {
+  const [option, setOption] = React.useState<any>(null);
+  const { mode } = React.useContext(ColorModeContext);
   const queryClient: QueryClient = useQueryClient();
 
-  useEffect(() => {
+  React.useEffect(() => {
     queryClient.invalidateQueries('queryTreasuryValue');
   }, [mode]);
 
-  useQuery('queryTreasuryValue', queryTreasuryValue, {
-    onSuccess: data => {
-      const XData = data.data.data.map(i => i.groupTime);
-      const treasuryData = data.data.data.map(i => +i.treasuryValue);
-      // const ethData = data.data.data.map(i => i.ethPrice);
-
+  useQuery(['queryAbTotalnetworth'], queryAbTotalnetworth, {
+    onSuccess: ({ data }) => {
+      const XData = data.data.map(i => i.groupTime);
+      const ezMaticTotalnetworth = data.data.map(i => i.ezMaticTotalnetworth);
+      const ezUsdTotalnetworth = data.data.map(i => i.ezUsdTotalnetworth);
+      const sum = getYMax([...ezMaticTotalnetworth, ...ezUsdTotalnetworth]);
       setOption({
         series: [
           {
-            name: t('home.treasuryValue'),
+            name: 'ezMaticTotalnetworth',
             type: 'area',
-            data: treasuryData,
+            data: ezMaticTotalnetworth,
+          },
+          {
+            name: 'ezUsdTotalnetworth',
+            type: 'area',
+            data: ezUsdTotalnetworth,
           },
           // {
           //   name: t('home.ethPrice'),
@@ -66,12 +69,20 @@ export default function MarketApexChart() {
           yaxis: [
             {
               title: {
-                text: t('home.treasuryValue'),
+                text: 'ezMaticTotalnetworth',
               },
               decimalsInFloat: 0,
               min: 0,
-              max: getYMax(treasuryData),
+              max: sum,
             },
+            // {
+            //   title: {
+            //     text: 'ezUsdTotalnetworth',
+            //   },
+            //   decimalsInFloat: 0,
+            //   min: 0,
+            //   max: getYMax(ezUsdTotalnetworth),
+            // },
             // {
             //   opposite: true,
             //   title: {
@@ -92,10 +103,9 @@ export default function MarketApexChart() {
 
   return (
     <Card>
-      <CardHeader title={t('home.treasuryValue') as string} />
+      <CardHeader title="价值" />
 
       <Box dir="ltr">
-        {/*<Box sx={{ p: 3, pb: 1 }} dir="ltr">*/}
         {option ? (
           <ReactApexChart options={option.options} series={option.series} type="line" height={350} />
         ) : (

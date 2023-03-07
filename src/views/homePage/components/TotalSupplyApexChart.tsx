@@ -18,7 +18,7 @@ export default function TotalSupplyApexChart() {
   const queryClient: QueryClient = useQueryClient();
 
   useEffect(() => {
-    queryClient.invalidateQueries('queryTotalNetWorth');
+    queryClient.invalidateQueries('queryTreasuryValue');
   }, [mode]);
 
   useQuery('queryTokenGroup', queryTokenGroup, {
@@ -88,7 +88,7 @@ export default function TotalSupplyApexChart() {
     <Card>
       <CardHeader title={t('home.totalSupplyTitle') as string} />
 
-      <Box sx={{ p: 2, pb: 1 }} dir="ltr">
+      <Box dir="ltr">
         {option ? (
           <ReactApexChart options={option.options} series={option.series} type="line" height={350} />
         ) : (
