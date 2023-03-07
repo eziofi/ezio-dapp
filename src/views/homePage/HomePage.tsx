@@ -28,9 +28,9 @@ export default function HomePage() {
             <HomeCard type={HOME_CARD_TYPE.Leverage} />
           </Grid>
 
-          <Grid item xs={12} md={12} lg={12}>
+          {/* <Grid item xs={12} md={12} lg={12}>
             <PriceTable />
-          </Grid>
+          </Grid> */}
 
           <Grid item xs={12} md={6} lg={6}>
             <MarketApexChart />

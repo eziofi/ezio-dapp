@@ -7,11 +7,13 @@ import { Box } from '@mui/system';
 import { useTheme } from '@mui/material/styles';
 import { useQuery } from 'react-query';
 import { queryAccumulatedFees, queryDailyAccumulatedFees } from '../../../api/api';
+import { ColorModeContext } from '../../../theme';
 import { getYMax } from '../../wallet/helpers/utilities';
 
 export default function BarChart() {
   const [option, setOption] = React.useState<any>(null);
   const theme = useTheme();
+  const { mode } = React.useContext(ColorModeContext);
   const [DailyAccumulatedFees, setDailyAccumulatedFees] = React.useState<number[]>([]);
   const [AccumulatedFees, setAccumulatedFees] = React.useState<number[]>([]);
   const [XData, setXData] = React.useState<string[]>([]);
@@ -47,12 +49,16 @@ export default function BarChart() {
         },
       ],
       options: {
+        theme: {
+          mode,
+        },
         chart: {
           type: 'bar',
           height: 350,
           toolbar: {
             show: false,
           },
+          background: 'transparent',
         },
         plotOptions: {
           bar: {
@@ -65,9 +71,11 @@ export default function BarChart() {
           enabled: false,
         },
         stroke: {
-          show: true,
-          width: 2,
-          colors: ['transparent'],
+          curve: 'smooth',
+        },
+        fill: {
+          type: 'solid',
+          opacity: 1,
         },
         labels: XData,
         yaxis: [
@@ -91,9 +99,6 @@ export default function BarChart() {
             max: getYMax(AccumulatedFees),
           },
         ],
-        fill: {
-          opacity: 1,
-        },
         tooltip: {
           y: {
             formatter: function (val: string) {

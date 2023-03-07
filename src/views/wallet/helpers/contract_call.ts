@@ -1,9 +1,12 @@
+import { useQuery } from 'react-query';
 import { EzioV1__factory, EzMATICV1, EzMATICV1__factory, EzUSDV1__factory } from '../contract';
 
 import { ERC20_ABI, POLYGON_TOKENS, TOKEN_TYPE, TRANSFER_TYPE } from './constant';
 import { BigNumber, ethers, Signer } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
 import { formatDecimal, formatString } from './utilities';
+
+import { queryAccumulatedFees24H } from '../../../api/api';
 
 const ezatJson = require('../contract/abi/EzUSDV1.json');
 const ezbtJson = require('../contract/abi/EzMATICV1.json');
@@ -84,6 +87,15 @@ export async function ezUSDTotalNetWorth(signerOrProvider: Signer | Provider): P
 export async function ezMATICTotalNetWorth(signerOrProvider: Signer | Provider): Promise<BigNumber> {
   const res = await EzbtConnect(signerOrProvider).totalNetWorth();
   console.log('ezMATIC Total NetWorth = ' + res.toString());
+  return res;
+}
+
+/**
+ * 获取 手续费收入
+ * @returns 过去24小时手续费汇总 fees24H
+ */
+export async function commissionIncome() {
+  const res = await queryAccumulatedFees24H();
   return res;
 }
 

@@ -23,7 +23,7 @@ export default function TotleNetWorthApexChart() {
   useQuery(['queryAbTotalnetworth'], queryAbTotalnetworth, {
     onSuccess: ({ data }) => {
       // @ts-ignore
-      const XData = data.data.map(i => i.groupTime.substring(5));
+      const XData = data.data.map(i => parseInt(i.groupTime?.split('-')[i.groupTime.split('-').length - 1]));
       const ezMaticTotalnetworth = data.data.map(i => i.ezMaticTotalnetworth);
       const ezUsdTotalnetworth = data.data.map(i => i.ezUsdTotalnetworth);
       const sum = getYMax([...ezMaticTotalnetworth, ...ezUsdTotalnetworth]);
@@ -113,7 +113,7 @@ export default function TotleNetWorthApexChart() {
     <Card>
       <CardHeader title={t('home.abNetworth') as string} />
 
-      <Box dir="ltr" sx={{ pl: 3 }}>
+      <Box dir="ltr" sx={{ pl: 2, pr: 2 }}>
         {option ? (
           <ReactApexChart options={option.options} series={option.series} type="line" height={350} />
         ) : (

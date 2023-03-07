@@ -60,7 +60,7 @@ export default function LineChart() {
               title: {
                 text: t('home.netWorthEzbtAxis'),
               },
-              decimalsInFloat: 0,
+              decimalsInFloat: 2, // 保留几位小数
               min: 0,
               max: getYMax(ezMaticPrice),
             },
@@ -69,7 +69,7 @@ export default function LineChart() {
               title: {
                 text: t('home.card.rebalancePrice'),
               },
-              decimalsInFloat: 0,
+              decimalsInFloat: 2,
               min: 0,
               max: getYMax(convertDownPrice),
             },

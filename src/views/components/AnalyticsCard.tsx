@@ -4,6 +4,7 @@ import { Box, Card, SxProps, Theme, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import useWallet from '../hooks/useWallet';
 import {
+  commissionIncome,
   ezatTotalSupply,
   ezbtTotalSupply,
   ezMATICTotalNetWorth,
@@ -56,8 +57,9 @@ export default function AnalyticsCard({
   const api = {
     [ANALYTICS_CARD_TYPE.USDC]: ezUSDTotalNetWorth,
     [ANALYTICS_CARD_TYPE.stMATIC]: ezMATICTotalNetWorth,
-    [ANALYTICS_CARD_TYPE.FEE]: ezMATICTotalNetWorth,
+    [ANALYTICS_CARD_TYPE.FEE]: commissionIncome,
   };
+
   const title = {
     [ANALYTICS_CARD_TYPE.USDC]: t('analytics.title.usdc'),
     [ANALYTICS_CARD_TYPE.stMATIC]: t('analytics.title.stMATIC'),
@@ -68,8 +70,10 @@ export default function AnalyticsCard({
     [ANALYTICS_CARD_TYPE.stMATIC]: StMaticIcon,
     [ANALYTICS_CARD_TYPE.FEE]: FeeValueIcon,
   };
+  // @ts-ignore
   const { data, isLoading } = useQuery(['AnalyticsCard', type], () => api[type](ethersProvider!.getSigner()), {
     enabled: !!ethersProvider,
+    // @ts-ignore
     onSuccess: data1 => {
       // if (type === ANALYSIS_CARD_TYPE.rate) {
       //   const res = formatNetWorth(data1);
@@ -80,6 +84,7 @@ export default function AnalyticsCard({
       // debugger;
     },
   });
+
   return (
     <Card
       sx={{
@@ -100,7 +105,8 @@ export default function AnalyticsCard({
         <div style={{ width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>
           {!isLoading ? (
             type === ANALYTICS_CARD_TYPE.FEE ? (
-              'feeValue'
+              // @ts-ignore
+              data?.data.data.fees24H
             ) : (
               formatDecimal(data, TOKEN_TYPE.USDC).toString()
             )

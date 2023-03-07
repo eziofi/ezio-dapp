@@ -53,7 +53,7 @@ export default {
     totalSupplyAxis: 'Total Supply',
     aNetWorthSeries: 'EzUSD Price',
     bNetWorthSeries: 'EzMATIC Price',
-    stMaticPrice: 'StMatic Price',
+    stMaticPrice: 'stMatic Price',
     aTotalSupplySeries: 'EzUSD Supply',
     bTotalSupplySeries: 'EzMATIC Supply',
     copyText: 'Copy Succeeded',
