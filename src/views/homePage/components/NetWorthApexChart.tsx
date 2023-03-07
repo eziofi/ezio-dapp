@@ -28,9 +28,10 @@ export default function NetWorthApexChart() {
       // const bNetWorth = data.data.data.map(i => i.ezbtNetWorth);
       // const aRate = data.data.data.map(i => i.ezatRate);
 
-      const XData = data.data.map(i => i.groupTime);
+      const XData = data.data.map(i => i.groupTime.substring(5));
       const ezMaticPrice = data.data.map(i => i.ezMaticPrice);
       const stMaticPrice = data.data.map(i => i.stMaticPrice);
+      console.log('🚀 ~ file: NetWorthApexChart.tsx:34 ~ NetWorthApexChart ~ stMaticPrice:', stMaticPrice[0]);
       const aRate = data.data.map(i => i.ezUsdRate);
 
       setOption({
@@ -79,18 +80,18 @@ export default function NetWorthApexChart() {
               title: {
                 text: t('home.netWorthEzatAxis'),
               },
-              max: getYMax([...stMaticPrice, ...ezMaticPrice]),
+              max: getYMax([...ezMaticPrice, ...stMaticPrice]),
             },
             {
-              opposite: true,
+              show: false,
               title: {
                 text: t('home.netWorthAxis'),
               },
-              max: getYMax([...stMaticPrice, ...ezMaticPrice]),
+              max: getYMax([...ezMaticPrice, ...stMaticPrice]),
             },
 
             {
-              show: false,
+              opposite: true,
               title: {
                 text: t('home.aRateAxis'),
               },
@@ -100,6 +101,11 @@ export default function NetWorthApexChart() {
           tooltip: {
             shared: true,
             intersect: false,
+            y: {
+              formatter: function (val: string) {
+                return val;
+              },
+            },
           },
         },
       });

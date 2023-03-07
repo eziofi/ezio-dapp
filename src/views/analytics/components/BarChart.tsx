@@ -5,31 +5,54 @@ import { Card, CardHeader } from '@mui/material';
 import { t } from 'i18next';
 import { Box } from '@mui/system';
 import { useTheme } from '@mui/material/styles';
+import { useQuery } from 'react-query';
+import { queryAccumulatedFees, queryDailyAccumulatedFees } from '../../../api/api';
+import { getYMax } from '../../wallet/helpers/utilities';
 
 export default function BarChart() {
   const [option, setOption] = React.useState<any>(null);
   const theme = useTheme();
+  const [DailyAccumulatedFees, setDailyAccumulatedFees] = React.useState<number[]>([]);
+  const [AccumulatedFees, setAccumulatedFees] = React.useState<number[]>([]);
+  const [XData, setXData] = React.useState<string[]>([]);
+
+  useQuery(['queryDailyAccumulatedFees'], queryDailyAccumulatedFees, {
+    onSuccess: ({ data }) => {
+      setDailyAccumulatedFees(data.data.map(i => i.dailyAccumulatedFees));
+      setXData(data.data.map(i => i.groupTime));
+    },
+  });
+
+  useQuery(['queryAccumulatedFees'], queryAccumulatedFees, {
+    onSuccess: ({ data }) => {
+      setAccumulatedFees(
+        data.data.map(i => {
+          return !!i.accumulatedFees ? i.accumulatedFees : Math.max(...data.data.map(i => i.accumulatedFees));
+        }),
+      );
+    },
+  });
+  // console.log('🚀 ~ file: BarChart.tsx:17 ~ BarChart ~ data:', AccumulatedFees);
 
   useEffect(() => {
     setOption({
       series: [
         {
-          name: 'Net Profit',
-          data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
+          name: t('analytics.everyday'),
+          data: DailyAccumulatedFees,
         },
         {
-          name: 'Revenue',
-          data: [76, 85, 101, 98, 87, 105, 91, 114, 94],
-        },
-        {
-          name: 'Free Cash Flow',
-          data: [35, 41, 36, 26, 45, 48, 52, 53, 41],
+          name: t('analytics.accumulativeTotal'),
+          data: AccumulatedFees,
         },
       ],
       options: {
         chart: {
           type: 'bar',
           height: 350,
+          toolbar: {
+            show: false,
+          },
         },
         plotOptions: {
           bar: {
@@ -46,31 +69,45 @@ export default function BarChart() {
           width: 2,
           colors: ['transparent'],
         },
-        xaxis: {
-          categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
-        },
-        yaxis: {
-          title: {
-            text: '$ (thousands)',
+        labels: XData,
+        yaxis: [
+          {
+            title: {
+              text: t('analytics.everyday'),
+            },
+            decimalsInFloat: 0,
+            min: 0,
+            // @ts-ignore
+            max: getYMax(DailyAccumulatedFees),
           },
-        },
+          {
+            opposite: true,
+            title: {
+              text: t('analytics.accumulativeTotal'),
+            },
+            decimalsInFloat: 0,
+            min: 0,
+            // @ts-ignore
+            max: getYMax(AccumulatedFees),
+          },
+        ],
         fill: {
           opacity: 1,
         },
         tooltip: {
           y: {
             formatter: function (val: string) {
-              return '$ ' + val + ' thousands';
+              return val;
             },
           },
         },
       },
     });
-  }, []);
+  }, [DailyAccumulatedFees, AccumulatedFees]);
 
   return (
     <Card>
-      <CardHeader title="手续费" />
+      <CardHeader title={t('analytics.title.fee') as string} />
 
       <Box dir="ltr" sx={{ p: `0 ${theme.spacing(3)} 0 ${theme.spacing(3)}` }}>
         {option ? (

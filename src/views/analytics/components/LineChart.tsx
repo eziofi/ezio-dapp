@@ -1,43 +1,35 @@
 import { Box, Card, CardHeader } from '@mui/material';
 import ReactApexChart from 'react-apexcharts';
-import { QueryClient, useQuery, useQueryClient } from 'react-query';
-import { queryTotalNetWorth, queryTreasuryValue } from '../../../api/api';
+import { useQuery } from 'react-query';
+import { convertDownPrice } from '../../../api/api';
 import { t } from 'i18next';
 import { getYMax } from '../../wallet/helpers/utilities';
 import { useContext, useEffect, useState } from 'react';
-import { useTheme } from '@mui/material/styles';
 import { ColorModeContext } from '../../../theme';
-import RenderSkeleton from './RenderSkeleton';
+import RenderSkeleton from '../../homePage/components/RenderSkeleton';
 
-export default function MarketApexChart() {
+export default function LineChart() {
   const [option, setOption] = useState<any>(null);
-  const theme = useTheme();
   const { mode } = useContext(ColorModeContext);
 
-  const queryClient: QueryClient = useQueryClient();
-
-  useEffect(() => {
-    queryClient.invalidateQueries('queryTreasuryValue');
-  }, [mode]);
-
-  useQuery('queryTreasuryValue', queryTreasuryValue, {
+  useQuery('convertDownPrice', convertDownPrice, {
     onSuccess: data => {
       const XData = data.data.data.map(i => i.groupTime.substring(5));
-      const treasuryData = data.data.data.map(i => parseFloat(i.treasuryValue));
-      // const ethData = data.data.data.map(i => i.ethPrice);
+      const ezMaticPrice = data.data.data.map(i => i.ezMaticPrice);
+      const convertDownPrice = data.data.data.map(i => i.convertDownPrice);
 
       setOption({
         series: [
           {
-            name: t('home.treasuryValue'),
+            name: t('home.netWorthEzbtAxis'),
             type: 'area',
-            data: treasuryData,
+            data: ezMaticPrice,
           },
-          // {
-          //   name: t('home.ethPrice'),
-          //   type: 'area',
-          //   data: ethData,
-          // },
+          {
+            name: t('home.card.rebalancePrice'),
+            type: 'area',
+            data: convertDownPrice,
+          },
         ],
         options: {
           theme: {
@@ -66,11 +58,20 @@ export default function MarketApexChart() {
           yaxis: [
             {
               title: {
-                text: t('home.treasuryValue'),
+                text: t('home.netWorthEzbtAxis'),
               },
               decimalsInFloat: 0,
               min: 0,
-              max: getYMax(treasuryData),
+              max: getYMax(ezMaticPrice),
+            },
+            {
+              opposite: true,
+              title: {
+                text: t('home.card.rebalancePrice'),
+              },
+              decimalsInFloat: 0,
+              min: 0,
+              max: getYMax(convertDownPrice),
             },
             // {
             //   opposite: true,
@@ -97,7 +98,7 @@ export default function MarketApexChart() {
 
   return (
     <Card>
-      <CardHeader title={t('home.treasuryValue') as string} />
+      <CardHeader title="统计ezMatic的价格和下折价格" />
 
       <Box dir="ltr" sx={{ pl: 2 }}>
         {/*<Box sx={{ p: 3, pb: 1 }} dir="ltr">*/}

@@ -16,7 +16,7 @@ interface ITokenInfoRes {
 
 export function queryTokenInfo() {
   // return httpClient.get<ITokenInfoRes[]>('/api/queryTokenInfo');
-  return httpClient.get<ICommonRes<ITokenInfoRes[]>>('/api/ezioGroup24HChange');
+  return httpClient.get<ICommonRes<ITokenInfoRes[]>>('/api/v1/ezioGroup24HChange');
 }
 
 interface ITotalNetWorth {
@@ -108,7 +108,7 @@ export function queryAccumulatedFees24H() {
 interface IDailyAccumulatedFees {
   code: number;
   message: string;
-  data: { groupTime: string; dailyAccumulatedFees: number };
+  data: { groupTime: string; dailyAccumulatedFees: number }[];
 }
 
 export function queryDailyAccumulatedFees() {
@@ -120,9 +120,21 @@ export function queryDailyAccumulatedFees() {
 interface IAccumulatedFees {
   code: number;
   message: string;
-  data: { groupTime: string; accumulatedFees: number };
+  data: { groupTime: string; accumulatedFees: number }[];
 }
 
 export function queryAccumulatedFees() {
   return httpClient.get<IAccumulatedFees>('api/v1/lineGraph/accumulatedFees');
+}
+
+// 统计ezMatic的价格和下折价格
+
+interface IConvertDownPrice {
+  code: number;
+  message: string;
+  data: { ezMaticPrice: number; convertDownPrice: number; groupTime: string }[];
+}
+
+export function convertDownPrice() {
+  return httpClient.get<IConvertDownPrice>('/api/v1/lineGraph/convertDownPrice');
 }

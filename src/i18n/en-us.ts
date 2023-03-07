@@ -57,6 +57,9 @@ export default {
     aTotalSupplySeries: 'EzUSD Supply',
     bTotalSupplySeries: 'EzMATIC Supply',
     copyText: 'Copy Succeeded',
+    ezMaticTotalnetworth: 'EzMatic Total Networth',
+    ezUsdTotalnetworth: 'EzUsd Total Networth',
+    abNetworth: 'abNetworth',
   },
   purchase: {
     purchaseValue: 'Purchase',
@@ -112,6 +115,8 @@ export default {
       stMATIC: 'Treasury stMATIC value',
       fee: 'Fees earned by Ezio (last 24hrs)',
     },
+    everyday: 'Every Day',
+    accumulativeTotal: 'Accumulative Total',
   },
   tips: {
     line1: "The big decline of stEth may cause risks to EzUSD's investors.",

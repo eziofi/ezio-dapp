@@ -8,6 +8,8 @@ import RenderSkeleton from './RenderSkeleton';
 import { Box, Card, CardHeader } from '@mui/material';
 import { queryAbTotalnetworth } from '../../../api/api';
 import { getYMax } from '../../wallet/helpers/utilities';
+import { fDate } from '../../../utils/formatTime';
+import { format } from 'date-fns';
 
 export default function TotleNetWorthApexChart() {
   const [option, setOption] = React.useState<any>(null);
@@ -20,19 +22,20 @@ export default function TotleNetWorthApexChart() {
 
   useQuery(['queryAbTotalnetworth'], queryAbTotalnetworth, {
     onSuccess: ({ data }) => {
-      const XData = data.data.map(i => i.groupTime);
+      // @ts-ignore
+      const XData = data.data.map(i => i.groupTime.substring(5));
       const ezMaticTotalnetworth = data.data.map(i => i.ezMaticTotalnetworth);
       const ezUsdTotalnetworth = data.data.map(i => i.ezUsdTotalnetworth);
       const sum = getYMax([...ezMaticTotalnetworth, ...ezUsdTotalnetworth]);
       setOption({
         series: [
           {
-            name: 'ezMaticTotalnetworth',
+            name: t('home.ezMaticTotalnetworth'),
             type: 'area',
             data: ezMaticTotalnetworth,
           },
           {
-            name: 'ezUsdTotalnetworth',
+            name: t('home.ezUsdTotalnetworth'),
             type: 'area',
             data: ezUsdTotalnetworth,
           },
@@ -69,7 +72,7 @@ export default function TotleNetWorthApexChart() {
           yaxis: [
             {
               title: {
-                text: 'ezMaticTotalnetworth',
+                text: t('home.ezMaticTotalnetworth'),
               },
               decimalsInFloat: 0,
               min: 0,
@@ -95,6 +98,11 @@ export default function TotleNetWorthApexChart() {
           tooltip: {
             shared: true,
             intersect: false,
+            y: {
+              formatter: function (val: string) {
+                return val;
+              },
+            },
           },
         },
       });
@@ -103,9 +111,9 @@ export default function TotleNetWorthApexChart() {
 
   return (
     <Card>
-      <CardHeader title="价值" />
+      <CardHeader title={t('home.abNetworth') as string} />
 
-      <Box dir="ltr">
+      <Box dir="ltr" sx={{ pl: 3 }}>
         {option ? (
           <ReactApexChart options={option.options} series={option.series} type="line" height={350} />
         ) : (

@@ -78,6 +78,11 @@ export default function TotalSupplyApexChart() {
           tooltip: {
             shared: true,
             intersect: false,
+            y: {
+              formatter: function (val: string) {
+                return val;
+              },
+            },
           },
         },
       });
@@ -88,7 +93,7 @@ export default function TotalSupplyApexChart() {
     <Card>
       <CardHeader title={t('home.totalSupplyTitle') as string} />
 
-      <Box dir="ltr">
+      <Box dir="ltr" sx={{ pl: 2, pr: 2 }}>
         {option ? (
           <ReactApexChart options={option.options} series={option.series} type="line" height={350} />
         ) : (

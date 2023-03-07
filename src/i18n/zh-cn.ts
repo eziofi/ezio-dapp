@@ -56,6 +56,9 @@ export default {
     aTotalSupplySeries: 'EzUSD供应量',
     bTotalSupplySeries: 'EzMATIC供应量',
     copyText: '复制成功',
+    ezMaticTotalnetworth: 'EzMatic总净值',
+    ezUsdTotalnetworth: 'EzUsd总净值',
+    abNetworth: 'ab总净值',
   },
   purchase: {
     purchaseValue: '购买',
@@ -111,6 +114,8 @@ export default {
       stMATIC: '金库stMATIC价值',
       fee: '手续费收入',
     },
+    everyday: '每日',
+    accumulativeTotal: '累计',
   },
   tips: {
     line1: '由于stETH大幅下跌可能会给TokenA的投资人带来风险。',
