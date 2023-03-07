@@ -108,6 +108,7 @@ export default function AnalyticsCard({
               // @ts-ignore
               data?.data.data.fees24H
             ) : (
+              // @ts-ignore
               formatDecimal(data, TOKEN_TYPE.USDC).toString()
             )
           ) : (
