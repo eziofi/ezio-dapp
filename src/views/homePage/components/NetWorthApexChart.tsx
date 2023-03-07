@@ -31,7 +31,7 @@ export default function NetWorthApexChart() {
       // @ts-ignore
       const ezMaticPrice = data.data.map(i => +i.ezMaticPrice);
       const stMaticPrice = data.data.map(i => +i.stMaticPrice);
-      const aRate = data.data.map(i => i.ezUsdRate * 10000);
+      const aRate = data.data.map(i => +parseFloat(String(i.ezUsdRate * 10000)).toFixed(2));
 
       setOption({
         series: [
