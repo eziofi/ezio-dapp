@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 //
 import Header from './header';
 import Nav from './nav';
 import { Alert, Backdrop, Box, CircularProgress, Snackbar } from '@mui/material';
+import { AlertColor } from '@mui/material/Alert/Alert';
 
 // ----------------------------------------------------------------------
 
@@ -39,6 +40,8 @@ const BackDropContent = styled('div')({
 
 // ----------------------------------------------------------------------
 interface IUIContext {
+  loadingOpen: boolean;
+  loadingText: string;
   openBackLoading: () => void;
   closeBackLoading: () => void;
   setBackLoadingText: (text: string) => void;
@@ -68,12 +71,15 @@ export default function DashboardLayout() {
   };
 
   const [msgOpen, setMsgOpen] = useState(false);
+  const [msgType, setMsgType] = useState<AlertColor>('error');
   const [msg, setMsg] = useState('');
   const openMsg = () => setMsgOpen(true);
   const closeMsg = () => setMsgOpen(false);
   const _setMsg = (msg: string) => setMsg(msg);
 
   const UIContextValue = {
+    loadingOpen: backLoadingOpen,
+    loadingText: backLoadingText,
     openBackLoading,
     closeBackLoading,
     setBackLoadingText: _setBackLoadingText,
@@ -96,7 +102,7 @@ export default function DashboardLayout() {
           message={msg}
           sx={{ position: 'fixed' }}
         >
-          <Alert onClose={() => setMsgOpen(false)} severity="error" sx={{ width: '100%' }}>
+          <Alert onClose={() => setMsgOpen(false)} severity={msgType} sx={{ width: '100%' }}>
             {msg}
           </Alert>
         </Snackbar>

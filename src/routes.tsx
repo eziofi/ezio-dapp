@@ -30,7 +30,7 @@ export default function Router() {
       children: [
         { element: <Navigate to="/dashboard/homePage" />, index: true },
         { path: 'homePage', element: <HomePage /> },
-        { path: 'purchase', element: <Purchase /> },
+        { path: 'swap', element: <Purchase /> },
         // { path: 'redeem', element: <Redeem /> },
         { path: 'account', element: <Account /> },
         { path: 'analytics', element: <Analytics /> },

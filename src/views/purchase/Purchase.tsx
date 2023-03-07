@@ -1,18 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './animation.less';
-import {
-  Backdrop,
-  Button,
-  CardContent,
-  CircularProgress,
-  IconButton,
-  Link,
-  Snackbar,
-  Toolbar,
-  Typography,
-  useTheme,
-} from '@mui/material';
-import PurchaseDrawer from './components/PurchaseDrawer';
+import { Box, Button, CardContent, CircularProgress, IconButton, Toolbar, Typography, useTheme } from '@mui/material';
 import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
 import { BigNumber, Signer } from 'ethers';
 import { TOKEN_DECIMAL, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
@@ -27,9 +15,11 @@ import { useBalance } from '../../hooks/useBalance';
 import FormDialog from './components/FormDialog';
 import BaseIconFont from '../components/BaseIconFont';
 import { Provider } from '@ethersproject/providers';
-import { interestRateDay, treasuryInterestRate } from '../wallet/helpers/contract_call';
+import { interestRateDay, interestRateYear, treasuryInterestRate } from '../wallet/helpers/contract_call';
 import { UIContext } from '../../layouts/dashboard/DashboardLayout';
 import useTx from '../../hooks/useTx';
+import { InlineSkeleton } from '../components/Skeleton';
+import { HOME_CARD_TYPE } from '../components/HomeCard';
 
 interface IPurchaseArg {
   fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC;
@@ -59,6 +49,8 @@ export default function Purchase() {
   const theme = useTheme();
   const [slippage, setSlippage] = useState<number>(1);
   const [time, setTime] = useState<string>();
+
+  const { loadingOpen, loadingText } = useContext(UIContext);
 
   const { purchase, redeem } = useTx();
 
@@ -145,7 +137,7 @@ export default function Purchase() {
   const { balance, refetchBalance } = useBalance(type === TRANSFER_TYPE.PURCHASE ? redeemTokenType : tokenType);
 
   const { ethersProvider, account } = useWallet();
-  const { data: rate } = useQuery(['ezUSDDayRate'], () => interestRateDay(ethersProvider!.getSigner()), {
+  const { data: rate } = useQuery(['ezUSDDayRate'], () => interestRateYear(ethersProvider!.getSigner()), {
     enabled: !!ethersProvider,
     // onSuccess: data => {
     //   const res = formatNetWorth(data);
@@ -167,7 +159,7 @@ export default function Purchase() {
   // 购买
   const doPurchase = () => {
     openBackLoading();
-    setBackLoadingText(t('purchase.purchaseTip'));
+    // setBackLoadingText(t('purchase.purchaseTip'));
 
     refetchBalance()
       .then(({ data }) => {
@@ -199,7 +191,7 @@ export default function Purchase() {
 
   const doRedeem = () => {
     openBackLoading();
-    setBackLoadingText(t('purchase.purchaseTip'));
+    // setBackLoadingText(t('purchase.purchaseTip'));
     refetchBalance()
       .then(({ data }) => {
         if (!data) return Promise.reject();
@@ -335,21 +327,30 @@ export default function Purchase() {
       <DateNow>
         {t('purchase.currentTime')}: {time}
       </DateNow>
-      {/* 购买按钮 */}
+      {/* 购买、赎回按钮 */}
       <Button
         sx={{
           ...style,
           background:
-            !inputValue1 || !+inputValue1
+            !inputValue1 || !+inputValue1 || loadingOpen
               ? 'gray'
               : 'linear-gradient(180deg, rgba(108, 75, 246, 1) 0%, rgba(113, 79, 251, 1) 100%)',
         }}
         variant="contained"
         disableElevation
-        disabled={!inputValue1 || !+inputValue1}
+        disabled={!inputValue1 || !+inputValue1 || loadingOpen}
         onClick={() => (type === 0 ? doPurchase() : type === 1 ? doRedeem() : null)}
       >
-        {type === TRANSFER_TYPE.PURCHASE ? t('purchase.purchaseAction') : t('redeem.redeemAction')}
+        {loadingOpen ? (
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ mr: 1 }}>{loadingText}</Box>
+            <CircularProgress size={16} sx={{ color: 'rgba(145, 158, 171, 0.8)' }} />
+          </Box>
+        ) : type === TRANSFER_TYPE.PURCHASE ? (
+          t('purchase.purchaseAction')
+        ) : (
+          t('redeem.redeemAction')
+        )}
       </Button>
       {/*<>*/}
       {/*  <Link*/}
@@ -365,7 +366,7 @@ export default function Purchase() {
       <FooterContent>
         {/*<span>{t('purchase.unitPrice') + ' $' + formatNetWorth(netWorth, true)}</span>*/}
         <span style={{ color: theme.palette.text.secondary }}>
-          {t('purchase.EZATRate')} {rate}
+          {rate ? t('purchase.EZATRate') + rate + '%' : <InlineSkeleton />}
         </span>
       </FooterContent>
     </PurchaseContainer>

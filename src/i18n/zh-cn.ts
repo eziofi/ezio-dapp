@@ -73,7 +73,7 @@ export default {
     unitPrice: '参考单价',
     USDTEstimated: '预估获得',
     estimated: '预计获得',
-    EZATRate: 'EzUSD参考日利率',
+    EZATRate: 'EzUSD参考年利率',
     moreThanAvailableMsg: '购买金额不能大于本轮剩余数量。',
     moreThanBalanceMsg: '购买金额不能大于余额。',
     extractAction: '提取',

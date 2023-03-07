@@ -74,7 +74,7 @@ export default {
     unitPrice: 'Unit Price',
     USDTEstimated: 'USDT Estimated',
     estimated: 'Estimated',
-    EZATRate: 'EzUSD Daily Rate',
+    EZATRate: 'EzUSD Year Rate',
     moreThanAvailableMsg: 'Purchase amount cannot be more than the available amount.',
     moreThanBalanceMsg: 'Purchase amount cannot be more than balance.',
     extractAction: 'extract',

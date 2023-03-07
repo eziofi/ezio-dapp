@@ -50,7 +50,7 @@ export default function Nav({ openNav, onCloseNav }: { openNav: boolean; onClose
     },
     {
       title: t('nav.swap'),
-      path: '/dashboard/purchase',
+      path: '/dashboard/swap',
       icon: icon('ic_cart'),
     },
     {
