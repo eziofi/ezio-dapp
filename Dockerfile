@@ -10,7 +10,7 @@ RUN echo 'server {\
     gzip on;\
     gzip_min_length 1k;\
     gzip_buffers 4 16k;\
-    gzip_http_version 1.0|1.1;\
+    gzip_http_version 1.0 | 1.1;\
     gzip_comp_level 2;\
     gzip_types text/plain application/javascript text/css application/xml;\
     gzip_vary on;\
