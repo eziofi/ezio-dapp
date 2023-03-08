@@ -3,7 +3,7 @@ import { Box, Card, SxProps, Theme } from '@mui/material';
 
 import { useTranslation } from 'react-i18next';
 import useWallet from '../hooks/useWallet';
-import { commissionIncome, ezMATICTotalNetWorth, ezUSDTotalNetWorth } from '../wallet/helpers/contract_call';
+import { commissionIncome, ezMATICReverse, getPooledA } from '../wallet/helpers/contract_call';
 import { useQuery } from 'react-query';
 import { formatDecimal } from '../wallet/helpers/utilities';
 import { TOKEN_TYPE } from '../wallet/helpers/constant';
@@ -48,8 +48,8 @@ export default function AnalyticsCard({
   const theme = useTheme();
 
   const api = {
-    [ANALYTICS_CARD_TYPE.USDC]: ezUSDTotalNetWorth,
-    [ANALYTICS_CARD_TYPE.stMATIC]: ezMATICTotalNetWorth,
+    [ANALYTICS_CARD_TYPE.USDC]: getPooledA,
+    [ANALYTICS_CARD_TYPE.stMATIC]: ezMATICReverse,
     [ANALYTICS_CARD_TYPE.FEE]: commissionIncome,
   };
 
@@ -111,8 +111,7 @@ export default function AnalyticsCard({
               // @ts-ignore
               data?.data.data.fees24H
             ) : (
-              // @ts-ignore
-              formatDecimal(data, TOKEN_TYPE.USDC).toString()
+              data
             )
           ) : (
             <InlineSkeleton />

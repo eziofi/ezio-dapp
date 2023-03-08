@@ -1,7 +1,6 @@
-import { useQuery } from 'react-query';
 import { EzioV1__factory, EzMATICV1, EzMATICV1__factory, EzUSDV1__factory } from '../contract';
 
-import { ERC20_ABI, POLYGON_TOKENS, TOKEN_TYPE, TRANSFER_TYPE } from './constant';
+import { ERC20_ABI, POLYGON_TOKENS, TOKEN_DECIMAL, TOKEN_TYPE, TRANSFER_TYPE } from './constant';
 import { BigNumber, ethers, Signer } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
 import { formatDecimal, formatString } from './utilities';
@@ -74,9 +73,10 @@ export async function treasuryTotalNetWorth(signerOrProvider: Signer | Provider)
  * 获取 金库储量
  * @returns ezUSD总净值
  */
-export async function ezUSDTotalNetWorth(signerOrProvider: Signer | Provider): Promise<BigNumber> {
-  const res = await EzatConnect(signerOrProvider).totalNetWorth();
-  console.log('ezUSD Total NetWorth = ' + res.toString());
+export async function getPooledA(signerOrProvider: Signer | Provider) {
+  const data = await EzioConnect(signerOrProvider).pooledA();
+  const res = formatDecimal(data, TOKEN_TYPE.USDC).toString();
+  console.log('pooledA = ' + res);
   return res;
 }
 
@@ -84,10 +84,15 @@ export async function ezUSDTotalNetWorth(signerOrProvider: Signer | Provider): P
  * 获取 金库储量
  * @returns ezMATIC总净值
  */
-export async function ezMATICTotalNetWorth(signerOrProvider: Signer | Provider): Promise<BigNumber> {
-  const res = await EzbtConnect(signerOrProvider).totalNetWorth();
-  console.log('ezMATIC Total NetWorth = ' + res.toString());
-  return res;
+export async function ezMATICReverse(signerOrProvider: Signer | Provider) {
+  const totalReserve = await EzioConnect(signerOrProvider).totalReserve();
+  const stMATICPrice = await EzioConnect(signerOrProvider).getPrice(STMATIC_ADDRESS);
+  const res = formatDecimal(
+    totalReserve.mul(stMATICPrice.div(BigNumber.from(10).pow(TOKEN_DECIMAL[TOKEN_TYPE.USDC]))),
+    TOKEN_TYPE.stMATIC,
+  );
+  console.log('ezMATIC Reverse = ' + res.toString());
+  return res.toString();
 }
 
 /**

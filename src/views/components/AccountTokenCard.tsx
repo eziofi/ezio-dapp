@@ -10,7 +10,7 @@ import { Box, Tooltip } from '@mui/material';
 import { useEffect } from 'react';
 
 export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TYPE; refreshFlag: number }) {
-  const { balance, refetchBalance, isLoading } = useBalance(type);
+  const { balance, refetchBalance } = useBalance(type);
   const { price, refetchPrice } = usePrice(type);
   const { t } = useTranslation();
 
