@@ -42,10 +42,12 @@ export default function BarChart() {
         {
           name: t('analytics.everyday'),
           data: DailyAccumulatedFees,
+          type: 'column',
         },
         {
           name: t('analytics.accumulativeTotal'),
           data: AccumulatedFees,
+          type: 'line',
         },
       ],
       options: {
@@ -53,7 +55,6 @@ export default function BarChart() {
           mode,
         },
         chart: {
-          type: 'bar',
           height: 350,
           toolbar: {
             show: false,
@@ -71,7 +72,7 @@ export default function BarChart() {
           enabled: false,
         },
         stroke: {
-          curve: 'smooth',
+          width: [4, 4],
         },
         fill: {
           type: 'solid',
@@ -113,11 +114,7 @@ export default function BarChart() {
       <CardHeader title={t('analytics.CommissionDetail') as string} />
 
       <Box dir="ltr">
-        {option ? (
-          <ReactApexChart options={option.options} series={option.series} type="bar" height={350} />
-        ) : (
-          <RenderSkeleton />
-        )}
+        {option ? <ReactApexChart options={option.options} series={option.series} height={350} /> : <RenderSkeleton />}
       </Box>
     </Card>
   );

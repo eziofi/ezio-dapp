@@ -32,87 +32,71 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
   };
 
   const IconStyle = {
-    width: 30,
-    height: 30,
+    width: 40,
+    height: 40,
     borderRadius: '50%',
     opacity: 1,
     fill: 'white',
   };
 
+  const IconNames = {
+    [TOKEN_TYPE.USDT]: 'icon-usdt',
+    [TOKEN_TYPE.USDC]: 'icon-usdc',
+    [TOKEN_TYPE.stMATIC]: 'icon-stMatic1',
+    [TOKEN_TYPE.ezUSD]: 'icon-A',
+    [TOKEN_TYPE.ezMATIC]: 'icon-B',
+  };
+
   return (
     <AccountCard>
       <Content>
-        {type === TOKEN_TYPE.USDT || type === TOKEN_TYPE.USDC || type === TOKEN_TYPE.stMATIC ? (
-          <>
-            <div style={{ ...iconDiv }}>
-              <BaseIconFont
-                name={type === TOKEN_TYPE.USDT ? 'icon-usdt' : type === TOKEN_TYPE.USDC ? 'icon-usdc' : 'icon-stMatic1'}
-              />
-            </div>
-            <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Box>
-                <div style={{ fontSize: 20 }}>{TOKEN_TYPE[type]}</div>
-                {price ? (
-                  <div style={{ fontSize: 12, color: 'rgba(76, 80, 97, 1)' }}>
-                    {t('account.netWorth')}: {price} USDC
-                  </div>
-                ) : (
-                  <InlineSkeleton width={70} />
-                )}
-              </Box>
-              <div>
-                {balance ? (
-                  <Tooltip title={formatDecimal(balance, type, 6).toString()} placement="top">
-                    <div style={{ fontSize: 28, color: 'rgba(67, 207, 124, 1)' }}>
-                      {formatDecimal(balance, type).toString()}
-                    </div>
-                  </Tooltip>
-                ) : (
-                  <InlineSkeleton width={70} />
-                )}
-              </div>
+        <>
+          <div
+            style={{
+              ...iconDiv,
+              background:
+                type === TOKEN_TYPE.ezUSD
+                  ? 'rgba(95, 69, 186, 1)'
+                  : type === TOKEN_TYPE.ezMATIC
+                  ? 'rgba(239, 89, 114, 1)'
+                  : 'none',
+            }}
+          >
+            <BaseIconFont
+              name={IconNames[type]}
+              style={
+                type === TOKEN_TYPE.ezUSD || type === TOKEN_TYPE.ezMATIC
+                  ? {
+                      ...IconStyle,
+                    }
+                  : {}
+              }
+            />
+          </div>
+          <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Box>
+              <div style={{ fontSize: 20 }}>{TOKEN_TYPE[type]}</div>
+              {price ? (
+                <div style={{ fontSize: 12, color: 'rgba(76, 80, 97, 1)' }}>
+                  {t('account.netWorth')}: {price} USDC
+                </div>
+              ) : (
+                <InlineSkeleton width={70} />
+              )}
             </Box>
-          </>
-        ) : (
-          <>
-            <div
-              style={{
-                ...iconDiv,
-                background: type === TOKEN_TYPE.ezUSD ? 'rgba(95, 69, 186, 1)' : 'rgba(239, 89, 114, 1)',
-              }}
-            >
-              <BaseIconFont
-                name={type === TOKEN_TYPE.ezUSD ? 'icon-A' : 'icon-B'}
-                style={{
-                  ...IconStyle,
-                }}
-              />
-            </div>
-            <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Box>
-                <div style={{ fontSize: 20 }}>{TOKEN_TYPE[type]}</div>
-                {price ? (
-                  <div style={{ fontSize: 12, color: 'rgba(76, 80, 97, 1)' }}>
-                    {t('account.netWorth')}: {price} USDC
+            <div>
+              {balance ? (
+                <Tooltip title={formatDecimal(balance, type, 6).toString()} placement="top">
+                  <div style={{ fontSize: 28, color: 'rgba(67, 207, 124, 1)' }}>
+                    {formatDecimal(balance, type).toString()}
                   </div>
-                ) : (
-                  <InlineSkeleton width={70} />
-                )}
-              </Box>
-              <div>
-                {balance ? (
-                  <Tooltip title={formatDecimal(balance, type, 18).toString()} placement="top">
-                    <div style={{ fontSize: 28, color: 'rgba(67, 207, 124, 1)' }}>
-                      {formatDecimal(balance, type).toString()}
-                    </div>
-                  </Tooltip>
-                ) : (
-                  <InlineSkeleton width={70} />
-                )}
-              </div>
-            </Box>
-          </>
-        )}
+                </Tooltip>
+              ) : (
+                <InlineSkeleton width={70} />
+              )}
+            </div>
+          </Box>
+        </>
       </Content>
     </AccountCard>
   );
