@@ -100,7 +100,7 @@ export default function LineChart() {
     <Card>
       <CardHeader title={t('home.netWorthEzbtAxis') as string} />
 
-      <Box dir="ltr" sx={{ pl: 2 }}>
+      <Box dir="ltr">
         {/*<Box sx={{ p: 3, pb: 1 }} dir="ltr">*/}
         {option ? (
           <ReactApexChart options={option.options} series={option.series} type="line" height={350} />

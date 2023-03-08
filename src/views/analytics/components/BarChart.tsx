@@ -21,7 +21,7 @@ export default function BarChart() {
   useQuery(['queryDailyAccumulatedFees'], queryDailyAccumulatedFees, {
     onSuccess: ({ data }) => {
       setDailyAccumulatedFees(data.data.map(i => i.dailyAccumulatedFees));
-      setXData(data.data.map(i => i.groupTime));
+      setXData(data.data.map(i => i.groupTime.substring(5)));
     },
   });
 
@@ -112,7 +112,7 @@ export default function BarChart() {
     <Card>
       <CardHeader title={t('analytics.CommissionDetail') as string} />
 
-      <Box dir="ltr" sx={{ p: `0 ${theme.spacing(3)} 0 ${theme.spacing(3)}` }}>
+      <Box dir="ltr">
         {option ? (
           <ReactApexChart options={option.options} series={option.series} type="bar" height={350} />
         ) : (
