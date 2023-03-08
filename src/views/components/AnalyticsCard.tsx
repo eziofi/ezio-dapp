@@ -18,9 +18,11 @@ import BaseIconFont from './BaseIconFont';
 import { TOKEN_TYPE } from '../wallet/helpers/constant';
 import { InlineSkeleton } from './Skeleton';
 
-import StMaticIcon from '../../assets/analytics/stMatic.png';
-import USDCIcon from '../../assets/analytics/usdc.png';
+import StMaticIconDrak from '../../assets/analytics/stMatic_drak.png';
+import USDCIconDrak from '../../assets/analytics/usdc_drak.png';
 import FeeValueIcon from '../../assets/analytics/feeValue.png';
+import StMaticIconLight from '../../assets/analytics/stMatic_light.png';
+import USDCIconLight from '../../assets/analytics/usdc_light.png';
 
 const StyledIcon = styled('div')(({ theme }) => ({
   // margin: 'auto',
@@ -65,11 +67,21 @@ export default function AnalyticsCard({
     [ANALYTICS_CARD_TYPE.stMATIC]: t('analytics.title.stMATIC'),
     [ANALYTICS_CARD_TYPE.FEE]: t('analytics.title.fee'),
   };
-  const icon = {
-    [ANALYTICS_CARD_TYPE.USDC]: USDCIcon,
-    [ANALYTICS_CARD_TYPE.stMATIC]: StMaticIcon,
+
+  // 深色
+  const icon_drak = {
+    [ANALYTICS_CARD_TYPE.USDC]: USDCIconDrak,
+    [ANALYTICS_CARD_TYPE.stMATIC]: StMaticIconDrak,
     [ANALYTICS_CARD_TYPE.FEE]: FeeValueIcon,
   };
+
+  // 浅色
+  const icon_light = {
+    [ANALYTICS_CARD_TYPE.USDC]: USDCIconLight,
+    [ANALYTICS_CARD_TYPE.stMATIC]: StMaticIconLight,
+    [ANALYTICS_CARD_TYPE.FEE]: FeeValueIcon,
+  };
+
   // @ts-ignore
   const { data, isLoading } = useQuery(['AnalyticsCard', type], () => api[type](ethersProvider!.getSigner()), {
     enabled: !!ethersProvider,
@@ -146,7 +158,7 @@ export default function AnalyticsCard({
             fill: theme.palette[color][theme.palette.mode === 'light' ? 'darker' : 'lighter'],
           }}
         /> */}
-        <img src={icon[type]} />
+        <img src={theme.palette.mode === 'dark' ? icon_drak[type] : icon_light[type]} />
 
         {/*<Iconify icon={icon[type]} width={24} height={24} />*/}
       </StyledIcon>

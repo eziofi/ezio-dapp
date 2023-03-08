@@ -175,30 +175,31 @@ const PurchasenOptions: IOptions[] = [
   },
   {
     value: TOKEN_TYPE.ezMATIC,
-    style: { margin: '0 10px', background: 'rgba(26, 107, 173, 1)' },
+    style: { margin: '0 10px', background: 'rgba(239, 89, 114, 1)' },
     iconName: 'icon-B',
     iconStyle: { width: 20, height: 20, fill: 'white' },
   },
 ];
 
+// 宽高 30 是因为他们没有背景色 显得图标会小 宽高30是同父级宽高,是button的宽高
 const redeemOptions: IOptions[] = [
   {
     value: TOKEN_TYPE.USDT,
-    style: { margin: '0 10px', background: 'rgba(50, 177, 108)' },
-    iconName: 'icon-USDT-white',
-    iconStyle: { width: 20, height: 20, fill: 'white' },
+    style: { margin: '0 10px', background: 'none' },
+    iconName: 'icon-usdt',
+    iconStyle: { width: 30, height: 30, fill: 'white' },
   },
   {
     value: TOKEN_TYPE.USDC,
-    style: { margin: '0 10px', background: 'rgba(60, 193, 200)' },
-    iconName: 'icon-USDC-white',
-    iconStyle: { width: 20, height: 20, fill: 'white' },
+    style: { margin: '0 10px', background: 'none' },
+    iconName: 'icon-usdc',
+    iconStyle: { width: 30, height: 30, fill: 'white' },
   },
   {
     value: TOKEN_TYPE.stMATIC,
-    style: { margin: '0 10px', background: 'rgba(239, 89, 114)' },
-    iconName: 'icon-stMatic-white',
-    iconStyle: { width: 20, height: 20, fill: 'white' },
+    style: { margin: '0 10px', background: 'none' },
+    iconName: 'icon-stMatic1',
+    iconStyle: { width: 30, height: 30, fill: 'white' },
   },
 ];
 
@@ -338,7 +339,7 @@ function MyCardContentSecond({
               }}
             >
               <BaseIconFont
-                name="icon-USDC-white"
+                name="icon-usdc"
                 style={redeemOptions[redeemOptions.findIndex(item => item.value === TOKEN_TYPE.USDC)].iconStyle}
               />
             </div>

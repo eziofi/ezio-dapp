@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3861749 */
-  src: url('iconfont.woff2?t=1676613501415') format('woff2'),
-       url('iconfont.woff?t=1676613501415') format('woff'),
-       url('iconfont.ttf?t=1676613501415') format('truetype');
+  src: url('iconfont.woff2?t=1678250810713') format('woff2'),
+       url('iconfont.woff?t=1678250810713') format('woff'),
+       url('iconfont.ttf?t=1678250810713') format('truetype');
 }
 
 .iconfont {
@@ -13,7 +13,51 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-stMatic-copy:before {
+.icon-stMatic1:before {
+  content: "\e606";
+}
+
+.icon-usdt:before {
+  content: "\e6b0";
+}
+
+.icon-usdc:before {
+  content: "\e624";
+}
+
+.icon-gangganshuai-copy:before {
+  content: "\e758";
+}
+
+.icon-zijinchengben-copy:before {
+  content: "\e756";
+}
+
+.icon-xiaoshoujiage-copy:before {
+  content: "\e757";
+}
+
+.icon-gangganshuai:before {
+  content: "\e668";
+}
+
+.icon-zijinchengben:before {
+  content: "\e64e";
+}
+
+.icon-xiaoshoujiage:before {
+  content: "\e628";
+}
+
+.icon-yuqinianhualishuai-copy:before {
+  content: "\e755";
+}
+
+.icon-yuqinianhualishuai:before {
+  content: "\e623";
+}
+
+.icon-stMatic-white:before {
   content: "\e74e";
 }
 
@@ -25,7 +69,7 @@
   content: "\e604";
 }
 
-.icon-USDT-copy:before {
+.icon-USDT-white:before {
   content: "\e74f";
 }
 
@@ -33,7 +77,7 @@
   content: "\e605";
 }
 
-.icon-USDC-copy:before {
+.icon-USDC-white:before {
   content: "\e750";
 }
 
@@ -69,11 +113,11 @@
   content: "\e658";
 }
 
-.icon-A-copy-copy:before {
+.icon-EZAT:before {
   content: "\e753";
 }
 
-.icon-B-copy-copy:before {
+.icon-EZBT:before {
   content: "\e754";
 }
 
