@@ -109,7 +109,7 @@ export default function AnalyticsCard({
           {!isLoading ? (
             type === ANALYTICS_CARD_TYPE.FEE ? (
               // @ts-ignore
-              data?.data.data.fees24H
+              data
             ) : (
               data
             )

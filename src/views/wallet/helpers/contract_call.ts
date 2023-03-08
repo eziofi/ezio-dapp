@@ -100,7 +100,7 @@ export async function ezMATICReverse(signerOrProvider: Signer | Provider) {
  * @returns 过去24小时手续费汇总 fees24H
  */
 export async function commissionIncome() {
-  const res = await queryAccumulatedFees24H();
+  const res = await (await queryAccumulatedFees24H()).data.data.fees24H;
   return res;
 }
 
