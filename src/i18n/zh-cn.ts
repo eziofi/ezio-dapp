@@ -47,7 +47,7 @@ export default {
     netWorthAxis: '价格',
     netWorthEzatAxis: 'Token价格',
     netWorthEzbtAxis: 'ezMATIC价格',
-    aRateAxis: 'ezUSD利率',
+    aRateAxis: 'ezUSD回报率',
     totalSupplyTitle: 'Token供应量',
     totalSupplyAxis: '供应量',
     aNetWorthSeries: 'ezUSD价格',

@@ -1,7 +1,7 @@
 import { InputBase, MenuItem, Select, Skeleton, styled, useTheme } from '@mui/material';
 import React from 'react';
 import { BalanceContent, BodyContent } from '../purchase/PurchaseStyle';
-import { useTranslation } from 'react-i18next';
+import { t } from 'i18next';
 import { useBalance } from '../../hooks/useBalance';
 import { formatDecimal } from '../wallet/helpers/utilities';
 import TextField from '@mui/material/TextField';
@@ -109,18 +109,21 @@ const iconStyle = {
   borderRadius: '50%',
 };
 
+/**
+ * 渲染各种币的下拉框
+ * @param Options icon图标
+ * @param tokenType 币的类型
+ * @param handleChange 更改币的类型的函数
+ * @param balance 余额
+ * @returns SelectItem
+ */
 function RanderOptions(
   Options: IOptions[],
   tokenType: TOKEN_TYPE,
   handleChange: (value: TOKEN_TYPE) => void,
-  isShowBalance?: boolean,
-  balance?: BigNumber,
+  balance: undefined | BigNumber,
 ) {
   const theme = useTheme();
-  let translate: any;
-  if (isShowBalance) {
-    translate = useTranslation().t;
-  }
   return (
     <BalanceContent>
       <Select
@@ -148,20 +151,16 @@ function RanderOptions(
           );
         })}
       </Select>
-      {isShowBalance ? (
-        <span
-          style={{
-            fontSize: 12,
-            color: theme.palette.text.secondary,
-            marginTop: 5,
-          }}
-        >
-          {translate('purchase.leftBalance') + ': '}
-          {balance ? formatDecimal(balance, tokenType, 6).toString() : <InlineSkeleton width={40} />}
-        </span>
-      ) : (
-        <div style={{ height: 18, visibility: 'hidden' }} />
-      )}
+      <span
+        style={{
+          fontSize: 12,
+          color: theme.palette.text.secondary,
+          marginTop: 5,
+        }}
+      >
+        {t('purchase.leftBalance') + ': '}
+        {balance ? formatDecimal(balance, tokenType, 6).toString() : <InlineSkeleton width={40} />}
+      </span>
     </BalanceContent>
   );
 }
@@ -228,7 +227,6 @@ function MyCardContentOne({
   const { balance } = useBalance(transactionType === TRANSFER_TYPE.PURCHASE ? redeemTokenType : tokenType);
 
   const theme = useTheme();
-  const { t } = useTranslation();
 
   return (
     <BodyContent>
@@ -266,10 +264,9 @@ function MyCardContentOne({
             redeemOptions.filter(item => item.value !== TOKEN_TYPE.stMATIC),
             redeemTokenType,
             redeemChange,
-            true,
             balance,
           )
-        : RanderOptions(PurchasenOptions, tokenType, handleChange, true, balance)}
+        : RanderOptions(PurchasenOptions, tokenType, handleChange, balance)}
     </BodyContent>
   );
 }
@@ -297,7 +294,6 @@ function MyCardContentSecond({
   };
 
   const theme = useTheme();
-  const { t } = useTranslation();
 
   return (
     <BodyContent>
@@ -322,11 +318,9 @@ function MyCardContentSecond({
           {price ? t('purchase.unitPrice') + ': ' + price + ' USDC' : <Skeleton width={100} />}
         </div>
       </div>
-      {/* {transactionType === TRANSFER_TYPE.PURCHASE
-        ? RanderOptions(PurchasenOptions, tokenType, handleChange)
-        : RanderOptions(redeemOptions, redeemTokenType, redeemChange)} */}
+
       {transactionType === TRANSFER_TYPE.PURCHASE ? (
-        RanderOptions(PurchasenOptions, tokenType, handleChange)
+        RanderOptions(PurchasenOptions, tokenType, handleChange, balance)
       ) : tokenType === TOKEN_TYPE.ezUSD ? (
         <div>
           <div style={{ display: 'flex', alignItems: 'center', marginRight: 5, height: 46 }}>
@@ -345,13 +339,25 @@ function MyCardContentSecond({
             </div>
             {TOKEN_TYPE[TOKEN_TYPE.USDC]}
           </div>
-          <div style={{ height: 18, visibility: 'hidden' }} />
+          {/* <div style={{ height: 18, visibility: 'hidden' }} /> */}
+          {/* 显示账户余额 */}
+          <span
+            style={{
+              fontSize: 12,
+              color: theme.palette.text.secondary,
+              marginTop: 5,
+            }}
+          >
+            {t('purchase.leftBalance') + ': '}
+            {balance ? formatDecimal(balance, tokenType, 6).toString() : <InlineSkeleton width={40} />}
+          </span>
         </div>
       ) : (
         RanderOptions(
           redeemOptions.filter(item => item.value !== TOKEN_TYPE.USDT),
           redeemTokenType,
           redeemChange,
+          balance,
         )
       )}
     </BodyContent>
