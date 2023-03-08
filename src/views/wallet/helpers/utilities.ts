@@ -159,15 +159,21 @@ export function isObject(obj: any): boolean {
  * 格式化数值，转换小数位数
  * @param value wei 单位的数值
  * @param tokenType token种类，影响计算位数
- * @param decimal 最多显示多少位小数，默认2位
+ * @param floatDecimal 最多显示多少位小数，默认2位
+ * @param manualDecimal 自定义除以的位数
  * @returns 带小数的FixedNumber
  */
-export function formatDecimal(value: BigNumber | undefined, tokenType: TOKEN_TYPE, decimal: number = 2): FixedNumber {
+export function formatDecimal(
+  value: BigNumber | undefined,
+  tokenType: TOKEN_TYPE,
+  floatDecimal: number = 2,
+  manualDecimal?: number,
+): FixedNumber {
   if (!value) {
     return FixedNumber.from(0);
   }
-  const ether = formatUnits(value, TOKEN_DECIMAL[tokenType]);
-  return formatString(ether, decimal);
+  const ether = formatUnits(value, manualDecimal ? manualDecimal : TOKEN_DECIMAL[tokenType]);
+  return formatString(ether, floatDecimal);
 }
 
 export const formatString = (str: string, decimal: number = 2) => {

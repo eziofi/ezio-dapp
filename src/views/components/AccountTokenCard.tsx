@@ -44,22 +44,9 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
       <Content>
         {type === TOKEN_TYPE.USDT || type === TOKEN_TYPE.USDC || type === TOKEN_TYPE.stMATIC ? (
           <>
-            {/* icon */}
-            {/* <Box sx={{ width: 50, height: 50, borderRadius: '50%', background: 'pink', marginRight: 2 }} /> */}
-            <div
-              style={{
-                ...iconDiv,
-                // background:
-                //   type === TOKEN_TYPE.USDT
-                //     ? 'rgba(50, 177, 108)'
-                //     : type === TOKEN_TYPE.USDC
-                //     ? 'rgba(60, 193, 200)'
-                //     : 'rgba(239, 89, 114)',
-              }}
-            >
+            <div style={{ ...iconDiv }}>
               <BaseIconFont
                 name={type === TOKEN_TYPE.USDT ? 'icon-usdt' : type === TOKEN_TYPE.USDC ? 'icon-usdc' : 'icon-stMatic1'}
-                // style={{ ...IconStyle }}
               />
             </div>
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -88,8 +75,6 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
           </>
         ) : (
           <>
-            {/* icon */}
-            {/* <Box sx={{ width: 50, height: 50, borderRadius: '50%', background: 'pink', marginRight: 2 }} /> */}
             <div
               style={{
                 ...iconDiv,

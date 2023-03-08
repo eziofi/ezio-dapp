@@ -88,11 +88,13 @@ export async function ezMATICReverse(signerOrProvider: Signer | Provider) {
   const totalReserve = await EzioConnect(signerOrProvider).totalReserve();
   const stMATICPrice = await EzioConnect(signerOrProvider).getPrice(STMATIC_ADDRESS);
   const res = formatDecimal(
-    totalReserve.mul(stMATICPrice.div(BigNumber.from(10).pow(TOKEN_DECIMAL[TOKEN_TYPE.USDC]))),
-    TOKEN_TYPE.stMATIC,
-  );
-  console.log('ezMATIC Reverse = ' + res.toString());
-  return res.toString();
+    totalReserve.mul(stMATICPrice),
+    TOKEN_TYPE.USDC, // 此参数无用
+    2,
+    TOKEN_DECIMAL[TOKEN_TYPE.USDC] + TOKEN_DECIMAL[TOKEN_TYPE.stMATIC],
+  ).toString();
+  console.log('ezMATIC Reverse = ' + res);
+  return res;
 }
 
 /**
