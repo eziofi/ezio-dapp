@@ -1,9 +1,5 @@
 import styles from '../purchase.module.less';
-import netBtn from '../../../assets/home/net@2x.png';
 import closeBtn from '../../../assets/home/close@2x.png';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import { Drawer } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 

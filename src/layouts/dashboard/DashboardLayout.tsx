@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 //
 import Header from './header';
 import Nav from './nav';
-import { Alert, Backdrop, Box, CircularProgress, Snackbar } from '@mui/material';
-import { AlertColor } from '@mui/material/Alert/Alert';
+import { Alert, AlertColor, Snackbar } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

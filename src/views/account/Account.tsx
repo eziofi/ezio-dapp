@@ -1,6 +1,5 @@
-import Typography from '@mui/material/Typography';
 import { useState } from 'react';
-import { Card, CardContent, IconButton, Tooltip } from '@mui/material';
+import { Card, CardContent, IconButton, Tooltip, Typography } from '@mui/material';
 import AccountDetail from './AccountDetail';
 import { TOKEN_TYPE } from '../wallet/helpers/constant';
 import { useTranslation } from 'react-i18next';

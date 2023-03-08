@@ -1,10 +1,9 @@
-import { InputBase, MenuItem, Select, Skeleton, styled, useTheme } from '@mui/material';
+import { InputBase, MenuItem, Select, Skeleton, styled, TextField, useTheme } from '@mui/material';
 import React from 'react';
 import { BalanceContent, BodyContent } from '../purchase/PurchaseStyle';
 import { useTranslation } from 'react-i18next';
 import { useBalance } from '../../hooks/useBalance';
 import { formatDecimal } from '../wallet/helpers/utilities';
-import TextField from '@mui/material/TextField';
 import { TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
 import BaseIconFont from './BaseIconFont';
 import { usePrice } from '../../hooks/usePrice';
