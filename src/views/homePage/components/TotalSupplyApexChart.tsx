@@ -27,7 +27,7 @@ export default function TotalSupplyApexChart() {
       const aTotalSupply = data.data.data.map(i => i.ezatSupply);
       const bTatalSupply = data.data.data.map(i => i.ezbtSupply);
 
-      const totalSupplyMax = getYMax([...aTotalSupply, ...aTotalSupply]);
+      const totalSupplyMax = getYMax([...aTotalSupply, ...bTatalSupply]);
 
       setOption({
         series: [
