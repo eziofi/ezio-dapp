@@ -23,15 +23,15 @@ import { HOME_CARD_TYPE } from '../components/HomeCard';
 
 interface IPurchaseArg {
   fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC;
-  toType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMatic;
+  toType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC;
   amount: number;
   slippage: number;
   signerOrProvider: Signer | Provider;
 }
 
 interface IRedeemArg {
-  fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMatic;
-  toType: TOKEN_TYPE.USDC | TOKEN_TYPE.stMatic;
+  fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC;
+  toType: TOKEN_TYPE.USDC | TOKEN_TYPE.stMATIC;
   amount: number;
   slippage: number;
   signerOrProvider: Signer | Provider;
@@ -171,7 +171,7 @@ export default function Purchase() {
         } else {
           const args: IPurchaseArg = {
             fromType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.USDT,
-            toType: tokenType as TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMatic,
+            toType: tokenType as TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC,
             amount: Number(inputValue1),
             slippage,
             signerOrProvider: ethersProvider!.getSigner(),
@@ -201,8 +201,8 @@ export default function Purchase() {
           openMsg();
         } else {
           const args: IRedeemArg = {
-            fromType: tokenType as TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMatic,
-            toType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.stMatic,
+            fromType: tokenType as TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC,
+            toType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.stMATIC,
             amount: Number(inputValue1),
             signerOrProvider: ethersProvider!.getSigner(),
             slippage,

@@ -8,10 +8,10 @@ export function usePrice(tokenType: TOKEN_TYPE) {
 
   const netWorthApi = {
     [TOKEN_TYPE.ezUSD]: ezUSDPrice,
-    [TOKEN_TYPE.ezMatic]: ezMaticPrice,
+    [TOKEN_TYPE.ezMATIC]: ezMaticPrice,
     [TOKEN_TYPE.USDC]: usdcPrice,
     [TOKEN_TYPE.USDT]: usdtPrice,
-    [TOKEN_TYPE.stMatic]: stMaticPrice,
+    [TOKEN_TYPE.stMATIC]: stMaticPrice,
   };
 
   const {

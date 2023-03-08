@@ -65,9 +65,9 @@ const DetailItem = ({ record }: { record: PurchaseRecord | RedeemRecord }) => {
           <ListItemText
             primary={
               type === TRANSFER_TYPE.PURCHASE ? (
-                (record.tokenType === 0 ? TOKEN_TYPE.ezUSD : TOKEN_TYPE.ezMatic) + titleMap[type]
+                (record.tokenType === 0 ? TOKEN_TYPE.ezUSD : TOKEN_TYPE.ezMATIC) + titleMap[type]
               ) : type === TRANSFER_TYPE.REDEEM ? (
-                (record.tokenType === 0 ? TOKEN_TYPE.ezUSD : TOKEN_TYPE.ezMatic) + titleMap[type]
+                (record.tokenType === 0 ? TOKEN_TYPE.ezUSD : TOKEN_TYPE.ezMATIC) + titleMap[type]
               ) : (
                 <></>
               )
@@ -88,7 +88,7 @@ const DetailItem = ({ record }: { record: PurchaseRecord | RedeemRecord }) => {
                   -{amt} {TOKEN_TYPE.USDT}
                 </div>
                 <div style={{ fontSize: '1rem' }}>
-                  +{qty} {record.tokenType === 0 ? TOKEN_TYPE.ezUSD : TOKEN_TYPE.ezMatic}
+                  +{qty} {record.tokenType === 0 ? TOKEN_TYPE.ezUSD : TOKEN_TYPE.ezMATIC}
                 </div>
               </>
             ) : type === TRANSFER_TYPE.REDEEM ? (
@@ -97,7 +97,7 @@ const DetailItem = ({ record }: { record: PurchaseRecord | RedeemRecord }) => {
                   +{amt} {TOKEN_TYPE.USDT}
                 </div>
                 <div style={{ color: '#e63212', fontSize: '1rem' }}>
-                  -{qty} {record.tokenType === 0 ? TOKEN_TYPE.ezUSD : TOKEN_TYPE.ezMatic}
+                  -{qty} {record.tokenType === 0 ? TOKEN_TYPE.ezUSD : TOKEN_TYPE.ezMATIC}
                 </div>
               </>
             ) : (

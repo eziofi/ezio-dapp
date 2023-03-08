@@ -40,7 +40,7 @@ export default function PriceTable() {
         ),
       };
       const EZBTInfo: ITokenInfo = {
-        type: TOKEN_TYPE.ezMatic,
+        type: TOKEN_TYPE.ezMATIC,
         netWorth: bTodayWorth,
         oneDayChange: numeral((parseFloat(bTodayWorth) - parseFloat(bYestdayWorth)) / parseFloat(bYestdayWorth)).format(
           '0.00%',

@@ -17,8 +17,8 @@ export default {
   },
   home: {
     card: {
-      rate: 'ezUSD年化利率',
-      fundCost: 'ezMATIC资金成本',
+      rate: 'ezUSD APR',
+      fundCost: 'ezMATIC年化成本',
       rebalancePrice: 'ezMATIC下折价格',
       leverage: 'ezMATIC杠杆率',
     },
@@ -112,7 +112,7 @@ export default {
     title: {
       usdc: '金库USDC价值',
       stMATIC: '金库stMATIC价值',
-      fee: '手续费收入',
+      fee: '手续费收入(过去24h)',
     },
     everyday: '每日',
     accumulativeTotal: '累计',

@@ -43,7 +43,7 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
   return (
     <AccountCard>
       <Content>
-        {type === TOKEN_TYPE.USDT || type === TOKEN_TYPE.USDC || type === TOKEN_TYPE.stMatic ? (
+        {type === TOKEN_TYPE.USDT || type === TOKEN_TYPE.USDC || type === TOKEN_TYPE.stMATIC ? (
           <>
             {/* icon */}
             {/* <Box sx={{ width: 50, height: 50, borderRadius: '50%', background: 'pink', marginRight: 2 }} /> */}

@@ -56,9 +56,9 @@ export default function Account() {
         <AccountCardBox>
           <AccountTokenCard type={TOKEN_TYPE.USDT} refreshFlag={refreshFlag} />
           <AccountTokenCard type={TOKEN_TYPE.USDC} refreshFlag={refreshFlag} />
-          <AccountTokenCard type={TOKEN_TYPE.stMatic} refreshFlag={refreshFlag} />
+          <AccountTokenCard type={TOKEN_TYPE.stMATIC} refreshFlag={refreshFlag} />
           <AccountTokenCard type={TOKEN_TYPE.ezUSD} refreshFlag={refreshFlag} />
-          <AccountTokenCard type={TOKEN_TYPE.ezMatic} refreshFlag={refreshFlag} />
+          <AccountTokenCard type={TOKEN_TYPE.ezMATIC} refreshFlag={refreshFlag} />
         </AccountCardBox>
       ) : (
         <AccountDetail />

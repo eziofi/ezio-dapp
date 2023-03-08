@@ -174,7 +174,7 @@ const PurchasenOptions: IOptions[] = [
     iconStyle: { width: 20, height: 20, fill: 'white' },
   },
   {
-    value: TOKEN_TYPE.ezMatic,
+    value: TOKEN_TYPE.ezMATIC,
     style: { margin: '0 10px', background: 'rgba(26, 107, 173, 1)' },
     iconName: 'icon-B',
     iconStyle: { width: 20, height: 20, fill: 'white' },
@@ -195,7 +195,7 @@ const redeemOptions: IOptions[] = [
     iconStyle: { width: 20, height: 20, fill: 'white' },
   },
   {
-    value: TOKEN_TYPE.stMatic,
+    value: TOKEN_TYPE.stMATIC,
     style: { margin: '0 10px', background: 'rgba(239, 89, 114)' },
     iconName: 'icon-stMatic-white',
     iconStyle: { width: 20, height: 20, fill: 'white' },
@@ -262,7 +262,7 @@ function MyCardContentOne({
       </div>
       {transactionType === TRANSFER_TYPE.PURCHASE
         ? RanderOptions(
-            redeemOptions.filter(item => item.value !== TOKEN_TYPE.stMatic),
+            redeemOptions.filter(item => item.value !== TOKEN_TYPE.stMATIC),
             redeemTokenType,
             redeemChange,
             true,

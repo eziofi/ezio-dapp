@@ -17,8 +17,8 @@ export default {
   },
   home: {
     card: {
-      rate: 'ezUSD Interest Rate',
-      fundCost: 'ezMATIC Funding Cost',
+      rate: 'ezUSD APR',
+      fundCost: 'ezMATIC Year Cost',
       rebalancePrice: 'ezMATIC Rebalancing Price',
       leverage: 'ezMATIC Leverage Ratio',
     },
@@ -113,7 +113,7 @@ export default {
     title: {
       usdc: 'Treasury USDC value',
       stMATIC: 'Treasury stMATIC value',
-      fee: 'Fees Earned by Ezio',
+      fee: 'Fees Earned (last 24h)',
     },
     everyday: 'every Day',
     accumulativeTotal: 'accumulative Total',

@@ -44,7 +44,7 @@ export default function useTx() {
    */
   async function purchase(
     fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC,
-    toType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMatic,
+    toType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC,
     amount: number,
     slippage: number,
     signerOrProvider: Signer | Provider,
@@ -156,7 +156,7 @@ export default function useTx() {
     }
     console.log(quotes);
     setBackLoadingText(t('message.sendingTx'));
-    const purchaseTx = await ezio.purchase(TOKEN_TYPE.ezMatic, channel, quotes);
+    const purchaseTx = await ezio.purchase(TOKEN_TYPE.ezMATIC, channel, quotes);
     setBackLoadingText(t('message.waitingTx'));
     await purchaseTx.wait();
   }
@@ -170,8 +170,8 @@ export default function useTx() {
    * @param signerOrProvider signerOrProvider
    */
   async function redeem(
-    fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMatic,
-    toType: TOKEN_TYPE.USDC | TOKEN_TYPE.stMatic,
+    fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC,
+    toType: TOKEN_TYPE.USDC | TOKEN_TYPE.stMATIC,
     amount: number,
     signerOrProvider: Signer | Provider,
     slippage: number,
@@ -187,7 +187,7 @@ export default function useTx() {
    * @param signerOrProvider signerOrProvider
    */
   async function redeemToUSDC(
-    fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMatic,
+    fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC,
     amount: number,
     signerOrProvider: Signer | Provider,
     slippage: number,
@@ -227,13 +227,13 @@ export default function useTx() {
    * @param signerOrProvider signerOrProvider
    */
   async function redeemToStMatic(
-    fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMatic,
+    fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC,
     amount: number,
     signerOrProvider: Signer | Provider,
     slippage: number,
   ) {
     const redeemAmount = ethers.utils.parseEther(String(amount));
-    const convertAmount = await getRedeemQuoteQty(fromType, redeemAmount, TOKEN_TYPE.stMatic, signerOrProvider);
+    const convertAmount = await getRedeemQuoteQty(fromType, redeemAmount, TOKEN_TYPE.stMATIC, signerOrProvider);
     if (convertAmount.gt(BigNumber.from(0))) {
       setBackLoadingText(t('message.request0x'));
       const quoteResponse = await getQuote(channel, STMATIC_ADDRESS, USDC_ADDRESS, convertAmount.toString(), slippage);
@@ -259,9 +259,9 @@ export default function useTx() {
   }
 
   const getRedeemQuoteQty = async (
-    fromToken: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMatic,
+    fromToken: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC,
     qty: BigNumber,
-    toToken: TOKEN_TYPE.USDC | TOKEN_TYPE.stMatic,
+    toToken: TOKEN_TYPE.USDC | TOKEN_TYPE.stMATIC,
     signerOrProvider: Signer | Provider,
   ) => {
     let amt: BigNumber;
@@ -286,7 +286,7 @@ export default function useTx() {
       // amt = qty.mul(await bToken.netWorth()).div(BigNumber.from('10').pow(await bToken.decimals()));
       if (toToken === TOKEN_TYPE.USDC) {
         quoteQty = qty.mul(await ezio.totalReserve()).div(await bToken.totalSupply());
-      } else if (toToken === TOKEN_TYPE.stMatic) {
+      } else if (toToken === TOKEN_TYPE.stMATIC) {
         let redeemReserveQty = qty.mul(await ezio.totalReserve()).div(await bToken.totalSupply());
         let leverage: BigNumber = await ezio.leverage();
         const DENOMINATOR = await ezio.LEVERAGE_DENOMINATOR();

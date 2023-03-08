@@ -180,9 +180,9 @@ export async function stMaticBalanceOf(signerOrProvider: Signer | Provider, addr
  */
 export async function ezMATICFundCost(signerOrProvider: Signer | Provider) {
   const data = await EzioConnect(signerOrProvider).rewardRate();
-  const res = '' + (data / 1000000) * 10000 + '‱';
-  console.log('ezMATIC Fund Cost = ' + res);
-  return res;
+  const yearRate = '' + (data / 1000000) * 365 * 100;
+  console.log('ezMATIC Fund Cost = ' + yearRate);
+  return formatString(yearRate) + '%';
 }
 
 /**
@@ -271,7 +271,8 @@ export async function ezbtTotalSupply(signerOrProvider: Signer | Provider): Prom
 
 export async function interestRateYear(signerOrProvider: Signer | Provider) {
   const rate = await treasuryInterestRate(signerOrProvider);
-  const yearRate = '' + ((1 + rate.toNumber() / 1000000) * (10 ^ 365)) / 100;
+  const yearRate = '' + (rate.toNumber() / 1000000) * 365 * 100;
+  // const yearRate2 = '' + ((1 + rate.toNumber() / 1000000) * (10 ^ 365)) / 100;
   return formatString(yearRate);
 }
 
