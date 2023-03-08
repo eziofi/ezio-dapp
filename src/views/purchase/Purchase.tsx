@@ -5,7 +5,7 @@ import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query'
 import { BigNumber, Signer } from 'ethers';
 import { TOKEN_DECIMAL, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
 import useWallet from '../hooks/useWallet';
-import { formatDecimal, formatNetWorth, timestampFormat } from '../wallet/helpers/utilities';
+import { formatDecimal, timestampFormat } from '../wallet/helpers/utilities';
 import { useTranslation } from 'react-i18next';
 import { ContentBottom, ContentTop, ConverBtn, DateNow, FooterContent, PurchaseContainer } from './PurchaseStyle';
 import CachedIcon from '@mui/icons-material/Cached';

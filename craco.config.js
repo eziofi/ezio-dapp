@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const CracoLessPlugin = require('craco-less');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   plugins: [
@@ -25,6 +26,7 @@ module.exports = {
           Buffer: ['buffer', 'Buffer'],
           process: 'process/browser',
         }),
+        // new BundleAnalyzerPlugin(),
       ],
     },
   },

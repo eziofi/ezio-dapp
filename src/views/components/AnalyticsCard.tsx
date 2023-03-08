@@ -1,20 +1,11 @@
-import { alpha, styled, useTheme } from '@mui/material/styles';
-import { Box, Card, SxProps, Theme, Typography } from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
+import { Box, Card, SxProps, Theme } from '@mui/material';
 
 import { useTranslation } from 'react-i18next';
 import useWallet from '../hooks/useWallet';
-import {
-  commissionIncome,
-  ezatTotalSupply,
-  ezbtTotalSupply,
-  ezMATICTotalNetWorth,
-  ezUSDTotalNetWorth,
-  treasuryInterestRate,
-  treasuryTotalNetWorth,
-} from '../wallet/helpers/contract_call';
+import { commissionIncome, ezMATICTotalNetWorth, ezUSDTotalNetWorth } from '../wallet/helpers/contract_call';
 import { useQuery } from 'react-query';
-import { formatNetWorth, formatDecimal } from '../wallet/helpers/utilities';
-import BaseIconFont from './BaseIconFont';
+import { formatDecimal } from '../wallet/helpers/utilities';
 import { TOKEN_TYPE } from '../wallet/helpers/constant';
 import { InlineSkeleton } from './Skeleton';
 
