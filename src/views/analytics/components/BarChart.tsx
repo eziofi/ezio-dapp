@@ -8,7 +8,7 @@ import { useTheme } from '@mui/material/styles';
 import { useQuery } from 'react-query';
 import { queryAccumulatedFees, queryDailyAccumulatedFees } from '../../../api/api';
 import { ColorModeContext } from '../../../theme';
-import { getYMax } from '../../wallet/helpers/utilities';
+import { getDecimal, getYMax } from '../../wallet/helpers/utilities';
 
 export default function BarChart() {
   const [option, setOption] = React.useState<any>(null);
@@ -83,9 +83,8 @@ export default function BarChart() {
             title: {
               text: t('analytics.everyday'),
             },
-            decimalsInFloat: 0,
+            decimalsInFloat: getDecimal(DailyAccumulatedFees),
             min: 0,
-            // @ts-ignore
             max: getYMax(DailyAccumulatedFees),
           },
           {
@@ -93,9 +92,8 @@ export default function BarChart() {
             title: {
               text: t('analytics.accumulativeTotal'),
             },
-            decimalsInFloat: 0,
+            decimalsInFloat: getDecimal(DailyAccumulatedFees),
             min: 0,
-            // @ts-ignore
             max: getYMax(AccumulatedFees),
           },
         ],

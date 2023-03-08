@@ -94,7 +94,7 @@ export default {
     redeemValue: 'Redeem',
     title: 'Redeem',
     redeemInputLabel: 'Amount',
-    redeemAction: 'Redeem to USDC',
+    redeemAction: 'Redeem',
     maxRedeemAmount: 'Max Redeem Amount: ',
     overAmount: 'Amount Overflow',
     ETHEstimated: 'ETH Estimated',

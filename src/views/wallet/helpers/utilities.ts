@@ -208,12 +208,33 @@ export function timestampFormat(timestamp: number) {
  * @returns Y轴最大值
  */
 export function getYMax(data: number[]) {
+  if (data.length === 0) return 0;
   const max = Math.max(...data);
-  const length = max.toString().split('.')[0].length;
-  const float = max / Math.pow(10, length - 1);
-  const first = Math.ceil(float);
-  const maxYValue = first * Math.pow(10, length - 1);
-  return maxYValue;
+  if (max > 1) {
+    const length = max.toString().split('.')[0].length;
+    const float = max / Math.pow(10, length - 1);
+    const first = Math.ceil(float);
+    const maxYValue = first * Math.pow(10, length - 1);
+    return maxYValue;
+  } else {
+    const floatString = max.toString().split('.')[1];
+    let firstNumDecimal = floatString.length - String(parseInt(floatString)).length; // 小数点后有多少个零
+    const roundMax = max * Math.pow(10, firstNumDecimal + 1); // 乘为整数
+    const ceilNum = Math.ceil(roundMax); // 向上圆整到最小整数
+    const res = ceilNum / Math.pow(10, firstNumDecimal + 1); //再除为原先的位数
+    return res;
+  }
+}
+
+export function getDecimal(data: number[]) {
+  if (data.length === 0) return 0;
+  const max = Math.max(...data);
+  if (max > 1) return 0;
+  else {
+    const floatString = max.toString().split('.')[1];
+    let firstNumDecimal = floatString.length - String(parseInt(floatString)).length; // 小数点后有多少个零
+    return firstNumDecimal + 2;
+  }
 }
 
 export async function getOneInchQuoteResponse(quoteParams: OneInchQuoteParams) {
