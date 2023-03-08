@@ -4,17 +4,11 @@ import { styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar, IconButton, CircularProgress } from '@mui/material';
 // utils
 import { bgBlur } from '../../../utils/cssStyles';
-// components
-// import Iconify from '../../../components/iconify';
-//
-import Searchbar from './Searchbar';
 import LanguagePopover from './LanguagePopover';
-import NotificationsPopover from './NotificationsPopover';
 import Iconify from '../../../components/iconify';
 import AddressPopover from './AddressPopover';
 import ThemeSwitcher from './ThemeSwitcher';
-import { useContext } from 'react';
-import { UIContext } from '../DashboardLayout';
+
 import { useLocation } from 'react-router-dom';
 
 // ----------------------------------------------------------------------

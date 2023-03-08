@@ -2,7 +2,6 @@ import * as ethUtil from 'ethereumjs-util';
 import { IChainData, OneInchQuoteParams, ZeroExQuoteParams } from './types';
 import supportedChains from './chains';
 import { BigNumber, BigNumberish, FixedNumber, utils } from 'ethers';
-import numeral from 'numeral';
 import qs from 'qs';
 import { formatUnits } from 'ethers/lib/utils';
 import { QUOTE_CHANNEL, TOKEN_DECIMAL, TOKEN_TYPE } from './constant';
@@ -154,13 +153,6 @@ export function recoverPersonalSignature(sig: string, msg: string): string {
 
 export function isObject(obj: any): boolean {
   return typeof obj === 'object' && !!Object.keys(obj).length;
-}
-
-export function formatNetWorth(value: BigNumberish | string | undefined, format18?: boolean) {
-  if (format18) {
-    return value ? numeral(utils.formatEther(value)).format('0.00') : '0';
-  }
-  return value ? numeral(value).format('0.00') : '0';
 }
 
 /**

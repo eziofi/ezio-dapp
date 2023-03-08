@@ -3,11 +3,10 @@ import { useBalance } from '../../hooks/useBalance';
 import { usePrice } from '../../hooks/usePrice';
 import { AccountCard, Content } from '../account/AccountStyle';
 import BaseIconFont from './BaseIconFont';
-import Box from '@mui/material/Box';
 import { formatDecimal } from '../wallet/helpers/utilities';
 import { InlineSkeleton } from './Skeleton';
 import { useTranslation } from 'react-i18next';
-import { Tooltip } from '@mui/material';
+import { Box, Tooltip } from '@mui/material';
 import { useEffect } from 'react';
 
 export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TYPE; refreshFlag: number }) {

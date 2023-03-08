@@ -2,14 +2,11 @@ import React, { useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { t } from 'i18next';
-import { useTheme } from '@mui/material/styles';
 import { ColorModeContext } from '../../../theme';
 import RenderSkeleton from './RenderSkeleton';
 import { Box, Card, CardHeader } from '@mui/material';
 import { queryAbTotalnetworth } from '../../../api/api';
 import { getYMax } from '../../wallet/helpers/utilities';
-import { fDate } from '../../../utils/formatTime';
-import { format } from 'date-fns';
 
 export default function TotleNetWorthApexChart() {
   const [option, setOption] = React.useState<any>(null);

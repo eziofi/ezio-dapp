@@ -1,5 +1,4 @@
 import { Container, Grid } from '@mui/material';
-import PriceTable from './components/PriceTable';
 
 import MarketApexChart from './components/MarketApexChart';
 import HomeCard, { HOME_CARD_TYPE } from '../components/HomeCard';
