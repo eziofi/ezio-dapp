@@ -116,7 +116,7 @@ export default {
     },
     everyday: '每日',
     accumulativeTotal: '累计',
-    commissionIncome: '按日分组手续费',
+    CommissionDetail: '手续费明细',
   },
   tips: {
     line1: '由于stETH大幅下跌可能会给TokenA的投资人带来风险。',
