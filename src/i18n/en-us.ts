@@ -117,6 +117,7 @@ export default {
     },
     everyday: 'every Day',
     accumulativeTotal: 'accumulative Total',
+    commissionIncome: 'Commission Income',
   },
   tips: {
     line1: "The big decline of stEth may cause risks to EzUSD's investors.",

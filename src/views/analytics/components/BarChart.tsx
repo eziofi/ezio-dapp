@@ -112,7 +112,7 @@ export default function BarChart() {
 
   return (
     <Card>
-      <CardHeader title={t('analytics.title.fee') as string} />
+      <CardHeader title={t('analytics.commissionIncome') as string} />
 
       <Box dir="ltr" sx={{ p: `0 ${theme.spacing(3)} 0 ${theme.spacing(3)}` }}>
         {option ? (

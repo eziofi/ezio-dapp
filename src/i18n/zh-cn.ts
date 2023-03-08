@@ -116,6 +116,7 @@ export default {
     },
     everyday: '每日',
     accumulativeTotal: '累计',
+    commissionIncome: '手续费收入',
   },
   tips: {
     line1: '由于stETH大幅下跌可能会给TokenA的投资人带来风险。',
