@@ -64,8 +64,8 @@ export default function Purchase() {
     TOKEN_TYPE.USDT,
   ); // 下拉框value
   const theme = useTheme();
-  const [slippage, setSlippage] = useState<number>(1);
-  const [resetVal, setHiddenVal] = useState<number>(1);
+  const [slippage, setSlippage] = useState<number>(0.5);
+  const [resetVal, setHiddenVal] = useState<number>(0.5);
   const [time, setTime] = useState<string>();
 
   const { loadingOpen, loadingText } = useContext(UIContext);

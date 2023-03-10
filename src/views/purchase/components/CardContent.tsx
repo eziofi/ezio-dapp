@@ -92,7 +92,7 @@ const CssTextField = styled(TextField)(() => {
       },
       '#custom-css-outlined-input': {
         fontSize: 32,
-        width: 150,
+        width: 200,
         color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
         padding: 0,
       },
@@ -162,14 +162,19 @@ function RanderOptions(
           fontSize: 12,
           color: theme.palette.text.secondary,
           marginTop: 5,
+          display: 'flex',
+          alignItems: 'center',
         }}
       >
         {t('purchase.leftBalance') + ': '}
         {balance ? formatString(balance, 6).toString() : <InlineSkeleton width={40} />}
-        {showMaxVal && inputVal && (
+        {showMaxVal && inputVal !== balance && (
           <Button
             sx={{
               padding: '0',
+              size: 12,
+              lineHeight: '0',
+              fontWeight: '0',
               ':hover': {
                 background: 'none',
               },

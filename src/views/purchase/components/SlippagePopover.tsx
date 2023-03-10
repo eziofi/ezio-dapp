@@ -38,13 +38,12 @@ export default function SlippagePopover({
       setIsAutomation(false);
     } else {
       e.target.value = e.target.value.replace(/[e\+\-]/, '');
-      setSlippage(slippage);
+      setSlippage(e.target.value);
       setIsAutomation(true);
     }
   };
 
   const [isAutomation, setIsAutomation] = React.useState(true);
-  const _slippage = slippage;
 
   return (
     <div>
@@ -95,7 +94,7 @@ export default function SlippagePopover({
                   id="outlined-adornment-weight"
                   endAdornment={
                     <InputAdornment position="end">
-                      <span style={{ color: 'white' }}>%</span>
+                      <span style={{ color: useTheme().palette.mode === 'dark' ? 'white' : 'black' }}>%</span>
                     </InputAdornment>
                   }
                   value={slippage}
