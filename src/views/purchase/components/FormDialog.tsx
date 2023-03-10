@@ -1,16 +1,6 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, ChangeEventHandler } from 'react';
 import { useTranslation } from 'react-i18next';
-import { styled } from '@mui/system';
-import {
-  useTheme,
-  InputAdornment,
-  Button,
-  TextField,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from '@mui/material';
+import { InputAdornment, Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 export default function FormDialog({
   open,
   setOpen,
@@ -33,11 +23,14 @@ export default function FormDialog({
 
   const { t } = useTranslation();
 
-  const theme = useTheme();
-
-  function setAmountFormat(val: string) {
-    if (val) return parseFloat(val).toFixed(2) || '';
-  }
+  const toFixedSlippage = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value !== '') {
+      setSlippage(+e.target.value.replace(/^\D*(\d*(?:\.\d{0,1})?).*$/g, '$1'));
+    } else {
+      e.target.value = e.target.value.replace(/[e\+\-]/, '');
+      setSlippage(+e.target.value);
+    }
+  };
 
   return (
     <Dialog
@@ -61,16 +54,9 @@ export default function FormDialog({
           variant="standard"
           type="number"
           value={slippage}
-          onInput={(e: any) => {
-            if (e.target.value !== '') {
-              setSlippage(e.target.value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1'));
-            } else {
-              e.target.value = e.target.value.replace(/[e\+\-]/, '');
-              setSlippage(e.target.value);
-            }
-          }}
+          onInput={(e: ChangeEvent<HTMLInputElement>) => toFixedSlippage(e)}
           InputProps={{
-            endAdornment: <InputAdornment position="end">%</InputAdornment>,
+            endAdornment: <InputAdornment position="start">%</InputAdornment>,
           }}
         />
         {/* <FormattedInputs /> */}

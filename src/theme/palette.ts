@@ -101,6 +101,12 @@ const palette = {
     hoverOpacity: 0.08,
     disabledOpacity: 0.48,
   },
+  purchase: {
+    containerBg: 'rgb(255, 255, 255, 1)',
+    cardBg: 'rgba(245, 246, 252, 1)',
+    menuItemBg: 'rgba(110, 77, 248, 0.1)',
+    slippageBg: 'rgba(255, 255, 255, 1)',
+  },
 };
 
 export default palette;

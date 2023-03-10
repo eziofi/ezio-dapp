@@ -7,9 +7,17 @@ import { TOKEN_DECIMAL, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/cons
 import useWallet from '../hooks/useWallet';
 import { formatDecimal, timestampFormat } from '../wallet/helpers/utilities';
 import { useTranslation } from 'react-i18next';
-import { ContentBottom, ContentTop, ConverBtn, DateNow, FooterContent, PurchaseContainer } from './PurchaseStyle';
+import {
+  ContentBottom,
+  ContentTop,
+  ConverBtn,
+  DateNow,
+  FooterContent,
+  PurchaseContainer,
+  UnitconverContent,
+} from './PurchaseStyle';
 import CachedIcon from '@mui/icons-material/Cached';
-import { MyCardContentOne, MyCardContentSecond } from '../components/CardContent';
+import { MyCardContentOne, MyCardContentSecond } from './components/CardContent';
 import { usePrice } from '../../hooks/usePrice';
 import { useBalance } from '../../hooks/useBalance';
 import FormDialog from './components/FormDialog';
@@ -20,6 +28,7 @@ import { UIContext } from '../../layouts/dashboard/DashboardLayout';
 import useTx from '../../hooks/useTx';
 import { InlineSkeleton } from '../components/Skeleton';
 import { HOME_CARD_TYPE } from '../components/HomeCard';
+import SlippagePopover from './components/SlippagePopover';
 
 interface IPurchaseArg {
   fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC;
@@ -44,8 +53,10 @@ export default function Purchase() {
   const [inputValue1, setInputValue1] = useState('');
   const [inputValue2, setInputValue2] = useState('');
   const [isClick, setIsClick] = useState(false);
-  const [tokenType, setTokenType] = useState<TOKEN_TYPE>(TOKEN_TYPE.ezUSD); // 下拉框value
-  const [redeemTokenType, setRedeemTokenType] = useState<TOKEN_TYPE>(TOKEN_TYPE.USDT); // 下拉框value
+  const [tokenType, setTokenType] = useState<TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC>(TOKEN_TYPE.ezUSD); // 下拉框value
+  const [redeemTokenType, setRedeemTokenType] = useState<TOKEN_TYPE.USDC | TOKEN_TYPE.USDT | TOKEN_TYPE.stMATIC>(
+    TOKEN_TYPE.USDT,
+  ); // 下拉框value
   const theme = useTheme();
   const [slippage, setSlippage] = useState<number>(1);
   const [time, setTime] = useState<string>();
@@ -67,12 +78,13 @@ export default function Purchase() {
   const { price: toPrice } = usePrice(type === TRANSFER_TYPE.PURCHASE ? tokenType : redeemTokenType);
 
   const { t } = useTranslation();
-  const style = {
+  const buyBtnStyle = {
     display: 'flex',
     width: '90%',
     color: 'white',
     margin: '10px 0',
     fontWeight: 'none',
+    marginTop: theme.spacing(10),
   };
   function getInputVal1(value: string) {
     setInputValue1(value);
@@ -106,7 +118,7 @@ export default function Purchase() {
     // }, 1500);
   }
 
-  function getTokenType(tokenType: TOKEN_TYPE) {
+  function getTokenType(tokenType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC) {
     setTokenType(tokenType);
   }
 
@@ -239,6 +251,15 @@ export default function Purchase() {
     }
   }, [type]);
 
+  const CardStyle = {
+    borderColor: `${inputValue1 ? theme.palette.primary.main : ''}`,
+    ':after': {
+      border: `${inputValue1 ? `1px solid ${theme.palette.primary.main}` : ''}`,
+    },
+    borderBottomLeftRadius: inputValue1 !== '' && '0',
+    borderBottomRightRadius: inputValue1 !== '' && '0',
+  };
+
   return (
     <PurchaseContainer>
       <Toolbar sx={{ width: '98%', alignSelf: 'flex-start', margin: '0 auto' }}>
@@ -248,25 +269,18 @@ export default function Purchase() {
           sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}
         >
           <span>{type === 0 ? t('purchase.purchaseValue') : t('redeem.redeemValue')}</span>
-          {/* <span onClick={handleClickOpen}>设置</span> */}
-          <IconButton onClick={handleClickOpen}>
-            {/* <img src={rollbackIcon} width="24" style={{ background: 'red' }} /> */}
-            {/* <ReplyIcon /> */}
-            <BaseIconFont name="icon-shezhi" style={{ width: 20, height: 20 }} />
-          </IconButton>
-          <FormDialog open={open} setOpen={setOpen} slippage={slippage} setSlippage={setSlippage} />
+          {/* <IconButton onClick={handleClickOpen} title="滑点设置">
+            <BaseIconFont
+              name={theme.palette.mode === 'dark' ? 'icon-shezhi-copy2' : 'icon-shezhi'}
+              style={{ width: 20, height: 20 }}
+            />
+          </IconButton> */}
+          {/* <FormDialog open={open} setOpen={setOpen} slippage={slippage} setSlippage={setSlippage} /> */}
+          <SlippagePopover slippage={slippage} setSlippage={setSlippage} />
         </Typography>
       </Toolbar>
       {/* 卡片1 */}
-      <ContentBottom
-        sx={{
-          borderColor: `${inputValue1 ? 'rgba(110, 76, 248, 1)' : ''}`,
-          ':after': {
-            border: `${inputValue1 ? '1px solid rgba(110, 76, 248, 1)' : ''}`,
-          },
-        }}
-        className="contentBottom"
-      >
+      <ContentBottom sx={{ ...CardStyle }} className="contentBottom">
         {!isClick ? (
           <CardContent>
             <MyCardContentOne
@@ -286,27 +300,12 @@ export default function Purchase() {
       </ContentBottom>
       {/* cover btn */}
       <ConverBtn className="coverBtn">
-        <IconButton
-          className="iconBtn"
-          // size="large"
-          sx={{ color: 'white' }}
-          onClick={() => {
-            setAnimation();
-          }}
-        >
+        <IconButton className="iconBtn" sx={{ color: 'white' }} onClick={() => setAnimation()}>
           <CachedIcon fontSize="inherit" />
         </IconButton>
       </ConverBtn>
       {/* 卡片2 */}
-      <ContentTop
-        sx={{
-          borderColor: `${inputValue2 ? 'rgba(110, 76, 248, 1)' : ''}`,
-          ':after': {
-            border: `${inputValue2 ? '1px solid rgba(110, 76, 248, 1)' : ''}`,
-          },
-        }}
-        className="contentTop"
-      >
+      <ContentTop sx={{ ...CardStyle }} className="contentTop">
         {!isClick ? (
           <CardContent>
             <MyCardContentSecond
@@ -323,19 +322,24 @@ export default function Purchase() {
           <></>
         )}
       </ContentTop>
-      {/* 当前时间 */}
-      <DateNow>
-        {t('purchase.currentTime')}: {time}
-      </DateNow>
+
+      {/* 单位换算/*/}
+      {inputValue1 ? (
+        <UnitconverContent>
+          <p>
+            <BaseIconFont name="icon-Prompt" />
+            <span>
+              1 {TOKEN_TYPE[redeemTokenType]} = 1,541.04 {TOKEN_TYPE[tokenType]}
+            </span>
+          </p>
+        </UnitconverContent>
+      ) : (
+        <></>
+      )}
+
       {/* 购买、赎回按钮 */}
       <Button
-        sx={{
-          ...style,
-          background:
-            !inputValue1 || !+inputValue1 || loadingOpen
-              ? 'gray'
-              : 'linear-gradient(180deg, rgba(108, 75, 246, 1) 0%, rgba(113, 79, 251, 1) 100%)',
-        }}
+        sx={{ ...buyBtnStyle }}
         variant="contained"
         disableElevation
         disabled={!inputValue1 || !+inputValue1 || loadingOpen}
@@ -352,20 +356,16 @@ export default function Purchase() {
           t('redeem.redeemAction')
         )}
       </Button>
-      {/*<>*/}
-      {/*  <Link*/}
-      {/*    href="#"*/}
-      {/*    underline="none"*/}
-      {/*    onClick={() => setTipDrawerOpened(true)}*/}
-      {/*    sx={{ fontSize: 12, color: 'rgba(110, 76, 248, 1)' }}*/}
-      {/*  >*/}
-      {/*    {t('purchase.checkTips')}*/}
-      {/*  </Link>*/}
-      {/*  {tipDrawerOpened ? <PurchaseDrawer opened={tipDrawerOpened} close={() => setTipDrawerOpened(false)} /> : <></>}*/}
-      {/*</>*/}
       <FooterContent>
-        {/*<span>{t('purchase.unitPrice') + ' $' + formatNetWorth(netWorth, true)}</span>*/}
-        <span style={{ color: theme.palette.text.secondary }}>
+        {/* 当前时间 */}
+        <DateNow>
+          {t('purchase.currentTime')}: {time}
+        </DateNow>
+
+        {/* ezUSD参考年利率 */}
+        <span
+          style={{ color: theme.palette.mode === 'light' ? theme.palette.primary.main : theme.palette.text.primary }}
+        >
           {rate ? t('purchase.EZATRate') + rate + '%' : <InlineSkeleton />}
         </span>
       </FooterContent>

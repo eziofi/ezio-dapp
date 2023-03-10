@@ -3,9 +3,10 @@ import { styled } from '@mui/system';
 import { IProps } from '../styleType';
 
 const PurchaseContainer = styled((props: IProps) => {
+  const theme: any = useTheme();
   return (
     <div style={{ padding: '0 15px' }}>
-      <Card {...props} />
+      <Card {...props} sx={{ background: theme.palette.purchase.containerBg }} />
     </div>
   );
 })(() => {
@@ -24,18 +25,20 @@ const PurchaseContainer = styled((props: IProps) => {
 });
 
 const ContentBottom = styled((props: IProps) => {
-  return <Card {...props} variant="outlined" />;
+  return <Card {...props} />;
 })(() => {
   return {
     width: '90%',
     height: 109,
     position: 'relative',
+    // @ts-ignore
+    background: useTheme().palette.purchase.cardBg,
+    boxShadow: 'none',
     ':after': {
       position: 'absolute',
       content: '""',
       width: 50,
       height: 50,
-      // background: '#eef1f9',
       borderRadius: '100%',
       top: '100%',
       left: '50%',
@@ -46,18 +49,20 @@ const ContentBottom = styled((props: IProps) => {
 });
 
 const ContentTop = styled((props: IProps) => {
-  return <Card {...props} variant="outlined" />;
+  return <Card {...props} />;
 })(() => {
   return {
     width: '90%',
     height: 109,
     position: 'relative',
+    // @ts-ignore
+    background: useTheme().palette.purchase.cardBg,
+    boxShadow: 'none',
     ':after': {
       position: 'absolute',
       content: '""',
       width: 50,
       height: 50,
-      // background: '#eef1f9',
       color: 'red',
       borderRadius: '100%',
       top: '0',
@@ -90,10 +95,10 @@ const ConverBtn = styled('div')(() => {
       width: 35,
       height: 35,
       borderRadius: '50%',
-      background: 'rgba(110, 76, 248, 1)',
+      background: theme.palette.primary.main,
       border: 'none',
       ':hover': {
-        background: 'rgba(110, 76, 248, 1)',
+        background: theme.palette.primary.main,
       },
     },
   };
@@ -112,6 +117,7 @@ const BalanceContent = styled('div')(() => {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-end',
+    height: 83,
   };
 });
 
@@ -131,9 +137,9 @@ const DateNow = styled('p')(() => {
     color: 'rgba(76, 80, 97, 1)',
     fontSize: 14,
     letterSpacing: 0,
-    width: '90%',
+    width: '100%',
     bgColor: 'red',
-    margin: '10px auto 20px',
+    // margin: '10px auto 20px',
   };
 });
 
@@ -142,10 +148,66 @@ const FooterContent = styled('div')(() => {
     display: 'flex',
     flexDirection: 'column',
     textAlign: 'center',
-    width: 200,
+    width: '90%',
     fontSize: 12,
     letterSpacing: 0,
     marginTop: 10,
+  };
+});
+
+const UnitconverContent = styled((props: IProps) => {
+  return <Card {...props} />;
+})(() => {
+  return {
+    width: '90%',
+    // @ts-ignore
+    background: useTheme().palette.purchase.cardBg,
+    marginTop: 5,
+    borderTopLeftRadius: '0',
+    borderTopRightRadius: '0',
+    boxShadow: 'none',
+    p: {
+      fontSize: 14,
+      display: 'flex',
+      alignItems: 'center',
+      '.icon': {
+        width: 14,
+        height: 14,
+        margin: '0 10px 1px 20px',
+        fill: 'rgba(112, 78, 250, 1)',
+      },
+    },
+  };
+});
+
+const SlippagePopoverContent = styled((props: IProps) => {
+  return <Card {...props} />;
+})(() => {
+  return {
+    width: 317,
+    height: 178,
+    // @ts-ignore
+    background: useTheme().palette.purchase.slippageBg,
+    div: {
+      header: {
+        // flex: 1.5,
+        display: 'flex',
+        alignItems: 'center',
+        p: {
+          '.icon': {
+            width: 14,
+            height: 14,
+            fill: 'rgba(112, 78, 250, 1)',
+            // fill: 'red',
+          },
+        },
+      },
+      footer: {
+        height: 36,
+        flex: 1,
+        display: 'flex',
+      },
+    },
   };
 });
 
@@ -159,4 +221,6 @@ export {
   FormControlStyle,
   DateNow,
   FooterContent,
+  UnitconverContent,
+  SlippagePopoverContent,
 };

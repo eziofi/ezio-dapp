@@ -1,31 +1,31 @@
-import { InputBase, MenuItem, Select, Skeleton, styled, TextField, useTheme } from '@mui/material';
+import { Button, InputBase, MenuItem, Select, Skeleton, styled, TextField, useTheme } from '@mui/material';
 import React from 'react';
-import { BalanceContent, BodyContent } from '../purchase/PurchaseStyle';
+import { BalanceContent, BodyContent, UnitconverContent } from '../PurchaseStyle';
 import { t } from 'i18next';
-import { useBalance } from '../../hooks/useBalance';
-import { formatDecimal } from '../wallet/helpers/utilities';
-import { TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
-import BaseIconFont from './BaseIconFont';
-import { usePrice } from '../../hooks/usePrice';
+import { useBalance } from '../../../hooks/useBalance';
+import { formatDecimal } from '../../wallet/helpers/utilities';
+import { TOKEN_TYPE, TRANSFER_TYPE } from '../../wallet/helpers/constant';
+import BaseIconFont from '../../components/BaseIconFont';
+import { usePrice } from '../../../hooks/usePrice';
 import { BigNumber } from 'ethers';
-import { InlineSkeleton } from './Skeleton';
+import { InlineSkeleton } from '../../components/Skeleton';
 
 interface IProps {
   isBuy?: boolean;
   setIsBuy: (buy: boolean) => void;
   transactionType: TRANSFER_TYPE.PURCHASE | TRANSFER_TYPE.REDEEM;
-  getTokenType: (tokenType: TOKEN_TYPE) => void;
+  getTokenType: (tokenType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC) => void;
   getInputVal1: (InputVal: string) => void | any;
   inputValue2: string;
-  tokenType: TOKEN_TYPE;
+  tokenType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC;
   redeemTokenType: TOKEN_TYPE;
-  setRedeemTokenType: (redeemTokenType: TOKEN_TYPE) => void;
+  setRedeemTokenType: (redeemTokenType: TOKEN_TYPE.USDC | TOKEN_TYPE.USDT | TOKEN_TYPE.stMATIC) => void;
   inputValue1: string;
 }
 
 interface IOptions {
   value: TOKEN_TYPE;
-  style: { margin: string; background: string };
+  iconParentStyle: { margin: string; background: string };
   iconName: string;
   iconStyle: { width: number; height: number; fill: string };
 }
@@ -54,7 +54,8 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
     borderRadius: 15,
     width: 110,
     position: 'relative',
-    backgroundColor: theme.palette.mode === 'light' ? 'rgba(247, 239, 255, 1)' : theme.palette.grey[700],
+    // @ts-ignore
+    backgroundColor: theme.palette.purchase.menuItemBg,
     fontSize: 14,
     display: 'flex',
     alignItems: 'center',
@@ -99,7 +100,7 @@ const CssTextField = styled(TextField)(() => {
   };
 });
 
-const iconStyle = {
+const MenuItemStyle = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -114,23 +115,29 @@ const iconStyle = {
  * @param tokenType 币的类型
  * @param handleChange 更改币的类型的函数
  * @param balance 余额
+ * @param showMaxVal 是否显示最大值
+ * @param inputVal 购买值
+ * @param setInputVal 设置购买值
  * @returns SelectItem
  */
 function RanderOptions(
   Options: IOptions[],
   tokenType: TOKEN_TYPE,
-  handleChange: (value: TOKEN_TYPE) => void,
+  handleChange: (value: keyof TOKEN_TYPE) => void,
   balance: undefined | BigNumber,
+  showMaxVal: boolean,
+  inputVal?: string,
+  setInputVal?: (value: string) => void,
 ) {
   const theme = useTheme();
   return (
     <BalanceContent>
       <Select
-        id="demo-customized-select-native"
         value={tokenType}
         // @ts-ignore
         onChange={e => handleChange(e.target.value as typeof TOKEN_TYPE)}
         input={<BootstrapInput />}
+        sx={{ height: 46 }}
       >
         {Options.map((item: IOptions, index: number) => {
           return (
@@ -138,8 +145,8 @@ function RanderOptions(
               <>
                 <div
                   style={{
-                    ...iconStyle,
-                    ...item.style,
+                    ...MenuItemStyle,
+                    ...item.iconParentStyle,
                   }}
                 >
                   <BaseIconFont name={item.iconName} style={item.iconStyle} />
@@ -150,7 +157,7 @@ function RanderOptions(
           );
         })}
       </Select>
-      <span
+      <div
         style={{
           fontSize: 12,
           color: theme.palette.text.secondary,
@@ -159,7 +166,21 @@ function RanderOptions(
       >
         {t('purchase.leftBalance') + ': '}
         {balance ? formatDecimal(balance, tokenType, 6).toString() : <InlineSkeleton width={40} />}
-      </span>
+        {showMaxVal && inputVal && (
+          <Button
+            sx={{
+              padding: '0',
+              ':hover': {
+                background: 'none',
+              },
+            }}
+            // @ts-ignore
+            onClick={() => setInputVal(formatDecimal(balance, tokenType, 6).toString())}
+          >
+            最大值
+          </Button>
+        )}
+      </div>
     </BalanceContent>
   );
 }
@@ -167,13 +188,13 @@ function RanderOptions(
 const PurchasenOptions: IOptions[] = [
   {
     value: TOKEN_TYPE.ezUSD,
-    style: { margin: '0 10px', background: 'rgba(95, 69, 186, 1)' },
+    iconParentStyle: { margin: '0 10px', background: 'rgba(95, 69, 186, 1)' },
     iconName: 'icon-A',
     iconStyle: { width: 20, height: 20, fill: 'white' },
   },
   {
     value: TOKEN_TYPE.ezMATIC,
-    style: { margin: '0 10px', background: 'rgba(239, 89, 114, 1)' },
+    iconParentStyle: { margin: '0 10px', background: 'rgba(239, 89, 114, 1)' },
     iconName: 'icon-B',
     iconStyle: { width: 20, height: 20, fill: 'white' },
   },
@@ -183,23 +204,31 @@ const PurchasenOptions: IOptions[] = [
 const redeemOptions: IOptions[] = [
   {
     value: TOKEN_TYPE.USDT,
-    style: { margin: '0 10px', background: 'none' },
+    iconParentStyle: { margin: '0 10px', background: 'none' },
     iconName: 'icon-usdt',
     iconStyle: { width: 30, height: 30, fill: 'white' },
   },
   {
     value: TOKEN_TYPE.USDC,
-    style: { margin: '0 10px', background: 'none' },
+    iconParentStyle: { margin: '0 10px', background: 'none' },
     iconName: 'icon-usdc',
     iconStyle: { width: 30, height: 30, fill: 'white' },
   },
   {
     value: TOKEN_TYPE.stMATIC,
-    style: { margin: '0 10px', background: 'none' },
+    iconParentStyle: { margin: '0 10px', background: 'none' },
     iconName: 'icon-stMatic1',
     iconStyle: { width: 30, height: 30, fill: 'white' },
   },
 ];
+
+const INPUT_PARENT_HEIGHT = 83; // 输入框父级高度
+
+//参考单价
+const priceStyle = {
+  fontSize: 12,
+  marginTop: 5,
+};
 
 function MyCardContentOne({
   transactionType,
@@ -214,22 +243,20 @@ function MyCardContentOne({
   const { price } = usePrice(isBuy ? redeemTokenType : tokenType);
 
   // const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
-  const handleChange = (value: TOKEN_TYPE) => {
+  const handleChange = (value: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC) => {
     getTokenType(value);
     // SetCurrency(event.target.value as TOKEN_BALANCE_TYPE);
   };
 
-  const redeemChange = (value: TOKEN_TYPE) => {
+  const redeemChange = (value: TOKEN_TYPE.USDC | TOKEN_TYPE.USDT | TOKEN_TYPE.stMATIC) => {
     setRedeemTokenType(value);
   };
 
   const { balance } = useBalance(transactionType === TRANSFER_TYPE.PURCHASE ? redeemTokenType : tokenType);
 
-  const theme = useTheme();
-
   return (
     <BodyContent>
-      <div>
+      <div style={{ height: INPUT_PARENT_HEIGHT }}>
         <CssTextField
           id="custom-css-outlined-input"
           size="small"
@@ -247,14 +274,7 @@ function MyCardContentOne({
           type="number"
           value={inputValue1}
         />
-        <div
-          style={{
-            fontSize: 12,
-            color: theme.palette.text.secondary,
-            marginTop: 5,
-            height: 18,
-          }}
-        >
+        <div style={{ ...priceStyle, color: useTheme().palette.text.secondary }}>
           {price ? t('purchase.unitPrice') + ': ' + price + ' USDC' : <Skeleton width={100} />}
         </div>
       </div>
@@ -262,10 +282,15 @@ function MyCardContentOne({
         ? RanderOptions(
             redeemOptions.filter(item => item.value !== TOKEN_TYPE.stMATIC),
             redeemTokenType,
+            // @ts-ignore
             redeemChange,
             balance,
+            true,
+            inputValue1,
+            getInputVal1,
           )
-        : RanderOptions(PurchasenOptions, tokenType, handleChange, balance)}
+        : // @ts-ignore
+          RanderOptions(PurchasenOptions, tokenType, handleChange, balance, true, inputValue1, getInputVal1)}
     </BodyContent>
   );
 }
@@ -283,83 +308,74 @@ function MyCardContentSecond({
   const { balance } = useBalance(transactionType === TRANSFER_TYPE.PURCHASE ? tokenType : redeemTokenType);
 
   // const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
-  const handleChange = (value: TOKEN_TYPE) => {
+  const handleChange = (value: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC) => {
     getTokenType(value);
     // SetCurrency(event.target.value as TOKEN_BALANCE_TYPE);
   };
 
-  const redeemChange = (value: TOKEN_TYPE) => {
+  const redeemChange = (value: TOKEN_TYPE.USDC | TOKEN_TYPE.USDT | TOKEN_TYPE.stMATIC) => {
     setRedeemTokenType(value);
   };
 
-  const theme = useTheme();
-
   return (
-    <BodyContent>
-      <div>
-        <CssTextField
-          id="custom-css-outlined-input"
-          size="small"
-          placeholder="0"
-          // onChange={e => getInputVal2(e.target.value)}
-          type="number"
-          value={inputValue2}
-          disabled
-        />
-        <div
-          style={{
-            fontSize: 12,
-            color: theme.palette.text.secondary,
-            marginTop: 5,
-          }}
-        >
-          {/*{t('purchase.estimated')}*/}
-          {price ? t('purchase.unitPrice') + ': ' + price + ' USDC' : <Skeleton width={100} />}
-        </div>
-      </div>
-
-      {transactionType === TRANSFER_TYPE.PURCHASE ? (
-        RanderOptions(PurchasenOptions, tokenType, handleChange, balance)
-      ) : tokenType === TOKEN_TYPE.ezUSD ? (
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', marginRight: 5, height: 46 }}>
-            <div
-              style={{
-                ...iconStyle,
-                background:
-                  redeemOptions[redeemOptions.findIndex(item => item.value === TOKEN_TYPE.USDC)].style.background,
-                marginRight: 5,
-              }}
-            >
-              <BaseIconFont
-                name="icon-usdc"
-                style={redeemOptions[redeemOptions.findIndex(item => item.value === TOKEN_TYPE.USDC)].iconStyle}
-              />
-            </div>
-            {TOKEN_TYPE[TOKEN_TYPE.USDC]}
+    <>
+      <BodyContent>
+        <div style={{ height: INPUT_PARENT_HEIGHT }}>
+          <CssTextField
+            id="custom-css-outlined-input"
+            size="small"
+            placeholder="0"
+            type="number"
+            value={inputValue2}
+            disabled
+          />
+          <div style={{ ...priceStyle, color: useTheme().palette.text.secondary }}>
+            {/*{t('purchase.estimated')}*/}
+            {price ? t('purchase.unitPrice') + ': ' + price + ' USDC' : <Skeleton width={100} />}
           </div>
-          {/* <div style={{ height: 18, visibility: 'hidden' }} /> */}
-          {/* 显示账户余额 */}
-          <span
-            style={{
-              fontSize: 12,
-              color: theme.palette.text.secondary,
-              marginTop: 5,
-            }}
-          >
-            {t('purchase.leftBalance') + ': '}
-            {balance ? formatDecimal(balance, tokenType, 6).toString() : <InlineSkeleton width={40} />}
-          </span>
         </div>
-      ) : (
-        RanderOptions(
-          redeemOptions.filter(item => item.value !== TOKEN_TYPE.USDT),
-          redeemTokenType,
-          redeemChange,
-          balance,
-        )
-      )}
-    </BodyContent>
+
+        {transactionType === TRANSFER_TYPE.PURCHASE ? (
+          // @ts-ignore
+          RanderOptions(PurchasenOptions, tokenType, handleChange, balance, false)
+        ) : tokenType === TOKEN_TYPE.ezUSD ? (
+          <div style={{ width: 142, height: 83, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+            <div style={{ display: 'flex', alignItems: 'center', height: 46 }}>
+              <div
+                style={{
+                  ...MenuItemStyle,
+                  background:
+                    redeemOptions[redeemOptions.findIndex(item => item.value === TOKEN_TYPE.USDC)].iconParentStyle
+                      .background,
+                  marginRight: 10,
+                }}
+              >
+                <BaseIconFont
+                  name="icon-usdc"
+                  style={redeemOptions[redeemOptions.findIndex(item => item.value === TOKEN_TYPE.USDC)].iconStyle}
+                />
+              </div>
+              <span style={{ fontSize: 14 }}>{TOKEN_TYPE[TOKEN_TYPE.USDC]}</span>
+            </div>
+
+            {/* 显示账户余额 */}
+            <span style={{ ...priceStyle, color: useTheme().palette.text.secondary }}>
+              {t('purchase.leftBalance') + ': '}
+              {balance ? formatDecimal(balance, tokenType, 6).toString() : <InlineSkeleton width={40} />}
+            </span>
+          </div>
+        ) : (
+          RanderOptions(
+            redeemOptions.filter(item => item.value !== TOKEN_TYPE.USDT),
+            redeemTokenType,
+            // @ts-ignore
+            redeemChange,
+            balance,
+            false,
+          )
+        )}
+      </BodyContent>
+    </>
   );
 }
 
