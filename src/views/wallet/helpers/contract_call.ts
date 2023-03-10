@@ -116,6 +116,15 @@ export async function treasuryInterestRate(signerOrProvider: Signer | Provider):
   return res;
 }
 /**
+ * 获取 手续费比率
+ * @returns 手续费比率
+ */
+export async function redeemFeeRate(signerOrProvider: Signer | Provider) {
+  const res = await EzioConnect(signerOrProvider).redeemFeeRate();
+  console.log('redeemFeeRate = ' + res.toString());
+  return res;
+}
+/**
  * 获取 杠杆率
  * @returns 杠杆率
  */
@@ -133,7 +142,7 @@ export async function getLeverage(signerOrProvider: Signer | Provider) {
  */
 export async function ezatBalanceOf(signerOrProvider: Signer | Provider, address: string): Promise<BigNumber> {
   const res = await EzatConnect(signerOrProvider).balanceOf(address);
-  // console.log('ezat Balance = ' + res.toString());
+  console.log('ezat Balance = ' + res.toString());
   return res;
 }
 
@@ -145,7 +154,7 @@ export async function ezatBalanceOf(signerOrProvider: Signer | Provider, address
  */
 export async function ezbtBalanceOf(signerOrProvider: Signer | Provider, address: string): Promise<BigNumber> {
   const res = await EzbtConnect(signerOrProvider).balanceOf(address);
-  // console.log('ezbt Balance = ' + res.toString());
+  console.log('ezbt Balance = ' + res.toString());
   return res;
 }
 
@@ -156,7 +165,29 @@ export async function ezbtBalanceOf(signerOrProvider: Signer | Provider, address
  * @returns usdt token 数量
  */
 export async function usdtBalanceOf(signerOrProvider: Signer | Provider, address: string): Promise<BigNumber> {
-  return await USDTConnect(signerOrProvider).balanceOf(address);
+  const res = await USDTConnect(signerOrProvider).balanceOf(address);
+  console.log('usdt Balance = ' + res.toString());
+  return res;
+}
+
+/**
+ * 获取 已授权数量
+ * @param signerOrProvider
+ * @param address 账户地址
+ * @param tokenType
+ * @returns usdt token allowance
+ */
+export async function getAllowance(
+  signerOrProvider: Signer | Provider,
+  address: string,
+  tokenType: TOKEN_TYPE.USDC | TOKEN_TYPE.USDT,
+): Promise<BigNumber> {
+  const res = await (tokenType === TOKEN_TYPE.USDC ? USDCConnect : USDTConnect)(signerOrProvider).allowance(
+    address,
+    ezioJson.address,
+  );
+  console.log(TOKEN_TYPE[tokenType] + ' allowance =' + res.toString());
+  return res;
 }
 
 /**
@@ -166,7 +197,9 @@ export async function usdtBalanceOf(signerOrProvider: Signer | Provider, address
  * @returns usdc token 数量
  */
 export async function usdcBalanceOf(signerOrProvider: Signer | Provider, address: string): Promise<BigNumber> {
-  return await USDCConnect(signerOrProvider).balanceOf(address);
+  const res = await USDCConnect(signerOrProvider).balanceOf(address);
+  console.log('usdc Balance = ' + res.toString());
+  return res;
 }
 
 /**

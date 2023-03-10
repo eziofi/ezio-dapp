@@ -1,3 +1,5 @@
+import { BigNumber } from 'ethers';
+
 export enum TOKEN_TYPE {
   ezUSD,
   ezMATIC,
@@ -23,6 +25,8 @@ export enum QUOTE_CHANNEL {
   ZeroEx,
   OneInch,
 }
+
+export const MAX_UINT256 = BigNumber.from(2).pow(256).add(-1);
 
 // Mainnet tokens
 // Not an exhaustive list, just enough so we don't repeat ourselves

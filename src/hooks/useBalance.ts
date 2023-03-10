@@ -26,10 +26,6 @@ export function useBalance(tokenType: TOKEN_TYPE) {
     isLoading,
   } = useQuery(['balanceOf', tokenType], () => balanceApi[tokenType](ethersProvider!.getSigner(), account), {
     enabled: !!ethersProvider && !!account,
-    onSuccess: data => {
-      // const res = formatDecimal(data, tokenType, 6).toString();
-      // console.log(res);
-    },
   });
   return { balance, refetchBalance, isLoading };
 }

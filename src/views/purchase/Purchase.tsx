@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import './animation.less';
 import { Box, Button, CardContent, CircularProgress, IconButton, Toolbar, Typography, useTheme } from '@mui/material';
 import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
-import { BigNumber, Signer } from 'ethers';
+import { Signer } from 'ethers';
 import { TOKEN_DECIMAL, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
 import useWallet from '../hooks/useWallet';
 import { formatDecimal, timestampFormat } from '../wallet/helpers/utilities';
@@ -23,10 +23,11 @@ import { useBalance } from '../../hooks/useBalance';
 import FormDialog from './components/FormDialog';
 import BaseIconFont from '../components/BaseIconFont';
 import { Provider } from '@ethersproject/providers';
-import { interestRateDay, interestRateYear, treasuryInterestRate } from '../wallet/helpers/contract_call';
+import { interestRateYear } from '../wallet/helpers/contract_call';
 import { UIContext } from '../../layouts/dashboard/DashboardLayout';
 import useTx from '../../hooks/useTx';
 import { InlineSkeleton } from '../components/Skeleton';
+import { useFeeRate } from '../../hooks/useFeeRate';
 import { HOME_CARD_TYPE } from '../components/HomeCard';
 import SlippagePopover from './components/SlippagePopover';
 
@@ -43,6 +44,11 @@ interface IRedeemArg {
   toType: TOKEN_TYPE.USDC | TOKEN_TYPE.stMATIC;
   amount: number;
   slippage: number;
+  signerOrProvider: Signer | Provider;
+}
+
+interface IApproveArg {
+  fromType: TOKEN_TYPE.USDC | TOKEN_TYPE.USDT;
   signerOrProvider: Signer | Provider;
 }
 
@@ -63,7 +69,7 @@ export default function Purchase() {
 
   const { loadingOpen, loadingText } = useContext(UIContext);
 
-  const { purchase, redeem } = useTx();
+  const { purchase, redeem, approve } = useTx();
 
   const { openBackLoading, closeBackLoading, setBackLoadingText, setMsg, openMsg, closeMsg } = useContext(UIContext);
 
@@ -76,6 +82,7 @@ export default function Purchase() {
 
   const { price: fromPrice } = usePrice(type === TRANSFER_TYPE.PURCHASE ? redeemTokenType : tokenType);
   const { price: toPrice } = usePrice(type === TRANSFER_TYPE.PURCHASE ? tokenType : redeemTokenType);
+  const { feeRate } = useFeeRate();
 
   const { t } = useTranslation();
   const buyBtnStyle = {
@@ -134,6 +141,33 @@ export default function Purchase() {
     },
   );
 
+  const { mutateAsync: approveMutate } = useMutation(
+    (arg: IApproveArg) => approve(arg.fromType, arg.signerOrProvider),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries();
+      },
+      onError: error => {
+        console.error(error);
+      },
+    },
+  );
+  const doApprove = async () => {
+    try {
+      openBackLoading();
+      const args: IApproveArg = {
+        fromType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.USDT,
+        signerOrProvider: ethersProvider!.getSigner(),
+      };
+      await approveMutate(args);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      closeBackLoading();
+      setBackLoadingText('');
+    }
+  };
+
   const { mutateAsync: redeemMutate } = useMutation(
     (arg: IRedeemArg) => redeem(arg.fromType, arg.toType, arg.amount, arg.signerOrProvider, arg.slippage),
     {
@@ -148,7 +182,12 @@ export default function Purchase() {
 
   const { balance, refetchBalance } = useBalance(type === TRANSFER_TYPE.PURCHASE ? redeemTokenType : tokenType);
 
-  const { ethersProvider, account } = useWallet();
+  const { ethersProvider, account, allowanceUSDT, allowanceUSDC } = useWallet();
+  const needApprove =
+    type === TRANSFER_TYPE.PURCHASE &&
+    ((redeemTokenType === TOKEN_TYPE.USDT && (!allowanceUSDT || allowanceUSDT === '0')) ||
+      (redeemTokenType === TOKEN_TYPE.USDC && (!allowanceUSDC || allowanceUSDC === '0')));
+
   const { data: rate } = useQuery(['ezUSDDayRate'], () => interestRateYear(ethersProvider!.getSigner()), {
     enabled: !!ethersProvider,
     // onSuccess: data => {
@@ -171,8 +210,6 @@ export default function Purchase() {
   // 购买
   const doPurchase = () => {
     openBackLoading();
-    // setBackLoadingText(t('purchase.purchaseTip'));
-
     refetchBalance()
       .then(({ data }) => {
         if (!data) return Promise.reject();
@@ -342,14 +379,24 @@ export default function Purchase() {
         sx={{ ...buyBtnStyle }}
         variant="contained"
         disableElevation
-        disabled={!inputValue1 || !+inputValue1 || loadingOpen}
-        onClick={() => (type === 0 ? doPurchase() : type === 1 ? doRedeem() : null)}
+        disabled={(!needApprove && (!inputValue1 || !+inputValue1)) || loadingOpen}
+        onClick={() =>
+          needApprove
+            ? doApprove()
+            : type === TRANSFER_TYPE.PURCHASE
+            ? doPurchase()
+            : type === TRANSFER_TYPE.REDEEM
+            ? doRedeem()
+            : null
+        }
       >
         {loadingOpen ? (
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Box sx={{ mr: 1 }}>{loadingText}</Box>
             <CircularProgress size={16} sx={{ color: 'rgba(145, 158, 171, 0.8)' }} />
           </Box>
+        ) : needApprove ? (
+          t('purchase.approveAction') + TOKEN_TYPE[redeemTokenType]
         ) : type === TRANSFER_TYPE.PURCHASE ? (
           t('purchase.purchaseAction')
         ) : (
@@ -357,6 +404,16 @@ export default function Purchase() {
         )}
       </Button>
       <FooterContent>
+        {/*<span>{t('purchase.unitPrice') + ' $' + formatNetWorth(netWorth, true)}</span>*/}
+        {type === TRANSFER_TYPE.PURCHASE ? (
+          <span style={{ color: theme.palette.text.secondary }}>
+            {rate ? t('purchase.EZATRate') + rate + '%' : <InlineSkeleton />}
+          </span>
+        ) : (
+          <span style={{ color: theme.palette.text.secondary }}>
+            {rate ? t('purchase.feeRate') + feeRate + '%' : <InlineSkeleton />}
+          </span>
+        )}
         {/* 当前时间 */}
         <DateNow>
           {t('purchase.currentTime')}: {time}

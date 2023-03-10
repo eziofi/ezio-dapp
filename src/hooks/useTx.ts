@@ -1,6 +1,6 @@
 import { BigNumber, ethers, Signer } from 'ethers';
 import { Provider } from '@ethersproject/providers';
-import { POLYGON_TOKENS, QUOTE_CHANNEL, TOKEN_TYPE } from '../views/wallet/helpers/constant';
+import { MAX_UINT256, POLYGON_TOKENS, QUOTE_CHANNEL, TOKEN_TYPE } from '../views/wallet/helpers/constant';
 import { SwapQuoteStruct } from '../views/wallet/contract/contracts/interfaces/v1/IEzio';
 import { getQuote } from '../views/wallet/helpers/utilities';
 import {
@@ -31,8 +31,21 @@ const DAI_TAKER_ADDRESS = process.env.POLYGON_DAI_TAKER_ADDRESS || '';
 const channel = process.env.REACT_APP_QUOTE_CHANNEL === '1inch' ? QUOTE_CHANNEL.OneInch : QUOTE_CHANNEL.ZeroEx;
 
 export default function useTx() {
-  const { openBackLoading, closeBackLoading, setBackLoadingText, setMsg, openMsg, closeMsg } = useContext(UIContext);
+  const { setBackLoadingText } = useContext(UIContext);
   const { t } = useTranslation();
+
+  async function approve(fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC, signerOrProvider: Signer | Provider) {
+    console.log('approve');
+    setBackLoadingText(t('message.approving'));
+    const approveTx = await (fromType === TOKEN_TYPE.USDT ? USDTConnect : USDCConnect)(signerOrProvider).approve(
+      ezioJson.address,
+      MAX_UINT256.toString(),
+    );
+    console.log('approve waiting');
+    setBackLoadingText(t('message.approveWaiting'));
+    await approveTx.wait();
+    console.log('approved');
+  }
 
   /**
    * 购买
@@ -77,16 +90,16 @@ export default function useTx() {
         swapCallData: ethers.constants.HashZero,
       };
     }
-    console.log('approve');
-    setBackLoadingText(t('message.approving'));
-    const approveTx = await (fromType === TOKEN_TYPE.USDT ? USDTConnect : USDCConnect)(signerOrProvider).approve(
-      ezioJson.address,
-      quoteResponse.sellAmount,
-    );
-    console.log('approve waiting');
-    setBackLoadingText(t('message.approveWaiting'));
-    await approveTx.wait();
-    console.log('approved');
+    // console.log('approve');
+    // setBackLoadingText(t('message.approving'));
+    // const approveTx = await (fromType === TOKEN_TYPE.USDT ? USDTConnect : USDCConnect)(signerOrProvider).approve(
+    //   ezioJson.address,
+    //   quoteResponse.sellAmount,
+    // );
+    // console.log('approve waiting');
+    // setBackLoadingText(t('message.approveWaiting'));
+    // await approveTx.wait();
+    // console.log('approved');
     setBackLoadingText(t('message.sendingTx'));
     const purchaseTx = await EzioConnect(signerOrProvider).purchase(TOKEN_TYPE.ezUSD, channel, [quoteResponse]);
     setBackLoadingText(t('message.waitingTx'));
@@ -111,19 +124,17 @@ export default function useTx() {
       String(amount * 1000000),
       slippage,
     );
-    console.log('approve');
-    setBackLoadingText(t('message.approving'));
-    const approveTx = await (fromType === TOKEN_TYPE.USDT ? USDTConnect : USDCConnect)(signerOrProvider).approve(
-      ezioJson.address,
-      quoteResponse.sellAmount,
-    );
-    console.log('approve waiting');
-    setBackLoadingText(t('message.approveWaiting'));
-    await approveTx.wait();
-    console.log('approved');
-    // const quoteNetWorth = BigNumber.from(String(amount * 1000000))
-    //   .mul(fromType === TOKEN_TYPE.USDT ? await ezio.getPrice(fromTokenAddress) : 1000000)
-    //   .div(1000000);
+    // console.log('approve');
+    // setBackLoadingText(t('message.approving'));
+    // const approveTx = await (fromType === TOKEN_TYPE.USDT ? USDTConnect : USDCConnect)(signerOrProvider).approve(
+    //   ezioJson.address,
+    //   quoteResponse.sellAmount,
+    // );
+    // console.log('approve waiting');
+    // setBackLoadingText(t('message.approveWaiting'));
+    // await approveTx.wait();
+    // console.log('approved');
+
     const quoteNetWorth =
       fromType === TOKEN_TYPE.USDT
         ? BigNumber.from(amount * 1000000)
@@ -300,5 +311,5 @@ export default function useTx() {
     return quoteQty;
   };
 
-  return { purchase, redeem };
+  return { purchase, redeem, approve };
 }
