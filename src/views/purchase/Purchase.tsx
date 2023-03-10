@@ -213,7 +213,7 @@ export default function Purchase() {
     refetchBalance()
       .then(({ data }) => {
         if (!data) return Promise.reject();
-        const balance = formatDecimal(data, redeemTokenType, TOKEN_DECIMAL[redeemTokenType]).toUnsafeFloat();
+        const balance = parseFloat(data);
         if (parseFloat(inputValue1) > balance) {
           setMsg(t('purchase.moreThanBalanceMsg'));
           openMsg();
@@ -240,11 +240,10 @@ export default function Purchase() {
 
   const doRedeem = () => {
     openBackLoading();
-    // setBackLoadingText(t('purchase.purchaseTip'));
     refetchBalance()
       .then(({ data }) => {
         if (!data) return Promise.reject();
-        const balance = formatDecimal(data, tokenType, TOKEN_DECIMAL[tokenType]).toUnsafeFloat();
+        const balance = parseFloat(data);
         if (parseFloat(inputValue1) > balance) {
           setMsg(t('redeem.moreThanBalanceMsg'));
           openMsg();

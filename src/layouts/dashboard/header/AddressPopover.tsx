@@ -8,8 +8,9 @@ import { styled } from '@mui/material/styles';
 import metamaskBtn from '../../../assets/home/metamask@3x.png';
 import { useBalance } from '../../../hooks/useBalance';
 import { TOKEN_TYPE } from '../../../views/wallet/helpers/constant';
-import { formatDecimal } from '../../../views/wallet/helpers/utilities';
+import { formatDecimal, formatString } from '../../../views/wallet/helpers/utilities';
 import useResponsive from '../../../hooks/useResponsive';
+import { InlineSkeleton } from '../../../views/components/Skeleton';
 
 export default function AddressPopover() {
   const { connectState, connect, disconnect, account, ethersProvider } = useWallet();
@@ -109,7 +110,7 @@ export default function AddressPopover() {
         {/* <Divider sx={{ borderStyle: 'dashed' }} /> */}
 
         <Box sx={{ my: 1.5, px: 2.5 }}>
-          <TextDiv>{formatDecimal(balance, TOKEN_TYPE.USDT) + ' USDT'}</TextDiv>
+          {balance ? <TextDiv>{formatString(balance).toString() + ' USDT'}</TextDiv> : <InlineSkeleton width={70} />}
           <Button
             sx={{
               width: '100%',

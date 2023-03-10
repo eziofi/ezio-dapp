@@ -3,7 +3,7 @@ import React from 'react';
 import { BalanceContent, BodyContent, UnitconverContent } from '../PurchaseStyle';
 import { t } from 'i18next';
 import { useBalance } from '../../../hooks/useBalance';
-import { formatDecimal } from '../../wallet/helpers/utilities';
+import { formatDecimal, formatString } from '../../wallet/helpers/utilities';
 import { TOKEN_TYPE, TRANSFER_TYPE } from '../../wallet/helpers/constant';
 import BaseIconFont from '../../components/BaseIconFont';
 import { usePrice } from '../../../hooks/usePrice';
@@ -124,7 +124,7 @@ function RanderOptions(
   Options: IOptions[],
   tokenType: TOKEN_TYPE,
   handleChange: (value: keyof TOKEN_TYPE) => void,
-  balance: undefined | BigNumber,
+  balance: undefined | string,
   showMaxVal: boolean,
   inputVal?: string,
   setInputVal?: (value: string) => void,
@@ -165,7 +165,7 @@ function RanderOptions(
         }}
       >
         {t('purchase.leftBalance') + ': '}
-        {balance ? formatDecimal(balance, tokenType, 6).toString() : <InlineSkeleton width={40} />}
+        {balance ? formatString(balance, 6).toString() : <InlineSkeleton width={40} />}
         {showMaxVal && inputVal && (
           <Button
             sx={{
@@ -175,7 +175,7 @@ function RanderOptions(
               },
             }}
             // @ts-ignore
-            onClick={() => setInputVal(formatDecimal(balance, tokenType, 6).toString())}
+            onClick={() => setInputVal(formatString(balance, 6).toString())}
           >
             最大值
           </Button>
@@ -361,7 +361,7 @@ function MyCardContentSecond({
             {/* 显示账户余额 */}
             <span style={{ ...priceStyle, color: useTheme().palette.text.secondary }}>
               {t('purchase.leftBalance') + ': '}
-              {balance ? formatDecimal(balance, tokenType, 6).toString() : <InlineSkeleton width={40} />}
+              {balance ? formatString(balance).toString() : <InlineSkeleton width={40} />}
             </span>
           </div>
         ) : (

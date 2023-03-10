@@ -3,7 +3,7 @@ import { useBalance } from '../../hooks/useBalance';
 import { usePrice } from '../../hooks/usePrice';
 import { AccountCard, Content } from '../account/AccountStyle';
 import BaseIconFont from './BaseIconFont';
-import { formatDecimal } from '../wallet/helpers/utilities';
+import { formatDecimal, formatString } from '../wallet/helpers/utilities';
 import { InlineSkeleton } from './Skeleton';
 import { useTranslation } from 'react-i18next';
 import { Box, Tooltip } from '@mui/material';
@@ -86,10 +86,8 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
             </Box>
             <div>
               {balance ? (
-                <Tooltip title={formatDecimal(balance, type, 6).toString()} placement="top">
-                  <div style={{ fontSize: 28, color: 'rgba(67, 207, 124, 1)' }}>
-                    {formatDecimal(balance, type).toString()}
-                  </div>
+                <Tooltip title={balance} placement="top">
+                  <div style={{ fontSize: 28, color: 'rgba(67, 207, 124, 1)' }}>{formatString(balance).toString()}</div>
                 </Tooltip>
               ) : (
                 <InlineSkeleton width={70} />
