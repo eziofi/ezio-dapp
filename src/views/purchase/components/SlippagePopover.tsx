@@ -10,9 +10,11 @@ import { useTranslation } from 'react-i18next';
 export default function SlippagePopover({
   slippage,
   setSlippage,
+  resetVal,
 }: {
   slippage: number;
   setSlippage: (count: number) => void;
+  resetVal: number;
 }) {
   const { t } = useTranslation();
 
@@ -36,12 +38,13 @@ export default function SlippagePopover({
       setIsAutomation(false);
     } else {
       e.target.value = e.target.value.replace(/[e\+\-]/, '');
-      setSlippage(e.target.value);
+      setSlippage(slippage);
       setIsAutomation(true);
     }
   };
 
   const [isAutomation, setIsAutomation] = React.useState(true);
+  const _slippage = slippage;
 
   return (
     <div>
@@ -77,25 +80,27 @@ export default function SlippagePopover({
                 </p>
               </header>
               <footer>
-                <Button size="small" variant="contained" disabled={!isAutomation}>
+                <Button
+                  size="small"
+                  variant="contained"
+                  sx={!isAutomation ? { background: 'rgba(145, 158, 171, 0.24)' } : {}}
+                  onClick={() => {
+                    setIsAutomation(true);
+                    setSlippage(resetVal);
+                  }}
+                >
                   自动
                 </Button>
                 <OutlinedInput
                   id="outlined-adornment-weight"
                   endAdornment={
                     <InputAdornment position="end">
-                      {isAutomation ? (
-                        <>
-                          {0.5} <span style={{ color: 'white', marginLeft: 5 }}>%</span>
-                        </>
-                      ) : (
-                        <span style={{ color: 'white' }}>%</span>
-                      )}
+                      <span style={{ color: 'white' }}>%</span>
                     </InputAdornment>
                   }
                   value={slippage}
                   onInput={(e: ChangeEvent<HTMLInputElement>) => toFixedSlippage(e)}
-                  sx={{ width: 200, marginLeft: '5px' }}
+                  sx={{ width: 200, marginLeft: '5px', color: 'rgba(81, 91, 119, 1)' }}
                 />
               </footer>
             </div>

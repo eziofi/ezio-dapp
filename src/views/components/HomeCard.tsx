@@ -8,17 +8,6 @@ import { useQuery } from 'react-query';
 import BaseIconFont from './BaseIconFont';
 import { InlineSkeleton } from './Skeleton';
 
-const StyledIcon = styled('div')(({ theme }) => ({
-  margin: 'auto',
-  display: 'flex',
-  borderRadius: '50%',
-  alignItems: 'center',
-  width: theme.spacing(8),
-  height: theme.spacing(8),
-  justifyContent: 'center',
-  marginBottom: theme.spacing(3),
-}));
-
 export enum HOME_CARD_TYPE {
   Rate,
   FundCost,
@@ -53,10 +42,10 @@ export default function HomeCard({
     [HOME_CARD_TYPE.Leverage]: t('home.card.leverage'),
   };
   const icon = {
-    [HOME_CARD_TYPE.Rate]: theme.palette.mode === 'light' ? 'icon-yuqinianhualishuai' : 'icon-yuqinianhualishuai-copy',
-    [HOME_CARD_TYPE.FundCost]: theme.palette.mode === 'light' ? 'icon-zijinchengben' : 'icon-zijinchengben-copy',
-    [HOME_CARD_TYPE.RebalancePrice]: theme.palette.mode === 'light' ? 'icon-xiaoshoujiage' : 'icon-xiaoshoujiage-copy',
-    [HOME_CARD_TYPE.Leverage]: theme.palette.mode === 'light' ? 'icon-gangganshuai' : 'icon-gangganshuai-copy',
+    [HOME_CARD_TYPE.Rate]: 'icon-yuqinianhualishuai-copy',
+    [HOME_CARD_TYPE.FundCost]: 'icon-zijinchengben-copy',
+    [HOME_CARD_TYPE.RebalancePrice]: 'icon-xiaoshoujiage-copy',
+    [HOME_CARD_TYPE.Leverage]: 'icon-gangganshuai-copy',
   };
   // @ts-ignore
   const { data, isLoading } = useQuery(['totalSupply', type], () => api[type](ethersProvider!.getSigner()), {
@@ -72,6 +61,40 @@ export default function HomeCard({
     },
   });
   // @ts-ignore
+
+  const IconDivBorderColor = {
+    [HOME_CARD_TYPE.Rate]: '#4481EB',
+    [HOME_CARD_TYPE.FundCost]: '#F5586D',
+    [HOME_CARD_TYPE.RebalancePrice]: '#1CC4C9',
+    [HOME_CARD_TYPE.Leverage]: '#FF5858',
+  };
+
+  const StyledIcon = styled('div')(({ theme }) => ({
+    margin: 'auto',
+    display: 'flex',
+    borderRadius: '50%',
+    alignItems: 'center',
+    width: theme.spacing(8),
+    height: theme.spacing(8),
+    justifyContent: 'center',
+    marginBottom: theme.spacing(3),
+    border: `1px solid ${IconDivBorderColor[type]}`,
+  }));
+
+  const IconBgColor = {
+    [HOME_CARD_TYPE.Rate]: 'radial-gradient(50% 50%, rgba(107, 155, 237, 1) 0%, #6B9BED 100%)',
+    [HOME_CARD_TYPE.FundCost]: 'radial-gradient(50% 50%, rgba(235, 122, 141, 1) 0%, #EB7A8D 100%)',
+    [HOME_CARD_TYPE.RebalancePrice]: 'radial-gradient(50% 50%, rgba(20, 173, 179, 1) 0%, #14ADB3 100%)',
+    [HOME_CARD_TYPE.Leverage]: 'radial-gradient(50% 50%, rgba(222, 106, 106, 1) 0%, #DE6A6A 100%)',
+  };
+
+  const IconShadowColor = {
+    [HOME_CARD_TYPE.Rate]: '0px 0px 2px 0px rgba(69, 129, 235, 0.6)',
+    [HOME_CARD_TYPE.FundCost]: '0px 0px 2px 0px rgba(245, 89, 112, 0.6)',
+    [HOME_CARD_TYPE.RebalancePrice]: '0px 0px 2px 0px rgba(28, 196, 201, 0.6)',
+    [HOME_CARD_TYPE.Leverage]: '0px 0px 2px 0px rgba(233, 86, 84, 0.6)',
+  };
+
   return (
     <Card
       sx={{
@@ -81,32 +104,37 @@ export default function HomeCard({
         // @ts-ignore
         color: theme => theme.palette[color][theme.palette.mode === 'light' ? 'darker' : 'lighter'],
         // @ts-ignore
-        bgcolor: theme => theme.palette[color][theme.palette.mode === 'light' ? 'lighter' : 'darker'],
+        // bgcolor: theme => theme.palette[color][theme.palette.mode === 'light' ? 'lighter' : 'darker'],
         ...sx,
       }}
       {...other}
     >
-      <StyledIcon
-        sx={{
-          // color: theme => theme.palette[color][theme.palette.mode === 'light' ? 'dark' : 'light'],
-          backgroundImage: theme =>
-            `linear-gradient(${theme.palette.mode === 'light' ? '135deg' : '-45deg'}, ${alpha(
-              theme.palette[color][theme.palette.mode === 'light' ? 'dark' : 'light'],
-              0,
-            )} 0%, ${alpha(theme.palette[color][theme.palette.mode === 'light' ? 'dark' : 'light'], 0.24)} 100%)`,
-        }}
-      >
-        <BaseIconFont
-          name={icon[type]}
+      <StyledIcon>
+        <div
           style={{
-            width: 26,
-            height: 26,
-            // @ts-ignore
-            // fill: theme.palette[color][theme.palette.mode === 'light' ? 'darker' : 'lighter'],
+            border: '1px solid black',
+            width: theme.spacing(7),
+            height: theme.spacing(7),
+            borderRadius: '50%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            background: IconBgColor[type],
+            opacity: 1,
+            boxShadow: IconShadowColor[type],
           }}
-        />
-
-        {/*<Iconify icon={icon[type]} width={24} height={24} />*/}
+        >
+          <BaseIconFont
+            name={icon[type]}
+            style={{
+              width: 26,
+              height: 26,
+              // @ts-ignore
+              // fill: theme.palette[color][theme.palette.mode === 'light' ? 'darker' : 'lighter'],
+              fill: 'white',
+            }}
+          />
+        </div>
       </StyledIcon>
 
       <Typography variant="h3">

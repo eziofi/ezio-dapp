@@ -65,6 +65,7 @@ export default function Purchase() {
   ); // 下拉框value
   const theme = useTheme();
   const [slippage, setSlippage] = useState<number>(1);
+  const [resetVal, setHiddenVal] = useState<number>(1);
   const [time, setTime] = useState<string>();
 
   const { loadingOpen, loadingText } = useContext(UIContext);
@@ -313,7 +314,7 @@ export default function Purchase() {
             />
           </IconButton> */}
           {/* <FormDialog open={open} setOpen={setOpen} slippage={slippage} setSlippage={setSlippage} /> */}
-          <SlippagePopover slippage={slippage} setSlippage={setSlippage} />
+          <SlippagePopover slippage={slippage} setSlippage={setSlippage} resetVal={resetVal} />
         </Typography>
       </Toolbar>
       {/* 卡片1 */}

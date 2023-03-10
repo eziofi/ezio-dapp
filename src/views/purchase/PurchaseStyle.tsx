@@ -206,6 +206,9 @@ const SlippagePopoverContent = styled((props: IProps) => {
         height: 36,
         flex: 1,
         display: 'flex',
+        '.MuiOutlinedInput-input': {
+          textAlign: 'right',
+        },
       },
     },
   };

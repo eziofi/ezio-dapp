@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3861749 */
-  src: url('iconfont.woff2?t=1678433845978') format('woff2'),
-       url('iconfont.woff?t=1678433845978') format('woff'),
-       url('iconfont.ttf?t=1678433845978') format('truetype');
+  src: url('iconfont.woff2?t=1678438542766') format('woff2'),
+       url('iconfont.woff?t=1678438542766') format('woff'),
+       url('iconfont.ttf?t=1678438542766') format('truetype');
 }
 
 .iconfont {
@@ -49,24 +49,8 @@
   content: "\e757";
 }
 
-.icon-gangganshuai:before {
-  content: "\e668";
-}
-
-.icon-zijinchengben:before {
-  content: "\e64e";
-}
-
-.icon-xiaoshoujiage:before {
-  content: "\e628";
-}
-
 .icon-yuqinianhualishuai-copy:before {
   content: "\e755";
-}
-
-.icon-yuqinianhualishuai:before {
-  content: "\e623";
 }
 
 .icon-stMatic-white:before {
