@@ -405,26 +405,24 @@ export default function Purchase() {
       </Button>
       <FooterContent>
         {/*<span>{t('purchase.unitPrice') + ' $' + formatNetWorth(netWorth, true)}</span>*/}
-        {type === TRANSFER_TYPE.PURCHASE ? (
-          <span style={{ color: theme.palette.text.secondary }}>
-            {rate ? t('purchase.EZATRate') + rate + '%' : <InlineSkeleton />}
-          </span>
-        ) : (
-          <span style={{ color: theme.palette.text.secondary }}>
-            {rate ? t('purchase.feeRate') + feeRate + '%' : <InlineSkeleton />}
-          </span>
-        )}
+        <span
+          style={{ color: theme.palette.mode === 'light' ? theme.palette.primary.main : theme.palette.text.primary }}
+        >
+          {rate ? (
+            type === TRANSFER_TYPE.PURCHASE ? (
+              t('purchase.EZATRate') + rate + '%'
+            ) : (
+              t('purchase.feeRate') + feeRate + '%'
+            )
+          ) : (
+            <InlineSkeleton />
+          )}
+        </span>
+
         {/* 当前时间 */}
         <DateNow>
           {t('purchase.currentTime')}: {time}
         </DateNow>
-
-        {/* ezUSD参考年利率 */}
-        <span
-          style={{ color: theme.palette.mode === 'light' ? theme.palette.primary.main : theme.palette.text.primary }}
-        >
-          {rate ? t('purchase.EZATRate') + rate + '%' : <InlineSkeleton />}
-        </span>
       </FooterContent>
     </PurchaseContainer>
   );
