@@ -140,9 +140,10 @@ export async function getLeverage(signerOrProvider: Signer | Provider) {
  * @param address 账户地址
  * @returns ezat token 数量
  */
-export async function ezatBalanceOf(signerOrProvider: Signer | Provider, address: string): Promise<BigNumber> {
-  const res = await EzatConnect(signerOrProvider).balanceOf(address);
-  console.log('ezat Balance = ' + res.toString());
+export async function ezatBalanceOf(signerOrProvider: Signer | Provider, address: string) {
+  const data = await EzatConnect(signerOrProvider).balanceOf(address);
+  const res = formatDecimal(data, TOKEN_TYPE.ezUSD, 18).toString();
+  console.log('ezat Balance = ' + res);
   return res;
 }
 
@@ -152,9 +153,10 @@ export async function ezatBalanceOf(signerOrProvider: Signer | Provider, address
  * @param address 账户地址
  * @returns ezbt token 数量
  */
-export async function ezbtBalanceOf(signerOrProvider: Signer | Provider, address: string): Promise<BigNumber> {
-  const res = await EzbtConnect(signerOrProvider).balanceOf(address);
-  console.log('ezbt Balance = ' + res.toString());
+export async function ezbtBalanceOf(signerOrProvider: Signer | Provider, address: string) {
+  const data = await EzbtConnect(signerOrProvider).balanceOf(address);
+  const res = formatDecimal(data, TOKEN_TYPE.ezMATIC, 18).toString();
+  console.log('ezbt Balance = ' + res);
   return res;
 }
 
@@ -164,9 +166,10 @@ export async function ezbtBalanceOf(signerOrProvider: Signer | Provider, address
  * @param address 账户地址
  * @returns usdt token 数量
  */
-export async function usdtBalanceOf(signerOrProvider: Signer | Provider, address: string): Promise<BigNumber> {
-  const res = await USDTConnect(signerOrProvider).balanceOf(address);
-  console.log('usdt Balance = ' + res.toString());
+export async function usdtBalanceOf(signerOrProvider: Signer | Provider, address: string) {
+  const data = await USDTConnect(signerOrProvider).balanceOf(address);
+  const res = formatDecimal(data, TOKEN_TYPE.USDT, 6).toString();
+  console.log('usdt Balance = ' + res);
   return res;
 }
 
@@ -196,9 +199,10 @@ export async function getAllowance(
  * @param address 账户地址
  * @returns usdc token 数量
  */
-export async function usdcBalanceOf(signerOrProvider: Signer | Provider, address: string): Promise<BigNumber> {
-  const res = await USDCConnect(signerOrProvider).balanceOf(address);
-  console.log('usdc Balance = ' + res.toString());
+export async function usdcBalanceOf(signerOrProvider: Signer | Provider, address: string) {
+  const data = await USDCConnect(signerOrProvider).balanceOf(address);
+  const res = formatDecimal(data, TOKEN_TYPE.USDC, 6).toString();
+  console.log('usdc Balance = ' + res);
   return res;
 }
 
@@ -208,9 +212,10 @@ export async function usdcBalanceOf(signerOrProvider: Signer | Provider, address
  * @param address 账户地址
  * @returns stMatic token 数量
  */
-export async function stMaticBalanceOf(signerOrProvider: Signer | Provider, address: string): Promise<BigNumber> {
-  const res = await stMaticConnect(signerOrProvider).balanceOf(address);
-  console.log('stMatic Balance = ' + res.toString());
+export async function stMaticBalanceOf(signerOrProvider: Signer | Provider, address: string) {
+  const data = await stMaticConnect(signerOrProvider).balanceOf(address);
+  const res = formatDecimal(data, TOKEN_TYPE.stMATIC, 18).toString();
+  console.log('stMatic Balance = ' + res);
   return res;
 }
 
