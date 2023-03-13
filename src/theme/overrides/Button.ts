@@ -14,13 +14,13 @@ export default function Button(theme: Theme) {
         },
         sizeLarge: {
           height: 48,
-        },
-        containedInherit: {
-          color: theme.palette.grey[800],
-          // @ts-ignore
-          // boxShadow: theme.customShadows.z8,
+        }, // type === 'containerd'
+
+        contained: {
+          color: 'white',
           '&:hover': {
-            backgroundColor: theme.palette.grey[400],
+            // @ts-ignore
+            background: theme.palette.action.btnHover,
           },
         },
         containedPrimary: {

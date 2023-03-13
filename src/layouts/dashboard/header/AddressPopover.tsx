@@ -114,7 +114,7 @@ export default function AddressPopover() {
           <Button
             sx={{
               width: '100%',
-              background: 'linear-gradient(180deg, rgba(108, 75, 246, 1) 0%, rgba(113, 79, 251, 1) 100%)',
+              // background: 'linear-gradient(180deg, rgba(108, 75, 246, 1) 0%, rgba(113, 79, 251, 1) 100%)',
               borderRadius: '36px',
               marginBottom: '37px',
             }}

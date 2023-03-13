@@ -1,6 +1,6 @@
 import { Card, CardContent, styled, Toolbar } from '@mui/material';
 import { Box } from '@mui/system';
-import { IProps } from '../styleType';
+import { IProps } from '../../types/styleType';
 
 export const AccountToolBar = styled((props: IProps) => {
   return <Toolbar {...props} />;

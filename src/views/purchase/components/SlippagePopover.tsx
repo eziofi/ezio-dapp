@@ -16,6 +16,8 @@ export default function SlippagePopover({
   setSlippage: (count: number) => void;
   resetVal: number;
 }) {
+  const { t } = useTranslation();
+
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -46,7 +48,7 @@ export default function SlippagePopover({
 
   return (
     <div>
-      <IconButton title="滑点设置" aria-describedby={id} onClick={handleClick}>
+      <IconButton aria-describedby={id} onClick={handleClick}>
         <BaseIconFont
           name={useTheme().palette.mode === 'dark' ? 'icon-shezhi-copy2' : 'icon-shezhi'}
           style={{ width: 20, height: 20 }}
@@ -69,12 +71,12 @@ export default function SlippagePopover({
         <SlippagePopoverContent>
           <CardContent>
             <Typography sx={{ fontSize: 20 }} gutterBottom>
-              设置
+              {t('purchase.slippageSetting')}
             </Typography>
             <div>
               <header>
                 <p>
-                  滑点容差 <BaseIconFont name="icon-wenhaoxiao" />
+                  {t('purchase.slippageTolerance')} <BaseIconFont name="icon-wenhaoxiao" />
                 </p>
               </header>
               <footer>
@@ -87,7 +89,7 @@ export default function SlippagePopover({
                     setSlippage(resetVal);
                   }}
                 >
-                  自动
+                  {t('purchase.voluntarily')}
                 </Button>
                 <OutlinedInput
                   id="outlined-adornment-weight"

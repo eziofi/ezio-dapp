@@ -1,6 +1,8 @@
 import { Box, Button, Card, FormControl, useTheme } from '@mui/material';
 import { styled } from '@mui/system';
-import { IProps } from '../styleType';
+import { IProps } from '../../types/styleType';
+
+const CONTAINER_WIDTH = '90%';
 
 const PurchaseContainer = styled((props: IProps) => {
   const theme: any = useTheme();
@@ -28,7 +30,7 @@ const ContentBottom = styled((props: IProps) => {
   return <Card {...props} />;
 })(() => {
   return {
-    width: '90%',
+    width: CONTAINER_WIDTH,
     height: 109,
     position: 'relative',
     // @ts-ignore
@@ -52,7 +54,7 @@ const ContentTop = styled((props: IProps) => {
   return <Card {...props} />;
 })(() => {
   return {
-    width: '90%',
+    width: CONTAINER_WIDTH,
     height: 109,
     position: 'relative',
     // @ts-ignore
@@ -82,7 +84,8 @@ const ConverBtn = styled('div')(() => {
     borderRadius: '50%',
     alignContent: 'center',
     margin: '-12px 0 -12px 0',
-    background: theme.palette.background.paper,
+    // @ts-ignore
+    background: useTheme().palette.purchase.cardBg,
     zIndex: 100,
     // border: '1px solid rgba(145, 158, 171, 0.24)',
     borderRight: 'none',
@@ -98,7 +101,8 @@ const ConverBtn = styled('div')(() => {
       background: theme.palette.primary.main,
       border: 'none',
       ':hover': {
-        background: theme.palette.primary.main,
+        // @ts-ignore
+        background: theme.palette.action.btnHover,
       },
     },
   };
@@ -139,7 +143,6 @@ const DateNow = styled('p')(() => {
     letterSpacing: 0,
     width: '100%',
     bgColor: 'red',
-    // margin: '10px auto 20px',
   };
 });
 
@@ -148,7 +151,7 @@ const FooterContent = styled('div')(() => {
     display: 'flex',
     flexDirection: 'column',
     textAlign: 'center',
-    width: '90%',
+    width: CONTAINER_WIDTH,
     fontSize: 12,
     letterSpacing: 0,
     marginTop: 10,
@@ -159,7 +162,7 @@ const UnitconverContent = styled((props: IProps) => {
   return <Card {...props} />;
 })(() => {
   return {
-    width: '90%',
+    width: CONTAINER_WIDTH,
     // @ts-ignore
     background: useTheme().palette.purchase.cardBg,
     marginTop: 5,
@@ -190,7 +193,6 @@ const SlippagePopoverContent = styled((props: IProps) => {
     background: useTheme().palette.purchase.slippageBg,
     div: {
       header: {
-        // flex: 1.5,
         display: 'flex',
         alignItems: 'center',
         p: {
@@ -198,7 +200,6 @@ const SlippagePopoverContent = styled((props: IProps) => {
             width: 14,
             height: 14,
             fill: 'rgba(112, 78, 250, 1)',
-            // fill: 'red',
           },
         },
       },

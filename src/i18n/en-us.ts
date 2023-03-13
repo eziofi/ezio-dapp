@@ -91,6 +91,9 @@ export default {
     cancel: 'cancel',
     ok: 'ok',
     purchaseTip: 'in transaction，please operate in metamask',
+    maxValue: 'Max Value',
+    slippageTolerance: 'Slippage Tolerance',
+    voluntarily: 'Voluntarily',
   },
   redeem: {
     redeemValue: 'Redeem',

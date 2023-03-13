@@ -1,6 +1,6 @@
 import { Button, InputBase, MenuItem, Select, Skeleton, styled, TextField, useTheme } from '@mui/material';
 import React from 'react';
-import { BalanceContent, BodyContent, UnitconverContent } from '../PurchaseStyle';
+import { BalanceContent, BodyContent } from '../PurchaseStyle';
 import { t } from 'i18next';
 import { useBalance } from '../../../hooks/useBalance';
 import { formatDecimal, formatString } from '../../wallet/helpers/utilities';
@@ -170,19 +170,17 @@ function RanderOptions(
         {balance ? formatString(balance, 6).toString() : <InlineSkeleton width={40} />}
         {showMaxVal && inputVal !== balance && (
           <Button
+            variant="text"
             sx={{
-              padding: '0',
               size: 12,
+              padding: '0',
               lineHeight: '0',
-              fontWeight: '0',
-              ':hover': {
-                background: 'none',
-              },
+              marginLeft: theme.spacing(1),
             }}
             // @ts-ignore
             onClick={() => setInputVal(formatString(balance, 6).toString())}
           >
-            最大值
+            <>{t('purchase.maxValue')}</>
           </Button>
         )}
       </div>

@@ -90,6 +90,9 @@ export default {
     cancel: '取消',
     ok: '确定',
     purchaseTip: '交易中，请在metamask中操作',
+    maxValue: '最大值',
+    slippageTolerance: '滑点容差',
+    voluntarily: '自动',
   },
   redeem: {
     redeemValue: '赎回',

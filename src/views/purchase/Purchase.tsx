@@ -16,11 +16,9 @@ import {
   PurchaseContainer,
   UnitconverContent,
 } from './PurchaseStyle';
-import CachedIcon from '@mui/icons-material/Cached';
 import { MyCardContentOne, MyCardContentSecond } from './components/CardContent';
 import { usePrice } from '../../hooks/usePrice';
 import { useBalance } from '../../hooks/useBalance';
-import FormDialog from './components/FormDialog';
 import BaseIconFont from '../components/BaseIconFont';
 import { Provider } from '@ethersproject/providers';
 import { interestRateYear } from '../wallet/helpers/contract_call';
@@ -64,11 +62,12 @@ export default function Purchase() {
     TOKEN_TYPE.USDT,
   ); // 下拉框value
   const theme = useTheme();
-  const [slippage, setSlippage] = useState<number>(0.5);
-  const [resetVal, setHiddenVal] = useState<number>(0.5);
-  const [time, setTime] = useState<string>();
 
   const [tokenRate, setTokenRate] = useState(1); // eg. 1 USDT = xxx ezUSD
+
+  const [slippage, setSlippage] = useState<number>(0.5);
+  const [resetVal] = useState<number>(0.5);
+  const [time, setTime] = useState<string>();
 
   const { loadingOpen, loadingText } = useContext(UIContext);
 
@@ -79,7 +78,6 @@ export default function Purchase() {
   useEffect(() => {
     // 定时时间
     const timer = setInterval(() => setTime(timestampFormat(new Date().getTime())), 1000);
-    9;
     return () => clearInterval(timer);
   }, []);
 
@@ -95,14 +93,7 @@ export default function Purchase() {
   }, [tokenType, redeemTokenType, fromPrice, toPrice, inputValue1]);
 
   const { t } = useTranslation();
-  const buyBtnStyle = {
-    display: 'flex',
-    width: '90%',
-    color: 'white',
-    margin: '10px 0',
-    fontWeight: 'none',
-    marginTop: theme.spacing(10),
-  };
+
   function getInputVal1(value: string) {
     setInputValue1(value);
     // 计算预计获得
@@ -114,25 +105,11 @@ export default function Purchase() {
     }
   }
 
-  // function getInputVal2(value: string) {
-  //   setInputValue2(value);
-  // }
-
+  // 改变购买 / 赎回 状态 清空value
   function setAnimation() {
     setInputValue1('');
     setInputValue2('');
-    setType(type === TRANSFER_TYPE.PURCHASE ? TRANSFER_TYPE.REDEEM : TRANSFER_TYPE.PURCHASE); // 改变购买 / 赎回 状态
-
-    // setIsClick(true);
-    // const contentBottom: any = document.querySelector('.contentBottom');
-    // contentBottom.style.animation = 'move_down 1.5s ease-out alternate';
-    // const contentTop: any = document.querySelector('.contentTop');
-    // contentTop.style.animation = 'move_up 1.5s ease-out alternate';
-    // setTimeout(() => {
-    //   setIsClick(false);
-    //   contentBottom.style.animation = 'none';
-    //   contentTop.style.animation = 'none';
-    // }, 1500);
+    setType(type === TRANSFER_TYPE.PURCHASE ? TRANSFER_TYPE.REDEEM : TRANSFER_TYPE.PURCHASE);
   }
 
   function getTokenType(tokenType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC) {
@@ -162,6 +139,7 @@ export default function Purchase() {
       },
     },
   );
+
   const doApprove = async () => {
     try {
       openBackLoading();
@@ -193,6 +171,7 @@ export default function Purchase() {
   const { balance, refetchBalance } = useBalance(type === TRANSFER_TYPE.PURCHASE ? redeemTokenType : tokenType);
 
   const { ethersProvider, account, allowanceUSDT, allowanceUSDC } = useWallet();
+
   const needApprove =
     type === TRANSFER_TYPE.PURCHASE &&
     ((redeemTokenType === TOKEN_TYPE.USDT && (!allowanceUSDT || allowanceUSDT === '0')) ||
@@ -283,10 +262,6 @@ export default function Purchase() {
     setBackLoadingText('');
   };
 
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => setOpen(true);
-
   useEffect(() => {
     // type 为赎回时 && redeemTokenType = USDT, redeemTokenType赋值 为 USDC 因为赎回时的下拉框value不存在USDT 会导致value为空
     if (type === TRANSFER_TYPE.REDEEM && redeemTokenType === 4) {
@@ -297,15 +272,6 @@ export default function Purchase() {
     }
   }, [type]);
 
-  const CardStyle = {
-    borderColor: `${inputValue1 ? theme.palette.primary.main : ''}`,
-    ':after': {
-      border: `${inputValue1 ? `1px solid ${theme.palette.primary.main}` : ''}`,
-    },
-    borderBottomLeftRadius: inputValue1 !== '' && '0',
-    borderBottomRightRadius: inputValue1 !== '' && '0',
-  };
-
   return (
     <PurchaseContainer>
       <Toolbar sx={{ width: '98%', alignSelf: 'flex-start', margin: '0 auto' }}>
@@ -315,18 +281,12 @@ export default function Purchase() {
           sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}
         >
           <span>{type === 0 ? t('purchase.purchaseValue') : t('redeem.redeemValue')}</span>
-          {/* <IconButton onClick={handleClickOpen} title="滑点设置">
-            <BaseIconFont
-              name={theme.palette.mode === 'dark' ? 'icon-shezhi-copy2' : 'icon-shezhi'}
-              style={{ width: 20, height: 20 }}
-            />
-          </IconButton> */}
-          {/* <FormDialog open={open} setOpen={setOpen} slippage={slippage} setSlippage={setSlippage} /> */}
           <SlippagePopover slippage={slippage} setSlippage={setSlippage} resetVal={resetVal} />
         </Typography>
       </Toolbar>
+
       {/* 卡片1 */}
-      <ContentBottom sx={{ ...CardStyle }} className="contentBottom">
+      <ContentBottom sx={{}} className="contentBottom">
         {!isClick ? (
           <CardContent>
             <MyCardContentOne
@@ -344,14 +304,16 @@ export default function Purchase() {
           <></>
         )}
       </ContentBottom>
+
       {/* cover btn */}
       <ConverBtn className="coverBtn">
-        <IconButton className="iconBtn" sx={{ color: 'white' }} onClick={() => setAnimation()}>
-          <CachedIcon fontSize="inherit" />
+        <IconButton className="iconBtn" onClick={() => setAnimation()}>
+          <BaseIconFont name="icon-qiehuan" style={{ fill: 'white', height: '100%' }} />
         </IconButton>
       </ConverBtn>
+
       {/* 卡片2 */}
-      <ContentTop sx={{ ...CardStyle }} className="contentTop">
+      <ContentTop sx={{}} className="contentTop">
         {!isClick ? (
           <CardContent>
             <MyCardContentSecond
@@ -385,7 +347,7 @@ export default function Purchase() {
 
       {/* 购买、赎回按钮 */}
       <Button
-        sx={{ ...buyBtnStyle }}
+        sx={{ width: '90%', marginTop: theme.spacing(5) }}
         variant="contained"
         disableElevation
         disabled={(!needApprove && (!inputValue1 || !+inputValue1)) || loadingOpen}
@@ -412,6 +374,7 @@ export default function Purchase() {
           t('redeem.redeemAction')
         )}
       </Button>
+
       <FooterContent>
         {/*<span>{t('purchase.unitPrice') + ' $' + formatNetWorth(netWorth, true)}</span>*/}
         <span
