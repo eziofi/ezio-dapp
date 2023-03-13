@@ -68,6 +68,8 @@ export default function Purchase() {
   const [resetVal, setHiddenVal] = useState<number>(0.5);
   const [time, setTime] = useState<string>();
 
+  const [tokenRate, setTokenRate] = useState(1); // eg. 1 USDT = xxx ezUSD
+
   const { loadingOpen, loadingText } = useContext(UIContext);
 
   const { purchase, redeem, approve } = useTx();
@@ -84,6 +86,13 @@ export default function Purchase() {
   const { price: fromPrice } = usePrice(type === TRANSFER_TYPE.PURCHASE ? redeemTokenType : tokenType);
   const { price: toPrice } = usePrice(type === TRANSFER_TYPE.PURCHASE ? tokenType : redeemTokenType);
   const { feeRate } = useFeeRate();
+
+  useEffect(() => {
+    if (fromPrice && toPrice && inputValue1) {
+      const rate = parseFloat(fromPrice) / parseFloat(toPrice);
+      setTokenRate(rate);
+    }
+  }, [tokenType, redeemTokenType, fromPrice, toPrice, inputValue1]);
 
   const { t } = useTranslation();
   const buyBtnStyle = {
@@ -366,7 +375,7 @@ export default function Purchase() {
           <p>
             <BaseIconFont name="icon-Prompt" />
             <span>
-              1 {TOKEN_TYPE[redeemTokenType]} = 1,541.04 {TOKEN_TYPE[tokenType]}
+              1 {TOKEN_TYPE[redeemTokenType]} ≈ {tokenRate + ' ' + TOKEN_TYPE[tokenType]}
             </span>
           </p>
         </UnitconverContent>
