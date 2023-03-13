@@ -8,7 +8,7 @@ export default function Autocomplete(theme: Theme) {
       styleOverrides: {
         paper: {
           // @ts-ignore
-          boxShadow: theme.customShadows.z20,
+          // boxShadow: theme.customShadows.z20,
         },
       },
     },
