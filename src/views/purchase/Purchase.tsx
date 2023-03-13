@@ -5,7 +5,7 @@ import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query'
 import { Signer } from 'ethers';
 import { TOKEN_DECIMAL, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
 import useWallet from '../hooks/useWallet';
-import { formatDecimal, timestampFormat } from '../wallet/helpers/utilities';
+import { formatDecimal, formatString, timestampFormat } from '../wallet/helpers/utilities';
 import { useTranslation } from 'react-i18next';
 import {
   ContentBottom,
@@ -63,11 +63,11 @@ export default function Purchase() {
   ); // 下拉框value
   const theme = useTheme();
 
-  const [tokenRate, setTokenRate] = useState(1); // eg. 1 USDT = xxx ezUSD
+  const [tokenRate, setTokenRate] = useState('1'); // eg. 1 USDT = xxx ezUSD
 
   const [slippage, setSlippage] = useState<number>(0.5);
   const [resetVal] = useState<number>(0.5);
-  const [time, setTime] = useState<string>();
+  // const [time, setTime] = useState<string>();
 
   const { loadingOpen, loadingText } = useContext(UIContext);
 
@@ -75,11 +75,11 @@ export default function Purchase() {
 
   const { openBackLoading, closeBackLoading, setBackLoadingText, setMsg, openMsg, closeMsg } = useContext(UIContext);
 
-  useEffect(() => {
-    // 定时时间
-    const timer = setInterval(() => setTime(timestampFormat(new Date().getTime())), 1000);
-    return () => clearInterval(timer);
-  }, []);
+  // useEffect(() => {
+  //   // 定时时间
+  //   const timer = setInterval(() => setTime(timestampFormat(new Date().getTime())), 1000);
+  //   return () => clearInterval(timer);
+  // }, []);
 
   const { price: fromPrice } = usePrice(type === TRANSFER_TYPE.PURCHASE ? redeemTokenType : tokenType);
   const { price: toPrice } = usePrice(type === TRANSFER_TYPE.PURCHASE ? tokenType : redeemTokenType);
@@ -87,7 +87,7 @@ export default function Purchase() {
 
   useEffect(() => {
     if (fromPrice && toPrice && inputValue1) {
-      const rate = parseFloat(fromPrice) / parseFloat(toPrice);
+      const rate = formatString('' + parseFloat(fromPrice) / parseFloat(toPrice), 6).toString();
       setTokenRate(rate);
     }
   }, [tokenType, redeemTokenType, fromPrice, toPrice, inputValue1]);
@@ -97,8 +97,6 @@ export default function Purchase() {
   function getInputVal1(value: string) {
     setInputValue1(value);
     // 计算预计获得
-    console.log('fromPrice=' + fromPrice);
-    console.log('toPrice=' + toPrice);
     if (fromPrice && toPrice) {
       const estimatedValue2 = (parseFloat(value) * parseFloat(fromPrice)) / parseFloat(toPrice);
       setInputValue2(estimatedValue2 + '');
@@ -131,9 +129,6 @@ export default function Purchase() {
   const { mutateAsync: approveMutate } = useMutation(
     (arg: IApproveArg) => approve(arg.fromType, arg.signerOrProvider),
     {
-      onSuccess: () => {
-        queryClient.invalidateQueries();
-      },
       onError: error => {
         console.error(error);
       },
@@ -148,6 +143,9 @@ export default function Purchase() {
         signerOrProvider: ethersProvider!.getSigner(),
       };
       await approveMutate(args);
+      await queryClient.invalidateQueries('allowance');
+      console.log('resetApproveState');
+      resetApproveState();
     } catch (e) {
       console.error(e);
     } finally {
@@ -172,10 +170,22 @@ export default function Purchase() {
 
   const { ethersProvider, account, allowanceUSDT, allowanceUSDC } = useWallet();
 
-  const needApprove =
-    type === TRANSFER_TYPE.PURCHASE &&
-    ((redeemTokenType === TOKEN_TYPE.USDT && (!allowanceUSDT || allowanceUSDT === '0')) ||
-      (redeemTokenType === TOKEN_TYPE.USDC && (!allowanceUSDC || allowanceUSDC === '0')));
+  const [needApprove, setNeedApprove] = useState(false);
+
+  const resetApproveState = () => {
+    setNeedApprove(
+      type === TRANSFER_TYPE.PURCHASE &&
+        ((redeemTokenType === TOKEN_TYPE.USDT && (!allowanceUSDT || allowanceUSDT === '0')) ||
+          (redeemTokenType === TOKEN_TYPE.USDC && (!allowanceUSDC || allowanceUSDC === '0'))),
+    );
+    // setNeedApprove(true);
+  };
+
+  useEffect(() => {
+    if (allowanceUSDT && allowanceUSDC) {
+      resetApproveState();
+    }
+  }, [redeemTokenType, type, allowanceUSDT, allowanceUSDC]);
 
   const { data: rate } = useQuery(['ezUSDDayRate'], () => interestRateYear(ethersProvider!.getSigner()), {
     enabled: !!ethersProvider,
@@ -298,6 +308,7 @@ export default function Purchase() {
               redeemTokenType={redeemTokenType}
               setRedeemTokenType={setRedeemTokenType}
               inputValue1={inputValue1}
+              needApprove={needApprove}
             />
           </CardContent>
         ) : (
@@ -392,9 +403,9 @@ export default function Purchase() {
         </span>
 
         {/* 当前时间 */}
-        <DateNow>
-          {t('purchase.currentTime')}: {time}
-        </DateNow>
+        {/*<DateNow>*/}
+        {/*  {t('purchase.currentTime')}: {time}*/}
+        {/*</DateNow>*/}
       </FooterContent>
     </PurchaseContainer>
   );

@@ -21,6 +21,7 @@ interface IProps {
   redeemTokenType: TOKEN_TYPE;
   setRedeemTokenType: (redeemTokenType: TOKEN_TYPE.USDC | TOKEN_TYPE.USDT | TOKEN_TYPE.stMATIC) => void;
   inputValue1: string;
+  needApprove: boolean;
 }
 
 interface IOptions {
@@ -40,8 +41,9 @@ type CardContentOneProps = Pick<
   | 'redeemTokenType'
   | 'setRedeemTokenType'
   | 'inputValue1'
+  | 'needApprove'
 >;
-type CardContentSencoedProps = Pick<
+type CardContentSecondProps = Pick<
   IProps,
   'transactionType' | 'inputValue2' | 'getTokenType' | 'tokenType' | 'redeemTokenType' | 'setRedeemTokenType' | 'isBuy'
 >;
@@ -242,6 +244,7 @@ function MyCardContentOne({
   setRedeemTokenType,
   isBuy,
   inputValue1,
+  needApprove,
 }: CardContentOneProps) {
   const { price } = usePrice(isBuy ? redeemTokenType : tokenType);
 
@@ -276,6 +279,7 @@ function MyCardContentOne({
           }}
           type="number"
           value={inputValue1}
+          disabled={needApprove}
         />
         <div style={{ ...priceStyle, color: useTheme().palette.text.secondary }}>
           {price ? t('purchase.unitPrice') + ': ' + price + ' USDC' : <Skeleton width={100} />}
@@ -306,7 +310,7 @@ function MyCardContentSecond({
   redeemTokenType,
   setRedeemTokenType,
   isBuy,
-}: CardContentSencoedProps) {
+}: CardContentSecondProps) {
   const { price } = usePrice(isBuy ? tokenType : redeemTokenType);
   const { balance } = useBalance(transactionType === TRANSFER_TYPE.PURCHASE ? tokenType : redeemTokenType);
 

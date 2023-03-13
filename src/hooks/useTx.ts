@@ -40,6 +40,7 @@ export default function useTx() {
     const approveTx = await (fromType === TOKEN_TYPE.USDT ? USDTConnect : USDCConnect)(signerOrProvider).approve(
       ezioJson.address,
       MAX_UINT256.toString(),
+      // '0',
     );
     console.log('approve waiting');
     setBackLoadingText(t('message.approveWaiting'));

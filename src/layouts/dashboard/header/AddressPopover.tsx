@@ -18,7 +18,7 @@ export default function AddressPopover() {
   const [copyFlag, setCopyFlag] = useState<boolean>(false);
   const { t } = useTranslation();
 
-  const isDesktop = useResponsive('up', 'lg', 'lg');
+  const isDesktop = useResponsive('up', 'md', 'md');
 
   const { balance } = useBalance(TOKEN_TYPE.USDT);
 
