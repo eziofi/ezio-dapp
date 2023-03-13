@@ -16,8 +16,6 @@ export default function SlippagePopover({
   setSlippage: (count: number) => void;
   resetVal: number;
 }) {
-  const { t } = useTranslation();
-
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -33,8 +31,9 @@ export default function SlippagePopover({
 
   const toFixedSlippage = (e: ChangeEvent<HTMLInputElement | any>) => {
     if (e.target.value !== '') {
-      // @ts-ignore
-      setSlippage(e.target.value.replace(/^\D*(\d*(?:\.\d{0,1})?).*$/g, '$1'));
+      e.target.value >= +'50'
+        ? setSlippage(+'50')
+        : setSlippage(e.target.value.replace(/^\D*(\d*(?:\.\d{0,1})?).*$/g, '$1'));
       setIsAutomation(false);
     } else {
       e.target.value = e.target.value.replace(/[e\+\-]/, '');
