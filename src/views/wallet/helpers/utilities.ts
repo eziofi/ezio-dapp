@@ -1,10 +1,18 @@
 import * as ethUtil from 'ethereumjs-util';
-import { IChainData } from './types';
+import { IChainData, OneInchQuoteParams, ZeroExQuoteParams } from './types';
 import supportedChains from './chains';
 import { BigNumber, BigNumberish, FixedNumber, utils } from 'ethers';
-import numeral from 'numeral';
+import qs from 'qs';
+import { formatUnits } from 'ethers/lib/utils';
+import { QUOTE_CHANNEL, TOKEN_DECIMAL, TOKEN_TYPE } from './constant';
+import { SwapQuoteStruct } from '../contract/contracts/interfaces/v1/IEzio';
 // import { apiGetGasPrices, apiGetAccountNonce } from "./api";
 // import { convertAmountToRawNumber, convertStringToHex } from "./bignumber";
+
+const ZEROEX_API_QUOTE_URL = 'https://polygon.api.0x.org/swap/v1/quote';
+const ONEINCH_API_QUOTE_URL = 'https://api.1inch.io/v5.0/137/swap';
+
+const ezioJson = require('../contract/abi/EzioV1.json');
 
 export function capitalize(string: string): string {
   return string
@@ -143,88 +151,33 @@ export function recoverPersonalSignature(sig: string, msg: string): string {
   return signer;
 }
 
-// export async function formatTestTransaction(address: string, chainId: number) {
-//   // from
-//   const from = address;
-
-//   // to
-//   const to = address;
-
-//   // nonce
-//   const _nonce = await apiGetAccountNonce(address, chainId);
-//   const nonce = sanitizeHex(convertStringToHex(_nonce));
-
-//   // gasPrice
-//   const gasPrices = await apiGetGasPrices();
-//   const _gasPrice = gasPrices.slow.price;
-//   const gasPrice = sanitizeHex(
-//     convertStringToHex(convertAmountToRawNumber(_gasPrice, 9))
-//   );
-
-//   // gasLimit
-//   const _gasLimit = 21000;
-//   const gasLimit = sanitizeHex(convertStringToHex(_gasLimit));
-
-//   // value
-//   const _value = 0;
-//   const value = sanitizeHex(convertStringToHex(_value));
-
-//   // data
-//   const data = "0x";
-
-//   // test transaction
-//   const tx = {
-//     from,
-//     to,
-//     nonce,
-//     gasPrice,
-//     gasLimit,
-//     value,
-//     data
-//   };
-
-//   return tx;
-// }
-
 export function isObject(obj: any): boolean {
   return typeof obj === 'object' && !!Object.keys(obj).length;
 }
 
-export function toNum(value?: BigNumber) {
-  if (!value) {
-    return 0;
-  }
-  const ether = utils.formatEther(value);
-  const numArr = ether.split('.');
-
-  if (numArr.length == 1) {
-    return parseFloat(numArr[0]);
-  }
-  if (numArr[1] === '0') {
-    return parseFloat(numArr[0]);
-  }
-  return parseFloat(`${numArr[0]}.${numArr[1].length > 2 ? numArr[1].substring(0, 2) : numArr[1]}`);
-}
-
-export function formatNetWorth(value: BigNumberish | string | undefined, format18?: boolean) {
-  if (format18) {
-    return value ? numeral(utils.formatEther(value)).format('0.00') : '0';
-  }
-  return value ? numeral(value).format('0.00') : '0';
-}
-
 /**
- * 格式化数值，
- * todo abstract functions
+ * 格式化数值，转换小数位数
  * @param value wei 单位的数值
- * @returns
+ * @param tokenType token种类，影响计算位数
+ * @param floatDecimal 最多显示多少位小数，默认2位
+ * @param manualDecimal 自定义除以的位数
+ * @returns 带小数的FixedNumber
  */
-export function formatNum(value?: BigNumber): FixedNumber {
+export function formatDecimal(
+  value: BigNumber | undefined,
+  tokenType: TOKEN_TYPE,
+  floatDecimal: number = 2,
+  manualDecimal?: number,
+): FixedNumber {
   if (!value) {
     return FixedNumber.from(0);
   }
-  const ether = utils.formatEther(value);
-  const numArr = ether.split('.');
+  const ether = formatUnits(value, manualDecimal ? manualDecimal : TOKEN_DECIMAL[tokenType]);
+  return formatString(ether, floatDecimal);
+}
+
+export const formatString = (str: string, decimal: number = 2) => {
+  const numArr = str.split('.');
 
   if (numArr.length == 1) {
     return FixedNumber.from(numArr[0]);
@@ -233,42 +186,8 @@ export function formatNum(value?: BigNumber): FixedNumber {
     return FixedNumber.from(numArr[0]);
   }
 
-  return FixedNumber.from(`${numArr[0]}.${numArr[1].length > 2 ? numArr[1].substring(0, 2) : numArr[1]}`);
-}
-
-/**
- * 转换为 ether 的字符串
- * todo abstract functions
- * @param value wei 单位的数值
- * @returns
- */
-export function formatNumToString(value: BigNumber): string {
-  return numToString(formatNum(value));
-}
-
-/**
- * 数字类型转换为字符串
- * todo need abstract functions
- * @param value
- * @returns
- */
-export function numToString(value?: BigNumber | FixedNumber, decimals?: number): string {
-  if (!value) {
-    return '0';
-  }
-  const numArr = value.toString().split('.');
-
-  if (numArr.length == 1) {
-    return numArr[0];
-  }
-  if (numArr[1] === '0') {
-    return numArr[0];
-  }
-  if (!decimals) {
-    decimals = 2;
-  }
-  return `${numArr[0]}.${numArr[1].length > decimals ? numArr[1].substring(0, decimals) : numArr[1]}`;
-}
+  return FixedNumber.from(`${numArr[0]}.${numArr[1].length > decimal ? numArr[1].substring(0, decimal) : numArr[1]}`);
+};
 
 export function timestampFormat(timestamp: number) {
   let date = new Date(timestamp);
@@ -287,10 +206,112 @@ export function timestampFormat(timestamp: number) {
  * @returns Y轴最大值
  */
 export function getYMax(data: number[]) {
+  if (data.length === 0) return 0;
   const max = Math.max(...data);
-  const length = max.toString().split('.')[0].length;
-  const float = max / Math.pow(10, length - 1);
-  const first = Math.ceil(float);
-  const maxYValue = first * Math.pow(10, length - 1);
-  return maxYValue;
+  if (max > 1) {
+    const length = max.toString().split('.')[0].length;
+    const float = max / Math.pow(10, length - 1);
+    const first = Math.ceil(float);
+    const maxYValue = first * Math.pow(10, length - 1);
+    return maxYValue;
+  } else {
+    const floatString = max.toString().split('.')[1];
+    let firstNumDecimal = floatString.length - String(parseInt(floatString)).length; // 小数点后有多少个零
+    const roundMax = max * Math.pow(10, firstNumDecimal + 1); // 乘为整数
+    const ceilNum = Math.ceil(roundMax); // 向上圆整到最小整数
+    const res = ceilNum / Math.pow(10, firstNumDecimal + 1); //再除为原先的位数
+    return res;
+  }
+}
+
+export function getDecimal(data: number[]) {
+  if (data.length === 0) return 0;
+  const max = Math.max(...data);
+  if (max > 1) return 0;
+  else {
+    const floatString = max.toString().split('.')[1];
+    let firstNumDecimal = floatString.length - String(parseInt(floatString)).length; // 小数点后有多少个零
+    return firstNumDecimal + 2;
+  }
+}
+
+export async function getOneInchQuoteResponse(quoteParams: OneInchQuoteParams) {
+  let quote: SwapQuoteStruct;
+  let quoteUrl = `${ONEINCH_API_QUOTE_URL}?${qs.stringify(quoteParams)}`;
+  let response = await getJson(quoteUrl);
+  //console.log("=======response=",response);
+  quote = {
+    buyToken: quoteParams.toTokenAddress,
+    sellAmount: quoteParams.amount,
+    sellToken: quoteParams.fromTokenAddress,
+    swapCallData: response.tx.data,
+  };
+  return quote;
+}
+
+export async function getZeroExQuoteResponse(quoteParams: ZeroExQuoteParams) {
+  let quoteResponse: SwapQuoteStruct;
+  let quoteUrl = `${ZEROEX_API_QUOTE_URL}?${qs.stringify(quoteParams)}`;
+  let response = await getJson(quoteUrl);
+  quoteResponse = {
+    buyToken: quoteParams.buyToken,
+    sellAmount: quoteParams.sellAmount,
+    sellToken: quoteParams.sellToken,
+    swapCallData: response.data,
+  };
+  return quoteResponse;
+}
+
+export async function getJson(url: RequestInfo | URL) {
+  const res = await fetch(url);
+  const json = await res.json();
+  if (!json) {
+    throw new Error('no response');
+  }
+  if (json.error) {
+    console.log(json);
+    throw new Error(json.description || json.error);
+  }
+  return json;
+}
+
+export async function getQuote(
+  channel: QUOTE_CHANNEL,
+  fromTokenAddress: string,
+  toTokenAddress: string,
+  amount: string,
+  slippage: number,
+) {
+  const blankRes = {
+    buyToken: '',
+    sellAmount: 0,
+    sellToken: '',
+    swapCallData: '',
+  };
+  try {
+    if (channel === QUOTE_CHANNEL.OneInch) {
+      const quoteParams: OneInchQuoteParams = {
+        fromTokenAddress,
+        toTokenAddress,
+        amount,
+        fromAddress: ezioJson.address,
+        slippage,
+        disableEstimate: true,
+      };
+      return await getOneInchQuoteResponse(quoteParams);
+    }
+    if (channel === QUOTE_CHANNEL.ZeroEx) {
+      const quoteParams: ZeroExQuoteParams = {
+        sellToken: fromTokenAddress,
+        buyToken: toTokenAddress,
+        sellAmount: amount,
+        slippagePercentage: String(slippage / 100),
+      };
+      return await getZeroExQuoteResponse(quoteParams);
+    }
+    return blankRes;
+  } catch (e) {
+    console.error(e);
+    return blankRes;
+  }
 }

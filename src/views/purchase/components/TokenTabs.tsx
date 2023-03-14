@@ -1,10 +1,7 @@
 import styles from '../purchase.module.less';
 import * as React from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
+import { Tab, Tabs } from '@mui/material';
 
 export default function TokenTabs({ tab, tabChange }: { tab: number; tabChange: (tab: number) => void }) {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {

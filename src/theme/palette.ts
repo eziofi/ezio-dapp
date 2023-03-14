@@ -14,6 +14,7 @@ const GREY = {
   700: '#454F5B',
   800: '#212B36',
   900: '#161C24',
+  btnHover: '#502FD4',
 };
 
 const PRIMARY = {
@@ -100,6 +101,13 @@ const palette = {
     focus: alpha(GREY[500], 0.24),
     hoverOpacity: 0.08,
     disabledOpacity: 0.48,
+    btnHover: GREY['btnHover'],
+  },
+  purchase: {
+    containerBg: 'rgb(255, 255, 255, 1)',
+    cardBg: 'rgba(245, 246, 252, 1)',
+    menuItemBg: 'rgba(110, 77, 248, 0.1)',
+    slippageBg: 'rgba(255, 255, 255, 1)',
   },
 };
 

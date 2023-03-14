@@ -10,7 +10,6 @@ import typography from './typography';
 import GlobalStyles from './globalStyles';
 import customShadows from './customShadows';
 import componentsOverride from './overrides';
-import { ThemeOptions } from '@mui/material/styles/createTheme';
 import paletteDark from './paletteDark';
 
 // ----------------------------------------------------------------------
@@ -44,8 +43,8 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
       palette: mode === 'light' ? palette : paletteDark,
       shape: { borderRadius: 6 },
       typography,
-      shadows: shadows(),
-      customShadows: customShadows(),
+      // shadows: shadows(),
+      // customShadows: customShadows(),
     }),
     [mode],
   );

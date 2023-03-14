@@ -1,18 +1,21 @@
 import { Box, Button, Card, FormControl, useTheme } from '@mui/material';
 import { styled } from '@mui/system';
-import { IProps } from '../styleType';
+import { IProps } from '../../types/styleType';
+
+const CONTAINER_WIDTH = '90%';
 
 const PurchaseContainer = styled((props: IProps) => {
+  const theme: any = useTheme();
   return (
     <div style={{ padding: '0 15px' }}>
-      <Card {...props} />
+      <Card {...props} sx={{ background: theme.palette.purchase.containerBg }} />
     </div>
   );
 })(() => {
   return {
     maxWidth: 500,
     height: '100%',
-    maxHeight: document.body.offsetHeight - 196,
+    // maxHeight: document.body.offsetHeight - 196,
     paddingBottom: 30,
     // margin: '0 30px 20px',
     margin: '0 auto',
@@ -24,18 +27,21 @@ const PurchaseContainer = styled((props: IProps) => {
 });
 
 const ContentBottom = styled((props: IProps) => {
-  return <Card {...props} variant="outlined" />;
+  return <Card {...props} />;
 })(() => {
+  const theme = useTheme();
   return {
-    width: '90%',
+    width: CONTAINER_WIDTH,
     height: 109,
     position: 'relative',
+    // @ts-ignore
+    background: theme.palette.purchase.cardBg,
+    boxShadow: 'none',
     ':after': {
       position: 'absolute',
       content: '""',
       width: 50,
       height: 50,
-      // background: '#eef1f9',
       borderRadius: '100%',
       top: '100%',
       left: '50%',
@@ -46,18 +52,21 @@ const ContentBottom = styled((props: IProps) => {
 });
 
 const ContentTop = styled((props: IProps) => {
-  return <Card {...props} variant="outlined" />;
+  return <Card {...props} />;
 })(() => {
+  const theme = useTheme();
   return {
-    width: '90%',
+    width: CONTAINER_WIDTH,
     height: 109,
     position: 'relative',
+    // @ts-ignore
+    background: theme.palette.purchase.cardBg,
+    boxShadow: 'none',
     ':after': {
       position: 'absolute',
       content: '""',
       width: 50,
       height: 50,
-      // background: '#eef1f9',
       color: 'red',
       borderRadius: '100%',
       top: '0',
@@ -77,7 +86,8 @@ const ConverBtn = styled('div')(() => {
     borderRadius: '50%',
     alignContent: 'center',
     margin: '-12px 0 -12px 0',
-    background: theme.palette.background.paper,
+    // @ts-ignore
+    background: theme.palette.purchase.cardBg,
     zIndex: 100,
     // border: '1px solid rgba(145, 158, 171, 0.24)',
     borderRight: 'none',
@@ -90,10 +100,11 @@ const ConverBtn = styled('div')(() => {
       width: 35,
       height: 35,
       borderRadius: '50%',
-      background: 'rgba(110, 76, 248, 1)',
+      background: theme.palette.primary.main,
       border: 'none',
       ':hover': {
-        background: 'rgba(110, 76, 248, 1)',
+        // @ts-ignore
+        background: theme.palette.action.btnHover,
       },
     },
   };
@@ -112,6 +123,7 @@ const BalanceContent = styled('div')(() => {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-end',
+    height: 83,
   };
 });
 
@@ -131,9 +143,8 @@ const DateNow = styled('p')(() => {
     color: 'rgba(76, 80, 97, 1)',
     fontSize: 14,
     letterSpacing: 0,
-    width: '90%',
+    width: '100%',
     bgColor: 'red',
-    margin: '10px auto 20px',
   };
 });
 
@@ -142,10 +153,69 @@ const FooterContent = styled('div')(() => {
     display: 'flex',
     flexDirection: 'column',
     textAlign: 'center',
-    width: 200,
+    width: CONTAINER_WIDTH,
     fontSize: 12,
     letterSpacing: 0,
     marginTop: 10,
+  };
+});
+
+const UnitconverContent = styled((props: IProps) => {
+  return <Card {...props} />;
+})(() => {
+  const theme = useTheme();
+  return {
+    width: CONTAINER_WIDTH,
+    // @ts-ignore
+    background: theme.palette.purchase.cardBg,
+    marginTop: 5,
+    borderTopLeftRadius: '0',
+    borderTopRightRadius: '0',
+    boxShadow: 'none',
+    p: {
+      fontSize: 14,
+      display: 'flex',
+      alignItems: 'center',
+      '.icon': {
+        width: 14,
+        height: 14,
+        margin: '0 10px 1px 20px',
+        fill: 'rgba(112, 78, 250, 1)',
+      },
+    },
+  };
+});
+
+const SlippagePopoverContent = styled((props: IProps) => {
+  return <Card {...props} />;
+})(() => {
+  const theme = useTheme();
+  return {
+    width: 317,
+    height: 178,
+    // @ts-ignore
+    background: theme.palette.purchase.slippageBg,
+    div: {
+      header: {
+        display: 'flex',
+        alignItems: 'center',
+        p: {
+          '.icon': {
+            width: 14,
+            height: 14,
+            fill: 'rgba(112, 78, 250, 1)',
+          },
+        },
+      },
+      footer: {
+        height: 36,
+        flex: 1,
+        display: 'flex',
+        '.MuiOutlinedInput-input': {
+          textAlign: 'right',
+        },
+      },
+    },
   };
 });
 
@@ -159,4 +229,6 @@ export {
   FormControlStyle,
   DateNow,
   FooterContent,
+  UnitconverContent,
+  SlippagePopoverContent,
 };

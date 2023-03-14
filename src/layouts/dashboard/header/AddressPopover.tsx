@@ -1,15 +1,16 @@
-import { Box, Button, Popover, Stack, Typography, Avatar, IconButton, Snackbar } from '@mui/material';
+import { Avatar, Box, Button, IconButton, Popover, Snackbar, Typography } from '@mui/material';
 import useWallet from '../../../views/hooks/useWallet';
 import { useTranslation } from 'react-i18next';
-import account from '../../../_mock/account';
 import { useState } from 'react';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import { styled } from '@mui/material/styles';
 import metamaskBtn from '../../../assets/home/metamask@3x.png';
 import { useBalance } from '../../../hooks/useBalance';
-import { TOKEN_BALANCE_TYPE } from '../../../views/wallet/helpers/constant';
-import { toNum } from '../../../views/wallet/helpers/utilities';
+import { TOKEN_TYPE } from '../../../views/wallet/helpers/constant';
+import { formatDecimal, formatString } from '../../../views/wallet/helpers/utilities';
+import useResponsive from '../../../hooks/useResponsive';
+import { InlineSkeleton } from '../../../views/components/Skeleton';
 
 export default function AddressPopover() {
   const { connectState, connect, disconnect, account, ethersProvider } = useWallet();
@@ -17,7 +18,9 @@ export default function AddressPopover() {
   const [copyFlag, setCopyFlag] = useState<boolean>(false);
   const { t } = useTranslation();
 
-  const { balance } = useBalance(TOKEN_BALANCE_TYPE.USDT);
+  const isDesktop = useResponsive('up', 'md', 'md');
+
+  const { balance } = useBalance(TOKEN_TYPE.USDT);
 
   const addressToShow = account.substring(0, 5) + '...' + account.substring(account.length - 5, account.length);
   const addressToShowInPop = account.substring(0, 12) + '...' + account.substring(account.length - 12, account.length);
@@ -65,8 +68,8 @@ export default function AddressPopover() {
           }}
           endIcon={<KeyboardArrowDownOutlinedIcon />}
         >
-          <Avatar src={metamaskBtn} sx={{ width: 24, height: 24, marginRight: 1 }} />
-          {addressToShow}
+          <Avatar src={metamaskBtn} sx={{ width: 24, height: 24, marginRight: isDesktop ? 1 : 0 }} />
+          {isDesktop ? addressToShow : ''}
         </Button>
       ) : connectState === 'connecting' ? (
         <Button variant="outlined">{t('home.connecting')}</Button>
@@ -107,11 +110,11 @@ export default function AddressPopover() {
         {/* <Divider sx={{ borderStyle: 'dashed' }} /> */}
 
         <Box sx={{ my: 1.5, px: 2.5 }}>
-          <TextDiv>{toNum(balance) + ' USDT'}</TextDiv>
+          {balance ? <TextDiv>{formatString(balance).toString() + ' USDT'}</TextDiv> : <InlineSkeleton width={70} />}
           <Button
             sx={{
               width: '100%',
-              background: 'linear-gradient(180deg, rgba(108, 75, 246, 1) 0%, rgba(113, 79, 251, 1) 100%)',
+              // background: 'linear-gradient(180deg, rgba(108, 75, 246, 1) 0%, rgba(113, 79, 251, 1) 100%)',
               borderRadius: '36px',
               marginBottom: '37px',
             }}

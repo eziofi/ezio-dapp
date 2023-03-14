@@ -1,42 +1,25 @@
 import styles from './account.module.less';
-import { TRANSFER_TYPE } from '../wallet/helpers/constant';
+import { TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
 import { timestampFormat } from '../wallet/helpers/utilities';
 import { t } from 'i18next';
-import { useRecord } from '../../hooks/useRecord';
-import { PurchaseRecord, RedeemRecord } from '../wallet/helpers/contract_call';
-import { Avatar, CardContent, List, ListItem, ListItemAvatar, ListItemText, useTheme } from '@mui/material';
-import WorkIcon from '@mui/icons-material/Work';
-import ImageIcon from '@mui/icons-material/Image';
-import BeachAccessIcon from '@mui/icons-material/BeachAccess';
-import Divider from '@mui/material/Divider';
-import { Box } from '@mui/system';
+import {
+  Avatar,
+  Box,
+  CardContent,
+  Divider,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  useTheme,
+} from '@mui/material';
 import BaseIconFont from '../components/BaseIconFont';
+import { PurchaseRecord, RedeemRecord } from '../wallet/helpers/contract_call';
 export default function AccountDetail() {
-  const recordList = useRecord();
-
-  const list: (RedeemRecord | PurchaseRecord)[] = [
-    {
-      timestamp: 0,
-      amt: 'a',
-      qty: 'a',
-      transferType: TRANSFER_TYPE.REDEEM,
-      tokenType: 1,
-    },
-    {
-      timestamp: 1,
-      amt: 'a',
-      qty: 'a',
-      transferType: TRANSFER_TYPE.PURCHASE,
-      tokenType: 0,
-    },
-  ];
+  // const recordList = useRecord();
+  const recordList: (RedeemRecord | PurchaseRecord)[] = [];
 
   return (
-    // <div className={styles.accountDetailBox}>
-    //   {recordList?.map((record, index) => (
-    //     <DetailItem record={record} key={record.timestamp} />
-    //   ))}
-    // </div>
     <>
       {recordList?.map((record, index) => (
         <DetailItem record={record} key={record.timestamp} />
@@ -48,7 +31,6 @@ export default function AccountDetail() {
 const DetailItem = ({ record }: { record: PurchaseRecord | RedeemRecord }) => {
   const theme = useTheme();
   const { transferType: type, timestamp, amt, qty } = record;
-  console.log(record);
   const titleMap = {
     [TRANSFER_TYPE.PURCHASE]: t('account.recordPurchaseAction'),
     [TRANSFER_TYPE.REDEEM]: t('account.recordRedeemAction'),
@@ -66,35 +48,6 @@ const DetailItem = ({ record }: { record: PurchaseRecord | RedeemRecord }) => {
   };
 
   return (
-    // <div className={styles.detailItemBox}>
-    //   <div className={styles.detailItem}>
-    //     <div className={styles.column1}>
-    //       <div className={styles.title}>
-    //         {titleMap[type]}
-    //         {/* {type === TRANSFER_TYPE.PURCHASE && <span>{ezat ? ' EZAT' : ezbt ? ' EZBT' : ''}</span>} */}
-    //       </div>
-    //     </div>
-    //     <div className={styles.column2}>
-    //       {type === TRANSFER_TYPE.PURCHASE ? (
-    //         <>
-    //           <div className={styles.valueOut}>-{amt} USDT</div>
-    //           <div className={styles.valueIn}>
-    //             +{qty} {record.tokenType === 0 ? 'EZAT' : 'EZBT'}
-    //           </div>
-    //         </>
-    //       ) : type === TRANSFER_TYPE.REDEEM ? (
-    //         <>
-    //           <div className={styles.valueIn}>+{amt} USDT</div>
-    //           <div className={styles.valueOut}>
-    //             -{qty} {record.tokenType === 0 ? 'EZAT' : 'EZBT'}
-    //           </div>
-    //         </>
-    //       ) : (
-    //         <></>
-    //       )}
-    //     </div>
-    //   </div>
-    // </div>
     <List sx={{ width: '97%', paddingBottom: 0 }}>
       <ListItem>
         <ListItemAvatar>
@@ -120,9 +73,9 @@ const DetailItem = ({ record }: { record: PurchaseRecord | RedeemRecord }) => {
           <ListItemText
             primary={
               type === TRANSFER_TYPE.PURCHASE ? (
-                (record.tokenType === 0 ? 'EZAT' : 'EZBT') + titleMap[type]
+                (record.tokenType === 0 ? TOKEN_TYPE.ezUSD : TOKEN_TYPE.ezMATIC) + titleMap[type]
               ) : type === TRANSFER_TYPE.REDEEM ? (
-                (record.tokenType === 0 ? 'EZAT' : 'EZBT') + titleMap[type]
+                (record.tokenType === 0 ? TOKEN_TYPE.ezUSD : TOKEN_TYPE.ezMATIC) + titleMap[type]
               ) : (
                 <></>
               )
@@ -139,16 +92,20 @@ const DetailItem = ({ record }: { record: PurchaseRecord | RedeemRecord }) => {
           >
             {type === TRANSFER_TYPE.PURCHASE ? (
               <>
-                <div style={{ color: '#e63212', fontSize: '1rem' }}>-{amt} USDT</div>
+                <div style={{ color: '#e63212', fontSize: '1rem' }}>
+                  -{amt} {TOKEN_TYPE.USDT}
+                </div>
                 <div style={{ fontSize: '1rem' }}>
-                  +{qty} {record.tokenType === 0 ? 'EZAT' : 'EZBT'}
+                  +{qty} {record.tokenType === 0 ? TOKEN_TYPE.ezUSD : TOKEN_TYPE.ezMATIC}
                 </div>
               </>
             ) : type === TRANSFER_TYPE.REDEEM ? (
               <>
-                <div style={{ fontSize: '1rem' }}>+{amt} USDT</div>
+                <div style={{ fontSize: '1rem' }}>
+                  +{amt} {TOKEN_TYPE.USDT}
+                </div>
                 <div style={{ color: '#e63212', fontSize: '1rem' }}>
-                  -{qty} {record.tokenType === 0 ? 'EZAT' : 'EZBT'}
+                  -{qty} {record.tokenType === 0 ? TOKEN_TYPE.ezUSD : TOKEN_TYPE.ezMATIC}
                 </div>
               </>
             ) : (

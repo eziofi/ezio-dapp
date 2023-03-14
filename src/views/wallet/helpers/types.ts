@@ -131,7 +131,7 @@ export interface IMethod {
 }
 
 export interface IBoxImage {
-  "@type": string;
+  '@type': string;
   contentUrl: {
     [label: string]: string;
   };
@@ -156,3 +156,19 @@ export interface IBoxProfile {
   image: IBoxImage[];
   name: string;
 }
+
+export type ZeroExQuoteParams = {
+  sellToken: string;
+  buyToken: string;
+  sellAmount: string;
+  slippagePercentage: string;
+};
+
+export type OneInchQuoteParams = {
+  fromTokenAddress: string;
+  toTokenAddress: string;
+  amount: string;
+  fromAddress: string;
+  disableEstimate: boolean;
+  slippage: number;
+};

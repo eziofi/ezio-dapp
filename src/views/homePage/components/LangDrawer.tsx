@@ -1,10 +1,6 @@
-// import styles from '../homePage.module.less';
 import langBtn from '../../../assets/home/lang@2x.png';
 import closeBtn from '../../../assets/home/close@2x.png';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import { Drawer } from '@mui/material';
+import { Drawer, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {

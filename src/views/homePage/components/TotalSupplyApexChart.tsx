@@ -7,6 +7,7 @@ import { getYMax } from '../../wallet/helpers/utilities';
 import { useContext, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { ColorModeContext } from '../../../theme';
+import RenderSkeleton from './RenderSkeleton';
 
 export default function TotalSupplyApexChart() {
   const [option, setOption] = useState<any>(null);
@@ -17,7 +18,7 @@ export default function TotalSupplyApexChart() {
   const queryClient: QueryClient = useQueryClient();
 
   useEffect(() => {
-    queryClient.invalidateQueries('queryTotalNetWorth');
+    queryClient.invalidateQueries('queryTreasuryValue');
   }, [mode]);
 
   useQuery('queryTokenGroup', queryTokenGroup, {
@@ -26,7 +27,7 @@ export default function TotalSupplyApexChart() {
       const aTotalSupply = data.data.data.map(i => i.ezatSupply);
       const bTatalSupply = data.data.data.map(i => i.ezbtSupply);
 
-      const totalSupplyMax = getYMax([...aTotalSupply, ...aTotalSupply]);
+      const totalSupplyMax = getYMax([...aTotalSupply, ...bTatalSupply]);
 
       setOption({
         series: [
@@ -77,6 +78,11 @@ export default function TotalSupplyApexChart() {
           tooltip: {
             shared: true,
             intersect: false,
+            y: {
+              formatter: function (val: string) {
+                return val;
+              },
+            },
           },
         },
       });
@@ -87,9 +93,12 @@ export default function TotalSupplyApexChart() {
     <Card>
       <CardHeader title={t('home.totalSupplyTitle') as string} />
 
-      <Box sx={{ p: 3, pb: 1 }} dir="ltr">
-        {/*@ts-ignore*/}
-        {option && <ReactApexChart options={option.options} series={option.series} type="line" height={350} />}
+      <Box dir="ltr" sx={{ pl: 2, pr: 2 }}>
+        {option ? (
+          <ReactApexChart options={option.options} series={option.series} type="line" height={350} />
+        ) : (
+          <RenderSkeleton />
+        )}
       </Box>
     </Card>
   );

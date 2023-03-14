@@ -1,12 +1,13 @@
 import { Box, Card, CardHeader } from '@mui/material';
 import ReactApexChart from 'react-apexcharts';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
-import { queryTotalNetWorth } from '../../../api/api';
+import { queryTotalNetWorth, queryTreasuryValue } from '../../../api/api';
 import { t } from 'i18next';
 import { getYMax } from '../../wallet/helpers/utilities';
 import { useContext, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { ColorModeContext } from '../../../theme';
+import RenderSkeleton from './RenderSkeleton';
 
 export default function MarketApexChart() {
   const [option, setOption] = useState<any>(null);
@@ -16,14 +17,14 @@ export default function MarketApexChart() {
   const queryClient: QueryClient = useQueryClient();
 
   useEffect(() => {
-    queryClient.invalidateQueries('queryTotalNetWorth');
+    queryClient.invalidateQueries('queryTreasuryValue');
   }, [mode]);
 
-  useQuery('queryTotalNetWorth', queryTotalNetWorth, {
+  useQuery('queryTreasuryValue', queryTreasuryValue, {
     onSuccess: data => {
-      const XData = data.data.data.map(i => parseInt(i.groupTime));
-      const treasuryData = data.data.data.map(i => i.totalNetWorth);
-      const ethData = data.data.data.map(i => i.ethPrice);
+      const XData = data.data.data.map(i => i.groupTime.substring(5));
+      const treasuryData = data.data.data.map(i => parseFloat(i.treasuryValue));
+      // const ethData = data.data.data.map(i => i.ethPrice);
 
       setOption({
         series: [
@@ -32,11 +33,11 @@ export default function MarketApexChart() {
             type: 'area',
             data: treasuryData,
           },
-          {
-            name: t('home.ethPrice'),
-            type: 'area',
-            data: ethData,
-          },
+          // {
+          //   name: t('home.ethPrice'),
+          //   type: 'area',
+          //   data: ethData,
+          // },
         ],
         options: {
           theme: {
@@ -71,18 +72,23 @@ export default function MarketApexChart() {
               min: 0,
               max: getYMax(treasuryData),
             },
-            {
-              opposite: true,
-              title: {
-                text: t('home.ethPrice'),
-              },
-              decimalsInFloat: 0,
-              max: getYMax(ethData),
-            },
+            // {
+            //   opposite: true,
+            //   title: {
+            //     text: t('home.ethPrice'),
+            //   },
+            //   decimalsInFloat: 0,
+            //   max: getYMax(ethData),
+            // },
           ],
           tooltip: {
             shared: true,
             intersect: false,
+            y: {
+              formatter: function (val: string) {
+                return val;
+              },
+            },
           },
         },
       });
@@ -93,8 +99,13 @@ export default function MarketApexChart() {
     <Card>
       <CardHeader title={t('home.treasuryValue') as string} />
 
-      <Box sx={{ p: 3, pb: 1 }} dir="ltr">
-        {option && <ReactApexChart options={option.options} series={option.series} type="line" height={350} />}
+      <Box dir="ltr" sx={{ pl: 2 }}>
+        {/*<Box sx={{ p: 3, pb: 1 }} dir="ltr">*/}
+        {option ? (
+          <ReactApexChart options={option.options} series={option.series} type="line" height={350} />
+        ) : (
+          <RenderSkeleton />
+        )}
       </Box>
     </Card>
   );

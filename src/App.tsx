@@ -4,12 +4,12 @@ import Router from './routes';
 // theme
 import ThemeProvider from './theme';
 // components
-import ScrollToTop from './components/scroll-to-top';
-import { StyledChart } from './components/chart';
+// import ScrollToTop from './components/scroll-to-top';
 
 // import './App.less';
 import WalletProvider from './views/context/WalletProvider';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import './views/default.less';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,8 +27,7 @@ export default function App() {
       <QueryClientProvider client={queryClient}>
         <WalletProvider>
           <ThemeProvider>
-            <ScrollToTop />
-            <StyledChart />
+            {/*<ScrollToTop />*/}
             <Router />
           </ThemeProvider>
         </WalletProvider>

@@ -50,13 +50,18 @@ export default function Nav({ openNav, onCloseNav }: { openNav: boolean; onClose
     },
     {
       title: t('nav.swap'),
-      path: '/dashboard/purchase',
+      path: '/dashboard/swap',
       icon: icon('ic_cart'),
     },
     {
       title: t('nav.account'),
       path: '/dashboard/account',
       icon: icon('ic_user'),
+    },
+    {
+      title: t('nav.analytics'),
+      path: '/dashboard/analytics',
+      icon: icon('ic_analytics'),
     },
   ];
 

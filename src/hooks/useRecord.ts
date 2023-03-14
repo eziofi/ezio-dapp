@@ -1,13 +1,13 @@
 import { useQuery } from 'react-query';
-import { queryPurchaseRecord, queryRedeemRecord } from '../views/wallet/helpers/contract_call';
 import useWallet from '../views/hooks/useWallet';
 import { TOKEN_TYPE } from '../views/wallet/helpers/constant';
+import { queryPurchaseRecord, queryRedeemRecord } from '../views/wallet/helpers/contract_call';
 
 export function useRecord() {
   const { account, ethersProvider } = useWallet();
   const { data: purchaseEzatRecords } = useQuery(
-    ['queryPurchaseRecord', account, TOKEN_TYPE.EZAT],
-    () => queryPurchaseRecord(ethersProvider!.getSigner(), account, TOKEN_TYPE.EZAT),
+    ['queryPurchaseRecord', account, TOKEN_TYPE.ezUSD],
+    () => queryPurchaseRecord(ethersProvider!.getSigner(), account, TOKEN_TYPE.ezUSD),
     {
       enabled: !!ethersProvider,
       onSuccess: data => {
@@ -16,8 +16,8 @@ export function useRecord() {
     },
   );
   const { data: purchaseEzbtRecords } = useQuery(
-    ['queryPurchaseRecord', account, TOKEN_TYPE.EZBT],
-    () => queryPurchaseRecord(ethersProvider!.getSigner(), account, TOKEN_TYPE.EZBT),
+    ['queryPurchaseRecord', account, TOKEN_TYPE.ezMATIC],
+    () => queryPurchaseRecord(ethersProvider!.getSigner(), account, TOKEN_TYPE.ezMATIC),
     {
       enabled: !!ethersProvider,
       onSuccess: data => {

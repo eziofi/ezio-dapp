@@ -1,6 +1,6 @@
 import { Card, CardContent, styled, Toolbar } from '@mui/material';
 import { Box } from '@mui/system';
-import { IProps } from '../styleType';
+import { IProps } from '../../types/styleType';
 
 export const AccountToolBar = styled((props: IProps) => {
   return <Toolbar {...props} />;
@@ -33,9 +33,9 @@ export const AccountCard = styled((props: IProps) => {
   return <Card {...props} variant="outlined" />;
 })(() => {
   return {
-    // height: 109,
-    ':nth-of-type(2)': {
-      margin: '10px 0',
+    marginBottom: 10,
+    ':last-child': {
+      marginBottom: 0,
     },
   };
 });

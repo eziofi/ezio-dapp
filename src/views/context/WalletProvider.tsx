@@ -1,7 +1,10 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import Web3Modal from 'web3modal';
+import { TOKEN_TYPE } from '../wallet/helpers/constant';
+import { useQuery } from 'react-query';
+import { getAllowance } from '../wallet/helpers/contract_call';
 
 interface IWalletContext {
   account: string;
@@ -10,6 +13,8 @@ interface IWalletContext {
   walletProvider?: any;
   ethersProvider?: ethers.providers.Web3Provider;
   connectState: string;
+  allowanceUSDT: string;
+  allowanceUSDC: string;
 }
 
 export const WalletContext = React.createContext<IWalletContext>({} as IWalletContext);
@@ -33,6 +38,21 @@ export default function WalletProvider({ children }: { children: ReactElement })
   }, []);
 
   // const getNetwork = () => getChainData(this.state.chainId).network;
+
+  const [allowanceUSDT, setAllowanceUSDT] = useState('');
+  const [allowanceUSDC, setAllowanceUSDC] = useState('');
+  useQuery(['allowance', TOKEN_TYPE.USDT], () => getAllowance(ethersProvider!.getSigner(), account, TOKEN_TYPE.USDT), {
+    enabled: !!ethersProvider && !!account,
+    onSuccess: data => {
+      setAllowanceUSDT(data.toString());
+    },
+  });
+  useQuery(['allowance', TOKEN_TYPE.USDC], () => getAllowance(ethersProvider!.getSigner(), account, TOKEN_TYPE.USDC), {
+    enabled: !!ethersProvider && !!account,
+    onSuccess: data => {
+      setAllowanceUSDC(data.toString());
+    },
+  });
 
   const connect = async () => {
     const infuraId = 'd7c876c8797d474cb2227e81fda1cd39';
@@ -146,6 +166,15 @@ export default function WalletProvider({ children }: { children: ReactElement })
     setConnectState('unconnected');
   };
 
-  const value = { connectState, account, walletProvider, ethersProvider, connect, disconnect };
+  const value = {
+    connectState,
+    account,
+    walletProvider,
+    ethersProvider,
+    connect,
+    disconnect,
+    allowanceUSDT,
+    allowanceUSDC,
+  };
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;
 }
