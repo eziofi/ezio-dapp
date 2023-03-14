@@ -78,7 +78,8 @@ export default function SlippagePopover({
             <div>
               <header>
                 <p>
-                  {t('purchase.slippageTolerance')} <BaseIconFont name="icon-wenhaoxiao" />
+                  {t('purchase.slippageTolerance')}
+                  {/*<BaseIconFont name="icon-wenhaoxiao" />*/}
                 </p>
               </header>
               <footer>

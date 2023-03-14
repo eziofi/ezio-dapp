@@ -177,7 +177,7 @@ function RanderOptions(
               size: 12,
               padding: '0',
               lineHeight: '0',
-              marginLeft: theme.spacing(1),
+              // marginLeft: theme.spacing(1),
             }}
             // @ts-ignore
             onClick={() => setInputVal(formatString(balance, 6).toString())}
