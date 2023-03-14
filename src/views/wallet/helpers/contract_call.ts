@@ -120,9 +120,11 @@ export async function treasuryInterestRate(signerOrProvider: Signer | Provider):
  * @returns 手续费比率
  */
 export async function redeemFeeRate(signerOrProvider: Signer | Provider) {
-  const res = await EzioConnect(signerOrProvider).redeemFeeRate();
-  console.log('redeemFeeRate = ' + res.toString());
-  return res;
+  const rawRate = await EzioConnect(signerOrProvider).redeemFeeRate();
+  const denominator = await EzioConnect(signerOrProvider).REDEEM_RATE_DENOMINATOR();
+  const rate = (rawRate / denominator.toNumber()) * 100 + '%';
+  console.log('redeemFeeRate = ' + rate);
+  return rate;
 }
 /**
  * 获取 杠杆率

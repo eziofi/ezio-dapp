@@ -391,7 +391,7 @@ export default function Purchase() {
             type === TRANSFER_TYPE.PURCHASE ? (
               t('purchase.EZATRate') + ': ' + rate + '%'
             ) : (
-              t('purchase.feeRate') + ': ' + feeRate + '%'
+              t('purchase.feeRate') + ': ' + feeRate
             )
           ) : (
             <InlineSkeleton />
