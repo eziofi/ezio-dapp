@@ -23,15 +23,10 @@ export default function NetWorthApexChart() {
 
   useQuery('queryMaticPrice', queryMaticPrice, {
     onSuccess: ({ data }) => {
-      // const XData = data.data.data.map(i => parseInt(i.groupTime));
-      // const aNetWorth = data.data.data.map(i => i.ezatNetWorth);
-      // const bNetWorth = data.data.data.map(i => i.ezbtNetWorth);
-      // const aRate = data.data.data.map(i => i.ezatRate);
       const XData = data.data.map(i => parseInt(i.groupTime?.split('-')[i.groupTime.split('-').length - 1]));
-      // @ts-ignore
       const ezMaticPrice = data.data.map(i => +i.ezMaticPrice);
       const stMaticPrice = data.data.map(i => +i.stMaticPrice);
-      const aRate = data.data.map(i => +parseFloat(String(i.ezUsdRate * 10000)).toFixed(2));
+      const aRate = data.data.map(i => +parseFloat(String(i.ezUsdRate * 10000 * 365)).toFixed(2));
 
       setOption({
         series: [
