@@ -52,6 +52,8 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
     [TOKEN_TYPE.ezMATIC]: 'rgba(239, 89, 114, 1)',
   };
 
+  const theme = useTheme();
+
   return (
     <AccountCard>
       <Content>
@@ -78,7 +80,7 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
             <Box>
               <div style={{ fontSize: 20 }}>{TOKEN_TYPE[type]}</div>
               {price ? (
-                <div style={{ fontSize: 12, color: useTheme().palette.text.disabled }}>
+                <div style={{ fontSize: 12, color: theme.palette.text.disabled }}>
                   {t('account.netWorth')}: {price} USDC
                 </div>
               ) : (

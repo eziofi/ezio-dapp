@@ -46,11 +46,13 @@ export default function SlippagePopover({
 
   const [isAutomation, setIsAutomation] = React.useState(true);
 
+  const theme = useTheme();
+
   return (
     <div>
       <IconButton aria-describedby={id} onClick={handleClick}>
         <BaseIconFont
-          name={useTheme().palette.mode === 'dark' ? 'icon-shezhi-copy2' : 'icon-shezhi'}
+          name={theme.palette.mode === 'dark' ? 'icon-shezhi-copy2' : 'icon-shezhi'}
           style={{ width: 20, height: 20 }}
         />
       </IconButton>
@@ -83,7 +85,7 @@ export default function SlippagePopover({
                 <Button
                   size="small"
                   variant="contained"
-                  sx={!isAutomation ? { background: useTheme().palette.text.disabled } : {}}
+                  sx={!isAutomation ? { background: theme.palette.text.disabled } : {}}
                   onClick={() => {
                     setIsAutomation(true);
                     setSlippage(resetVal);
@@ -95,7 +97,7 @@ export default function SlippagePopover({
                   id="outlined-adornment-weight"
                   endAdornment={
                     <InputAdornment position="end">
-                      <span style={{ color: useTheme().palette.mode === 'dark' ? 'white' : 'black' }}>%</span>
+                      <span style={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>%</span>
                     </InputAdornment>
                   }
                   value={slippage}

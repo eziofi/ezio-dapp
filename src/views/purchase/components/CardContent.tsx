@@ -260,6 +260,8 @@ function MyCardContentOne({
 
   const { balance } = useBalance(transactionType === TRANSFER_TYPE.PURCHASE ? redeemTokenType : tokenType);
 
+  const theme = useTheme();
+
   return (
     <BodyContent>
       <div style={{ height: INPUT_PARENT_HEIGHT }}>
@@ -281,7 +283,7 @@ function MyCardContentOne({
           value={inputValue1}
           disabled={needApprove}
         />
-        <div style={{ ...priceStyle, color: useTheme().palette.text.secondary }}>
+        <div style={{ ...priceStyle, color: theme.palette.text.secondary }}>
           {price ? t('purchase.unitPrice') + ': ' + price + ' USDC' : <Skeleton width={100} />}
         </div>
       </div>
@@ -324,6 +326,8 @@ function MyCardContentSecond({
     setRedeemTokenType(value);
   };
 
+  const theme = useTheme();
+
   return (
     <>
       <BodyContent>
@@ -336,7 +340,7 @@ function MyCardContentSecond({
             value={inputValue2}
             disabled
           />
-          <div style={{ ...priceStyle, color: useTheme().palette.text.secondary }}>
+          <div style={{ ...priceStyle, color: theme.palette.text.secondary }}>
             {/*{t('purchase.estimated')}*/}
             {price ? t('purchase.unitPrice') + ': ' + price + ' USDC' : <Skeleton width={100} />}
           </div>
@@ -366,7 +370,7 @@ function MyCardContentSecond({
             </div>
 
             {/* 显示账户余额 */}
-            <span style={{ ...priceStyle, color: useTheme().palette.text.secondary }}>
+            <span style={{ ...priceStyle, color: theme.palette.text.secondary }}>
               {t('purchase.leftBalance') + ': '}
               {balance ? formatString(balance).toString() : <InlineSkeleton width={40} />}
             </span>

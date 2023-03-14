@@ -29,12 +29,13 @@ const PurchaseContainer = styled((props: IProps) => {
 const ContentBottom = styled((props: IProps) => {
   return <Card {...props} />;
 })(() => {
+  const theme = useTheme();
   return {
     width: CONTAINER_WIDTH,
     height: 109,
     position: 'relative',
     // @ts-ignore
-    background: useTheme().palette.purchase.cardBg,
+    background: theme.palette.purchase.cardBg,
     boxShadow: 'none',
     ':after': {
       position: 'absolute',
@@ -53,12 +54,13 @@ const ContentBottom = styled((props: IProps) => {
 const ContentTop = styled((props: IProps) => {
   return <Card {...props} />;
 })(() => {
+  const theme = useTheme();
   return {
     width: CONTAINER_WIDTH,
     height: 109,
     position: 'relative',
     // @ts-ignore
-    background: useTheme().palette.purchase.cardBg,
+    background: theme.palette.purchase.cardBg,
     boxShadow: 'none',
     ':after': {
       position: 'absolute',
@@ -85,7 +87,7 @@ const ConverBtn = styled('div')(() => {
     alignContent: 'center',
     margin: '-12px 0 -12px 0',
     // @ts-ignore
-    background: useTheme().palette.purchase.cardBg,
+    background: theme.palette.purchase.cardBg,
     zIndex: 100,
     // border: '1px solid rgba(145, 158, 171, 0.24)',
     borderRight: 'none',
@@ -161,10 +163,11 @@ const FooterContent = styled('div')(() => {
 const UnitconverContent = styled((props: IProps) => {
   return <Card {...props} />;
 })(() => {
+  const theme = useTheme();
   return {
     width: CONTAINER_WIDTH,
     // @ts-ignore
-    background: useTheme().palette.purchase.cardBg,
+    background: theme.palette.purchase.cardBg,
     marginTop: 5,
     borderTopLeftRadius: '0',
     borderTopRightRadius: '0',
@@ -186,11 +189,12 @@ const UnitconverContent = styled((props: IProps) => {
 const SlippagePopoverContent = styled((props: IProps) => {
   return <Card {...props} />;
 })(() => {
+  const theme = useTheme();
   return {
     width: 317,
     height: 178,
     // @ts-ignore
-    background: useTheme().palette.purchase.slippageBg,
+    background: theme.palette.purchase.slippageBg,
     div: {
       header: {
         display: 'flex',
