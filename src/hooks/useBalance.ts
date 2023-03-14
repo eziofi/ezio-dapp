@@ -23,9 +23,9 @@ export function useBalance(tokenType: TOKEN_TYPE) {
   const {
     data: balance,
     refetch: refetchBalance,
-    isLoading,
+    isFetching,
   } = useQuery(['balanceOf', tokenType], () => balanceApi[tokenType](ethersProvider!.getSigner(), account), {
     enabled: !!ethersProvider && !!account,
   });
-  return { balance, refetchBalance, isLoading };
+  return { balance, refetchBalance, isBalanceFetching: isFetching };
 }

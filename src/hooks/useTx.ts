@@ -31,7 +31,7 @@ const DAI_TAKER_ADDRESS = process.env.POLYGON_DAI_TAKER_ADDRESS || '';
 const channel = process.env.REACT_APP_QUOTE_CHANNEL === '1inch' ? QUOTE_CHANNEL.OneInch : QUOTE_CHANNEL.ZeroEx;
 
 export default function useTx() {
-  const { setBackLoadingText } = useContext(UIContext);
+  const { setBackLoadingText, openMsg } = useContext(UIContext);
   const { t } = useTranslation();
 
   async function approve(fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC, signerOrProvider: Signer | Provider) {
@@ -46,6 +46,7 @@ export default function useTx() {
     setBackLoadingText(t('message.approveWaiting'));
     await approveTx.wait();
     console.log('approved');
+    openMsg(t('message.approved'), 'success', 2000);
   }
 
   /**
@@ -64,6 +65,7 @@ export default function useTx() {
     signerOrProvider: Signer | Provider,
   ) {
     await (toType === TOKEN_TYPE.ezUSD ? purchaseA : purchaseB)(signerOrProvider, fromType, amount, slippage);
+    openMsg(t('message.txConfirmed'), 'success', 2000);
   }
 
   async function purchaseA(
@@ -189,6 +191,7 @@ export default function useTx() {
     slippage: number,
   ) {
     await (toType === TOKEN_TYPE.USDC ? redeemToUSDC : redeemToStMatic)(fromType, amount, signerOrProvider, slippage);
+    openMsg(t('message.txConfirmed'), 'success', 2000);
   }
 
   /**

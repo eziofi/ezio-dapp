@@ -14,6 +14,8 @@ export default {
     approveWaiting: 'waiting approve response...',
     sendingTx: 'sending Tx...',
     waitingTx: 'waiting response...',
+    approved: 'approval tx confirmed',
+    txConfirmed: 'tx confirmed',
   },
   home: {
     card: {
@@ -110,7 +112,7 @@ export default {
     balance: 'Balance',
     detail: 'Transaction Detail',
     checkDetail: 'Detail>>',
-    netWorth: 'price',
+    netWorth: 'value',
     recordPurchaseAction: 'Purchase',
     recordRedeemAction: 'Redeem',
   },

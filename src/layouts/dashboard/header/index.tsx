@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Stack, AppBar, Toolbar, IconButton, CircularProgress } from '@mui/material';
+import { Box, Stack, AppBar, Toolbar, IconButton, CircularProgress, Chip } from '@mui/material';
 // utils
 import { bgBlur } from '../../../utils/cssStyles';
 import LanguagePopover from './LanguagePopover';
@@ -79,10 +79,14 @@ export default function Header({
           }}
         >
           {loadingOpen && pathname !== '/dashboard/swap' && (
-            <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
-              <Box sx={{ mr: 1, color: 'text.primary' }}>{loadingText}</Box>
-              <CircularProgress size={24} />
-            </Box>
+            <Chip
+              sx={{
+                color: theme => (theme.palette.mode === 'light' ? theme.palette.grey[600] : theme.palette.grey[400]),
+              }}
+              icon={<CircularProgress size={14} />}
+              label={loadingText}
+              variant="outlined"
+            />
           )}
           <ThemeSwitcher />
           <LanguagePopover />

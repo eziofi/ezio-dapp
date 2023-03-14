@@ -26,7 +26,6 @@ import { UIContext } from '../../layouts/dashboard/DashboardLayout';
 import useTx from '../../hooks/useTx';
 import { InlineSkeleton } from '../components/Skeleton';
 import { useFeeRate } from '../../hooks/useFeeRate';
-import { HOME_CARD_TYPE } from '../components/HomeCard';
 import SlippagePopover from './components/SlippagePopover';
 
 interface IPurchaseArg {
@@ -197,13 +196,12 @@ export default function Purchase() {
 
   function handleError(error: any) {
     if (error.reason) {
-      setMsg(error.reason);
+      openMsg(error.reason);
     } else if (error.code) {
-      setMsg(error.code);
+      openMsg(error.code);
     } else {
-      setMsg('Error');
+      openMsg('Error');
     }
-    openMsg();
   }
 
   // 购买
@@ -214,8 +212,7 @@ export default function Purchase() {
         if (!data) return Promise.reject();
         const balance = parseFloat(data);
         if (parseFloat(inputValue1) > balance) {
-          setMsg(t('purchase.moreThanBalanceMsg'));
-          openMsg();
+          openMsg(t('purchase.moreThanBalanceMsg'));
         } else {
           const args: IPurchaseArg = {
             fromType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.USDT,
@@ -244,8 +241,7 @@ export default function Purchase() {
         if (!data) return Promise.reject();
         const balance = parseFloat(data);
         if (parseFloat(inputValue1) > balance) {
-          setMsg(t('redeem.moreThanBalanceMsg'));
-          openMsg();
+          openMsg(t('redeem.moreThanBalanceMsg'));
         } else {
           const args: IRedeemArg = {
             fromType: tokenType as TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC,

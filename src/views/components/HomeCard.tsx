@@ -48,19 +48,12 @@ export default function HomeCard({
     [HOME_CARD_TYPE.Leverage]: 'icon-gangganshuai-copy',
   };
   // @ts-ignore
-  const { data, isLoading } = useQuery(['totalSupply', type], () => api[type](ethersProvider!.getSigner()), {
+  const { data } = useQuery(['totalSupply', type], () => api[type](ethersProvider!.getSigner()), {
     enabled: !!ethersProvider,
-    onSuccess: data1 => {
-      // if (type === VALUE_TYPE.rate) {
-      //   const res = formatNetWorth(data1);
-      //   debugger;
-      // }
-    },
     onError: err => {
       // debugger;
     },
   });
-  // @ts-ignore
 
   const IconDivBorderColor = {
     [HOME_CARD_TYPE.Rate]: '#4481EB',
@@ -74,10 +67,10 @@ export default function HomeCard({
     display: 'flex',
     borderRadius: '50%',
     alignItems: 'center',
-    width: theme.spacing(8),
-    height: theme.spacing(8),
+    width: theme.spacing(7),
+    height: theme.spacing(7),
     justifyContent: 'center',
-    marginBottom: theme.spacing(3),
+    marginBottom: theme.spacing(2),
     border: `1px solid ${IconDivBorderColor[type]}`,
   }));
 
@@ -113,8 +106,8 @@ export default function HomeCard({
         <div
           style={{
             border: '1px solid black',
-            width: theme.spacing(7),
-            height: theme.spacing(7),
+            width: theme.spacing(6),
+            height: theme.spacing(6),
             borderRadius: '50%',
             display: 'flex',
             justifyContent: 'center',
@@ -127,8 +120,8 @@ export default function HomeCard({
           <BaseIconFont
             name={icon[type]}
             style={{
-              width: 26,
-              height: 26,
+              width: 22,
+              height: 22,
               // @ts-ignore
               // fill: theme.palette[color][theme.palette.mode === 'light' ? 'darker' : 'lighter'],
               fill: 'white',

@@ -14,12 +14,12 @@ export function usePrice(tokenType: TOKEN_TYPE) {
     [TOKEN_TYPE.stMATIC]: stMaticPrice,
   };
 
-  const { data: price, refetch: refetchPrice } = useQuery(
-    ['price', tokenType],
-    () => netWorthApi[tokenType](ethersProvider!.getSigner()),
-    {
-      enabled: !!ethersProvider,
-    },
-  );
-  return { price, refetchPrice };
+  const {
+    data: price,
+    refetch: refetchPrice,
+    isFetching,
+  } = useQuery(['price', tokenType], () => netWorthApi[tokenType](ethersProvider!.getSigner()), {
+    enabled: !!ethersProvider,
+  });
+  return { price, refetchPrice, isPriceFetching: isFetching };
 }

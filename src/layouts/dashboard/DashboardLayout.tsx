@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 //
@@ -44,9 +44,10 @@ interface IUIContext {
   openBackLoading: () => void;
   closeBackLoading: () => void;
   setBackLoadingText: (text: string) => void;
-  openMsg: () => void;
+  openMsg: (msg: string, type?: AlertColor, closeTime?: number) => void;
   closeMsg: () => void;
   setMsg: (msg: string) => void;
+  setMsgType: Dispatch<SetStateAction<AlertColor>>;
 }
 
 export const UIContext = React.createContext<IUIContext>({} as IUIContext);
@@ -72,7 +73,14 @@ export default function DashboardLayout() {
   const [msgOpen, setMsgOpen] = useState(false);
   const [msgType, setMsgType] = useState<AlertColor>('error');
   const [msg, setMsg] = useState('');
-  const openMsg = () => setMsgOpen(true);
+  const [msgCloseTime, setMsgCloseTime] = useState(6000);
+
+  const openMsg = (msg: string, type: AlertColor = 'error', closeTime: number = 6000) => {
+    setMsgType(type);
+    setMsg(msg);
+    setMsgCloseTime(closeTime);
+    setMsgOpen(true);
+  };
   const closeMsg = () => setMsgOpen(false);
   const _setMsg = (msg: string) => setMsg(msg);
 
@@ -84,6 +92,7 @@ export default function DashboardLayout() {
     setBackLoadingText: _setBackLoadingText,
     openMsg,
     setMsg: _setMsg,
+    setMsgType,
     closeMsg,
   };
 
@@ -100,6 +109,7 @@ export default function DashboardLayout() {
           onClose={() => setMsgOpen(false)}
           message={msg}
           sx={{ position: 'fixed' }}
+          autoHideDuration={msgCloseTime}
         >
           <Alert onClose={() => setMsgOpen(false)} severity={msgType} sx={{ width: '100%' }}>
             {msg}

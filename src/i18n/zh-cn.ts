@@ -14,6 +14,8 @@ export default {
     approveWaiting: '等待授权结果……',
     sendingTx: '发送交易……',
     waitingTx: '等待交易确认……',
+    approved: '授权交易已确认',
+    txConfirmed: '交易已确认',
   },
   home: {
     card: {
@@ -109,7 +111,7 @@ export default {
     balance: '余额',
     detail: '交易记录',
     checkDetail: '查看明细>>',
-    netWorth: '单价',
+    netWorth: '总价值',
     recordPurchaseAction: '购买',
     recordRedeemAction: '赎回',
   },

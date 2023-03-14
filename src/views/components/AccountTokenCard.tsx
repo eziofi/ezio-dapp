@@ -10,8 +10,8 @@ import { Box, Tooltip, useTheme } from '@mui/material';
 import { useEffect } from 'react';
 
 export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TYPE; refreshFlag: number }) {
-  const { balance, refetchBalance } = useBalance(type);
-  const { price, refetchPrice } = usePrice(type);
+  const { balance, refetchBalance, isBalanceFetching } = useBalance(type);
+  const { price, refetchPrice, isPriceFetching } = usePrice(type);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -20,6 +20,16 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
       refetchPrice();
     }
   }, [refreshFlag]);
+
+  const calcValue = (price: string | undefined, balance: string | undefined) => {
+    if (price && balance) {
+      return (parseFloat(price) * parseFloat(balance)).toFixed(2);
+    } else {
+      return 0;
+    }
+  };
+  // 总价值
+  const value = calcValue(price, balance);
 
   const iconDiv = {
     width: 50,
@@ -79,18 +89,20 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
           <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Box>
               <div style={{ fontSize: 20 }}>{TOKEN_TYPE[type]}</div>
-              {price ? (
+              {!isBalanceFetching || !isPriceFetching ? (
                 <div style={{ fontSize: 12, color: theme.palette.text.disabled }}>
-                  {t('account.netWorth')}: {price} USDC
+                  {t('account.netWorth')}: {value} USDC
                 </div>
               ) : (
                 <InlineSkeleton width={70} />
               )}
             </Box>
             <div>
-              {balance ? (
+              {!isBalanceFetching ? (
                 <Tooltip title={balance} placement="top">
-                  <div style={{ fontSize: 28, color: 'rgba(67, 207, 124, 1)' }}>{formatString(balance).toString()}</div>
+                  <div style={{ fontSize: 28, color: 'rgba(67, 207, 124, 1)' }}>
+                    {formatString(balance || '0').toString()}
+                  </div>
                 </Tooltip>
               ) : (
                 <InlineSkeleton width={70} />
