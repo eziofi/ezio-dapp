@@ -83,7 +83,7 @@ export default function SlippagePopover({
                 <Button
                   size="small"
                   variant="contained"
-                  sx={!isAutomation ? { background: 'rgba(145, 158, 171, 0.24)' } : {}}
+                  sx={!isAutomation ? { background: useTheme().palette.text.disabled } : {}}
                   onClick={() => {
                     setIsAutomation(true);
                     setSlippage(resetVal);

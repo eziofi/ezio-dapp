@@ -137,12 +137,20 @@ export default function HomeCard({
         </div>
       </StyledIcon>
 
-      <Typography variant="h3">
-        {data ? type === HOME_CARD_TYPE.Rate ? data + '%' : data : <InlineSkeleton />}
+      <Typography variant="h3" sx={{ color: theme.palette.text.primary }}>
+        {data ? (
+          type === HOME_CARD_TYPE.Rate ? (
+            data + '%'
+          ) : type === HOME_CARD_TYPE.RebalancePrice ? (
+            '$' + data
+          ) : (
+            data
+          )
+        ) : (
+          <InlineSkeleton />
+        )}
       </Typography>
-      <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-        {title[type]}
-      </Typography>
+      <Typography sx={{ color: theme.palette.text.disabled }}>{title[type]}</Typography>
     </Card>
   );
 }

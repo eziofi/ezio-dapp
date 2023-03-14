@@ -6,7 +6,7 @@ import BaseIconFont from './BaseIconFont';
 import { formatDecimal, formatString } from '../wallet/helpers/utilities';
 import { InlineSkeleton } from './Skeleton';
 import { useTranslation } from 'react-i18next';
-import { Box, Tooltip } from '@mui/material';
+import { Box, Tooltip, useTheme } from '@mui/material';
 import { useEffect } from 'react';
 
 export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TYPE; refreshFlag: number }) {
@@ -47,6 +47,11 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
     [TOKEN_TYPE.ezMATIC]: 'icon-B',
   };
 
+  const iconDibBgColor = {
+    [TOKEN_TYPE.ezUSD]: 'rgba(95, 69, 186, 1)',
+    [TOKEN_TYPE.ezMATIC]: 'rgba(239, 89, 114, 1)',
+  };
+
   return (
     <AccountCard>
       <Content>
@@ -54,12 +59,8 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
           <div
             style={{
               ...iconDiv,
-              background:
-                type === TOKEN_TYPE.ezUSD
-                  ? 'rgba(95, 69, 186, 1)'
-                  : type === TOKEN_TYPE.ezMATIC
-                  ? 'rgba(239, 89, 114, 1)'
-                  : 'none',
+              // @ts-ignore
+              background: iconDibBgColor[type],
             }}
           >
             <BaseIconFont
@@ -77,7 +78,7 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
             <Box>
               <div style={{ fontSize: 20 }}>{TOKEN_TYPE[type]}</div>
               {price ? (
-                <div style={{ fontSize: 12, color: 'rgba(76, 80, 97, 1)' }}>
+                <div style={{ fontSize: 12, color: useTheme().palette.text.disabled }}>
                   {t('account.netWorth')}: {price} USDC
                 </div>
               ) : (
