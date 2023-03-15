@@ -147,7 +147,7 @@ const HomeCardHeader = styled('div')(() => {
     alignItems: 'center',
     '.homeCard_select': {
       '.MuiSelect-select': {
-        minWidth: 100,
+        width: 100,
         fontSize: 14,
         padding: '0',
         textAlign: 'center',

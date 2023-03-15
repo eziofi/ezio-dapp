@@ -104,7 +104,7 @@ export default function NetWorthApexChart() {
               decimalsInFloat: 0,
               opposite: true,
               title: {
-                text: t('home.aRateAxis') + ' ( ‱ ) ',
+                text: t('home.aRateAxis') + ' ( % ) ',
               },
               max: getYMax(aRate),
             },
@@ -114,7 +114,7 @@ export default function NetWorthApexChart() {
             intersect: false,
             y: {
               formatter: function (val: string, { seriesIndex }: any) {
-                return seriesIndex === 2 ? val + '‱' : val;
+                return seriesIndex === 2 ? val + '%' : val;
               },
             },
           },
