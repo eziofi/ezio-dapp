@@ -3,14 +3,13 @@ import ReactApexChart from 'react-apexcharts';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { queryTokenGroup, queryMaticPrice } from '../../../api/api';
 import { t } from 'i18next';
-import { getYMax } from '../../wallet/helpers/utilities';
+import { formatString, getYMax } from '../../wallet/helpers/utilities';
 import { useContext, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { ColorModeContext } from '../../../theme';
 import RenderSkeleton from './RenderSkeleton';
 import { HomeCardHeader } from '../mainStyle';
 import RenderSelect from './RenderSelect';
-import moment from 'moment';
 
 export default function NetWorthApexChart() {
   const [option, setOption] = useState<any>(null);
@@ -32,12 +31,12 @@ export default function NetWorthApexChart() {
         if (queryType === 'hour') {
           return String(parseInt(i.groupTime.slice(-2)));
         } else {
-          return moment(i.groupTime.slice(5)).format('M-D');
+          return i.groupTime.slice(5, 10);
         }
       });
       const ezMaticPrice = data.data.map(i => +i.ezMaticPrice);
       const stMaticPrice = data.data.map(i => +i.stMaticPrice);
-      const aRate = data.data.map(i => +parseFloat(String(i.ezUsdRate * 10000 * 365)).toFixed(2));
+      const aRate = data.data.map(i => +formatString(String((i.ezUsdRate * 10000 * 365) / 100)));
 
       setOption({
         series: [
@@ -102,7 +101,7 @@ export default function NetWorthApexChart() {
             },
 
             {
-              decimalsInFloat: 2,
+              decimalsInFloat: 0,
               opposite: true,
               title: {
                 text: t('home.aRateAxis') + ' ( ‱ ) ',

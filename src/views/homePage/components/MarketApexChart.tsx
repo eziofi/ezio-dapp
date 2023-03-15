@@ -10,7 +10,6 @@ import { ColorModeContext } from '../../../theme';
 import RenderSkeleton from './RenderSkeleton';
 import { HomeCardHeader } from '../mainStyle';
 import RenderSelect from './RenderSelect';
-import moment from 'moment';
 
 export default function MarketApexChart() {
   const [option, setOption] = useState<any>(null);
@@ -31,12 +30,10 @@ export default function MarketApexChart() {
         if (queryType === 'hour') {
           return String(parseInt(i.groupTime.slice(-2)));
         } else {
-          return moment(i.groupTime.slice(5)).format('M-D');
+          return i.groupTime.slice(5, 10);
         }
       });
-      console.log(XData[0][0]);
       const treasuryData = data.data.map(i => parseFloat(i.treasuryValue));
-      // const ethData = data.data.data.map(i => i.ethPrice);
 
       setOption({
         series: [

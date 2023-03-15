@@ -62,8 +62,8 @@ export default {
     ezMaticTotalnetworth: 'ezMATIC Total Networth',
     ezUsdTotalnetworth: 'ezUSD Total Networth',
     abNetworth: 'Token Networth',
-    ShowSevenDays: 'Show 7 days',
-    ShowTwelveHours: 'Show 12 hours',
+    ShowSevenDays: '7 days',
+    ShowTwelveHours: '12 hours',
   },
   purchase: {
     purchaseValue: 'Purchase',

@@ -8,7 +8,6 @@ import { useContext, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { ColorModeContext } from '../../../theme';
 import RenderSkeleton from './RenderSkeleton';
-import moment from 'moment';
 import { HomeCardHeader } from '../mainStyle';
 import RenderSelect from './RenderSelect';
 
@@ -32,7 +31,7 @@ export default function TotalSupplyApexChart() {
         if (queryType === 'hour') {
           return String(parseInt(i.groupTime.slice(-2)));
         } else {
-          return moment(i.groupTime.slice(5)).format('M-D');
+          return i.groupTime.slice(5, 10);
         }
       });
       const aTotalSupply = data.data.map(i => i.ezatSupply);

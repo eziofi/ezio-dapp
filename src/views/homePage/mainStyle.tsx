@@ -148,6 +148,9 @@ const HomeCardHeader = styled('div')(() => {
     '.homeCard_select': {
       '.MuiSelect-select': {
         minWidth: 100,
+        fontSize: 14,
+        padding: '0',
+        textAlign: 'center',
       },
     },
   };

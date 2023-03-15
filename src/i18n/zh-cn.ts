@@ -61,8 +61,8 @@ export default {
     ezMaticTotalnetworth: 'ezMATIC总净值',
     ezUsdTotalnetworth: 'ezUSD总净值',
     abNetworth: 'Token总净值',
-    ShowSevenDays: '显示7天',
-    ShowTwelveHours: '显示12小时',
+    ShowSevenDays: '7天',
+    ShowTwelveHours: '12小时',
   },
   purchase: {
     purchaseValue: '购买',
