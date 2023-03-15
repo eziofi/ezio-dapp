@@ -28,7 +28,13 @@ export default function TotalSupplyApexChart() {
 
   useQuery(['queryTokenGroup', queryType], () => queryTokenGroup(queryType), {
     onSuccess: ({ data }) => {
-      const XData = data.data.map(i => String(i.groupTime));
+      const XData = data.data.map(i => {
+        if (queryType === 'hour') {
+          return String(parseInt(i.groupTime.slice(-2)));
+        } else {
+          return moment(i.groupTime.slice(5)).format('M-D');
+        }
+      });
       const aTotalSupply = data.data.map(i => i.ezatSupply);
       const bTatalSupply = data.data.map(i => i.ezbtSupply);
 
