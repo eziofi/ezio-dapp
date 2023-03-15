@@ -8,6 +8,9 @@ import { useContext, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { ColorModeContext } from '../../../theme';
 import RenderSkeleton from './RenderSkeleton';
+import { HomeCardHeader } from '../mainStyle';
+import RenderSelect from './RenderSelect';
+import moment from 'moment';
 
 export default function NetWorthApexChart() {
   const [option, setOption] = useState<any>(null);
@@ -21,9 +24,17 @@ export default function NetWorthApexChart() {
     queryClient.invalidateQueries('queryTreasuryValue');
   }, [mode]);
 
-  useQuery('queryMaticPrice', queryMaticPrice, {
+  const [queryType, setQueryType] = useState('hour');
+
+  useQuery(['queryMaticPrice', queryType], () => queryMaticPrice(queryType), {
     onSuccess: ({ data }) => {
-      const XData = data.data.map(i => parseInt(i.groupTime?.split('-')[i.groupTime.split('-').length - 1]));
+      const XData = data.data.map(i => {
+        if (queryType === 'hour') {
+          return String(parseInt(i.groupTime.slice(-2)));
+        } else {
+          return moment(i.groupTime.slice(5)).format('M-D');
+        }
+      });
       const ezMaticPrice = data.data.map(i => +i.ezMaticPrice);
       const stMaticPrice = data.data.map(i => +i.stMaticPrice);
       const aRate = data.data.map(i => +parseFloat(String(i.ezUsdRate * 10000 * 365)).toFixed(2));
@@ -115,7 +126,11 @@ export default function NetWorthApexChart() {
 
   return (
     <Card>
-      <CardHeader title={t('home.priceTitle') as string} />
+      <HomeCardHeader>
+        <CardHeader title={t('home.priceTitle') as string} />
+
+        <RenderSelect value={queryType} onChange={setQueryType} />
+      </HomeCardHeader>
 
       <Box dir="ltr">
         {option ? (

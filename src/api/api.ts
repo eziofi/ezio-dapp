@@ -40,9 +40,9 @@ interface ITokenGroup {
   groupTime: string;
 }
 // 市值曲线
-export function queryTokenGroup() {
+export function queryTokenGroup(QueryType: string) {
   // return httpClient.get<ITokenGroup[]>('/api/queryTokenGroup');
-  return httpClient.get<ICommonRes<ITokenGroup[]>>('/api/v1/ezioGroupSupply');
+  return httpClient.get<ICommonRes<ITokenGroup[]>>('/api/v1/ezioGroupSupply', { params: { QueryType } });
 }
 
 interface ITotalPurchase {
@@ -63,8 +63,8 @@ interface ITreasuryValue {
   data: { groupTime: string; treasuryValue: string }[];
 }
 
-export function queryTreasuryValue() {
-  return httpClient.get<ITreasuryValue>('/api/v1/lineGraph/treasuryValue');
+export function queryTreasuryValue(QueryType: string) {
+  return httpClient.get<ITreasuryValue>('/api/v1/lineGraph/treasuryValue', { params: { QueryType } });
 }
 
 // ab总净值
@@ -75,8 +75,8 @@ interface IAbTotalnetworth {
   data: { groupTime: string; ezUsdTotalnetworth: number; ezMaticTotalnetworth: number }[];
 }
 
-export function queryAbTotalnetworth() {
-  return httpClient.get<IAbTotalnetworth>('api/v1/lineGraph/abTotalnetworth');
+export function queryAbTotalnetworth(QueryType: string) {
+  return httpClient.get<IAbTotalnetworth>('api/v1/lineGraph/abTotalnetworth', { params: { QueryType } });
 }
 
 // ezMATIC PRICE vs stMATIC PRICE ezMATIC 价格 vs stMATIC 价格
@@ -87,8 +87,8 @@ interface IMaticPrice {
   data: { groupTime: string; ezMaticPrice: number; stMaticPrice: number; ezUsdRate: number }[];
 }
 
-export function queryMaticPrice() {
-  return httpClient.get<IMaticPrice>('api/v1/lineGraph/maticPrice');
+export function queryMaticPrice(QueryType: string) {
+  return httpClient.get<IMaticPrice>('api/v1/lineGraph/maticPrice', { params: { QueryType } });
 }
 
 // AccumulatedFees24H 过去24h手续费收入

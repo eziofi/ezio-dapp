@@ -1,4 +1,4 @@
-import { Box, Card, CardHeader } from '@mui/material';
+import { Box, Card, CardHeader, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import ReactApexChart from 'react-apexcharts';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { queryTotalNetWorth, queryTreasuryValue } from '../../../api/api';
@@ -8,6 +8,9 @@ import { useContext, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { ColorModeContext } from '../../../theme';
 import RenderSkeleton from './RenderSkeleton';
+import { HomeCardHeader } from '../mainStyle';
+import RenderSelect from './RenderSelect';
+import moment from 'moment';
 
 export default function MarketApexChart() {
   const [option, setOption] = useState<any>(null);
@@ -20,10 +23,19 @@ export default function MarketApexChart() {
     queryClient.invalidateQueries('queryTreasuryValue');
   }, [mode]);
 
-  useQuery('queryTreasuryValue', queryTreasuryValue, {
-    onSuccess: data => {
-      const XData = data.data.data.map(i => i.groupTime.substring(5));
-      const treasuryData = data.data.data.map(i => parseFloat(i.treasuryValue));
+  const [queryType, setQueryType] = useState('hour');
+
+  useQuery(['queryTreasuryValue', queryType], () => queryTreasuryValue(queryType), {
+    onSuccess: ({ data }) => {
+      const XData = data.data.map(i => {
+        if (queryType === 'hour') {
+          return String(parseInt(i.groupTime.slice(-2)));
+        } else {
+          return moment(i.groupTime.slice(5)).format('M-D');
+        }
+      });
+      console.log(XData[0][0]);
+      const treasuryData = data.data.map(i => parseFloat(i.treasuryValue));
       // const ethData = data.data.data.map(i => i.ethPrice);
 
       setOption({
@@ -97,7 +109,11 @@ export default function MarketApexChart() {
 
   return (
     <Card>
-      <CardHeader title={t('home.treasuryValue') as string} />
+      <HomeCardHeader>
+        <CardHeader title={t('home.treasuryValue') as string} />
+
+        <RenderSelect value={queryType} onChange={setQueryType} />
+      </HomeCardHeader>
 
       <Box dir="ltr" sx={{ pl: 2 }}>
         {/*<Box sx={{ p: 3, pb: 1 }} dir="ltr">*/}

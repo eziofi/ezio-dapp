@@ -8,6 +8,9 @@ import { useContext, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { ColorModeContext } from '../../../theme';
 import RenderSkeleton from './RenderSkeleton';
+import moment from 'moment';
+import { HomeCardHeader } from '../mainStyle';
+import RenderSelect from './RenderSelect';
 
 export default function TotalSupplyApexChart() {
   const [option, setOption] = useState<any>(null);
@@ -21,11 +24,13 @@ export default function TotalSupplyApexChart() {
     queryClient.invalidateQueries('queryTreasuryValue');
   }, [mode]);
 
-  useQuery('queryTokenGroup', queryTokenGroup, {
-    onSuccess: data => {
-      const XData = data.data.data.map(i => parseInt(i.groupTime));
-      const aTotalSupply = data.data.data.map(i => i.ezatSupply);
-      const bTatalSupply = data.data.data.map(i => i.ezbtSupply);
+  const [queryType, setQueryType] = useState('hour');
+
+  useQuery(['queryTokenGroup', queryType], () => queryTokenGroup(queryType), {
+    onSuccess: ({ data }) => {
+      const XData = data.data.map(i => String(i.groupTime));
+      const aTotalSupply = data.data.map(i => i.ezatSupply);
+      const bTatalSupply = data.data.map(i => i.ezbtSupply);
 
       const totalSupplyMax = getYMax([...aTotalSupply, ...bTatalSupply]);
 
@@ -91,7 +96,11 @@ export default function TotalSupplyApexChart() {
 
   return (
     <Card>
-      <CardHeader title={t('home.totalSupplyTitle') as string} />
+      <HomeCardHeader>
+        <CardHeader title={t('home.totalSupplyTitle') as string} />
+
+        <RenderSelect value={queryType} onChange={setQueryType} />
+      </HomeCardHeader>
 
       <Box dir="ltr" sx={{ pl: 2, pr: 2 }}>
         {option ? (
