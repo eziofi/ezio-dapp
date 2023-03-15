@@ -17,7 +17,13 @@ export default function RenderSelect({ value, onChange }: IProps) {
 
   return (
     <FormControl sx={{ margin: '24px 24px 0 0' }}>
-      <Select className="homeCard_select" size="small" value={value} onChange={e => onChange(e.target.value)}>
+      <Select
+        className="homeCard_select"
+        size="small"
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        variant="standard"
+      >
         <MenuItem value={QueryType.day}>{t('home.ShowSevenDays')}</MenuItem>
         <MenuItem value={QueryType.hour}>{t('home.ShowTwelveHours')}</MenuItem>
       </Select>
