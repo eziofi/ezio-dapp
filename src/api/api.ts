@@ -132,7 +132,7 @@ export function queryAccumulatedFees() {
 interface IConvertDownPrice {
   code: number;
   message: string;
-  data: { ezWETHPrice: number; convertDownPrice: number; groupTime: string }[];
+  data: { ezMaticPrice: number; convertDownPrice: number; groupTime: string }[];
 }
 
 export function convertDownPrice() {
