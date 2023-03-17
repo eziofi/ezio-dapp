@@ -1,7 +1,20 @@
-import { Avatar, Box, Button, IconButton, Popover, Snackbar, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
+  Popover,
+  Snackbar,
+  Typography,
+} from '@mui/material';
 import useWallet from '../../../views/hooks/useWallet';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import { styled } from '@mui/material/styles';
@@ -11,21 +24,34 @@ import { TOKEN_TYPE } from '../../../views/wallet/helpers/constant';
 import { formatDecimal, formatString } from '../../../views/wallet/helpers/utilities';
 import useResponsive from '../../../hooks/useResponsive';
 import { InlineSkeleton } from '../../../views/components/Skeleton';
+import BaseIconFont from '../../../views/components/BaseIconFont';
 
 export default function AddressPopover() {
   const { connectState, connect, disconnect, ethersProvider, walletProvider, account, allowanceUSDT, allowanceUSDC } =
     useWallet();
-  console.log(ethersProvider?._network);
+  // console.log(ethersProvider?._network);
+  // const networkName = ethersProvider?._network.name;
+
   const [open, setOpen] = useState<(EventTarget & HTMLButtonElement) | null>(null);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [hasOpenDialog, setHasOpenDialog] = useState(false);
   const [copyFlag, setCopyFlag] = useState<boolean>(false);
   const { t } = useTranslation();
 
   const isDesktop = useResponsive('up', 'md', 'md');
 
-  const { balance } = useBalance(TOKEN_TYPE.USDT);
+  // const { balance } = useBalance(TOKEN_TYPE.USDT);
 
   const addressToShow = account.substring(0, 5) + '...' + account.substring(account.length - 5, account.length);
   const addressToShowInPop = account.substring(0, 12) + '...' + account.substring(account.length - 12, account.length);
+
+  useEffect(() => {
+    // console.log(ethersProvider._network);
+    if (!hasOpenDialog && ethersProvider && ethersProvider._network && ethersProvider._network.chainId !== 42161) {
+      setDialogOpen(true);
+      setHasOpenDialog(true);
+    }
+  });
 
   const logout = () => {
     disconnect();
@@ -36,11 +62,17 @@ export default function AddressPopover() {
     setOpen(null);
   };
 
-  const TextDiv = styled('div')({
-    textAlign: 'center',
-    fontSize: '40px',
+  const NetworkWrapper = styled('div')({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: '37px',
     marginTop: '37px',
+  });
+
+  const TextDiv = styled('span')({
+    marginLeft: 6,
+    fontSize: '32px',
   });
 
   const copyText = () => {
@@ -112,7 +144,12 @@ export default function AddressPopover() {
         {/* <Divider sx={{ borderStyle: 'dashed' }} /> */}
 
         <Box sx={{ my: 1.5, px: 2.5 }}>
-          {balance ? <TextDiv>{formatString(balance).toString() + ' USDT'}</TextDiv> : <InlineSkeleton width={70} />}
+          {/*{balance ? <TextDiv>{formatString(balance).toString() + ' USDT'}</TextDiv> : <InlineSkeleton width={70} />}*/}
+          <NetworkWrapper>
+            <BaseIconFont name="icon-arbitrum" style={{ width: 32, height: 32 }} />
+            <TextDiv>Arbitrum</TextDiv>
+            {/*<div>您连接的网络是{networkName}</div>*/}
+          </NetworkWrapper>
           <Button
             sx={{
               width: '100%',
@@ -137,6 +174,15 @@ export default function AddressPopover() {
           }}
         />
       </Popover>
+      <Dialog open={dialogOpen} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+        <DialogTitle id="alert-dialog-title">{t('common.warning')}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">{t('common.errorNetworkTip')}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDialogOpen(false)}>{t('common.ok')}</Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

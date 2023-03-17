@@ -1,4 +1,9 @@
 export default {
+  common: {
+    ok: 'OK',
+    warning: 'Wrong Network',
+    errorNetworkTip: 'Not connected to the Arbitrum network, please switch the network in your wallet software.',
+  },
   nav: {
     home: 'Home',
     swap: 'Swap',

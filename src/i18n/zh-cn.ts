@@ -1,4 +1,9 @@
 export default {
+  common: {
+    ok: '确定',
+    warning: '警告',
+    errorNetworkTip: '您连接的不是Arbitrum网络，请至您的钱包软件中切换网络。',
+  },
   nav: {
     home: '首页',
     swap: '兑换',
