@@ -1,7 +1,7 @@
 import {
   ezatBalanceOf,
   ezbtBalanceOf,
-  stMaticBalanceOf,
+  wstETHBalanceOf,
   usdcBalanceOf,
   usdtBalanceOf,
 } from '../views/wallet/helpers/contract_call';
@@ -15,10 +15,10 @@ export function useBalance(tokenType: TOKEN_TYPE) {
   const { account, ethersProvider } = useWallet();
   const balanceApi = {
     [TOKEN_TYPE.ezUSD]: ezatBalanceOf,
-    [TOKEN_TYPE.ezMATIC]: ezbtBalanceOf,
+    [TOKEN_TYPE.ezWETH]: ezbtBalanceOf,
     [TOKEN_TYPE.USDT]: usdtBalanceOf,
     [TOKEN_TYPE.USDC]: usdcBalanceOf,
-    [TOKEN_TYPE.stMATIC]: stMaticBalanceOf,
+    [TOKEN_TYPE.wstETH]: wstETHBalanceOf,
   };
   const {
     data: balance,

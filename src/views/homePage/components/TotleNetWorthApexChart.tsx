@@ -31,9 +31,9 @@ export default function TotleNetWorthApexChart() {
         }
       });
 
-      const ezMaticTotalnetworth = data.data.map(i => i.ezMaticTotalnetworth);
+      const ezWETHTotalnetworth = data.data.map(i => i.ezWETHTotalnetworth);
       const ezUsdTotalnetworth = data.data.map(i => i.ezUsdTotalnetworth);
-      const sum = getYMax([...ezMaticTotalnetworth, ...ezUsdTotalnetworth]);
+      const sum = getYMax([...ezWETHTotalnetworth, ...ezUsdTotalnetworth]);
       setOption({
         series: [
           {
@@ -42,9 +42,9 @@ export default function TotleNetWorthApexChart() {
             data: ezUsdTotalnetworth,
           },
           {
-            name: t('home.ezMaticTotalnetworth'),
+            name: t('home.ezWETHTotalnetworth'),
             type: 'area',
-            data: ezMaticTotalnetworth,
+            data: ezWETHTotalnetworth,
           },
 
           // {
@@ -80,7 +80,7 @@ export default function TotleNetWorthApexChart() {
           yaxis: [
             {
               title: {
-                text: t('home.ezMaticTotalnetworth'),
+                text: t('home.ezWETHTotalnetworth'),
               },
               decimalsInFloat: 0,
               min: 0,

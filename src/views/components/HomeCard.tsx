@@ -3,7 +3,7 @@ import { Card, SxProps, Theme, Typography } from '@mui/material';
 
 import { useTranslation } from 'react-i18next';
 import useWallet from '../hooks/useWallet';
-import { convertDownPrice, ezMATICFundCost, getLeverage, interestRateYear } from '../wallet/helpers/contract_call';
+import { convertDownPrice, ezWETHFundCost, getLeverage, interestRateYear } from '../wallet/helpers/contract_call';
 import { useQuery } from 'react-query';
 import BaseIconFont from './BaseIconFont';
 import { InlineSkeleton } from './Skeleton';
@@ -31,7 +31,7 @@ export default function HomeCard({
 
   const api = {
     [HOME_CARD_TYPE.Rate]: interestRateYear,
-    [HOME_CARD_TYPE.FundCost]: ezMATICFundCost,
+    [HOME_CARD_TYPE.FundCost]: ezWETHFundCost,
     [HOME_CARD_TYPE.RebalancePrice]: convertDownPrice,
     [HOME_CARD_TYPE.Leverage]: getLeverage,
   };

@@ -2,9 +2,9 @@ import { BigNumber } from 'ethers';
 
 export enum TOKEN_TYPE {
   ezUSD,
-  ezMATIC,
+  ezWETH,
   USDC,
-  stMATIC,
+  wstETH,
   USDT,
 }
 
@@ -15,10 +15,10 @@ export enum TRANSFER_TYPE {
 
 export const TOKEN_DECIMAL = {
   [TOKEN_TYPE.ezUSD]: 18,
-  [TOKEN_TYPE.ezMATIC]: 18,
+  [TOKEN_TYPE.ezWETH]: 18,
   [TOKEN_TYPE.USDT]: 6,
   [TOKEN_TYPE.USDC]: 6,
-  [TOKEN_TYPE.stMATIC]: 18,
+  [TOKEN_TYPE.wstETH]: 18,
 };
 
 export enum QUOTE_CHANNEL {
@@ -157,25 +157,18 @@ export const BSC_TOKENS = {
   WOO: '0x4691937a7508860f876c9c0a2a617e7d9e945d4b',
 };
 
-export const POLYGON_TOKENS = {
-  DAI: '0x8f3cf7ad23cd3cadbd9735aff958023239c6a063',
-  USDC: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-  USDT: '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-  amDAI: '0x27f8d03b3a2196956ed754badc28d73be8830a6e',
-  amUSDC: '0x1a13f4ca1d028320a707d99520abfefca3998b7f',
-  amUSDT: '0x60d55f02a771d515e077c9c2403a1ef324885cec',
-  WBTC: '0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6',
-  WMATIC: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
-  WETH: '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619',
-  renBTC: '0xdbf31df14b66535af65aac99c32e9ea844e14501',
-  QUICK: '0x831753dd7087cac61ab5644b308642cc1c33dc13',
-  DFYN: '0xc168e40227e4ebd8c1cae80f7a55a4f0e6d66c97',
-  BANANA: '0x5d47baba0d66083c52009271faf3f50dcc01023c',
-  WEXPOLY: '0x4c4bf319237d98a30a929a96112effa8da3510eb',
-  nUSD: '0xb6c473756050de474286bed418b77aeac39b02af',
-  ANY: '0x6ab6d61428fde76768d7b45d8bfeec19c6ef91a8',
-  WOO: '0x1b815d120b3ef02039ee11dc2d33de7aa4a8c603',
-  stMATIC: '0x3A58a54C066FdC0f2D55FC9C89F0415C92eBf3C4',
+export const ARBITRUM_TOKENS = {
+  USDT: '0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9',
+  USDC: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
+  DAI: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
+  FRAX: '0x17fc002b466eec40dae837fc4be5c67993ddbd6f',
+  nETH: '0x3ea9b0ab55f34fb188824ee288ceaefc63cf908e',
+  WETH: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+  nUSD: '0x2913e812cf0dcca30fb28e6cac3d2dcff4497688',
+  MIM: '0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a',
+  WBTC: '0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f',
+  VST: '0x64343594ab9b56e99087bfa6f2335db24c2d1f17',
+  wstETH: '0x5979D7b546E38E414F7E9822514be443A4800529',
 };
 
 export const ERC20_ABI = [

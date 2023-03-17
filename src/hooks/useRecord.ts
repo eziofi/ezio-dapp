@@ -16,8 +16,8 @@ export function useRecord() {
     },
   );
   const { data: purchaseEzbtRecords } = useQuery(
-    ['queryPurchaseRecord', account, TOKEN_TYPE.ezMATIC],
-    () => queryPurchaseRecord(ethersProvider!.getSigner(), account, TOKEN_TYPE.ezMATIC),
+    ['queryPurchaseRecord', account, TOKEN_TYPE.ezWETH],
+    () => queryPurchaseRecord(ethersProvider!.getSigner(), account, TOKEN_TYPE.ezWETH),
     {
       enabled: !!ethersProvider,
       onSuccess: data => {

@@ -37,7 +37,7 @@ export default function Account() {
               setRefreshFlag(refreshFlag + 1);
               // queryClient.invalidateQueries(['balanceOf', TOKEN_TYPE.USDC]);
               // queryClient.invalidateQueries(['balanceOf', TOKEN_TYPE.USDT]);
-              // queryClient.invalidateQueries(['balanceOf', TOKEN_TYPE.stMatic]);
+              // queryClient.invalidateQueries(['balanceOf', TOKEN_TYPE.wstETH]);
             }}
           >
             <CachedIcon />
@@ -55,9 +55,9 @@ export default function Account() {
         <AccountCardBox>
           <AccountTokenCard type={TOKEN_TYPE.USDT} refreshFlag={refreshFlag} />
           <AccountTokenCard type={TOKEN_TYPE.USDC} refreshFlag={refreshFlag} />
-          <AccountTokenCard type={TOKEN_TYPE.stMATIC} refreshFlag={refreshFlag} />
+          <AccountTokenCard type={TOKEN_TYPE.wstETH} refreshFlag={refreshFlag} />
           <AccountTokenCard type={TOKEN_TYPE.ezUSD} refreshFlag={refreshFlag} />
-          <AccountTokenCard type={TOKEN_TYPE.ezMATIC} refreshFlag={refreshFlag} />
+          <AccountTokenCard type={TOKEN_TYPE.ezWETH} refreshFlag={refreshFlag} />
         </AccountCardBox>
       ) : (
         <AccountDetail />

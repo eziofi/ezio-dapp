@@ -15,7 +15,7 @@ export default function LineChart() {
   useQuery('convertDownPrice', convertDownPrice, {
     onSuccess: data => {
       const XData = data.data.data.map(i => i.groupTime.substring(5));
-      const ezMaticPrice = data.data.data.map(i => i.ezMaticPrice);
+      const ezWETHPrice = data.data.data.map(i => i.ezWETHPrice);
       const convertDownPrice = data.data.data.map(i => i.convertDownPrice);
 
       setOption({
@@ -23,7 +23,7 @@ export default function LineChart() {
           {
             name: t('home.netWorthEzbtAxis'),
             type: 'area',
-            data: ezMaticPrice,
+            data: ezWETHPrice,
           },
           {
             name: t('home.card.rebalancePrice'),
@@ -62,7 +62,7 @@ export default function LineChart() {
               },
               decimalsInFloat: 2, // 保留几位小数
               min: 0,
-              max: getYMax(ezMaticPrice),
+              max: getYMax(ezWETHPrice),
             },
             {
               opposite: true,
@@ -71,7 +71,7 @@ export default function LineChart() {
               },
               decimalsInFloat: 2,
               min: 0,
-              max: getYMax(ezMaticPrice),
+              max: getYMax(ezWETHPrice),
             },
             // {
             //   opposite: true,

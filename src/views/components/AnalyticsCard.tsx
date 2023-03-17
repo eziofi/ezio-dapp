@@ -3,16 +3,16 @@ import { Box, Card, SxProps, Theme } from '@mui/material';
 
 import { useTranslation } from 'react-i18next';
 import useWallet from '../hooks/useWallet';
-import { commissionIncome, ezMATICReverse, getPooledA } from '../wallet/helpers/contract_call';
+import { commissionIncome, ezWETHReverse, getPooledA } from '../wallet/helpers/contract_call';
 import { useQuery } from 'react-query';
 import { formatDecimal } from '../wallet/helpers/utilities';
 import { TOKEN_TYPE } from '../wallet/helpers/constant';
 import { InlineSkeleton } from './Skeleton';
 
-import StMaticIconDrak from '../../assets/analytics/stMatic_drak.png';
-import USDCIconDrak from '../../assets/analytics/usdc_drak.png';
+import WstETHIconDark from '../../assets/analytics/wstETH_dark.png';
+import USDCIconDark from '../../assets/analytics/usdc_dark.png';
 import FeeValueIcon from '../../assets/analytics/feeValue.png';
-import StMaticIconLight from '../../assets/analytics/stMatic_light.png';
+import WstETHIconLight from '../../assets/analytics/wstETH_light.png';
 import USDCIconLight from '../../assets/analytics/usdc_light.png';
 
 const StyledIcon = styled('div')(({ theme }) => ({
@@ -29,7 +29,7 @@ const StyledIcon = styled('div')(({ theme }) => ({
 
 export enum ANALYTICS_CARD_TYPE {
   USDC,
-  stMATIC,
+  wstETH,
   FEE,
 }
 export default function AnalyticsCard({
@@ -49,27 +49,27 @@ export default function AnalyticsCard({
 
   const api = {
     [ANALYTICS_CARD_TYPE.USDC]: getPooledA,
-    [ANALYTICS_CARD_TYPE.stMATIC]: ezMATICReverse,
+    [ANALYTICS_CARD_TYPE.wstETH]: ezWETHReverse,
     [ANALYTICS_CARD_TYPE.FEE]: commissionIncome,
   };
 
   const title = {
     [ANALYTICS_CARD_TYPE.USDC]: t('analytics.title.usdc'),
-    [ANALYTICS_CARD_TYPE.stMATIC]: t('analytics.title.stMATIC'),
+    [ANALYTICS_CARD_TYPE.wstETH]: t('analytics.title.wstETH'),
     [ANALYTICS_CARD_TYPE.FEE]: t('analytics.title.fee'),
   };
 
   // 深色
-  const icon_drak = {
-    [ANALYTICS_CARD_TYPE.USDC]: USDCIconDrak,
-    [ANALYTICS_CARD_TYPE.stMATIC]: StMaticIconDrak,
+  const icon_Dark = {
+    [ANALYTICS_CARD_TYPE.USDC]: USDCIconDark,
+    [ANALYTICS_CARD_TYPE.wstETH]: WstETHIconDark,
     [ANALYTICS_CARD_TYPE.FEE]: FeeValueIcon,
   };
 
   // 浅色
   const icon_light = {
     [ANALYTICS_CARD_TYPE.USDC]: USDCIconLight,
-    [ANALYTICS_CARD_TYPE.stMATIC]: StMaticIconLight,
+    [ANALYTICS_CARD_TYPE.wstETH]: WstETHIconLight,
     [ANALYTICS_CARD_TYPE.FEE]: FeeValueIcon,
   };
 
@@ -148,7 +148,7 @@ export default function AnalyticsCard({
             fill: theme.palette[color][theme.palette.mode === 'light' ? 'darker' : 'lighter'],
           }}
         /> */}
-        <img src={theme.palette.mode === 'dark' ? icon_drak[type] : icon_light[type]} />
+        <img src={theme.palette.mode === 'dark' ? icon_Dark[type] : icon_light[type]} />
 
         {/*<Iconify icon={icon[type]} width={24} height={24} />*/}
       </StyledIcon>

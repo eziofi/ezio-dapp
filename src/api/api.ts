@@ -72,19 +72,19 @@ export function queryTreasuryValue(QueryType: string) {
 interface IAbTotalnetworth {
   code: number;
   message: string;
-  data: { groupTime: string; ezUsdTotalnetworth: number; ezMaticTotalnetworth: number }[];
+  data: { groupTime: string; ezUsdTotalnetworth: number; ezWETHTotalnetworth: number }[];
 }
 
 export function queryAbTotalnetworth(QueryType: string) {
   return httpClient.get<IAbTotalnetworth>('api/v1/lineGraph/abTotalnetworth', { params: { QueryType } });
 }
 
-// ezMATIC PRICE vs stMATIC PRICE ezMATIC 价格 vs stMATIC 价格
+// ezWETH PRICE vs wstETH PRICE ezWETH 价格 vs wstETH 价格
 
 interface IMaticPrice {
   code: number;
   message: string;
-  data: { groupTime: string; ezMaticPrice: number; stMaticPrice: number; ezUsdRate: number }[];
+  data: { groupTime: string; ezWETHPrice: number; wstETHPrice: number; ezUsdRate: number }[];
 }
 
 export function queryMaticPrice(QueryType: string) {
@@ -127,12 +127,12 @@ export function queryAccumulatedFees() {
   return httpClient.get<IAccumulatedFees>('api/v1/lineGraph/accumulatedFees');
 }
 
-// 统计ezMatic的价格和下折价格
+// 统计ezWETH的价格和下折价格
 
 interface IConvertDownPrice {
   code: number;
   message: string;
-  data: { ezMaticPrice: number; convertDownPrice: number; groupTime: string }[];
+  data: { ezWETHPrice: number; convertDownPrice: number; groupTime: string }[];
 }
 
 export function convertDownPrice() {

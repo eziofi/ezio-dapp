@@ -34,21 +34,21 @@ export default function NetWorthApexChart() {
           return i.groupTime.slice(5, 10);
         }
       });
-      const ezMaticPrice = data.data.map(i => +i.ezMaticPrice);
-      const stMaticPrice = data.data.map(i => +i.stMaticPrice);
+      const ezWETHPrice = data.data.map(i => +i.ezWETHPrice);
+      const wstETHPrice = data.data.map(i => +i.wstETHPrice);
       const aRate = data.data.map(i => +formatString(String((i.ezUsdRate * 10000 * 365) / 100)));
 
       setOption({
         series: [
           {
-            name: t('home.stMaticPrice'),
+            name: t('home.wstETHPrice'),
             type: 'area',
-            data: stMaticPrice,
+            data: wstETHPrice,
           },
           {
             name: t('home.bNetWorthSeries'),
             type: 'area',
-            data: ezMaticPrice,
+            data: ezWETHPrice,
           },
           {
             name: t('home.aRateAxis'),
@@ -90,14 +90,14 @@ export default function NetWorthApexChart() {
                   },
                 },
               },
-              max: getYMax([...ezMaticPrice, ...stMaticPrice]),
+              max: getYMax([...ezWETHPrice, ...wstETHPrice]),
             },
             {
               show: false,
               title: {
                 text: t('home.netWorthAxis'),
               },
-              max: getYMax([...ezMaticPrice, ...stMaticPrice]),
+              max: getYMax([...ezWETHPrice, ...wstETHPrice]),
             },
 
             {

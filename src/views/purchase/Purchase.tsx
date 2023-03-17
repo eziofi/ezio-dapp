@@ -30,15 +30,15 @@ import SlippagePopover from './components/SlippagePopover';
 
 interface IPurchaseArg {
   fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC;
-  toType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC;
+  toType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezWETH;
   amount: number;
   slippage: number;
   signerOrProvider: Signer | Provider;
 }
 
 interface IRedeemArg {
-  fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC;
-  toType: TOKEN_TYPE.USDC | TOKEN_TYPE.stMATIC;
+  fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezWETH;
+  toType: TOKEN_TYPE.USDC | TOKEN_TYPE.wstETH;
   amount: number;
   slippage: number;
   signerOrProvider: Signer | Provider;
@@ -56,8 +56,8 @@ export default function Purchase() {
   const [inputValue1, setInputValue1] = useState('');
   const [inputValue2, setInputValue2] = useState('');
   const [isClick, setIsClick] = useState(false);
-  const [tokenType, setTokenType] = useState<TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC>(TOKEN_TYPE.ezUSD); // 下拉框value
-  const [redeemTokenType, setRedeemTokenType] = useState<TOKEN_TYPE.USDC | TOKEN_TYPE.USDT | TOKEN_TYPE.stMATIC>(
+  const [tokenType, setTokenType] = useState<TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezWETH>(TOKEN_TYPE.ezUSD); // 下拉框value
+  const [redeemTokenType, setRedeemTokenType] = useState<TOKEN_TYPE.USDC | TOKEN_TYPE.USDT | TOKEN_TYPE.wstETH>(
     TOKEN_TYPE.USDT,
   ); // 下拉框value
   const theme = useTheme();
@@ -109,7 +109,7 @@ export default function Purchase() {
     setType(type === TRANSFER_TYPE.PURCHASE ? TRANSFER_TYPE.REDEEM : TRANSFER_TYPE.PURCHASE);
   }
 
-  function getTokenType(tokenType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC) {
+  function getTokenType(tokenType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezWETH) {
     setTokenType(tokenType);
   }
 
@@ -216,7 +216,7 @@ export default function Purchase() {
         } else {
           const args: IPurchaseArg = {
             fromType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.USDT,
-            toType: tokenType as TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC,
+            toType: tokenType as TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezWETH,
             amount: Number(inputValue1),
             slippage,
             signerOrProvider: ethersProvider!.getSigner(),
@@ -244,8 +244,8 @@ export default function Purchase() {
           openMsg(t('redeem.moreThanBalanceMsg'));
         } else {
           const args: IRedeemArg = {
-            fromType: tokenType as TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC,
-            toType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.stMATIC,
+            fromType: tokenType as TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezWETH,
+            toType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.wstETH,
             amount: Number(inputValue1),
             signerOrProvider: ethersProvider!.getSigner(),
             slippage,
@@ -273,7 +273,7 @@ export default function Purchase() {
     if (type === TRANSFER_TYPE.REDEEM && redeemTokenType === 4) {
       setRedeemTokenType(TOKEN_TYPE.USDC);
     } else if (type === TRANSFER_TYPE.PURCHASE && redeemTokenType === 3) {
-      // type 为购买时 && redeemTokenType = stMatic, redeemTokenType赋值 为 USDT 因为购买时的下拉框value不存stMatic 会导致value为空
+      // type 为购买时 && redeemTokenType = wstETH, redeemTokenType赋值 为 USDT 因为购买时的下拉框value不存wstETH 会导致value为空
       setRedeemTokenType(TOKEN_TYPE.USDT);
     }
   }, [type]);
