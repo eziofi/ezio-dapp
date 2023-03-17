@@ -5,5 +5,3 @@ import type * as impls from "./impls";
 export type { impls };
 import type * as interfaces from "./interfaces";
 export type { interfaces };
-import type * as test from "./test";
-export type { test };

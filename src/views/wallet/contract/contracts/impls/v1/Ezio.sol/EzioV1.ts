@@ -46,6 +46,7 @@ export interface EzioV1Interface extends utils.Interface {
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
     "GOVERNOR_ROLE()": FunctionFragment;
     "LEVERAGE_DENOMINATOR()": FunctionFragment;
+    "OPERATOR_ROLE()": FunctionFragment;
     "REDEEM_RATE_DENOMINATOR()": FunctionFragment;
     "REWARD_RATE_DENOMINATOR()": FunctionFragment;
     "aggregatorAction(address)": FunctionFragment;
@@ -73,6 +74,7 @@ export interface EzioV1Interface extends utils.Interface {
     "revokeRole(bytes32,address)": FunctionFragment;
     "rewardRate()": FunctionFragment;
     "setAggregators(address,address)": FunctionFragment;
+    "setApprove(address,address,uint256)": FunctionFragment;
     "setRedeemFeeRate(uint16)": FunctionFragment;
     "setRewardRate(uint16)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
@@ -87,6 +89,7 @@ export interface EzioV1Interface extends utils.Interface {
       | "DEFAULT_ADMIN_ROLE"
       | "GOVERNOR_ROLE"
       | "LEVERAGE_DENOMINATOR"
+      | "OPERATOR_ROLE"
       | "REDEEM_RATE_DENOMINATOR"
       | "REWARD_RATE_DENOMINATOR"
       | "aggregatorAction"
@@ -114,6 +117,7 @@ export interface EzioV1Interface extends utils.Interface {
       | "revokeRole"
       | "rewardRate"
       | "setAggregators"
+      | "setApprove"
       | "setRedeemFeeRate"
       | "setRewardRate"
       | "supportsInterface"
@@ -133,6 +137,10 @@ export interface EzioV1Interface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "LEVERAGE_DENOMINATOR",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "OPERATOR_ROLE",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -251,6 +259,14 @@ export interface EzioV1Interface extends utils.Interface {
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
+    functionFragment: "setApprove",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setRedeemFeeRate",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
@@ -289,6 +305,10 @@ export interface EzioV1Interface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "LEVERAGE_DENOMINATOR",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "OPERATOR_ROLE",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -357,6 +377,7 @@ export interface EzioV1Interface extends utils.Interface {
     functionFragment: "setAggregators",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setApprove", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setRedeemFeeRate",
     data: BytesLike
@@ -518,6 +539,8 @@ export interface EzioV1 extends BaseContract {
 
     LEVERAGE_DENOMINATOR(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    OPERATOR_ROLE(overrides?: CallOverrides): Promise<[string]>;
+
     REDEEM_RATE_DENOMINATOR(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     REWARD_RATE_DENOMINATOR(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -642,6 +665,13 @@ export interface EzioV1 extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    setApprove(
+      token: PromiseOrValue<string>,
+      addr: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     setRedeemFeeRate(
       redeemFeeRate_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -678,6 +708,8 @@ export interface EzioV1 extends BaseContract {
   GOVERNOR_ROLE(overrides?: CallOverrides): Promise<string>;
 
   LEVERAGE_DENOMINATOR(overrides?: CallOverrides): Promise<BigNumber>;
+
+  OPERATOR_ROLE(overrides?: CallOverrides): Promise<string>;
 
   REDEEM_RATE_DENOMINATOR(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -801,6 +833,13 @@ export interface EzioV1 extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  setApprove(
+    token: PromiseOrValue<string>,
+    addr: PromiseOrValue<string>,
+    amount: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   setRedeemFeeRate(
     redeemFeeRate_: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -837,6 +876,8 @@ export interface EzioV1 extends BaseContract {
     GOVERNOR_ROLE(overrides?: CallOverrides): Promise<string>;
 
     LEVERAGE_DENOMINATOR(overrides?: CallOverrides): Promise<BigNumber>;
+
+    OPERATOR_ROLE(overrides?: CallOverrides): Promise<string>;
 
     REDEEM_RATE_DENOMINATOR(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -958,6 +999,13 @@ export interface EzioV1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    setApprove(
+      token: PromiseOrValue<string>,
+      addr: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     setRedeemFeeRate(
       redeemFeeRate_: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -1072,6 +1120,8 @@ export interface EzioV1 extends BaseContract {
     GOVERNOR_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
     LEVERAGE_DENOMINATOR(overrides?: CallOverrides): Promise<BigNumber>;
+
+    OPERATOR_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
     REDEEM_RATE_DENOMINATOR(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1195,6 +1245,13 @@ export interface EzioV1 extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    setApprove(
+      token: PromiseOrValue<string>,
+      addr: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     setRedeemFeeRate(
       redeemFeeRate_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1236,6 +1293,8 @@ export interface EzioV1 extends BaseContract {
     LEVERAGE_DENOMINATOR(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    OPERATOR_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     REDEEM_RATE_DENOMINATOR(
       overrides?: CallOverrides
@@ -1360,6 +1419,13 @@ export interface EzioV1 extends BaseContract {
     setAggregators(
       tokenAddress: PromiseOrValue<string>,
       aggregatorAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setApprove(
+      token: PromiseOrValue<string>,
+      addr: PromiseOrValue<string>,
+      amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
