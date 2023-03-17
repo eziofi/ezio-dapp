@@ -72,7 +72,7 @@ export function queryTreasuryValue(QueryType: string) {
 interface IAbTotalnetworth {
   code: number;
   message: string;
-  data: { groupTime: string; ezUsdTotalnetworth: number; ezWETHTotalnetworth: number }[];
+  data: { groupTime: string; ezUsdTotalnetworth: number; ezMaticTotalnetworth: number }[];
 }
 
 export function queryAbTotalnetworth(QueryType: string) {
@@ -84,7 +84,7 @@ export function queryAbTotalnetworth(QueryType: string) {
 interface IMaticPrice {
   code: number;
   message: string;
-  data: { groupTime: string; ezWETHPrice: number; wstETHPrice: number; ezUsdRate: number }[];
+  data: { groupTime: string; ezMaticPrice: number; stMaticPrice: number; ezUsdRate: number }[];
 }
 
 export function queryMaticPrice(QueryType: string) {
