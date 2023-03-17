@@ -9,7 +9,7 @@ import { SwapQuoteStruct } from '../contract/contracts/interfaces/v1/IEzio';
 // import { apiGetGasPrices, apiGetAccountNonce } from "./api";
 // import { convertAmountToRawNumber, convertStringToHex } from "./bignumber";
 
-const ZEROEX_API_QUOTE_URL = 'https://polygon.api.0x.org/swap/v1/quote';
+const ZEROEX_API_QUOTE_URL = 'https://arbitrum.api.0x.org/swap/v1/quote';
 const ONEINCH_API_QUOTE_URL = 'https://api.1inch.io/v5.0/137/swap';
 
 const ezioJson = require('../contract/abi/EzioV1.json');

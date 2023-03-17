@@ -97,6 +97,9 @@ export default function WalletProvider({ children }: { children: ReactElement })
     });
     setConnectState('connecting');
     const connect = await web3Modal.connect();
+
+    console.log('connect.networkID');
+
     setWalletProvider(connect);
 
     await subscribeProvider(connect);

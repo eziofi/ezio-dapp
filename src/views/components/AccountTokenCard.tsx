@@ -101,7 +101,7 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
               {!isBalanceFetching ? (
                 <Tooltip title={balance} placement="top">
                   <div style={{ fontSize: 28, color: 'rgba(67, 207, 124, 1)' }}>
-                    {formatString(balance || '0').toString()}
+                    {formatString(balance || '0', 6).toString()}
                   </div>
                 </Tooltip>
               ) : (

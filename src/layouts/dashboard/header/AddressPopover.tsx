@@ -13,7 +13,9 @@ import useResponsive from '../../../hooks/useResponsive';
 import { InlineSkeleton } from '../../../views/components/Skeleton';
 
 export default function AddressPopover() {
-  const { connectState, connect, disconnect, account, ethersProvider } = useWallet();
+  const { connectState, connect, disconnect, ethersProvider, walletProvider, account, allowanceUSDT, allowanceUSDC } =
+    useWallet();
+  console.log(ethersProvider?._network);
   const [open, setOpen] = useState<(EventTarget & HTMLButtonElement) | null>(null);
   const [copyFlag, setCopyFlag] = useState<boolean>(false);
   const { t } = useTranslation();
