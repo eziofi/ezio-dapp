@@ -94,14 +94,15 @@ export default function NetWorthApexChart() {
             },
             {
               show: false,
+              decimalsInFloat: 2,
               title: {
                 text: t('home.netWorthAxis'),
               },
-              max: getYMax([...ezMaticPrice, ...stMaticPrice]),
+              max: getYMax(aRate),
             },
 
             {
-              decimalsInFloat: 0,
+              decimalsInFloat: 2,
               opposite: true,
               title: {
                 text: t('home.aRateAxis') + ' ( % ) ',
