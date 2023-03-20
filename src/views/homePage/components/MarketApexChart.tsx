@@ -112,7 +112,7 @@ export default function MarketApexChart() {
         <RenderSelect value={queryType} onChange={setQueryType} />
       </HomeCardHeader>
 
-      <Box dir="ltr" sx={{ pl: 2 }}>
+      <Box dir="ltr" sx={{ pl: 2, pr: 2 }}>
         {/*<Box sx={{ p: 3, pb: 1 }} dir="ltr">*/}
         {option ? (
           <ReactApexChart options={option.options} series={option.series} type="line" height={350} />

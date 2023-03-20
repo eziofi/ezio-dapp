@@ -213,12 +213,38 @@ export function getYMax(data: number[]) {
     const float = max / Math.pow(10, length - 1);
     const first = Math.ceil(float);
     const maxYValue = first * Math.pow(10, length - 1);
+
     return maxYValue;
   } else {
     const floatString = max.toString().split('.')[1];
     let firstNumDecimal = floatString.length - String(parseInt(floatString)).length; // 小数点后有多少个零
     const roundMax = max * Math.pow(10, firstNumDecimal + 1); // 乘为整数
     const ceilNum = Math.ceil(roundMax); // 向上圆整到最小整数
+    const res = ceilNum / Math.pow(10, firstNumDecimal + 1); //再除为原先的位数
+    return res;
+  }
+}
+
+/**
+ * 计算Y轴最小值
+ * @param data，数据列表
+ * @returns Y轴最小值
+ */
+export function getYMin(data: number[]) {
+  if (data.length === 0) return 0;
+  const min = Math.min(...data);
+  if (min > 1) {
+    const length = min.toString().split('.')[0].length;
+    const float = min / Math.pow(10, length - 1);
+    const first = Math.floor(float);
+    const minValue = first * Math.pow(10, length - 1);
+
+    return minValue;
+  } else {
+    const floatString = min.toString().split('.')[1];
+    let firstNumDecimal = floatString.length - String(parseInt(floatString)).length; // 小数点后有多少个零
+    const roundMin = min * Math.pow(10, firstNumDecimal + 1); // 乘为整数
+    const ceilNum = Math.floor(roundMin); // 向上圆整到最小整数
     const res = ceilNum / Math.pow(10, firstNumDecimal + 1); //再除为原先的位数
     return res;
   }

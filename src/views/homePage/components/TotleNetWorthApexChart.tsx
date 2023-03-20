@@ -6,7 +6,7 @@ import { ColorModeContext } from '../../../theme';
 import RenderSkeleton from './RenderSkeleton';
 import { Box, Card, CardHeader } from '@mui/material';
 import { queryAbTotalnetworth } from '../../../api/api';
-import { getYMax } from '../../wallet/helpers/utilities';
+import { getYMax, getYMin } from '../../wallet/helpers/utilities';
 import { HomeCardHeader } from '../mainStyle';
 import RenderSelect from './RenderSelect';
 
@@ -33,7 +33,7 @@ export default function TotleNetWorthApexChart() {
 
       const ezMaticTotalnetworth = data.data.map(i => i.ezMaticTotalnetworth);
       const ezUsdTotalnetworth = data.data.map(i => i.ezUsdTotalnetworth);
-      const sum = getYMax([...ezMaticTotalnetworth, ...ezUsdTotalnetworth]);
+      const sum = [...ezMaticTotalnetworth, ...ezUsdTotalnetworth];
       setOption({
         series: [
           {
@@ -83,8 +83,8 @@ export default function TotleNetWorthApexChart() {
                 text: t('home.ezWETHTotalnetworth'),
               },
               decimalsInFloat: 0,
-              min: 0,
-              max: sum,
+              max: getYMax(sum),
+              min: getYMin(sum),
             },
             // {
             //   title: {

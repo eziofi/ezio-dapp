@@ -3,7 +3,7 @@ import ReactApexChart from 'react-apexcharts';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { queryTokenGroup, queryMaticPrice } from '../../../api/api';
 import { t } from 'i18next';
-import { formatString, getYMax } from '../../wallet/helpers/utilities';
+import { formatString, getYMax, getYMin } from '../../wallet/helpers/utilities';
 import { useContext, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { ColorModeContext } from '../../../theme';
@@ -36,7 +36,6 @@ export default function NetWorthApexChart() {
       });
       const ezMaticPrice = data.data.map(i => +i.ezMaticPrice);
       const stMaticPrice = data.data.map(i => +i.stMaticPrice);
-      const aRate = data.data.map(i => +formatString(String((i.ezUsdRate * 10000 * 365) / 100)));
 
       setOption({
         series: [
@@ -50,11 +49,11 @@ export default function NetWorthApexChart() {
             type: 'area',
             data: ezMaticPrice,
           },
-          {
-            name: t('home.aRateAxis'),
-            type: 'line',
-            data: aRate,
-          },
+          // {
+          //   name: t('home.aRateAxis'),
+          //   type: 'line',
+          //   data: aRate,
+          // },
         ],
         options: {
           theme: {
@@ -81,34 +80,37 @@ export default function NetWorthApexChart() {
           },
           yaxis: [
             {
-              decimalsInFloat: 2,
+              decimalsInFloat: 0,
               title: {
-                text: t('home.netWorthEzatAxis'),
+                text: t('home.wstETHPrice'),
                 y: {
                   formatter: function (val: string) {
                     return val;
                   },
                 },
               },
-              max: getYMax([...ezMaticPrice, ...stMaticPrice]),
+              max: getYMax(stMaticPrice),
+              min: getYMin(stMaticPrice),
             },
             {
-              show: false,
-              decimalsInFloat: 2,
+              // show: false,
+              opposite: true,
+              decimalsInFloat: 1,
               title: {
-                text: t('home.netWorthAxis'),
+                text: t('home.bNetWorthSeries'),
               },
-              max: getYMax(aRate),
+              max: getYMax(ezMaticPrice),
+              min: getYMin(ezMaticPrice),
             },
 
-            {
-              decimalsInFloat: 2,
-              opposite: true,
-              title: {
-                text: t('home.aRateAxis') + ' ( % ) ',
-              },
-              max: getYMax(aRate),
-            },
+            // {
+            //   decimalsInFloat: 1,
+            //   opposite: true,
+            //   title: {
+            //     text: t('home.aRateAxis') + ' ( % ) ',
+            //   },
+            //   max: getYMax(aRate),
+            // },
           ],
           tooltip: {
             shared: true,
