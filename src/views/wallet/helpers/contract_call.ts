@@ -16,23 +16,25 @@ import { formatDecimal, formatString } from './utilities';
 
 import { queryAccumulatedFees24H } from '../../../api/api';
 
-const ezatJson = require('../arbitrum/contract/abi/EzUSDV1.json');
-const ezbtJson = {
+export const ezUSDJson = require('../arbitrum/contract/abi/EzUSDV1.json');
+// NETWORK CONFIG
+export const E2LPJson = {
   [NETWORK_TYPE.Arbitrum]: require('../arbitrum/contract/abi/EzWETHV1.json'),
-  [NETWORK_TYPE.Polygen]: require('../polygen/contract/abi/EzWETHV1.json'),
+  [NETWORK_TYPE.Polygen]: require('../polygen/contract/abi/EzMATICV1.json'),
 }[process.env.REACT_APP_NETWORK as keyof typeof NETWORK_TYPE];
 
-const ezioJson = require('../arbitrum/contract/abi/EzioV1.json');
+export const ezioJson = require('../arbitrum/contract/abi/EzioV1.json');
 
 const TOKENS = {
   [NETWORK_TYPE.Polygen]: POLYGON_TOKENS,
   [NETWORK_TYPE.Arbitrum]: ARBITRUM_TOKENS,
 }[process.env.REACT_APP_NETWORK as string] as any;
-const USDC_ADDRESS = TOKENS.USDC;
-const USDT_ADDRESS = TOKENS.USDT;
-const DAI_ADDRESS = TOKENS.DAI;
-const WETH_ADDRESS = TOKENS.WETH;
-const REVERSE_COIN_ADDRESS = TOKENS[REVERSE_COIN[process.env.REACT_APP_NETWORK as keyof typeof REVERSE_COIN]];
+
+export const USDC_ADDRESS = TOKENS.USDC;
+export const USDT_ADDRESS = TOKENS.USDT;
+export const DAI_ADDRESS = TOKENS.DAI;
+export const WETH_ADDRESS = TOKENS.WETH;
+export const REVERSE_COIN_ADDRESS = TOKENS[REVERSE_COIN[process.env.REACT_APP_NETWORK as keyof typeof REVERSE_COIN]];
 
 // export interface Overrides {
 //   gasLimit?: BigNumberish | Promise<BigNumberish>;
@@ -50,11 +52,11 @@ const override = {
 };
 
 export function EzUSDConnect(signerOrProvider: Signer | Provider) {
-  return EzUSDV1__factory.connect(ezatJson.address, signerOrProvider);
+  return EzUSDV1__factory.connect(ezUSDJson.address, signerOrProvider);
 }
 
 export function E2LPConnect(signerOrProvider: Signer | Provider): EzWETHV1 {
-  return REVERSE_COIN__factory.connect(ezbtJson.address, signerOrProvider);
+  return REVERSE_COIN__factory.connect(E2LPJson.address, signerOrProvider);
 }
 
 export function USDTConnect(signerOrProvider: Signer | Provider) {
@@ -69,7 +71,7 @@ export function USDCConnect(signerOrProvider: Signer | Provider) {
   return new ethers.Contract(USDC_ADDRESS, ERC20_ABI, signerOrProvider);
 }
 
-export function wstETHConnect(signerOrProvider: Signer | Provider) {
+export function reverseCoinConnect(signerOrProvider: Signer | Provider) {
   return new ethers.Contract(REVERSE_COIN_ADDRESS, ERC20_ABI, signerOrProvider);
 }
 
@@ -100,9 +102,9 @@ export async function getPooledA(signerOrProvider: Signer | Provider) {
  */
 export async function ezWETHReverse(signerOrProvider: Signer | Provider) {
   const totalReserve = await EzioConnect(signerOrProvider).totalReserve();
-  const wstETHPrice = await EzioConnect(signerOrProvider).getPrice(REVERSE_COIN_ADDRESS);
+  const reverseCoinPrice = await EzioConnect(signerOrProvider).getPrice(REVERSE_COIN_ADDRESS);
   const res = formatDecimal(
-    totalReserve.mul(wstETHPrice),
+    totalReserve.mul(reverseCoinPrice),
     TOKEN_TYPE.USDC, // 此参数无用
     2,
     TOKEN_DECIMAL[TOKEN_TYPE.USDC] + TOKEN_DECIMAL[TOKEN_TYPE.ReverseCoin],
@@ -223,15 +225,15 @@ export async function usdcBalanceOf(signerOrProvider: Signer | Provider, address
 }
 
 /**
- * 获取 wstETH token 数量
+ * 获取 ReverseCoin token 数量
  * @param signerOrProvider
  * @param address 账户地址
- * @returns wstETH token 数量
+ * @returns ReverseCoin token 数量
  */
-export async function wstETHBalanceOf(signerOrProvider: Signer | Provider, address: string) {
-  const data = await wstETHConnect(signerOrProvider).balanceOf(address);
+export async function reverseCoinBalanceOf(signerOrProvider: Signer | Provider, address: string) {
+  const data = await reverseCoinConnect(signerOrProvider).balanceOf(address);
   const res = formatDecimal(data, TOKEN_TYPE.ReverseCoin, 18).toString();
-  console.log('wstETH Balance = ' + res);
+  console.log('reverseCoin Balance = ' + res);
   return res;
 }
 
@@ -280,13 +282,13 @@ export async function ezWETHPrice(signerOrProvider: Signer | Provider) {
 }
 
 /**
- * 获取 wstETH 净值
+ * 获取 ReverseCoin 净值
  * @returns ezbt 净值
  */
 export async function reverseCoinPrice(signerOrProvider: Signer | Provider) {
   const data = await EzioConnect(signerOrProvider).getPrice(REVERSE_COIN_ADDRESS);
   const res = formatDecimal(data, TOKEN_TYPE.USDC, 6).toString();
-  console.log('wstETH Price = ' + res);
+  console.log('ReverseCoin Price = ' + res);
   return res;
 }
 /**

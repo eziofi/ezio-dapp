@@ -1,7 +1,7 @@
 import {
   ezatBalanceOf,
   ezbtBalanceOf,
-  wstETHBalanceOf,
+  reverseCoinBalanceOf,
   usdcBalanceOf,
   usdtBalanceOf,
 } from '../views/wallet/helpers/contract_call';
@@ -18,7 +18,7 @@ export function useBalance(tokenType: TOKEN_TYPE) {
     [TOKEN_TYPE.E2LP]: ezbtBalanceOf,
     [TOKEN_TYPE.USDT]: usdtBalanceOf,
     [TOKEN_TYPE.USDC]: usdcBalanceOf,
-    [TOKEN_TYPE.ReverseCoin]: wstETHBalanceOf,
+    [TOKEN_TYPE.ReverseCoin]: reverseCoinBalanceOf,
   };
   const {
     data: balance,

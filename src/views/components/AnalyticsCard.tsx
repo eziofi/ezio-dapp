@@ -29,7 +29,7 @@ const StyledIcon = styled('div')(({ theme }) => ({
 
 export enum ANALYTICS_CARD_TYPE {
   USDC,
-  wstETH,
+  reverseCoin,
   FEE,
 }
 export default function AnalyticsCard({
@@ -49,27 +49,27 @@ export default function AnalyticsCard({
 
   const api = {
     [ANALYTICS_CARD_TYPE.USDC]: getPooledA,
-    [ANALYTICS_CARD_TYPE.wstETH]: ezWETHReverse,
+    [ANALYTICS_CARD_TYPE.reverseCoin]: ezWETHReverse,
     [ANALYTICS_CARD_TYPE.FEE]: commissionIncome,
   };
 
   const title = {
     [ANALYTICS_CARD_TYPE.USDC]: t('analytics.title.usdc'),
-    [ANALYTICS_CARD_TYPE.wstETH]: t('analytics.title.wstETH'),
+    [ANALYTICS_CARD_TYPE.reverseCoin]: t('analytics.title.wstETH'),
     [ANALYTICS_CARD_TYPE.FEE]: t('analytics.title.fee'),
   };
 
   // 深色
   const icon_Dark = {
     [ANALYTICS_CARD_TYPE.USDC]: USDCIconDark,
-    [ANALYTICS_CARD_TYPE.wstETH]: WstETHIconDark,
+    [ANALYTICS_CARD_TYPE.reverseCoin]: WstETHIconDark,
     [ANALYTICS_CARD_TYPE.FEE]: FeeValueIcon,
   };
 
   // 浅色
   const icon_light = {
     [ANALYTICS_CARD_TYPE.USDC]: USDCIconLight,
-    [ANALYTICS_CARD_TYPE.wstETH]: WstETHIconLight,
+    [ANALYTICS_CARD_TYPE.reverseCoin]: WstETHIconLight,
     [ANALYTICS_CARD_TYPE.FEE]: FeeValueIcon,
   };
 
