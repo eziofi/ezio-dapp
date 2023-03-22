@@ -9,6 +9,7 @@ import BaseIconFont from '../../components/BaseIconFont';
 import { usePrice } from '../../../hooks/usePrice';
 import { BigNumber } from 'ethers';
 import { InlineSkeleton } from '../../components/Skeleton';
+import useWallet from '../../hooks/useWallet';
 
 interface IProps {
   isBuy?: boolean;
@@ -54,7 +55,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
   },
   '& .MuiInputBase-input': {
     borderRadius: 15,
-    width: 110,
+    width: 130,
     position: 'relative',
     // @ts-ignore
     backgroundColor: theme.palette.purchase.menuItemBg,
@@ -132,6 +133,8 @@ function RanderOptions(
   setInputVal?: (value: string) => void,
 ) {
   const theme = useTheme();
+  const { reverseCoin } = useWallet();
+
   return (
     <BalanceContent>
       <Select
@@ -151,7 +154,10 @@ function RanderOptions(
                     ...item.iconParentStyle,
                   }}
                 >
-                  <BaseIconFont name={item.iconName} style={item.iconStyle} />
+                  <BaseIconFont
+                    name={item.iconName === 'icon-wstETH1' ? `icon-${reverseCoin}` : item.iconName}
+                    style={item.iconStyle}
+                  />
                 </div>
                 {TOKEN_TYPE[item.value]}
               </>
