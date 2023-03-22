@@ -147,6 +147,8 @@ export default function WalletProvider({ children }: { children: ReactElement })
     });
     provider.on('chainChanged', async (chainId: number) => {
       console.log(`chainChanged: ${chainId}`);
+      window.location.reload();
+
       // const { web3 } = this.state;
       // const networkId = await web3.eth.net.getId();
       // await this.setState({ chainId, networkId });
