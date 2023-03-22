@@ -1,6 +1,6 @@
 import { EzioV1__factory, EzWETHV1, EzWETHV1__factory, EzUSDV1__factory } from '../contract';
 
-import { ERC20_ABI, ARBITRUM_TOKENS, TOKEN_DECIMAL, TOKEN_TYPE, TRANSFER_TYPE } from './constant';
+import { ERC20_ABI, ARBITRUM_TOKENS, TOKEN_DECIMAL, TOKEN_TYPE, TRANSFER_TYPE, POLYGON_TOKENS } from './constant';
 import { BigNumber, ethers, Signer } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
 import { formatDecimal, formatString } from './utilities';
@@ -11,14 +11,15 @@ const ezatJson = require('../contract/abi/EzUSDV1.json');
 const ezbtJson = require('../contract/abi/EzWETHV1.json');
 const ezioJson = require('../contract/abi/EzioV1.json');
 
-const USDC_ADDRESS = ARBITRUM_TOKENS.USDC;
-const USDT_ADDRESS = ARBITRUM_TOKENS.USDT;
-const DAI_ADDRESS = ARBITRUM_TOKENS.DAI;
-const WETH_ADDRESS = ARBITRUM_TOKENS.WETH;
-const WstETH_ADDRESS = ARBITRUM_TOKENS.wstETH;
-const USDC_TAKER_ADDRESS = process.env.POLYGON_USDC_TAKER_ADDRESS || '';
-const USDT_TAKER_ADDRESS = process.env.POLYGON_USDT_TAKER_ADDRESS || '';
-const DAI_TAKER_ADDRESS = process.env.POLYGON_DAI_TAKER_ADDRESS || '';
+const TOKENS = {
+  polygen: POLYGON_TOKENS,
+  arbitrum: ARBITRUM_TOKENS,
+}[process.env.REACT_APP_NETWORK as string] as any;
+const USDC_ADDRESS = TOKENS.USDC;
+const USDT_ADDRESS = TOKENS.USDT;
+const DAI_ADDRESS = TOKENS.DAI;
+const WETH_ADDRESS = TOKENS.WETH;
+const WstETH_ADDRESS = TOKENS.wstETH;
 
 // export interface Overrides {
 //   gasLimit?: BigNumberish | Promise<BigNumberish>;
