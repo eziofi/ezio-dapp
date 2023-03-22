@@ -61,6 +61,7 @@ export default {
     aNetWorthSeries: 'ezUSD Price',
     bNetWorthSeries: 'ezWETH Price',
     wstETHPrice: 'wstETH Price',
+    stMATICPrice: 'stMATIC Price',
     aTotalSupplySeries: 'ezUSD Supply',
     bTotalSupplySeries: 'ezWETH Supply',
     copyText: 'Copy Succeeded',
@@ -127,6 +128,7 @@ export default {
     title: {
       usdc: 'Treasury USDC value',
       wstETH: 'Treasury wstETH value',
+      stMATIC: 'Treasury stMATIC value',
       fee: 'Fees Earned (last 24h)',
     },
     everyday: 'Every Day',

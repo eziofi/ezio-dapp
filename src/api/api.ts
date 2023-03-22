@@ -56,7 +56,6 @@ export function queryTotalPurchaseBy24h() {
 }
 
 // 金库市值
-
 interface ITreasuryValue {
   code: number;
   message: string;
@@ -78,8 +77,6 @@ interface IAbTotalnetworth {
 export function queryAbTotalnetworth(QueryType: string) {
   return httpClient.get<IAbTotalnetworth>('api/v1/lineGraph/abTotalnetworth', { params: { QueryType } });
 }
-
-// ezWETH PRICE vs wstETH PRICE ezWETH 价格 vs wstETH 价格
 
 interface IMaticPrice {
   code: number;

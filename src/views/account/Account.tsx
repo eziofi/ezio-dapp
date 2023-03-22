@@ -35,9 +35,6 @@ export default function Account() {
             aria-label="refresh"
             onClick={() => {
               setRefreshFlag(refreshFlag + 1);
-              // queryClient.invalidateQueries(['balanceOf', TOKEN_TYPE.USDC]);
-              // queryClient.invalidateQueries(['balanceOf', TOKEN_TYPE.USDT]);
-              // queryClient.invalidateQueries(['balanceOf', TOKEN_TYPE.wstETH]);
             }}
           >
             <CachedIcon />

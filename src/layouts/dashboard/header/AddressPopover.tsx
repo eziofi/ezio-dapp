@@ -27,10 +27,7 @@ import { InlineSkeleton } from '../../../views/components/Skeleton';
 import BaseIconFont from '../../../views/components/BaseIconFont';
 
 export default function AddressPopover() {
-  const { connectState, connect, disconnect, ethersProvider, walletProvider, account, allowanceUSDT, allowanceUSDC } =
-    useWallet();
-  // console.log(ethersProvider?._network);
-  // const networkName = ethersProvider?._network.name;
+  const { connectState, connect, disconnect, account, networkId } = useWallet();
 
   const [open, setOpen] = useState<(EventTarget & HTMLButtonElement) | null>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -45,13 +42,12 @@ export default function AddressPopover() {
   const addressToShow = account.substring(0, 5) + '...' + account.substring(account.length - 5, account.length);
   const addressToShowInPop = account.substring(0, 12) + '...' + account.substring(account.length - 12, account.length);
 
-  useEffect(() => {
-    // console.log(ethersProvider._network);
-    if (!hasOpenDialog && ethersProvider && ethersProvider._network && ethersProvider._network.chainId !== 42161) {
-      setDialogOpen(true);
-      setHasOpenDialog(true);
-    }
-  });
+  // useEffect(() => {
+  //   if (!hasOpenDialog && networkId && networkId !== 'arbitrum') {
+  //     setDialogOpen(true);
+  //     setHasOpenDialog(true);
+  //   }
+  // });
 
   const logout = () => {
     disconnect();

@@ -273,7 +273,7 @@ export default function Purchase() {
     if (type === TRANSFER_TYPE.REDEEM && redeemTokenType === 4) {
       setRedeemTokenType(TOKEN_TYPE.USDC);
     } else if (type === TRANSFER_TYPE.PURCHASE && redeemTokenType === 3) {
-      // type 为购买时 && redeemTokenType = wstETH, redeemTokenType赋值 为 USDT 因为购买时的下拉框value不存wstETH 会导致value为空
+      // type 为购买时 && redeemTokenType = reverseCoin, redeemTokenType赋值 为 USDT 因为购买时的下拉框value不存reverseCoin 会导致value为空
       setRedeemTokenType(TOKEN_TYPE.USDT);
     }
   }, [type]);

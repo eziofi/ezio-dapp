@@ -2,7 +2,7 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import Web3Modal from 'web3modal';
-import { TOKEN_TYPE } from '../wallet/helpers/constant';
+import { NETWORK_TYPE, TOKEN_TYPE } from '../wallet/helpers/constant';
 import { useQuery } from 'react-query';
 import { getAllowance } from '../wallet/helpers/contract_call';
 
@@ -15,6 +15,7 @@ interface IWalletContext {
   connectState: string;
   allowanceUSDT: string;
   allowanceUSDC: string;
+  networkId: number | undefined;
 }
 
 export const WalletContext = React.createContext<IWalletContext>({} as IWalletContext);
@@ -98,14 +99,13 @@ export default function WalletProvider({ children }: { children: ReactElement })
     setConnectState('connecting');
     const connect = await web3Modal.connect();
 
-    console.log('connect.networkID');
-
     setWalletProvider(connect);
 
     await subscribeProvider(connect);
 
     const provider = new ethers.providers.Web3Provider(connect);
     setEthersProvider(provider);
+
     const signer = provider.getSigner();
     const address = await signer.getAddress();
     setAccount(address);
@@ -169,6 +169,12 @@ export default function WalletProvider({ children }: { children: ReactElement })
     setConnectState('unconnected');
   };
 
+  const [networkId, setNetworkId] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    setNetworkId(ethersProvider?._network?.chainId as number);
+  });
+
   const value = {
     connectState,
     account,
@@ -178,6 +184,7 @@ export default function WalletProvider({ children }: { children: ReactElement })
     disconnect,
     allowanceUSDT,
     allowanceUSDC,
+    networkId,
   };
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;
 }

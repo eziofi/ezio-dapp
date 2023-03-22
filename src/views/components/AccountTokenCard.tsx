@@ -8,11 +8,13 @@ import { InlineSkeleton } from './Skeleton';
 import { useTranslation } from 'react-i18next';
 import { Box, Tooltip, useTheme } from '@mui/material';
 import { useEffect } from 'react';
+import useWallet from '../hooks/useWallet';
 
 export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TYPE; refreshFlag: number }) {
   const { balance, refetchBalance, isBalanceFetching } = useBalance(type);
   const { price, refetchPrice, isPriceFetching } = usePrice(type);
   const { t } = useTranslation();
+  const { reverseCoin } = useWallet();
 
   useEffect(() => {
     if (refreshFlag > 0) {
@@ -52,7 +54,7 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
   const IconNames = {
     [TOKEN_TYPE.USDT]: 'icon-usdt',
     [TOKEN_TYPE.USDC]: 'icon-usdc',
-    [TOKEN_TYPE.ReverseCoin]: 'icon-wstETH1',
+    [TOKEN_TYPE.ReverseCoin]: `icon-${reverseCoin}1`,
     [TOKEN_TYPE.ezUSD]: 'icon-A',
     [TOKEN_TYPE.E2LP]: 'icon-B',
   };

@@ -10,6 +10,7 @@ import { ColorModeContext } from '../../../theme';
 import RenderSkeleton from './RenderSkeleton';
 import { HomeCardHeader } from '../mainStyle';
 import RenderSelect from './RenderSelect';
+import useWallet from '../../hooks/useWallet';
 
 export default function NetWorthApexChart() {
   const [option, setOption] = useState<any>(null);
@@ -24,8 +25,10 @@ export default function NetWorthApexChart() {
   }, [mode]);
 
   const [queryType, setQueryType] = useState('hour');
+  const { reverseCoin } = useWallet();
 
   useQuery(['queryMaticPrice', queryType], () => queryMaticPrice(queryType), {
+    enabled: !!reverseCoin,
     onSuccess: ({ data }) => {
       const XData = data.data.map(i => {
         if (queryType === 'hour') {
@@ -40,7 +43,7 @@ export default function NetWorthApexChart() {
       setOption({
         series: [
           {
-            name: t('home.wstETHPrice'),
+            name: reverseCoin ? t(`home.${reverseCoin}Price`) : '',
             type: 'area',
             data: stMaticPrice,
           },
@@ -82,7 +85,7 @@ export default function NetWorthApexChart() {
             {
               decimalsInFloat: 0,
               title: {
-                text: t('home.wstETHPrice'),
+                text: reverseCoin ? t(`home.${reverseCoin}Price`) : '',
                 y: {
                   formatter: function (val: string) {
                     return val;

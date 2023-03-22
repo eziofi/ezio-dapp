@@ -108,7 +108,7 @@ export default function useTx() {
   ) {
     const ezio = EzioConnect(signerOrProvider);
     let quotes: SwapQuoteStruct[];
-    // 先把USDC/USDT换成wstETH
+    // 先把USDC/USDT换成储备币
     const fromTokenAddress = fromType === TOKEN_TYPE.USDT ? USDT_ADDRESS : USDC_ADDRESS;
     setBackLoadingText(t('message.request0x'));
     const quoteResponse = await getQuote(
@@ -140,7 +140,7 @@ export default function useTx() {
     console.log('pooledA=' + pooledA.toString());
     if (quoteNetWorth.lte(pooledA)) {
       console.log('使用金库USDC');
-      // 如果金库USDC足够，用USDC转换成wstETH
+      // 如果金库USDC足够，用USDC转换成储备币
       const convertSellAmount =
         fromType === TOKEN_TYPE.USDT
           ? await ezio.convertAmt(fromTokenAddress, USDC_ADDRESS, BigNumber.from(String(amount * 1000000)))
@@ -169,7 +169,7 @@ export default function useTx() {
   /**
    * 赎回
    * @param fromType 卖出token类型，tokenA或者tokenB
-   * @param toType 获得的token类型，USDC或者wstETH
+   * @param toType 获得的token类型，USDC或者储备币
    * @param amount
    * @param slippage 滑点
    * @param signerOrProvider signerOrProvider
@@ -214,7 +214,7 @@ export default function useTx() {
         convertAmount.toString(),
         slippage,
       );
-      console.log('USDC储量不够，动用wstETH换成USDC');
+      console.log('USDC储量不够，动用储备币换成USDC');
       await EzioConnect(signerOrProvider)
         .connect(signerOrProvider)
         .redeem(fromType, channel, redeemAmount, USDC_ADDRESS, quoteResponse);
@@ -292,7 +292,7 @@ export default function useTx() {
     const aToken = EzUSDConnect(signerOrProvider);
     const bToken = E2LPConnect(signerOrProvider);
     const ezio = EzioConnect(signerOrProvider);
-    const wstETH = reverseCoinConnect(signerOrProvider);
+    const reverseCoin = reverseCoinConnect(signerOrProvider);
     if (fromToken === TOKEN_TYPE.ezUSD) {
       if (toToken === TOKEN_TYPE.USDC) {
         amt = qty.mul(await aToken.netWorth()).div(BigNumber.from('10').pow(await aToken.decimals()));
@@ -301,7 +301,7 @@ export default function useTx() {
         if (amt.gt(await ezio.pooledA())) {
           quoteQty = amt
             .sub(await ezio.pooledA())
-            .mul(BigNumber.from('10').pow(await wstETH.decimals()))
+            .mul(BigNumber.from('10').pow(await reverseCoin.decimals()))
             .div(await ezio.getPrice(REVERSE_COIN_ADDRESS));
         }
       }

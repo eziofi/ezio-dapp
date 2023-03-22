@@ -60,6 +60,7 @@ export default {
     aNetWorthSeries: 'ezUSD价格',
     bNetWorthSeries: 'ezWETH价格',
     wstETHPrice: 'wstETH价格',
+    stMATICPrice: 'stMATIC价格',
     aTotalSupplySeries: 'ezUSD供应量',
     bTotalSupplySeries: 'ezWETH供应量',
     copyText: '复制成功',
@@ -126,6 +127,7 @@ export default {
     title: {
       usdc: '金库USDC价值',
       wstETH: '金库wstETH价值',
+      stMATIC: '金库stMATIC价值',
       fee: '手续费收入(过去24h)',
     },
     everyday: '每日',
