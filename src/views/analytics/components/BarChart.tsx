@@ -27,11 +27,7 @@ export default function BarChart() {
 
   useQuery(['queryAccumulatedFees'], queryAccumulatedFees, {
     onSuccess: ({ data }) => {
-      setAccumulatedFees(
-        data.data.map(i => {
-          return !!i.accumulatedFees ? i.accumulatedFees : Math.max(...data.data.map(i => i.accumulatedFees));
-        }),
-      );
+      setAccumulatedFees(data.data.map(i => i.accumulatedFees));
     },
   });
   // console.log('🚀 ~ file: BarChart.tsx:17 ~ BarChart ~ data:', AccumulatedFees);

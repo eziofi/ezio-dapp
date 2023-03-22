@@ -1,9 +1,9 @@
 import { Box, Card, CardHeader, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import ReactApexChart from 'react-apexcharts';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
-import { queryTotalNetWorth, queryTreasuryValue } from '../../../api/api';
+import { queryMaticPrice, queryTotalNetWorth, queryTreasuryValue } from '../../../api/api';
 import { t } from 'i18next';
-import { getYMax } from '../../wallet/helpers/utilities';
+import { formatString, getYMax } from '../../wallet/helpers/utilities';
 import { useContext, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { ColorModeContext } from '../../../theme';
@@ -22,7 +22,17 @@ export default function MarketApexChart() {
     queryClient.invalidateQueries('queryTreasuryValue');
   }, [mode]);
 
+  const [aRate, setARate] = useState<number[]>([]);
+  const [XData, setXData] = useState<string[]>([]);
+  const [treasuryData, setTreasuryData] = useState<number[]>([]);
   const [queryType, setQueryType] = useState('hour');
+
+  useQuery(['queryMaticPrice', queryType], () => queryMaticPrice(queryType), {
+    onSuccess: ({ data }) => {
+      const aRate = data.data.map(i => +formatString(String((i.ezUsdRate * 10000 * 365) / 100)));
+      setARate([...aRate]);
+    },
+  });
 
   useQuery(['queryTreasuryValue', queryType], () => queryTreasuryValue(queryType), {
     onSuccess: ({ data }) => {
@@ -34,75 +44,93 @@ export default function MarketApexChart() {
         }
       });
       const treasuryData = data.data.map(i => parseFloat(i.treasuryValue));
+      setXData([...XData]);
+      setTreasuryData([...treasuryData]);
+    },
+  });
 
-      setOption({
-        series: [
+  useEffect(() => {
+    setOption({
+      series: [
+        {
+          name: t('home.treasuryValue'),
+          type: 'area',
+          data: treasuryData,
+        },
+        // {
+        //   name: t('home.ethPrice'),
+        //   type: 'area',
+        //   data: ethData,
+        // },
+        {
+          name: t('home.aRateAxis'),
+          type: 'area',
+          data: [...aRate],
+        },
+      ],
+      options: {
+        theme: {
+          mode,
+        },
+        chart: {
+          // @ts-ignore
+          background: 'transparent',
+          height: 350,
+          type: 'line',
+          toolbar: {
+            show: false,
+          },
+        },
+        stroke: {
+          curve: 'smooth',
+        },
+        fill: {
+          type: 'solid',
+          opacity: [0.2, 0.2],
+        },
+        labels: XData,
+        markers: {
+          size: 0,
+        },
+        yaxis: [
           {
-            name: t('home.treasuryValue'),
-            type: 'area',
-            data: treasuryData,
+            title: {
+              text: t('home.treasuryValue'),
+            },
+            decimalsInFloat: 0,
+            min: 0,
+            max: getYMax(treasuryData),
           },
           // {
-          //   name: t('home.ethPrice'),
-          //   type: 'area',
-          //   data: ethData,
+          //   opposite: true,
+          //   title: {
+          //     text: t('home.ethPrice'),
+          //   },
+          //   decimalsInFloat: 0,
+          //   max: getYMax(ethData),
           // },
+          {
+            decimalsInFloat: 0,
+            opposite: true,
+            title: {
+              text: t('home.aRateAxis') + ' ( % ) ',
+            },
+            min: 0,
+            max: getYMax([...aRate]),
+          },
         ],
-        options: {
-          theme: {
-            mode,
-          },
-          chart: {
-            // @ts-ignore
-            background: 'transparent',
-            height: 350,
-            type: 'line',
-            toolbar: {
-              show: false,
-            },
-          },
-          stroke: {
-            curve: 'smooth',
-          },
-          fill: {
-            type: 'solid',
-            opacity: [0.2, 0.2],
-          },
-          labels: XData,
-          markers: {
-            size: 0,
-          },
-          yaxis: [
-            {
-              title: {
-                text: t('home.treasuryValue'),
-              },
-              decimalsInFloat: 0,
-              min: 0,
-              max: getYMax(treasuryData),
-            },
-            // {
-            //   opposite: true,
-            //   title: {
-            //     text: t('home.ethPrice'),
-            //   },
-            //   decimalsInFloat: 0,
-            //   max: getYMax(ethData),
-            // },
-          ],
-          tooltip: {
-            shared: true,
-            intersect: false,
-            y: {
-              formatter: function (val: string) {
-                return val;
-              },
+        tooltip: {
+          shared: true,
+          intersect: false,
+          y: {
+            formatter: function (val: string) {
+              return val;
             },
           },
         },
-      });
-    },
-  });
+      },
+    });
+  }, [aRate, XData, treasuryData]);
 
   return (
     <Card>
