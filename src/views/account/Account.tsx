@@ -55,9 +55,9 @@ export default function Account() {
         <AccountCardBox>
           <AccountTokenCard type={TOKEN_TYPE.USDT} refreshFlag={refreshFlag} />
           <AccountTokenCard type={TOKEN_TYPE.USDC} refreshFlag={refreshFlag} />
-          <AccountTokenCard type={TOKEN_TYPE.wstETH} refreshFlag={refreshFlag} />
+          <AccountTokenCard type={TOKEN_TYPE.ReverseCoin} refreshFlag={refreshFlag} />
           <AccountTokenCard type={TOKEN_TYPE.ezUSD} refreshFlag={refreshFlag} />
-          <AccountTokenCard type={TOKEN_TYPE.ezWETH} refreshFlag={refreshFlag} />
+          <AccountTokenCard type={TOKEN_TYPE.E2LP} refreshFlag={refreshFlag} />
         </AccountCardBox>
       ) : (
         <AccountDetail />

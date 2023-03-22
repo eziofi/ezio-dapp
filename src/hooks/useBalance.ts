@@ -15,10 +15,10 @@ export function useBalance(tokenType: TOKEN_TYPE) {
   const { account, ethersProvider } = useWallet();
   const balanceApi = {
     [TOKEN_TYPE.ezUSD]: ezatBalanceOf,
-    [TOKEN_TYPE.ezWETH]: ezbtBalanceOf,
+    [TOKEN_TYPE.E2LP]: ezbtBalanceOf,
     [TOKEN_TYPE.USDT]: usdtBalanceOf,
     [TOKEN_TYPE.USDC]: usdcBalanceOf,
-    [TOKEN_TYPE.wstETH]: wstETHBalanceOf,
+    [TOKEN_TYPE.ReverseCoin]: wstETHBalanceOf,
   };
   const {
     data: balance,

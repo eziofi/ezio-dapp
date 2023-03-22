@@ -48,7 +48,7 @@ export { EzTokenV1__factory } from './factories/contracts/impls/v1/EzToken.sol/E
 export type { EzUSDV1 } from './contracts/impls/v1/EzUSD.sol/EzUSDV1';
 export { EzUSDV1__factory } from './factories/contracts/impls/v1/EzUSD.sol/EzUSDV1__factory';
 export type { EzWETHV1 } from './contracts/impls/v1/EzWETH.sol/EzWETHV1';
-export { EzWETHV1__factory } from './factories/contracts/impls/v1/EzWETH.sol/EzWETHV1__factory';
+export { EzWETHV1__factory as REVERSE_COIN__factory } from './factories/contracts/impls/v1/EzWETH.sol/EzWETHV1__factory';
 export type { SwapCollectorUpgradeable } from './contracts/impls/v1/SwapCollector.sol/SwapCollectorUpgradeable';
 export { SwapCollectorUpgradeable__factory } from './factories/contracts/impls/v1/SwapCollector.sol/SwapCollectorUpgradeable__factory';
 export type { IConversion } from './contracts/interfaces/v1/IConversion';

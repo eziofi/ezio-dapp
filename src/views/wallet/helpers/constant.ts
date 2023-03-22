@@ -2,11 +2,21 @@ import { BigNumber } from 'ethers';
 
 export enum TOKEN_TYPE {
   ezUSD,
-  ezWETH,
+  E2LP,
   USDC,
-  wstETH,
+  ReverseCoin, // wstETH or stMATIC
   USDT,
 }
+
+export enum NETWORK_TYPE {
+  Arbitrum = 'Arbitrum',
+  Polygen = 'Polygen',
+}
+
+export const REVERSE_COIN = {
+  [NETWORK_TYPE.Arbitrum]: 'wstETH',
+  [NETWORK_TYPE.Polygen]: 'stMATIC',
+};
 
 export enum TRANSFER_TYPE {
   PURCHASE = 0,
@@ -15,10 +25,10 @@ export enum TRANSFER_TYPE {
 
 export const TOKEN_DECIMAL = {
   [TOKEN_TYPE.ezUSD]: 18,
-  [TOKEN_TYPE.ezWETH]: 18,
+  [TOKEN_TYPE.E2LP]: 18,
   [TOKEN_TYPE.USDT]: 6,
   [TOKEN_TYPE.USDC]: 6,
-  [TOKEN_TYPE.wstETH]: 18,
+  [TOKEN_TYPE.ReverseCoin]: 18,
 };
 
 export enum QUOTE_CHANNEL {

@@ -4,8 +4,8 @@ import { MAX_UINT256, ARBITRUM_TOKENS, QUOTE_CHANNEL, TOKEN_TYPE } from '../view
 import { SwapQuoteStruct } from '../views/wallet/arbitrum/contract/contracts/interfaces/v1/IEzio';
 import { getQuote } from '../views/wallet/helpers/utilities';
 import {
-  EzatConnect,
-  EzbtConnect,
+  EzUSDConnect,
+  E2LPConnect,
   EzioConnect,
   wstETHConnect,
   USDCConnect,
@@ -59,7 +59,7 @@ export default function useTx() {
    */
   async function purchase(
     fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC,
-    toType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezWETH,
+    toType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP,
     amount: number,
     slippage: number,
     signerOrProvider: Signer | Provider,
@@ -164,7 +164,7 @@ export default function useTx() {
     }
     console.log(quotes);
     setBackLoadingText(t('message.sendingTx'));
-    const purchaseTx = await ezio.purchase(TOKEN_TYPE.ezWETH, channel, quotes);
+    const purchaseTx = await ezio.purchase(TOKEN_TYPE.E2LP, channel, quotes);
     setBackLoadingText(t('message.waitingTx'));
     await purchaseTx.wait();
   }
@@ -178,8 +178,8 @@ export default function useTx() {
    * @param signerOrProvider signerOrProvider
    */
   async function redeem(
-    fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezWETH,
-    toType: TOKEN_TYPE.USDC | TOKEN_TYPE.wstETH,
+    fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP,
+    toType: TOKEN_TYPE.USDC | TOKEN_TYPE.ReverseCoin,
     amount: number,
     signerOrProvider: Signer | Provider,
     slippage: number,
@@ -196,7 +196,7 @@ export default function useTx() {
    * @param signerOrProvider signerOrProvider
    */
   async function redeemToUSDC(
-    fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezWETH,
+    fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP,
     amount: number,
     signerOrProvider: Signer | Provider,
     slippage: number,
@@ -236,13 +236,13 @@ export default function useTx() {
    * @param signerOrProvider signerOrProvider
    */
   async function redeemToWstETH(
-    fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezWETH,
+    fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP,
     amount: number,
     signerOrProvider: Signer | Provider,
     slippage: number,
   ) {
     const redeemAmount = ethers.utils.parseEther(String(amount));
-    const convertAmount = await getRedeemQuoteQty(fromType, redeemAmount, TOKEN_TYPE.wstETH, signerOrProvider);
+    const convertAmount = await getRedeemQuoteQty(fromType, redeemAmount, TOKEN_TYPE.ReverseCoin, signerOrProvider);
     if (convertAmount.gt(BigNumber.from(0))) {
       setBackLoadingText(t('message.request0x'));
       const quoteResponse = await getQuote(channel, WstETH_ADDRESS, USDC_ADDRESS, convertAmount.toString(), slippage);
@@ -268,15 +268,15 @@ export default function useTx() {
   }
 
   const getRedeemQuoteQty = async (
-    fromToken: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezWETH,
+    fromToken: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP,
     qty: BigNumber,
-    toToken: TOKEN_TYPE.USDC | TOKEN_TYPE.wstETH,
+    toToken: TOKEN_TYPE.USDC | TOKEN_TYPE.ReverseCoin,
     signerOrProvider: Signer | Provider,
   ) => {
     let amt: BigNumber;
     let quoteQty: BigNumber = BigNumber.from('0');
-    const aToken = EzatConnect(signerOrProvider);
-    const bToken = EzbtConnect(signerOrProvider);
+    const aToken = EzUSDConnect(signerOrProvider);
+    const bToken = E2LPConnect(signerOrProvider);
     const ezio = EzioConnect(signerOrProvider);
     const wstETH = wstETHConnect(signerOrProvider);
     if (fromToken === TOKEN_TYPE.ezUSD) {
@@ -295,7 +295,7 @@ export default function useTx() {
       // amt = qty.mul(await bToken.netWorth()).div(BigNumber.from('10').pow(await bToken.decimals()));
       if (toToken === TOKEN_TYPE.USDC) {
         quoteQty = qty.mul(await ezio.totalReserve()).div(await bToken.totalSupply());
-      } else if (toToken === TOKEN_TYPE.wstETH) {
+      } else if (toToken === TOKEN_TYPE.ReverseCoin) {
         let redeemReserveQty = qty.mul(await ezio.totalReserve()).div(await bToken.totalSupply());
         let leverage: BigNumber = await ezio.leverage();
         const DENOMINATOR = await ezio.LEVERAGE_DENOMINATOR();

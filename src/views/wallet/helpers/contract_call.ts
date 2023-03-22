@@ -1,6 +1,15 @@
-import { EzioV1__factory, EzWETHV1, EzWETHV1__factory, EzUSDV1__factory } from '../arbitrum/contract';
+import { EzioV1__factory, EzWETHV1, REVERSE_COIN__factory, EzUSDV1__factory } from '../arbitrum/contract';
 
-import { ERC20_ABI, ARBITRUM_TOKENS, TOKEN_DECIMAL, TOKEN_TYPE, TRANSFER_TYPE, POLYGON_TOKENS } from './constant';
+import {
+  ERC20_ABI,
+  ARBITRUM_TOKENS,
+  TOKEN_DECIMAL,
+  TOKEN_TYPE,
+  TRANSFER_TYPE,
+  POLYGON_TOKENS,
+  REVERSE_COIN,
+  NETWORK_TYPE,
+} from './constant';
 import { BigNumber, ethers, Signer } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
 import { formatDecimal, formatString } from './utilities';
@@ -8,18 +17,22 @@ import { formatDecimal, formatString } from './utilities';
 import { queryAccumulatedFees24H } from '../../../api/api';
 
 const ezatJson = require('../arbitrum/contract/abi/EzUSDV1.json');
-const ezbtJson = require('../arbitrum/contract/abi/EzWETHV1.json');
+const ezbtJson = {
+  [NETWORK_TYPE.Arbitrum]: require('../arbitrum/contract/abi/EzWETHV1.json'),
+  [NETWORK_TYPE.Polygen]: require('../polygen/contract/abi/EzWETHV1.json'),
+}[process.env.REACT_APP_NETWORK as keyof typeof NETWORK_TYPE];
+
 const ezioJson = require('../arbitrum/contract/abi/EzioV1.json');
 
 const TOKENS = {
-  polygen: POLYGON_TOKENS,
-  arbitrum: ARBITRUM_TOKENS,
+  [NETWORK_TYPE.Polygen]: POLYGON_TOKENS,
+  [NETWORK_TYPE.Arbitrum]: ARBITRUM_TOKENS,
 }[process.env.REACT_APP_NETWORK as string] as any;
 const USDC_ADDRESS = TOKENS.USDC;
 const USDT_ADDRESS = TOKENS.USDT;
 const DAI_ADDRESS = TOKENS.DAI;
 const WETH_ADDRESS = TOKENS.WETH;
-const WstETH_ADDRESS = TOKENS.wstETH;
+const REVERSE_COIN_ADDRESS = TOKENS[REVERSE_COIN[process.env.REACT_APP_NETWORK as keyof typeof REVERSE_COIN]];
 
 // export interface Overrides {
 //   gasLimit?: BigNumberish | Promise<BigNumberish>;
@@ -36,12 +49,12 @@ const override = {
   gasLimit: 2000000,
 };
 
-export function EzatConnect(signerOrProvider: Signer | Provider) {
+export function EzUSDConnect(signerOrProvider: Signer | Provider) {
   return EzUSDV1__factory.connect(ezatJson.address, signerOrProvider);
 }
 
-export function EzbtConnect(signerOrProvider: Signer | Provider): EzWETHV1 {
-  return EzWETHV1__factory.connect(ezbtJson.address, signerOrProvider);
+export function E2LPConnect(signerOrProvider: Signer | Provider): EzWETHV1 {
+  return REVERSE_COIN__factory.connect(ezbtJson.address, signerOrProvider);
 }
 
 export function USDTConnect(signerOrProvider: Signer | Provider) {
@@ -57,7 +70,7 @@ export function USDCConnect(signerOrProvider: Signer | Provider) {
 }
 
 export function wstETHConnect(signerOrProvider: Signer | Provider) {
-  return new ethers.Contract(WstETH_ADDRESS, ERC20_ABI, signerOrProvider);
+  return new ethers.Contract(REVERSE_COIN_ADDRESS, ERC20_ABI, signerOrProvider);
 }
 
 /**
@@ -87,12 +100,12 @@ export async function getPooledA(signerOrProvider: Signer | Provider) {
  */
 export async function ezWETHReverse(signerOrProvider: Signer | Provider) {
   const totalReserve = await EzioConnect(signerOrProvider).totalReserve();
-  const wstETHPrice = await EzioConnect(signerOrProvider).getPrice(WstETH_ADDRESS);
+  const wstETHPrice = await EzioConnect(signerOrProvider).getPrice(REVERSE_COIN_ADDRESS);
   const res = formatDecimal(
     totalReserve.mul(wstETHPrice),
     TOKEN_TYPE.USDC, // 此参数无用
     2,
-    TOKEN_DECIMAL[TOKEN_TYPE.USDC] + TOKEN_DECIMAL[TOKEN_TYPE.wstETH],
+    TOKEN_DECIMAL[TOKEN_TYPE.USDC] + TOKEN_DECIMAL[TOKEN_TYPE.ReverseCoin],
   ).toString();
   console.log('ezWETH Reverse = ' + res);
   return res;
@@ -144,7 +157,7 @@ export async function getLeverage(signerOrProvider: Signer | Provider) {
  * @returns ezat token 数量
  */
 export async function ezatBalanceOf(signerOrProvider: Signer | Provider, address: string) {
-  const data = await EzatConnect(signerOrProvider).balanceOf(address);
+  const data = await EzUSDConnect(signerOrProvider).balanceOf(address);
   const res = formatDecimal(data, TOKEN_TYPE.ezUSD, 18).toString();
   console.log('ezat Balance = ' + res);
   return res;
@@ -157,8 +170,8 @@ export async function ezatBalanceOf(signerOrProvider: Signer | Provider, address
  * @returns ezbt token 数量
  */
 export async function ezbtBalanceOf(signerOrProvider: Signer | Provider, address: string) {
-  const data = await EzbtConnect(signerOrProvider).balanceOf(address);
-  const res = formatDecimal(data, TOKEN_TYPE.ezWETH, 18).toString();
+  const data = await E2LPConnect(signerOrProvider).balanceOf(address);
+  const res = formatDecimal(data, TOKEN_TYPE.E2LP, 18).toString();
   console.log('ezbt Balance = ' + res);
   return res;
 }
@@ -217,7 +230,7 @@ export async function usdcBalanceOf(signerOrProvider: Signer | Provider, address
  */
 export async function wstETHBalanceOf(signerOrProvider: Signer | Provider, address: string) {
   const data = await wstETHConnect(signerOrProvider).balanceOf(address);
-  const res = formatDecimal(data, TOKEN_TYPE.wstETH, 18).toString();
+  const res = formatDecimal(data, TOKEN_TYPE.ReverseCoin, 18).toString();
   console.log('wstETH Balance = ' + res);
   return res;
 }
@@ -249,7 +262,7 @@ export async function convertDownPrice(signerOrProvider: Signer | Provider) {
  * @returns ezat 净值
  */
 export async function ezUSDPrice(signerOrProvider: Signer | Provider) {
-  const data = await EzatConnect(signerOrProvider).netWorth();
+  const data = await EzUSDConnect(signerOrProvider).netWorth();
   const res = formatDecimal(data, TOKEN_TYPE.USDC, 6).toString();
   console.log('ezUSD netWorth = ' + res);
   return res;
@@ -260,7 +273,7 @@ export async function ezUSDPrice(signerOrProvider: Signer | Provider) {
  * @returns ezbt 净值
  */
 export async function ezWETHPrice(signerOrProvider: Signer | Provider) {
-  const data = await EzbtConnect(signerOrProvider).netWorth();
+  const data = await E2LPConnect(signerOrProvider).netWorth();
   const res = formatDecimal(data, TOKEN_TYPE.USDC, 6).toString();
   console.log('ezWETH netWorth = ' + res);
   return res;
@@ -270,8 +283,8 @@ export async function ezWETHPrice(signerOrProvider: Signer | Provider) {
  * 获取 wstETH 净值
  * @returns ezbt 净值
  */
-export async function wstETHPrice(signerOrProvider: Signer | Provider) {
-  const data = await EzioConnect(signerOrProvider).getPrice(WstETH_ADDRESS);
+export async function reverseCoinPrice(signerOrProvider: Signer | Provider) {
+  const data = await EzioConnect(signerOrProvider).getPrice(REVERSE_COIN_ADDRESS);
   const res = formatDecimal(data, TOKEN_TYPE.USDC, 6).toString();
   console.log('wstETH Price = ' + res);
   return res;
@@ -302,7 +315,7 @@ export async function usdcPrice(signerOrProvider: Signer | Provider) {
  * @returns ezat totalSupply
  */
 export async function ezatTotalSupply(signerOrProvider: Signer | Provider): Promise<BigNumber> {
-  const res = await EzatConnect(signerOrProvider).totalSupply();
+  const res = await EzUSDConnect(signerOrProvider).totalSupply();
   console.log('ezatTotalSupply = ' + res.toString());
   return res;
 }
@@ -312,7 +325,7 @@ export async function ezatTotalSupply(signerOrProvider: Signer | Provider): Prom
  * @returns ezbt totalSupply
  */
 export async function ezbtTotalSupply(signerOrProvider: Signer | Provider): Promise<BigNumber> {
-  const res = await EzbtConnect(signerOrProvider).totalSupply();
+  const res = await E2LPConnect(signerOrProvider).totalSupply();
   console.log('ezbtTotalSupply = ' + res.toString());
   return res;
 }

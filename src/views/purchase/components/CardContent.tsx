@@ -14,12 +14,12 @@ interface IProps {
   isBuy?: boolean;
   setIsBuy: (buy: boolean) => void;
   transactionType: TRANSFER_TYPE.PURCHASE | TRANSFER_TYPE.REDEEM;
-  getTokenType: (tokenType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezWETH) => void;
+  getTokenType: (tokenType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP) => void;
   getInputVal1: (InputVal: string) => void | any;
   inputValue2: string;
-  tokenType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezWETH;
+  tokenType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP;
   redeemTokenType: TOKEN_TYPE;
-  setRedeemTokenType: (redeemTokenType: TOKEN_TYPE.USDC | TOKEN_TYPE.USDT | TOKEN_TYPE.wstETH) => void;
+  setRedeemTokenType: (redeemTokenType: TOKEN_TYPE.USDC | TOKEN_TYPE.USDT | TOKEN_TYPE.ReverseCoin) => void;
   inputValue1: string;
   needApprove: boolean;
 }
@@ -198,7 +198,7 @@ const PurchasenOptions: IOptions[] = [
     iconStyle: { width: 20, height: 20, fill: 'white' },
   },
   {
-    value: TOKEN_TYPE.ezWETH,
+    value: TOKEN_TYPE.E2LP,
     iconParentStyle: { margin: '0 10px', background: 'rgba(239, 89, 114, 1)' },
     iconName: 'icon-B',
     iconStyle: { width: 20, height: 20, fill: 'white' },
@@ -220,7 +220,7 @@ const redeemOptions: IOptions[] = [
     iconStyle: { width: 30, height: 30, fill: 'white' },
   },
   {
-    value: TOKEN_TYPE.wstETH,
+    value: TOKEN_TYPE.ReverseCoin,
     iconParentStyle: { margin: '0 10px', background: 'none' },
     iconName: 'icon-wstETH1',
     iconStyle: { width: 30, height: 30, fill: 'white' },
@@ -249,12 +249,12 @@ function MyCardContentOne({
   const { price } = usePrice(isBuy ? redeemTokenType : tokenType);
 
   // const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
-  const handleChange = (value: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezWETH) => {
+  const handleChange = (value: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP) => {
     getTokenType(value);
     // SetCurrency(event.target.value as TOKEN_BALANCE_TYPE);
   };
 
-  const redeemChange = (value: TOKEN_TYPE.USDC | TOKEN_TYPE.USDT | TOKEN_TYPE.wstETH) => {
+  const redeemChange = (value: TOKEN_TYPE.USDC | TOKEN_TYPE.USDT | TOKEN_TYPE.ReverseCoin) => {
     setRedeemTokenType(value);
   };
 
@@ -289,7 +289,7 @@ function MyCardContentOne({
       </div>
       {transactionType === TRANSFER_TYPE.PURCHASE
         ? RanderOptions(
-            redeemOptions.filter(item => item.value !== TOKEN_TYPE.wstETH),
+            redeemOptions.filter(item => item.value !== TOKEN_TYPE.ReverseCoin),
             redeemTokenType,
             // @ts-ignore
             redeemChange,
@@ -317,12 +317,12 @@ function MyCardContentSecond({
   const { balance } = useBalance(transactionType === TRANSFER_TYPE.PURCHASE ? tokenType : redeemTokenType);
 
   // const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
-  const handleChange = (value: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezWETH) => {
+  const handleChange = (value: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP) => {
     getTokenType(value);
     // SetCurrency(event.target.value as TOKEN_BALANCE_TYPE);
   };
 
-  const redeemChange = (value: TOKEN_TYPE.USDC | TOKEN_TYPE.USDT | TOKEN_TYPE.wstETH) => {
+  const redeemChange = (value: TOKEN_TYPE.USDC | TOKEN_TYPE.USDT | TOKEN_TYPE.ReverseCoin) => {
     setRedeemTokenType(value);
   };
 

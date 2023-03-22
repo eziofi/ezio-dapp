@@ -52,14 +52,14 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
   const IconNames = {
     [TOKEN_TYPE.USDT]: 'icon-usdt',
     [TOKEN_TYPE.USDC]: 'icon-usdc',
-    [TOKEN_TYPE.wstETH]: 'icon-wstETH1',
+    [TOKEN_TYPE.ReverseCoin]: 'icon-wstETH1',
     [TOKEN_TYPE.ezUSD]: 'icon-A',
-    [TOKEN_TYPE.ezWETH]: 'icon-B',
+    [TOKEN_TYPE.E2LP]: 'icon-B',
   };
 
   const iconDibBgColor = {
     [TOKEN_TYPE.ezUSD]: 'rgba(95, 69, 186, 1)',
-    [TOKEN_TYPE.ezWETH]: 'rgba(239, 89, 114, 1)',
+    [TOKEN_TYPE.E2LP]: 'rgba(239, 89, 114, 1)',
   };
 
   const theme = useTheme();
@@ -78,7 +78,7 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
             <BaseIconFont
               name={IconNames[type]}
               style={
-                type === TOKEN_TYPE.ezUSD || type === TOKEN_TYPE.ezWETH
+                type === TOKEN_TYPE.ezUSD || type === TOKEN_TYPE.E2LP
                   ? {
                       ...IconStyle,
                     }
