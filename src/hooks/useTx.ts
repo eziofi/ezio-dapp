@@ -1,7 +1,7 @@
 import { BigNumber, ethers, Signer } from 'ethers';
 import { Provider } from '@ethersproject/providers';
 import { MAX_UINT256, ARBITRUM_TOKENS, QUOTE_CHANNEL, TOKEN_TYPE } from '../views/wallet/helpers/constant';
-import { SwapQuoteStruct } from '../views/wallet/contract/contracts/interfaces/v1/IEzio';
+import { SwapQuoteStruct } from '../views/wallet/arbitrum/contract/contracts/interfaces/v1/IEzio';
 import { getQuote } from '../views/wallet/helpers/utilities';
 import {
   EzatConnect,
@@ -15,9 +15,9 @@ import { useContext } from 'react';
 import { UIContext } from '../layouts/dashboard/DashboardLayout';
 import { useTranslation } from 'react-i18next';
 
-const ezatJson = require('../views/wallet/contract/abi/EzUSDV1.json');
-const ezbtJson = require('../views/wallet/contract/abi/EzWETHV1.json');
-const ezioJson = require('../views/wallet//contract/abi/EzioV1.json');
+const ezatJson = require('../views/wallet/arbitrum/contract/abi/EzUSDV1.json');
+const ezbtJson = require('../views/wallet/arbitrum/contract/abi/EzWETHV1.json');
+const ezioJson = require('../views/wallet/arbitrum/contract/abi/EzioV1.json');
 
 const USDC_ADDRESS = ARBITRUM_TOKENS.USDC;
 const USDT_ADDRESS = ARBITRUM_TOKENS.USDT;

@@ -5,14 +5,14 @@ import { BigNumber, BigNumberish, FixedNumber, utils } from 'ethers';
 import qs from 'qs';
 import { formatUnits } from 'ethers/lib/utils';
 import { QUOTE_CHANNEL, TOKEN_DECIMAL, TOKEN_TYPE } from './constant';
-import { SwapQuoteStruct } from '../contract/contracts/interfaces/v1/IEzio';
+import { SwapQuoteStruct } from '../arbitrum/contract/contracts/interfaces/v1/IEzio';
 // import { apiGetGasPrices, apiGetAccountNonce } from "./api";
 // import { convertAmountToRawNumber, convertStringToHex } from "./bignumber";
 
 const ZEROEX_API_QUOTE_URL = 'https://arbitrum.api.0x.org/swap/v1/quote';
 const ONEINCH_API_QUOTE_URL = 'https://api.1inch.io/v5.0/137/swap';
 
-const ezioJson = require('../contract/abi/EzioV1.json');
+const ezioJson = require('../arbitrum/contract/abi/EzioV1.json');
 
 export function capitalize(string: string): string {
   return string

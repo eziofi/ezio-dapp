@@ -1,4 +1,4 @@
-import { EzioV1__factory, EzWETHV1, EzWETHV1__factory, EzUSDV1__factory } from '../contract';
+import { EzioV1__factory, EzWETHV1, EzWETHV1__factory, EzUSDV1__factory } from '../arbitrum/contract';
 
 import { ERC20_ABI, ARBITRUM_TOKENS, TOKEN_DECIMAL, TOKEN_TYPE, TRANSFER_TYPE, POLYGON_TOKENS } from './constant';
 import { BigNumber, ethers, Signer } from 'ethers';
@@ -7,9 +7,9 @@ import { formatDecimal, formatString } from './utilities';
 
 import { queryAccumulatedFees24H } from '../../../api/api';
 
-const ezatJson = require('../contract/abi/EzUSDV1.json');
-const ezbtJson = require('../contract/abi/EzWETHV1.json');
-const ezioJson = require('../contract/abi/EzioV1.json');
+const ezatJson = require('../arbitrum/contract/abi/EzUSDV1.json');
+const ezbtJson = require('../arbitrum/contract/abi/EzWETHV1.json');
+const ezioJson = require('../arbitrum/contract/abi/EzioV1.json');
 
 const TOKENS = {
   polygen: POLYGON_TOKENS,
