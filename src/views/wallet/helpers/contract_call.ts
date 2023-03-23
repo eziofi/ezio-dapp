@@ -31,11 +31,11 @@ const TOKENS = {
   [NETWORK_TYPE.arbitrum]: ARBITRUM_TOKENS,
 }[process.env.REACT_APP_NETWORK as string] as any;
 
-export const USDC_ADDRESS = TOKENS.USDC;
-export const USDT_ADDRESS = TOKENS.USDT;
-export const DAI_ADDRESS = TOKENS.DAI;
-export const WETH_ADDRESS = TOKENS.WETH;
-export const REVERSE_COIN_ADDRESS = TOKENS[REVERSE_COIN[process.env.REACT_APP_NETWORK as keyof typeof REVERSE_COIN]];
+export const USDC_ADDRESS = TOKENS?.USDC;
+export const USDT_ADDRESS = TOKENS?.USDT;
+export const DAI_ADDRESS = TOKENS?.DAI;
+export const WETH_ADDRESS = TOKENS?.WETH;
+export const REVERSE_COIN_ADDRESS = TOKENS?.[REVERSE_COIN[process.env.REACT_APP_NETWORK as keyof typeof REVERSE_COIN]];
 
 // export interface Overrides {
 //   gasLimit?: BigNumberish | Promise<BigNumberish>;
