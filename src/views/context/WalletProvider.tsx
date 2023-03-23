@@ -15,7 +15,7 @@ interface IWalletContext {
   connectState: string;
   allowanceUSDT: string;
   allowanceUSDC: string;
-  networkId: NETWORK_ID | undefined;
+  // networkId: number | undefined;
   networkName: NETWORK_TYPE | '';
   switchNetwork: (network: string) => Promise<any>;
 }
@@ -36,7 +36,7 @@ export default function WalletProvider({ children }: { children: ReactElement })
     }
   }, []);
 
-  const [networkId, setNetworkId] = useState<NETWORK_ID | undefined>(undefined);
+  const [networkId, setNetworkId] = useState<number | undefined>(undefined);
   const [networkName, setNetworkName] = useState<NETWORK_TYPE | ''>('');
 
   // const getNetwork = () => getChainData(this.state.chainId).network;
@@ -105,13 +105,16 @@ export default function WalletProvider({ children }: { children: ReactElement })
     });
     setConnectState('connecting');
     const web3Connect = await web3Modal.connect();
-
     setWalletProvider(web3Connect);
     await subscribeProvider(web3Connect);
     const provider = new ethers.providers.Web3Provider(web3Connect);
     setEthersProvider(provider);
     const signer = provider.getSigner();
     const address = await signer.getAddress();
+    const chainId = await signer.getChainId();
+    setNetworkId(chainId);
+    setNetworkName(NETWORK_ID[chainId as keyof typeof NETWORK_ID]);
+
     setAccount(address);
     setConnectState('connected');
     provider.on('eth_subscribe', (p1: any, p2: any) => {
@@ -132,6 +135,8 @@ export default function WalletProvider({ children }: { children: ReactElement })
     });
     provider.on('chainChanged', async (chainId: number) => {
       console.log(`chainChanged: ${chainId}`);
+      setNetworkId(chainId);
+      setNetworkName(NETWORK_TYPE[chainId as unknown as keyof typeof NETWORK_TYPE]);
       window.location.reload();
 
       // const { web3 } = this.state;
@@ -155,13 +160,6 @@ export default function WalletProvider({ children }: { children: ReactElement })
     setWalletProvider(undefined);
     setConnectState('unconnected');
   };
-
-  useEffect(() => {
-    if (ethersProvider) {
-      setNetworkId(ethersProvider?._network?.chainId as NETWORK_ID);
-      setNetworkName(ethersProvider?._network?.name as NETWORK_TYPE);
-    }
-  });
 
   const networkInfo = {
     polygon: {
@@ -228,7 +226,7 @@ export default function WalletProvider({ children }: { children: ReactElement })
     disconnect,
     allowanceUSDT,
     allowanceUSDC,
-    networkId,
+    // networkId,
     networkName,
     switchNetwork,
   };

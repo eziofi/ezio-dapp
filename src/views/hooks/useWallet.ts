@@ -12,12 +12,12 @@ export default function useWallet() {
     account,
     allowanceUSDT,
     allowanceUSDC,
-    networkId,
+    // networkId,
     networkName,
     switchNetwork,
   } = useContext(WalletContext);
 
-  const reverseCoin = networkId ? REVERSE_COIN[NETWORK_ID[networkId] as keyof typeof REVERSE_COIN] : '';
+  const reverseCoin = networkName ? REVERSE_COIN[networkName as keyof typeof REVERSE_COIN] : '';
 
   return {
     connectState,
@@ -29,7 +29,7 @@ export default function useWallet() {
     allowanceUSDT,
     allowanceUSDC,
     reverseCoin,
-    networkId,
+    // networkId,
     networkName,
     switchNetwork,
   };

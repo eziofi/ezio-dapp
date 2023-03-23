@@ -1,4 +1,4 @@
-import { NETWORK_ID, NETWORK_TYPE } from './../views/wallet/helpers/constant';
+import { NETWORK_TYPE } from './../views/wallet/helpers/constant';
 import useWallet from '../views/hooks/useWallet';
 import httpClient from './request';
 

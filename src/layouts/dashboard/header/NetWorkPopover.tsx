@@ -6,7 +6,7 @@ import Popover from '@mui/material/Popover';
 import BaseIconFont from '../../../views/components/BaseIconFont';
 import styled from '@emotion/styled';
 import { Box } from '@mui/system';
-import { NETWORK_ID, NETWORK_TYPE } from '../../../views/wallet/helpers/constant';
+import { NETWORK_TYPE } from '../../../views/wallet/helpers/constant';
 import CheckIcon from '@mui/icons-material/Check';
 import useWallet from '../../../views/hooks/useWallet';
 
@@ -15,8 +15,8 @@ export default function NetWorkPopover() {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-  const [checkNetworkId, setCheckNetworkId] = React.useState<NETWORK_ID | null>(null);
-  const { networkId, switchNetwork } = useWallet();
+  const [checkNetworkName, setCheckNetworkName] = React.useState<NETWORK_TYPE | ''>('');
+  const { networkName, switchNetwork } = useWallet();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setFlag(true);
@@ -28,18 +28,21 @@ export default function NetWorkPopover() {
     setFlag(false);
   };
 
-  function handleCheckNetWork(network: NETWORK_ID) {
-    const networkToSwitch = NETWORK_ID[network];
-    switchNetwork(networkToSwitch).then(() => {
-      setCheckNetworkId(null);
-      setCheckNetworkId(network);
+  function handleCheckNetWork(network: NETWORK_TYPE) {
+    switchNetwork(network).then(() => {
+      setCheckNetworkName('');
+      setCheckNetworkName(network);
       handleClose();
     });
   }
 
   useEffect(() => {
-    setCheckNetworkId(networkId as NETWORK_ID);
-  }, [networkId]);
+    console.log('networkName');
+    console.log(networkName);
+    if (networkName) {
+      setCheckNetworkName(networkName);
+    }
+  }, [networkName]);
 
   const PopoverStyle = styled(Box)(() => {
     return {
@@ -68,8 +71,8 @@ export default function NetWorkPopover() {
   return (
     <>
       <Button onClick={handleClick} aria-describedby={id}>
-        {checkNetworkId &&
-          (checkNetworkId === NETWORK_ID.arbitrum ? (
+        {checkNetworkName &&
+          (checkNetworkName === NETWORK_TYPE.arbitrum ? (
             <BaseIconFont name="icon-arbitrum" style={{ width: 24, height: 24, marginRight: '4px' }} />
           ) : (
             <BaseIconFont name="icon-Polygon" style={{ width: 24, height: 24, marginRight: '4px' }} />
@@ -93,20 +96,20 @@ export default function NetWorkPopover() {
         PaperProps={{ sx: { width: 300, p: '10px' } }}
       >
         <PopoverStyle>
-          <Button sx={{ ...btnStyle }} onClick={() => handleCheckNetWork(NETWORK_ID.polygon)}>
+          <Button sx={{ ...btnStyle }} onClick={() => handleCheckNetWork(NETWORK_TYPE.polygon)}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <BaseIconFont name="icon-Polygon" style={{ ...networkIconStyle }} />
               {NETWORK_TYPE.polygon}
             </div>
-            {checkNetworkId === NETWORK_ID.polygon && <CheckIcon />}
+            {checkNetworkName === NETWORK_TYPE.polygon && <CheckIcon />}
           </Button>
 
-          <Button sx={{ ...btnStyle }} onClick={() => handleCheckNetWork(NETWORK_ID.arbitrum)}>
+          <Button sx={{ ...btnStyle }} onClick={() => handleCheckNetWork(NETWORK_TYPE.arbitrum)}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <BaseIconFont name="icon-arbitrum" style={{ ...networkIconStyle }} />
               {NETWORK_TYPE.arbitrum}
             </div>
-            {checkNetworkId === NETWORK_ID.arbitrum && <CheckIcon />}
+            {checkNetworkName === NETWORK_TYPE.arbitrum && <CheckIcon />}
           </Button>
         </PopoverStyle>
       </Popover>

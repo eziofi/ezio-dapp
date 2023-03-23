@@ -13,10 +13,10 @@ export enum NETWORK_TYPE {
   polygon = 'polygon',
 }
 
-export enum NETWORK_ID {
-  polygon = 137,
-  arbitrum = 42161,
-}
+export const NETWORK_ID = {
+  137: NETWORK_TYPE.polygon,
+  42161: NETWORK_TYPE.arbitrum,
+};
 
 export enum REVERSE_COIN_TYPE {
   wstETH = 'wstETH',

@@ -54,6 +54,7 @@ const override = {
 };
 
 export function EzUSDConnect(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
+  console.log(ezUSDJson[network].address);
   return EzUSDV1__factory.connect(ezUSDJson[network].address, signerOrProvider);
 }
 

@@ -34,7 +34,7 @@ import { ImageBox } from '../../../views/homePage/mainStyle';
 import icon_en from '../../../assets/header/ic_flag_en.svg';
 import icon_zh from '../../../assets/header/ic_flag_cn.svg';
 export default function AddressPopover() {
-  const { connectState, connect, disconnect, account, networkId } = useWallet();
+  const { connectState, connect, disconnect, account } = useWallet();
 
   const [open, setOpen] = useState<(EventTarget & HTMLButtonElement) | null>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
