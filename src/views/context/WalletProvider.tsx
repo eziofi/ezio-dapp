@@ -2,7 +2,7 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import Web3Modal from 'web3modal';
-import { NETWORK_TYPE, TOKEN_TYPE } from '../wallet/helpers/constant';
+import { TOKEN_TYPE } from '../wallet/helpers/constant';
 import { useQuery } from 'react-query';
 import { getAllowance } from '../wallet/helpers/contract_call';
 
@@ -16,6 +16,7 @@ interface IWalletContext {
   allowanceUSDT: string;
   allowanceUSDC: string;
   networkId: number | undefined;
+  switchNetwork: (network: string) => Promise<any>;
 }
 
 export const WalletContext = React.createContext<IWalletContext>({} as IWalletContext);
@@ -28,13 +29,9 @@ export default function WalletProvider({ children }: { children: ReactElement })
 
   useEffect(() => {
     if (!account && connectState === 'unconnected') {
-      connect()
-        .then(() => {})
-        .catch(() => {});
+      connect();
     } else {
-      subscribeProvider(walletProvider)
-        .then(() => {})
-        .catch(() => {});
+      subscribeProvider(walletProvider);
     }
   }, []);
 
@@ -56,82 +53,57 @@ export default function WalletProvider({ children }: { children: ReactElement })
   });
 
   const connect = async () => {
-    const infuraId = 'd7c876c8797d474cb2227e81fda1cd39';
-
-    const providerOptions = {
-      walletconnect: {
-        package: WalletConnectProvider,
-        options: {
-          // infuraId,
-          rpc: {
-            1337: 'https://rpc-ezio.duoblock.cn',
-          },
-          qrcodeModalOptions: {
-            desktopLinks: [
-              'ledger',
-              'tokenary',
-              'wallet',
-              'wallet 3',
-              'secuX',
-              'ambire',
-              'wallet3',
-              'apolloX',
-              'zerion',
-              'sequence',
-              'punkWallet',
-              'kryptoGO',
-              'nft',
-              'riceWallet',
-              'vision',
-              'keyring',
-            ],
-            mobileLinks: ['rainbow', 'metamask', 'argent', 'trust', 'imtoken', 'pillar'],
-          },
-        },
-      },
-    };
-
+    // const infuraId = 'd7c876c8797d474cb2227e81fda1cd39';
     const web3Modal = new Web3Modal({
       network: 'mainnet', // optional
       cacheProvider: true, // optional
-      providerOptions, // required
+      providerOptions: {
+        walletconnect: {
+          package: WalletConnectProvider,
+          options: {
+            // infuraId,
+            // rpc: {
+            //   1337: 'https://rpc-ezio.duoblock.cn',
+            // },
+            qrcodeModalOptions: {
+              desktopLinks: [
+                'ledger',
+                'tokenary',
+                'wallet',
+                'wallet 3',
+                'secuX',
+                'ambire',
+                'wallet3',
+                'apolloX',
+                'zerion',
+                'sequence',
+                'punkWallet',
+                'kryptoGO',
+                'nft',
+                'riceWallet',
+                'vision',
+                'keyring',
+              ],
+              mobileLinks: ['rainbow', 'metamask', 'argent', 'trust', 'imtoken', 'pillar'],
+            },
+          },
+        },
+      }, // required
     });
     setConnectState('connecting');
-    const connect = await web3Modal.connect();
+    const web3Connect = await web3Modal.connect();
 
-    setWalletProvider(connect);
-
-    await subscribeProvider(connect);
-
-    const provider = new ethers.providers.Web3Provider(connect);
+    setWalletProvider(web3Connect);
+    await subscribeProvider(web3Connect);
+    const provider = new ethers.providers.Web3Provider(web3Connect);
     setEthersProvider(provider);
-
     const signer = provider.getSigner();
     const address = await signer.getAddress();
     setAccount(address);
     setConnectState('connected');
-
     provider.on('eth_subscribe', (p1: any, p2: any) => {
       console.log(`eth_subscribe: ${p1}`);
     });
-
-    // provider.on('', (log, event) => {
-
-    // })
-
-    // console.log(`address: ${address}`);
-    // console.log(`address: ${address.substring(2)}`);
-    // const network = await provider.getNetwork();
-    // console.log(`chainId:${network.chainId}`);
-    // const accounts = await provider.send('eth_requestAccounts', []);
-    // console.log(accounts);
-
-    // const purchase = EzPurchase__factory.connect('contractagdress', signer);
-    // // 创建一个申购邀约
-    // purchase.createInvitation();
-    // const daiContract: DaiToken = DaiToken__factory.connect(ContractAddress.dai, signer);
-    // const daiBalance = await daiContract.balanceOf('e2eb1544b1ad7ff730e8c743b1f172d52a8bf386');
-    // console.log(`daiBalance: ${daiBalance}`);
   };
 
   const subscribeProvider = async (provider: any) => {
@@ -177,6 +149,62 @@ export default function WalletProvider({ children }: { children: ReactElement })
     setNetworkId(ethersProvider?._network?.chainId as number);
   });
 
+  const networkInfo = {
+    matic: {
+      chainId: '0x89',
+      chainName: 'Polygon',
+      nativeCurrency: {
+        name: 'MATIC',
+        symbol: 'MATIC',
+        decimals: 18,
+      },
+      // rpcUrls: ['https://rpc-mainnet.maticvigil.com/'],
+      blockExplorerUrls: ['https://polygonscan.com/'],
+    },
+    arbitrum: {
+      chainId: '0xa4b1',
+      chainName: 'arbitrum',
+      nativeCurrency: {
+        name: 'ETH',
+        symbol: 'ETH',
+        decimals: 18,
+      },
+      // rpcUrls: ['https://rpc-mainnet.maticvigil.com/'],
+      blockExplorerUrls: ['https://explorer.arbitrum.io'],
+    },
+  };
+
+  //切换网络
+  //walletProvider是上面的web3ModalProvider，而不是ethers获取的provider
+  async function switchNetwork(network: string) {
+    try {
+      await walletProvider.request({
+        method: 'wallet_switchEthereumChain',
+        // @ts-ignore
+        params: [{ chainId: networkInfo[network].chainId }],
+      });
+    } catch (error) {
+      console.error(error);
+      // @ts-ignore
+      if ((error.code = 4902)) {
+        return await addNetwork(network, walletProvider);
+      }
+      throw error;
+    }
+  }
+  //添加网络
+  async function addNetwork(network: string, web3ModalProvider: any) {
+    try {
+      return await web3ModalProvider.request({
+        method: 'wallet_addEthereumChain',
+        // @ts-ignore
+        params: [networkInfo[network]],
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const value = {
     connectState,
     account,
@@ -187,6 +215,7 @@ export default function WalletProvider({ children }: { children: ReactElement })
     allowanceUSDT,
     allowanceUSDC,
     networkId,
+    switchNetwork,
   };
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;
 }

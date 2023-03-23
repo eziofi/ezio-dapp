@@ -11,6 +11,9 @@ import ThemeSwitcher from './ThemeSwitcher';
 
 import { useLocation } from 'react-router-dom';
 import NetWorkPopover from './NetWorkPopover';
+import Nav from '../nav/Nav';
+import React from 'react';
+import useResponsive from '../../../hooks/useResponsive';
 
 // ----------------------------------------------------------------------
 
@@ -24,9 +27,9 @@ const HEADER_DESKTOP = 92;
 const StyledRoot = styled(AppBar)(({ theme }) => ({
   ...bgBlur({ color: theme.palette.background.default }),
   boxShadow: 'none',
-  [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${NAV_WIDTH + 1}px)`,
-  },
+  // [theme.breakpoints.up('lg')]: {
+  //   width: `calc(100% - ${NAV_WIDTH + 1}px)`,
+  // },
 }));
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
@@ -53,6 +56,7 @@ export default function Header({
   loadingText: string;
 }) {
   const { pathname } = useLocation();
+  const isDesktop = useResponsive('up', 'md', 'md');
 
   return (
     <StyledRoot>
@@ -62,23 +66,16 @@ export default function Header({
           sx={{
             mr: 1,
             color: 'text.primary',
-            display: { lg: 'none' },
+            display: { md: 'none' },
           }}
         >
           <Iconify icon="eva:menu-2-fill" />
         </IconButton>
+        {isDesktop && <Nav openNav={false} onCloseNav={() => {}} />}
 
-        {/*<Searchbar />*/}
         <Box sx={{ flexGrow: 1 }} />
 
-        <Stack
-          direction="row"
-          alignItems="center"
-          spacing={{
-            xs: 0.5,
-            sm: 1,
-          }}
-        >
+        <Stack direction="row" alignItems="center" spacing={1}>
           {loadingOpen && pathname !== '/dashboard/swap' && (
             <Chip
               sx={{

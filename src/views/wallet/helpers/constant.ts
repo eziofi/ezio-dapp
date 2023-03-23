@@ -10,11 +10,11 @@ export enum TOKEN_TYPE {
 
 export enum NETWORK_TYPE {
   arbitrum = 'arbitrum',
-  polygen = 'polygen',
+  polygon = 'polygon',
 }
 
 export enum NETWORK_ID {
-  polygen = 137,
+  polygon = 137,
   arbitrum = 42161,
 }
 
@@ -25,7 +25,7 @@ export enum REVERSE_COIN_TYPE {
 
 export const REVERSE_COIN = {
   [NETWORK_TYPE.arbitrum]: REVERSE_COIN_TYPE.wstETH,
-  [NETWORK_TYPE.polygen]: REVERSE_COIN_TYPE.stMATIC,
+  [NETWORK_TYPE.polygon]: REVERSE_COIN_TYPE.stMATIC,
 };
 
 export enum TRANSFER_TYPE {

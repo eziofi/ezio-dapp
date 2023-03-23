@@ -89,12 +89,12 @@ export default function MyNetWorkPopover() {
         PaperProps={{ sx: { width: 300, p: '10px' } }}
       >
         <PopoverStyle>
-          <Button sx={{ ...btnStyle }} onClick={() => handleCheckNetWork(NETWORK_ID.polygen)}>
+          <Button sx={{ ...btnStyle }} onClick={() => handleCheckNetWork(NETWORK_ID.polygon)}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <BaseIconFont name="icon-polygon" style={{ ...networkIconStyle }} />
-              {NETWORK_TYPE.polygen}
+              {NETWORK_TYPE.polygon}
             </div>
-            {checkNetworkId === NETWORK_ID.polygen && <CheckIcon />}
+            {checkNetworkId === NETWORK_ID.polygon && <CheckIcon />}
           </Button>
 
           <Button sx={{ ...btnStyle }} onClick={() => handleCheckNetWork(NETWORK_ID.arbitrum)}>

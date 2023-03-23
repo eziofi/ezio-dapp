@@ -15,12 +15,12 @@ import USDCIconLight from '../../assets/analytics/usdc_light.png';
 
 const reverseCoinDark = {
   [NETWORK_TYPE.arbitrum]: require('../../assets/analytics/wstETH_dark.png'),
-  [NETWORK_TYPE.polygen]: require('../../assets/analytics/stMatic_dark.png'),
+  [NETWORK_TYPE.polygon]: require('../../assets/analytics/stMatic_dark.png'),
 }[process.env.REACT_APP_NETWORK as keyof typeof NETWORK_TYPE];
 
 const reverseCoinLight = {
   [NETWORK_TYPE.arbitrum]: require('../../assets/analytics/wstETH_light.png'),
-  [NETWORK_TYPE.polygen]: require('../../assets/analytics/stMatic_light.png'),
+  [NETWORK_TYPE.polygon]: require('../../assets/analytics/stMatic_light.png'),
 }[process.env.REACT_APP_NETWORK as keyof typeof NETWORK_TYPE];
 
 const StyledIcon = styled('div')(({ theme }) => ({

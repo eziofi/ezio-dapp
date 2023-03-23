@@ -2,9 +2,10 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 //
-import Header from './header';
-import Nav from './nav';
+import Header from './header/Header';
+import Nav from './nav/Nav';
 import { Alert, AlertColor, Snackbar } from '@mui/material';
+import useResponsive from '../../hooks/useResponsive';
 
 // ----------------------------------------------------------------------
 
@@ -24,11 +25,11 @@ const Main = styled('div')(({ theme }) => ({
   minHeight: '100%',
   paddingTop: APP_BAR_MOBILE + 24,
   paddingBottom: theme.spacing(10),
-  [theme.breakpoints.up('lg')]: {
-    paddingTop: APP_BAR_DESKTOP + 24,
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-  },
+  // [theme.breakpoints.up('md')]: {
+  //   paddingTop: APP_BAR_DESKTOP + 24,
+  //   paddingLeft: theme.spacing(2),
+  //   paddingRight: theme.spacing(2),
+  // },
 }));
 
 const BackDropContent = styled('div')({
@@ -59,6 +60,8 @@ export default function DashboardLayout() {
   const [backLoadingOpen, setBackLoadingOpen] = useState(false);
   //控制loading遮罩层文字
   const [backLoadingText, setBackLoadingText] = useState('');
+
+  const isDesktop = useResponsive('up', 'md', 'md');
 
   const openBackLoading = () => {
     setBackLoadingOpen(true);
@@ -124,7 +127,7 @@ export default function DashboardLayout() {
         {/*</Backdrop>*/}
         <Header onOpenNav={() => setOpen(true)} loadingOpen={backLoadingOpen} loadingText={backLoadingText} />
 
-        <Nav openNav={open} onCloseNav={() => setOpen(false)} />
+        {!isDesktop && <Nav openNav={open} onCloseNav={() => setOpen(false)} />}
 
         <Main>
           <Outlet />

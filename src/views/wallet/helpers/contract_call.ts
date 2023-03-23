@@ -20,13 +20,13 @@ export const ezUSDJson = require('../arbitrum/contract/abi/EzUSDV1.json');
 // NETWORK CONFIG
 export const E2LPJson = {
   [NETWORK_TYPE.arbitrum]: require('../arbitrum/contract/abi/EzWETHV1.json'),
-  [NETWORK_TYPE.polygen]: require('../polygen/contract/abi/EzMATICV1.json'),
+  [NETWORK_TYPE.polygon]: require('../polygon/contract/abi/EzMATICV1.json'),
 }[process.env.REACT_APP_NETWORK as keyof typeof NETWORK_TYPE];
 
 export const ezioJson = require('../arbitrum/contract/abi/EzioV1.json');
 
 const TOKENS = {
-  [NETWORK_TYPE.polygen]: POLYGON_TOKENS,
+  [NETWORK_TYPE.polygon]: POLYGON_TOKENS,
   [NETWORK_TYPE.arbitrum]: ARBITRUM_TOKENS,
 }[process.env.REACT_APP_NETWORK as string] as any;
 
