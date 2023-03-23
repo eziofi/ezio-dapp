@@ -150,7 +150,7 @@ export default function WalletProvider({ children }: { children: ReactElement })
   });
 
   const networkInfo = {
-    matic: {
+    polygon: {
       chainId: '0x89',
       chainName: 'Polygon',
       nativeCurrency: {
