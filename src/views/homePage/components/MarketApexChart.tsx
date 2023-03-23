@@ -3,7 +3,7 @@ import ReactApexChart from 'react-apexcharts';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { queryMaticPrice, queryTotalNetWorth, queryTreasuryValue } from '../../../api/api';
 import { t } from 'i18next';
-import { formatString, getYMax } from '../../wallet/helpers/utilities';
+import { formatString, getYMax, getYMin } from '../../wallet/helpers/utilities';
 import { useContext, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { ColorModeContext } from '../../../theme';
@@ -110,13 +110,13 @@ export default function MarketApexChart() {
           //   max: getYMax(ethData),
           // },
           {
-            decimalsInFloat: 0,
+            decimalsInFloat: 1,
             opposite: true,
             title: {
               text: t('home.aRateAxis') + ' ( % ) ',
             },
-            min: 0,
-            max: getYMax([...aRate]),
+            min: getYMin(aRate),
+            max: getYMax(aRate),
           },
         ],
         tooltip: {
