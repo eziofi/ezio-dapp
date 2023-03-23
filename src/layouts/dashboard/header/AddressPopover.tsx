@@ -7,14 +7,16 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Divider,
   IconButton,
   Popover,
   Snackbar,
   Typography,
+  useTheme,
 } from '@mui/material';
 import useWallet from '../../../views/hooks/useWallet';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import { styled } from '@mui/material/styles';
@@ -25,7 +27,12 @@ import { formatDecimal, formatString } from '../../../views/wallet/helpers/utili
 import useResponsive from '../../../hooks/useResponsive';
 import { InlineSkeleton } from '../../../views/components/Skeleton';
 import BaseIconFont from '../../../views/components/BaseIconFont';
-
+import { ColorModeContext } from '../../../theme';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import NightlightIcon from '@mui/icons-material/Nightlight';
+import { ImageBox } from '../../../views/homePage/mainStyle';
+import icon_en from '../../../assets/header/ic_flag_en.svg';
+import icon_zh from '../../../assets/header/ic_flag_cn.svg';
 export default function AddressPopover() {
   const { connectState, connect, disconnect, account, networkId } = useWallet();
 
@@ -88,6 +95,44 @@ export default function AddressPopover() {
     setCopyFlag(false);
   };
 
+  const theme = useTheme();
+
+  const languageAndThemeStyle = {
+    width: '100%',
+    borderRadius: '12px',
+    // color: 'rgb(119, 128, 160)',
+    color: theme.palette.text.secondary,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '12px 8px',
+    fontWeight: 400,
+  };
+
+  const lang = localStorage.getItem('lang');
+
+  const { mode, toggleColorMode } = useContext(ColorModeContext);
+
+  type langType = 'en' | 'zh';
+
+  const LANGS = {
+    en: {
+      value: 'en',
+      label: 'English',
+      icon: icon_en,
+    },
+    zh: {
+      value: 'zh',
+      label: '简体中文',
+      icon: icon_zh,
+    },
+  };
+
+  function changeLang() {
+    localStorage.setItem('lang', lang === 'en' ? 'zh' : 'en');
+    window.location.reload();
+  }
+
   return (
     <>
       {connectState === 'connected' ? (
@@ -108,6 +153,7 @@ export default function AddressPopover() {
           {t('home.login')}
         </Button>
       )}
+
       <Popover
         open={Boolean(open)}
         anchorEl={open}
@@ -137,15 +183,32 @@ export default function AddressPopover() {
           </IconButton>
         </Box>
 
-        {/* <Divider sx={{ borderStyle: 'dashed' }} /> */}
-
         <Box sx={{ my: 1.5, px: 2.5 }}>
           {/*{balance ? <TextDiv>{formatString(balance).toString() + ' USDT'}</TextDiv> : <InlineSkeleton width={70} />}*/}
-          <NetworkWrapper>
-            <BaseIconFont name="icon-arbitrum" style={{ width: 32, height: 32 }} />
-            <TextDiv>Arbitrum</TextDiv>
-            {/*<div>您连接的网络是{networkName}</div>*/}
-          </NetworkWrapper>
+          {/* <NetworkWrapper> */}
+          {/* <BaseIconFont name="icon-arbitrum" style={{ width: 32, height: 32 }} /> */}
+          {/* <TextDiv>Arbitrum</TextDiv> */}
+          {/*<div>您连接的网络是{networkName}</div>*/}
+          {/* </NetworkWrapper> */}
+
+          <Divider />
+
+          <Box sx={{ margin: '20px 0' }}>
+            <Button sx={{ ...languageAndThemeStyle }} onClick={changeLang}>
+              <span>语言</span>
+              <span style={{ display: 'flex' }}>
+                {/* <ImageBox sx={{ background: 'rgba(255, 141, 26, 1)' }}>
+                <img src={LANGS[(lang || 'en') as langType].icon} alt={LANGS[(lang || 'en') as langType].label} />
+              </ImageBox> */}
+                {lang}
+              </span>
+            </Button>
+
+            <Button sx={{ ...languageAndThemeStyle }} onClick={toggleColorMode}>
+              <span>{mode} Theme</span>
+              <span>{mode === 'light' ? <NightlightIcon /> : <WbSunnyIcon />}</span>
+            </Button>
+          </Box>
           <Button
             sx={{
               width: '100%',

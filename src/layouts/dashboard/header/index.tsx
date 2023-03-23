@@ -10,6 +10,7 @@ import AddressPopover from './AddressPopover';
 import ThemeSwitcher from './ThemeSwitcher';
 
 import { useLocation } from 'react-router-dom';
+import NetWorkPopover from './NetWorkPopover';
 
 // ----------------------------------------------------------------------
 
@@ -88,10 +89,11 @@ export default function Header({
               variant="outlined"
             />
           )}
-          <ThemeSwitcher />
-          <LanguagePopover />
+          {/* <ThemeSwitcher /> */}
+          {/* <LanguagePopover /> */}
           {/*<NotificationsPopover />*/}
           {/*<AccountPopover />*/}
+          <NetWorkPopover />
           <AddressPopover />
         </Stack>
       </StyledToolbar>
