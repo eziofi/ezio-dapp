@@ -23,12 +23,14 @@ const icon = (name: string) => <SvgColor src={`/assets/icons/navbar/${name}.svg`
 // ----------------------------------------------------------------------
 
 export default function Nav({ openNav, onCloseNav }: { openNav: boolean; onCloseNav: () => void }) {
-  const { pathname } = useLocation();
   const { t } = useTranslation();
 
   const isDesktop = useResponsive('up', 'md', 'md');
 
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  const isCurrent = (path: string) => path === pathname;
 
   useEffect(() => {
     if (openNav) {
@@ -60,12 +62,26 @@ export default function Nav({ openNav, onCloseNav }: { openNav: boolean; onClose
   ];
 
   return isDesktop ? (
-    <Stack direction="row" alignItems="center" spacing={1}>
+    <Stack direction="row" alignItems="center" spacing={2}>
       <Box sx={{ py: 2, pr: 2, display: 'inline-flex' }}>
         <img src={logo} width="40" />
       </Box>
       {navConfig.map(navItem => (
-        <Button key={navItem.path} sx={{ color: 'text.primary', fontSize: 16 }} onClick={() => navigate(navItem.path)}>
+        <Button
+          key={navItem.path}
+          sx={{
+            color: theme =>
+              theme.palette.mode === 'light'
+                ? isCurrent(navItem.path)
+                  ? theme.palette.primary.main
+                  : theme.palette.grey[600]
+                : isCurrent(navItem.path)
+                ? theme.palette.primary.main
+                : theme.palette.grey[500],
+            fontSize: 16,
+          }}
+          onClick={() => navigate(navItem.path)}
+        >
           {navItem.title}
         </Button>
       ))}
