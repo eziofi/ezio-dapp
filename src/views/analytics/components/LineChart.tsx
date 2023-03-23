@@ -8,15 +8,16 @@ import { useContext, useEffect, useState } from 'react';
 import { ColorModeContext } from '../../../theme';
 import RenderSkeleton from '../../homePage/components/RenderSkeleton';
 import useWallet from '../../hooks/useWallet';
+import { NETWORK_TYPE } from '../../wallet/helpers/constant';
 
 export default function LineChart() {
   const [option, setOption] = useState<any>(null);
   const { mode } = useContext(ColorModeContext);
 
-  const { networkId } = useWallet();
+  const { networkName } = useWallet();
 
-  useQuery('convertDownPrice', () => convertDownPrice(networkId), {
-    enabled: !!networkId,
+  useQuery('convertDownPrice', () => convertDownPrice(networkName as NETWORK_TYPE), {
+    enabled: !!networkName,
     onSuccess: data => {
       const XData = data.data.data.map(i => i.groupTime.substring(5));
       const ezMaticPrice = data.data.data.map(i => i.ezMaticPrice);

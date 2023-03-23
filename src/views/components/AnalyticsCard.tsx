@@ -54,7 +54,7 @@ export default function AnalyticsCard({
   const { ethersProvider } = useWallet();
 
   const theme = useTheme();
-  const { reverseCoin, networkId } = useWallet();
+  const { reverseCoin, networkName } = useWallet();
 
   const api = {
     [ANALYTICS_CARD_TYPE.USDC]: getPooledA,
@@ -86,10 +86,12 @@ export default function AnalyticsCard({
   const { data, isLoading } = useQuery(
     ['AnalyticsCard', type],
     () => {
-      return type === ANALYTICS_CARD_TYPE.FEE ? api[type](networkId) : api[type](ethersProvider!.getSigner());
+      return type === ANALYTICS_CARD_TYPE.FEE
+        ? api[type](networkName as NETWORK_TYPE)
+        : api[type](ethersProvider!.getSigner(), networkName as NETWORK_TYPE);
     },
     {
-      enabled: !!ethersProvider && !!networkId,
+      enabled: !!ethersProvider && !!networkName,
       // @ts-ignore
       onSuccess: data1 => {
         // if (type === ANALYSIS_CARD_TYPE.rate) {

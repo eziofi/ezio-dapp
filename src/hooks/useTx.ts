@@ -1,6 +1,13 @@
 import { BigNumber, ethers, Signer } from 'ethers';
 import { Provider } from '@ethersproject/providers';
-import { MAX_UINT256, ARBITRUM_TOKENS, QUOTE_CHANNEL, TOKEN_TYPE } from '../views/wallet/helpers/constant';
+import {
+  MAX_UINT256,
+  ARBITRUM_TOKENS,
+  QUOTE_CHANNEL,
+  TOKEN_TYPE,
+  NETWORK_TYPE,
+  REVERSE_COIN,
+} from '../views/wallet/helpers/constant';
 import { SwapQuoteStruct } from '../views/wallet/arbitrum/contract/contracts/interfaces/v1/IEzio';
 import { getQuote } from '../views/wallet/helpers/utilities';
 import {
@@ -10,14 +17,13 @@ import {
   reverseCoinConnect,
   USDCConnect,
   USDTConnect,
-  USDT_ADDRESS,
-  USDC_ADDRESS,
   ezioJson,
-  REVERSE_COIN_ADDRESS,
+  TOKENS,
 } from '../views/wallet/helpers/contract_call';
 import { useContext } from 'react';
 import { UIContext } from '../layouts/dashboard/DashboardLayout';
 import { useTranslation } from 'react-i18next';
+import useWallet from '../views/hooks/useWallet';
 
 const channel = process.env.REACT_APP_QUOTE_CHANNEL === '1inch' ? QUOTE_CHANNEL.OneInch : QUOTE_CHANNEL.ZeroEx;
 
@@ -25,11 +31,16 @@ export default function useTx() {
   const { setBackLoadingText, openMsg } = useContext(UIContext);
   const { t } = useTranslation();
 
+  const { networkName } = useWallet();
+
   async function approve(fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC, signerOrProvider: Signer | Provider) {
     console.log('approve');
     setBackLoadingText(t('message.approving'));
-    const approveTx = await (fromType === TOKEN_TYPE.USDT ? USDTConnect : USDCConnect)(signerOrProvider).approve(
-      ezioJson.address,
+    const approveTx = await (fromType === TOKEN_TYPE.USDT ? USDTConnect : USDCConnect)(
+      signerOrProvider,
+      networkName as NETWORK_TYPE,
+    ).approve(
+      ezioJson['arbitrum'].address,
       MAX_UINT256.toString(),
       // '0',
     );
@@ -74,11 +85,17 @@ export default function useTx() {
     if (fromType === TOKEN_TYPE.USDT) {
       // 购买A之前，先把USDT换成USDC
       setBackLoadingText(t('message.request0x'));
-      quoteResponse = await getQuote(channel, USDT_ADDRESS, USDC_ADDRESS, String(amount * 1000000), slippage);
+      quoteResponse = await getQuote(
+        channel,
+        TOKENS[networkName as NETWORK_TYPE].USDT,
+        TOKENS[networkName as NETWORK_TYPE].USDC,
+        String(amount * 1000000),
+        slippage,
+      );
     } else if (fromType === TOKEN_TYPE.USDC) {
       // 直接购买，不通过1inch
       quoteResponse = {
-        sellToken: USDC_ADDRESS,
+        sellToken: TOKENS[networkName as NETWORK_TYPE].USDC,
         buyToken: ethers.constants.AddressZero,
         sellAmount: String(amount * 1000000),
         swapCallData: ethers.constants.HashZero,
@@ -95,7 +112,11 @@ export default function useTx() {
     // await approveTx.wait();
     // console.log('approved');
     setBackLoadingText(t('message.sendingTx'));
-    const purchaseTx = await EzioConnect(signerOrProvider).purchase(TOKEN_TYPE.ezUSD, channel, [quoteResponse]);
+    const purchaseTx = await EzioConnect(signerOrProvider, networkName as NETWORK_TYPE).purchase(
+      TOKEN_TYPE.ezUSD,
+      channel,
+      [quoteResponse],
+    );
     setBackLoadingText(t('message.waitingTx'));
     await purchaseTx.wait();
   }
@@ -106,15 +127,19 @@ export default function useTx() {
     amount: number,
     slippage: number,
   ) {
-    const ezio = EzioConnect(signerOrProvider);
+    const ezio = EzioConnect(signerOrProvider, networkName as NETWORK_TYPE);
     let quotes: SwapQuoteStruct[];
     // 先把USDC/USDT换成储备币
-    const fromTokenAddress = fromType === TOKEN_TYPE.USDT ? USDT_ADDRESS : USDC_ADDRESS;
+    const fromTokenAddress =
+      fromType === TOKEN_TYPE.USDT
+        ? TOKENS[networkName as NETWORK_TYPE].USDT
+        : TOKENS[networkName as NETWORK_TYPE].USDC;
     setBackLoadingText(t('message.request0x'));
     const quoteResponse = await getQuote(
       channel,
       fromTokenAddress,
-      REVERSE_COIN_ADDRESS,
+      // @ts-ignore
+      TOKENS[networkName][REVERSE_COIN[network]],
       String(amount * 1000000),
       slippage,
     );
@@ -143,14 +168,19 @@ export default function useTx() {
       // 如果金库USDC足够，用USDC转换成储备币
       const convertSellAmount =
         fromType === TOKEN_TYPE.USDT
-          ? await ezio.convertAmt(fromTokenAddress, USDC_ADDRESS, BigNumber.from(String(amount * 1000000)))
+          ? await ezio.convertAmt(
+              fromTokenAddress,
+              TOKENS[networkName as NETWORK_TYPE].USDC,
+              BigNumber.from(String(amount * 1000000)),
+            )
           : // 这是是否要转换小数位
             String(amount * 1000000);
       setBackLoadingText(t('message.request0x'));
       const quoteResponse2 = await getQuote(
         channel,
-        USDC_ADDRESS,
-        REVERSE_COIN_ADDRESS,
+        TOKENS[networkName as NETWORK_TYPE].USDC,
+        // @ts-ignore
+        TOKENS[networkName][REVERSE_COIN[network]],
         convertSellAmount.toString(),
         slippage,
       );
@@ -209,28 +239,29 @@ export default function useTx() {
       setBackLoadingText(t('message.request0x'));
       const quoteResponse = await getQuote(
         channel,
-        REVERSE_COIN_ADDRESS,
-        USDC_ADDRESS,
+        // @ts-ignore
+        TOKENS[networkName][REVERSE_COIN[network]],
+        TOKENS[networkName as NETWORK_TYPE].USDC,
         convertAmount.toString(),
         slippage,
       );
       console.log('USDC储量不够，动用储备币换成USDC');
-      await EzioConnect(signerOrProvider)
+      await EzioConnect(signerOrProvider, networkName as NETWORK_TYPE)
         .connect(signerOrProvider)
-        .redeem(fromType, channel, redeemAmount, USDC_ADDRESS, quoteResponse);
+        .redeem(fromType, channel, redeemAmount, TOKENS[networkName as NETWORK_TYPE].USDC, quoteResponse);
     } else {
       // 把USDC直接转给用户
       console.log('把USDC直接转给用户');
       const quoteResponse = {
-        sellToken: USDC_ADDRESS,
+        sellToken: TOKENS[networkName as NETWORK_TYPE].USDC,
         buyToken: ethers.constants.AddressZero,
         sellAmount: convertAmount,
         swapCallData: ethers.constants.HashZero,
       };
       setBackLoadingText(t('message.sendingTx'));
-      const purchaseTx = await EzioConnect(signerOrProvider)
+      const purchaseTx = await EzioConnect(signerOrProvider, networkName as NETWORK_TYPE)
         .connect(signerOrProvider)
-        .redeem(fromType, channel, redeemAmount, USDC_ADDRESS, quoteResponse);
+        .redeem(fromType, channel, redeemAmount, TOKENS[networkName as NETWORK_TYPE].USDC, quoteResponse);
       setBackLoadingText(t('message.waitingTx'));
       await purchaseTx.wait();
     }
@@ -255,25 +286,35 @@ export default function useTx() {
       setBackLoadingText(t('message.request0x'));
       const quoteResponse = await getQuote(
         channel,
-        REVERSE_COIN_ADDRESS,
-        USDC_ADDRESS,
+        // @ts-ignore
+        TOKENS[networkName][REVERSE_COIN[network]],
+        TOKENS[networkName as NETWORK_TYPE].USDC,
         convertAmount.toString(),
         slippage,
       );
-      await EzioConnect(signerOrProvider).redeem(1, channel, redeemAmount, REVERSE_COIN_ADDRESS, quoteResponse);
+      await EzioConnect(signerOrProvider, networkName as NETWORK_TYPE).redeem(
+        1,
+        channel,
+        redeemAmount,
+        // @ts-ignore
+        TOKENS[networkName][REVERSE_COIN[network]],
+        quoteResponse,
+      );
     } else {
       // convertAmount为零
       let quoteResponse6 = {
-        sellToken: REVERSE_COIN_ADDRESS,
+        // @ts-ignore
+        sellToken: TOKENS[networkName][REVERSE_COIN[network]],
         buyToken: ethers.constants.AddressZero,
         sellAmount: convertAmount.toString(),
         swapCallData: ethers.constants.HashZero,
       };
-      const purchaseTx = await EzioConnect(signerOrProvider).redeem(
+      const purchaseTx = await EzioConnect(signerOrProvider, networkName as NETWORK_TYPE).redeem(
         1,
         channel,
         convertAmount,
-        REVERSE_COIN_ADDRESS,
+        // @ts-ignore
+        TOKENS[network][REVERSE_COIN[network]],
         quoteResponse6,
       );
       setBackLoadingText(t('message.waitingTx'));
@@ -289,10 +330,10 @@ export default function useTx() {
   ) => {
     let amt: BigNumber;
     let quoteQty: BigNumber = BigNumber.from('0');
-    const aToken = EzUSDConnect(signerOrProvider);
-    const bToken = E2LPConnect(signerOrProvider);
-    const ezio = EzioConnect(signerOrProvider);
-    const reverseCoin = reverseCoinConnect(signerOrProvider);
+    const aToken = EzUSDConnect(signerOrProvider, networkName as NETWORK_TYPE);
+    const bToken = E2LPConnect(signerOrProvider, networkName as NETWORK_TYPE);
+    const ezio = EzioConnect(signerOrProvider, networkName as NETWORK_TYPE);
+    const reverseCoin = reverseCoinConnect(signerOrProvider, networkName as NETWORK_TYPE);
     if (fromToken === TOKEN_TYPE.ezUSD) {
       if (toToken === TOKEN_TYPE.USDC) {
         amt = qty.mul(await aToken.netWorth()).div(BigNumber.from('10').pow(await aToken.decimals()));
@@ -302,7 +343,8 @@ export default function useTx() {
           quoteQty = amt
             .sub(await ezio.pooledA())
             .mul(BigNumber.from('10').pow(await reverseCoin.decimals()))
-            .div(await ezio.getPrice(REVERSE_COIN_ADDRESS));
+            // @ts-ignore
+            .div(await ezio.getPrice(TOKENS[network][REVERSE_COIN[network]]));
         }
       }
     } else {

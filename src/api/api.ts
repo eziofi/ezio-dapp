@@ -1,4 +1,4 @@
-import { NETWORK_ID } from './../views/wallet/helpers/constant';
+import { NETWORK_ID, NETWORK_TYPE } from './../views/wallet/helpers/constant';
 import useWallet from '../views/hooks/useWallet';
 import httpClient from './request';
 
@@ -16,13 +16,13 @@ interface ITokenInfoRes {
   recordTime: string;
 }
 
-function backNetwork(networkId: number | undefined) {
-  if (networkId === NETWORK_ID.arbitrum) {
-    return 'arbitrum';
-  } else {
-    return 'polygon';
-  }
-}
+// function backNetwork(networkId: NETWORK_TYPE | undefined) {
+//   if (networkId === NETWORK_ID.arbitrum) {
+//     return 'arbitrum';
+//   } else {
+//     return 'polygon';
+//   }
+// }
 
 export function queryTokenInfo() {
   // return httpClient.get<ITokenInfoRes[]>('/api/queryTokenInfo');
@@ -50,9 +50,9 @@ interface ITokenGroup {
   groupTime: string;
 }
 // 市值曲线
-export function queryTokenGroup(QueryType: string, networkId: number | undefined) {
+export function queryTokenGroup(QueryType: string, networkName: NETWORK_TYPE | undefined) {
   // return httpClient.get<ITokenGroup[]>('/api/queryTokenGroup');
-  return httpClient.get<ICommonRes<ITokenGroup[]>>(`/api/${backNetwork(networkId)}/ezioGroupSupply`, {
+  return httpClient.get<ICommonRes<ITokenGroup[]>>(`/api/${networkName}/ezioGroupSupply`, {
     params: { QueryType },
   });
 }
@@ -74,8 +74,8 @@ interface ITreasuryValue {
   data: { groupTime: string; treasuryValue: string }[];
 }
 
-export function queryTreasuryValue(QueryType: string, networkId: number | undefined) {
-  return httpClient.get<ITreasuryValue>(`/api/${backNetwork(networkId)}/lineGraph/treasuryValue`, {
+export function queryTreasuryValue(QueryType: string, networkName: NETWORK_TYPE | undefined) {
+  return httpClient.get<ITreasuryValue>(`/api/${networkName}/lineGraph/treasuryValue`, {
     params: { QueryType },
   });
 }
@@ -88,8 +88,8 @@ interface IAbTotalnetworth {
   data: { groupTime: string; ezUsdTotalnetworth: number; ezMaticTotalnetworth: number }[];
 }
 
-export function queryAbTotalnetworth(QueryType: string, networkId: number | undefined) {
-  return httpClient.get<IAbTotalnetworth>(`api/${backNetwork(networkId)}/lineGraph/abTotalnetworth`, {
+export function queryAbTotalnetworth(QueryType: string, networkName: NETWORK_TYPE | undefined) {
+  return httpClient.get<IAbTotalnetworth>(`api/${networkName}/lineGraph/abTotalnetworth`, {
     params: { QueryType },
   });
 }
@@ -100,8 +100,8 @@ interface IMaticPrice {
   data: { groupTime: string; ezMaticPrice: number; stMaticPrice: number; ezUsdRate: number }[];
 }
 
-export function queryMaticPrice(QueryType: string, networkId: number | undefined) {
-  return httpClient.get<IMaticPrice>(`api/${backNetwork(networkId)}/lineGraph/maticPrice`, { params: { QueryType } });
+export function queryMaticPrice(QueryType: string, networkName: NETWORK_TYPE | undefined) {
+  return httpClient.get<IMaticPrice>(`api/${networkName}/lineGraph/maticPrice`, { params: { QueryType } });
 }
 
 // AccumulatedFees24H 过去24h手续费收入
@@ -112,8 +112,8 @@ interface IAccumulatedFees24H {
   data: { fees24H: string };
 }
 
-export function queryAccumulatedFees24H(networkId: number | undefined) {
-  return httpClient.get<IAccumulatedFees24H>(`api/${backNetwork(networkId)}/group/accumulatedFees24H`);
+export function queryAccumulatedFees24H(networkName: NETWORK_TYPE | undefined) {
+  return httpClient.get<IAccumulatedFees24H>(`api/${networkName}/group/accumulatedFees24H`);
 }
 
 // DailyAccumulatedFees 按日分组手续费
@@ -124,8 +124,8 @@ interface IDailyAccumulatedFees {
   data: { groupTime: string; dailyAccumulatedFees: number }[];
 }
 
-export function queryDailyAccumulatedFees(networkId: number | undefined) {
-  return httpClient.get<IDailyAccumulatedFees>(`api/${backNetwork(networkId)}/barChart/dailyAccumulatedFees`);
+export function queryDailyAccumulatedFees(networkName: NETWORK_TYPE | undefined) {
+  return httpClient.get<IDailyAccumulatedFees>(`api/${networkName}/barChart/dailyAccumulatedFees`);
 }
 
 // AccumulatedFees 累计EZIO手续费
@@ -136,8 +136,8 @@ interface IAccumulatedFees {
   data: { groupTime: string; accumulatedFees: number }[];
 }
 
-export function queryAccumulatedFees(networkId: number | undefined) {
-  return httpClient.get<IAccumulatedFees>(`api/${backNetwork(networkId)}/lineGraph/accumulatedFees`);
+export function queryAccumulatedFees(networkName: NETWORK_TYPE | undefined) {
+  return httpClient.get<IAccumulatedFees>(`api/${networkName}/lineGraph/accumulatedFees`);
 }
 
 // 统计ezWETH的价格和下折价格
@@ -148,6 +148,6 @@ interface IConvertDownPrice {
   data: { ezMaticPrice: number; convertDownPrice: number; groupTime: string }[];
 }
 
-export function convertDownPrice(networkId: number | undefined) {
-  return httpClient.get<IConvertDownPrice>(`/api/${backNetwork(networkId)}/lineGraph/convertDownPrice`);
+export function convertDownPrice(networkName: NETWORK_TYPE | undefined) {
+  return httpClient.get<IConvertDownPrice>(`/api/${networkName}/lineGraph/convertDownPrice`);
 }

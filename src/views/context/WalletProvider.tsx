@@ -2,7 +2,7 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import Web3Modal from 'web3modal';
-import { TOKEN_TYPE } from '../wallet/helpers/constant';
+import { NETWORK_ID, NETWORK_TYPE, TOKEN_TYPE } from '../wallet/helpers/constant';
 import { useQuery } from 'react-query';
 import { getAllowance } from '../wallet/helpers/contract_call';
 
@@ -15,7 +15,8 @@ interface IWalletContext {
   connectState: string;
   allowanceUSDT: string;
   allowanceUSDC: string;
-  networkId: number | undefined;
+  networkId: NETWORK_ID | undefined;
+  networkName: NETWORK_TYPE | '';
   switchNetwork: (network: string) => Promise<any>;
 }
 
@@ -35,22 +36,34 @@ export default function WalletProvider({ children }: { children: ReactElement })
     }
   }, []);
 
-  // const getNetwork = () => getChainData(this.state.chainId).network;
+  const [networkId, setNetworkId] = useState<NETWORK_ID | undefined>(undefined);
+  const [networkName, setNetworkName] = useState<NETWORK_TYPE | ''>('');
 
+  // const getNetwork = () => getChainData(this.state.chainId).network;
   const [allowanceUSDT, setAllowanceUSDT] = useState('');
+
   const [allowanceUSDC, setAllowanceUSDC] = useState('');
-  useQuery(['allowance', TOKEN_TYPE.USDT], () => getAllowance(ethersProvider!.getSigner(), account, TOKEN_TYPE.USDT), {
-    enabled: !!ethersProvider && !!account,
-    onSuccess: data => {
-      setAllowanceUSDT(data.toString());
+
+  useQuery(
+    ['allowance', TOKEN_TYPE.USDT],
+    () => getAllowance(ethersProvider!.getSigner(), account, TOKEN_TYPE.USDT, networkName as NETWORK_TYPE),
+    {
+      enabled: !!ethersProvider && !!account && !!networkName,
+      onSuccess: data => {
+        setAllowanceUSDT(data.toString());
+      },
     },
-  });
-  useQuery(['allowance', TOKEN_TYPE.USDC], () => getAllowance(ethersProvider!.getSigner(), account, TOKEN_TYPE.USDC), {
-    enabled: !!ethersProvider && !!account,
-    onSuccess: data => {
-      setAllowanceUSDC(data.toString());
+  );
+  useQuery(
+    ['allowance', TOKEN_TYPE.USDC],
+    () => getAllowance(ethersProvider!.getSigner(), account, TOKEN_TYPE.USDC, networkName as NETWORK_TYPE),
+    {
+      enabled: !!ethersProvider && !!account && !!networkName,
+      onSuccess: data => {
+        setAllowanceUSDC(data.toString());
+      },
     },
-  });
+  );
 
   const connect = async () => {
     // const infuraId = 'd7c876c8797d474cb2227e81fda1cd39';
@@ -143,10 +156,11 @@ export default function WalletProvider({ children }: { children: ReactElement })
     setConnectState('unconnected');
   };
 
-  const [networkId, setNetworkId] = useState<number | undefined>(undefined);
-
   useEffect(() => {
-    setNetworkId(ethersProvider?._network?.chainId as number);
+    if (ethersProvider) {
+      setNetworkId(ethersProvider?._network?.chainId as NETWORK_ID);
+      setNetworkName(ethersProvider?._network?.name as NETWORK_TYPE);
+    }
   });
 
   const networkInfo = {
@@ -215,6 +229,7 @@ export default function WalletProvider({ children }: { children: ReactElement })
     allowanceUSDT,
     allowanceUSDC,
     networkId,
+    networkName,
     switchNetwork,
   };
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;

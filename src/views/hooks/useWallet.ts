@@ -13,6 +13,7 @@ export default function useWallet() {
     allowanceUSDT,
     allowanceUSDC,
     networkId,
+    networkName,
     switchNetwork,
   } = useContext(WalletContext);
 
@@ -29,6 +30,7 @@ export default function useWallet() {
     allowanceUSDC,
     reverseCoin,
     networkId,
+    networkName,
     switchNetwork,
   };
 }

@@ -11,6 +11,7 @@ import RenderSkeleton from './RenderSkeleton';
 import { HomeCardHeader } from '../mainStyle';
 import RenderSelect from './RenderSelect';
 import useWallet from '../../hooks/useWallet';
+import { NETWORK_TYPE } from '../../wallet/helpers/constant';
 
 export default function NetWorthApexChart() {
   const [option, setOption] = useState<any>(null);
@@ -25,10 +26,10 @@ export default function NetWorthApexChart() {
   }, [mode]);
 
   const [queryType, setQueryType] = useState('hour');
-  const { reverseCoin, networkId } = useWallet();
+  const { reverseCoin, networkName } = useWallet();
 
-  useQuery(['queryMaticPrice', queryType], () => queryMaticPrice(queryType, networkId), {
-    enabled: !!reverseCoin && !!networkId,
+  useQuery(['queryMaticPrice', queryType], () => queryMaticPrice(queryType, networkName as NETWORK_TYPE), {
+    enabled: !!reverseCoin && !!networkName,
     onSuccess: ({ data }) => {
       const XData = data.data.map(i => {
         if (queryType === 'hour') {

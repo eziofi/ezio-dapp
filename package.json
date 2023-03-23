@@ -69,8 +69,7 @@
     "webpack-bundle-analyzer": "^4.8.0"
   },
   "scripts": {
-    "start-polygon": "env-cmd -f .env.polygon craco start",
-    "start-arbitrum": "env-cmd -f .env.arbitrum craco start",
+    "start": "craco start",
     "build": "CI=false && craco build",
     "test": "craco test",
     "eject": "react-scripts eject"

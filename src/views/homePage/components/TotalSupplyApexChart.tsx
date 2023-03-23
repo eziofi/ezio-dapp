@@ -11,6 +11,7 @@ import RenderSkeleton from './RenderSkeleton';
 import { HomeCardHeader } from '../mainStyle';
 import RenderSelect from './RenderSelect';
 import useWallet from '../../hooks/useWallet';
+import { NETWORK_TYPE } from '../../wallet/helpers/constant';
 
 export default function TotalSupplyApexChart() {
   const [option, setOption] = useState<any>(null);
@@ -26,10 +27,10 @@ export default function TotalSupplyApexChart() {
 
   const [queryType, setQueryType] = useState('hour');
 
-  const { networkId } = useWallet();
+  const { networkName } = useWallet();
 
-  useQuery(['queryTokenGroup', queryType], () => queryTokenGroup(queryType, networkId), {
-    enabled: !!networkId,
+  useQuery(['queryTokenGroup', queryType], () => queryTokenGroup(queryType, networkName as NETWORK_TYPE), {
+    enabled: !!networkName,
     onSuccess: ({ data }) => {
       const XData = data.data.map(i => {
         if (queryType === 'hour') {

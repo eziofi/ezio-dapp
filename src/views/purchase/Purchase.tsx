@@ -3,7 +3,7 @@ import './animation.less';
 import { Box, Button, CardContent, CircularProgress, IconButton, Toolbar, Typography, useTheme } from '@mui/material';
 import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
 import { Signer } from 'ethers';
-import { TOKEN_DECIMAL, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
+import { NETWORK_ID, NETWORK_TYPE, TOKEN_DECIMAL, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
 import useWallet from '../hooks/useWallet';
 import { formatDecimal, formatString, timestampFormat } from '../wallet/helpers/utilities';
 import { useTranslation } from 'react-i18next';
@@ -167,7 +167,7 @@ export default function Purchase() {
 
   const { balance, refetchBalance } = useBalance(type === TRANSFER_TYPE.PURCHASE ? redeemTokenType : tokenType);
 
-  const { ethersProvider, account, allowanceUSDT, allowanceUSDC } = useWallet();
+  const { ethersProvider, account, allowanceUSDT, allowanceUSDC, networkName } = useWallet();
 
   const [needApprove, setNeedApprove] = useState(false);
 
@@ -186,13 +186,17 @@ export default function Purchase() {
     }
   }, [redeemTokenType, type, allowanceUSDT, allowanceUSDC]);
 
-  const { data: rate } = useQuery(['ezUSDDayRate'], () => interestRateYear(ethersProvider!.getSigner()), {
-    enabled: !!ethersProvider,
-    // onSuccess: data => {
-    //   const res = formatNetWorth(data);
-    //   debugger;
-    // },
-  });
+  const { data: rate } = useQuery(
+    ['ezUSDDayRate'],
+    () => interestRateYear(ethersProvider!.getSigner(), networkName as NETWORK_TYPE),
+    {
+      enabled: !!ethersProvider && !!networkName,
+      // onSuccess: data => {
+      //   const res = formatNetWorth(data);
+      //   debugger;
+      // },
+    },
+  );
 
   function handleError(error: any) {
     if (error.reason) {

@@ -7,6 +7,8 @@ import { convertDownPrice, ezWETHFundCost, getLeverage, interestRateYear } from 
 import { useQuery } from 'react-query';
 import BaseIconFont from './BaseIconFont';
 import { InlineSkeleton } from './Skeleton';
+import * as Net from 'net';
+import { NETWORK_TYPE } from '../wallet/helpers/constant';
 
 export enum HOME_CARD_TYPE {
   Rate,
@@ -25,7 +27,7 @@ export default function HomeCard({
   sx?: SxProps<Theme>;
 }) {
   const { t } = useTranslation();
-  const { ethersProvider } = useWallet();
+  const { ethersProvider, networkName } = useWallet();
 
   const theme = useTheme();
 
@@ -47,13 +49,17 @@ export default function HomeCard({
     [HOME_CARD_TYPE.RebalancePrice]: 'icon-xiaoshoujiage-copy',
     [HOME_CARD_TYPE.Leverage]: 'icon-gangganshuai-copy',
   };
-  // @ts-ignore
-  const { data } = useQuery(['totalSupply', type], () => api[type](ethersProvider!.getSigner()), {
-    enabled: !!ethersProvider,
-    onError: err => {
-      // debugger;
+  const { data } = useQuery(
+    ['totalSupply', type],
+    // @ts-ignore
+    () => api[type](ethersProvider!.getSigner(), networkName as NETWORK_TYPE),
+    {
+      enabled: !!ethersProvider && !!networkName,
+      onError: err => {
+        // debugger;
+      },
     },
-  });
+  );
 
   const IconDivBorderColor = {
     [HOME_CARD_TYPE.Rate]: '#4481EB',
