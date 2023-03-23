@@ -17,6 +17,7 @@ export default function NetWorkPopover() {
   const id = open ? 'simple-popover' : undefined;
   const [checkNetworkId, setCheckNetworkId] = React.useState<NETWORK_ID | null>(null);
   const { networkId, switchNetwork } = useWallet();
+  console.log('🚀 ~ file: netWorkPopover.tsx:20 ~ NetWorkPopover ~ networkId:', networkId);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setFlag(true);
@@ -68,11 +69,12 @@ export default function NetWorkPopover() {
   return (
     <>
       <Button onClick={handleClick} aria-describedby={id}>
-        {checkNetworkId === NETWORK_ID.arbitrum ? (
-          <BaseIconFont name="icon-arbitrum" style={{ width: 24, height: 24, marginRight: '4px' }} />
-        ) : (
-          <BaseIconFont name="icon-Polygon" style={{ width: 24, height: 24, marginRight: '4px' }} />
-        )}
+        {checkNetworkId &&
+          (checkNetworkId === NETWORK_ID.arbitrum ? (
+            <BaseIconFont name="icon-arbitrum" style={{ width: 24, height: 24, marginRight: '4px' }} />
+          ) : (
+            <BaseIconFont name="icon-Polygon" style={{ width: 24, height: 24, marginRight: '4px' }} />
+          ))}
         {flag ? <ExpandLessIcon /> : <ExpandMoreIcon />}
       </Button>
 
