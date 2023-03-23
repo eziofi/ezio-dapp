@@ -83,19 +83,25 @@ export default function AnalyticsCard({
   };
 
   // @ts-ignore
-  const { data, isLoading } = useQuery(['AnalyticsCard', type], () => api[type](ethersProvider!.getSigner()), {
-    enabled: !!ethersProvider,
-    // @ts-ignore
-    onSuccess: data1 => {
-      // if (type === ANALYSIS_CARD_TYPE.rate) {
-      //   const res = formatNetWorth(data1);
-      //   debugger;
-      // }
+  const { data, isLoading } = useQuery(
+    ['AnalyticsCard', type],
+    () => {
+      return type === ANALYTICS_CARD_TYPE.FEE ? api[type](networkId) : api[type](ethersProvider!.getSigner());
     },
-    onError: err => {
-      // debugger;
+    {
+      enabled: !!ethersProvider && !!networkId,
+      // @ts-ignore
+      onSuccess: data1 => {
+        // if (type === ANALYSIS_CARD_TYPE.rate) {
+        //   const res = formatNetWorth(data1);
+        //   debugger;
+        // }
+      },
+      onError: err => {
+        // debugger;
+      },
     },
-  });
+  );
 
   return (
     <Card

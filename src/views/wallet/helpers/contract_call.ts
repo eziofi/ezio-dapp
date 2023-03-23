@@ -119,6 +119,7 @@ export async function ezWETHReverse(signerOrProvider: Signer | Provider) {
  * @returns 过去24小时手续费汇总 fees24H
  */
 export async function commissionIncome(networkId?: number | undefined) {
+  console.log('-----------', networkId);
   const res = await (await queryAccumulatedFees24H(networkId)).data.data.fees24H;
   return res;
 }
