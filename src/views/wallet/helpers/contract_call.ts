@@ -15,6 +15,7 @@ import type { Provider } from '@ethersproject/providers';
 import { formatDecimal, formatString } from './utilities';
 
 import { queryAccumulatedFees24H } from '../../../api/api';
+import useWallet from '../../hooks/useWallet';
 
 export const ezUSDJson = require('../arbitrum/contract/abi/EzUSDV1.json');
 // NETWORK CONFIG
@@ -117,8 +118,8 @@ export async function ezWETHReverse(signerOrProvider: Signer | Provider) {
  * 获取 手续费收入
  * @returns 过去24小时手续费汇总 fees24H
  */
-export async function commissionIncome() {
-  const res = await (await queryAccumulatedFees24H()).data.data.fees24H;
+export async function commissionIncome(networkId?: number | undefined) {
+  const res = await (await queryAccumulatedFees24H(networkId)).data.data.fees24H;
   return res;
 }
 

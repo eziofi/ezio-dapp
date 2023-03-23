@@ -217,7 +217,7 @@ export function getYMax(data: number[]) {
     return maxYValue;
   } else {
     const floatString = max.toString().split('.')[1];
-    let firstNumDecimal = floatString.length - String(parseInt(floatString)).length; // 小数点后有多少个零
+    let firstNumDecimal = floatString?.length - String(parseInt(floatString)).length; // 小数点后有多少个零
     const roundMax = max * Math.pow(10, firstNumDecimal + 1); // 乘为整数
     const ceilNum = Math.ceil(roundMax); // 向上圆整到最小整数
     const res = ceilNum / Math.pow(10, firstNumDecimal + 1); //再除为原先的位数
@@ -242,7 +242,7 @@ export function getYMin(data: number[]) {
     return minValue;
   } else {
     const floatString = min.toString().split('.')[1];
-    let firstNumDecimal = floatString.length - String(parseInt(floatString)).length; // 小数点后有多少个零
+    let firstNumDecimal = floatString?.length - String(parseInt(floatString)).length; // 小数点后有多少个零
     const roundMin = min * Math.pow(10, firstNumDecimal + 1); // 乘为整数
     const ceilNum = Math.floor(roundMin); // 向下圆整到最小整数
     const res = ceilNum / Math.pow(10, firstNumDecimal + 1); //再除为原先的位数
@@ -256,7 +256,7 @@ export function getDecimal(data: number[]) {
   if (max > 1) return 0;
   else {
     const floatString = max.toString().split('.')[1];
-    let firstNumDecimal = floatString.length - String(parseInt(floatString)).length; // 小数点后有多少个零
+    let firstNumDecimal = floatString?.length - String(parseInt(floatString)).length; // 小数点后有多少个零
     return firstNumDecimal + 2;
   }
 }

@@ -10,6 +10,7 @@ import { ColorModeContext } from '../../../theme';
 import RenderSkeleton from './RenderSkeleton';
 import { HomeCardHeader } from '../mainStyle';
 import RenderSelect from './RenderSelect';
+import useWallet from '../../hooks/useWallet';
 
 export default function MarketApexChart() {
   const [option, setOption] = useState<any>(null);
@@ -27,14 +28,18 @@ export default function MarketApexChart() {
   const [treasuryData, setTreasuryData] = useState<number[]>([]);
   const [queryType, setQueryType] = useState('hour');
 
-  useQuery(['queryMaticPrice', queryType], () => queryMaticPrice(queryType), {
+  const { networkId } = useWallet();
+
+  useQuery(['queryMaticPrice', queryType], () => queryMaticPrice(queryType, networkId), {
+    enabled: !!networkId,
     onSuccess: ({ data }) => {
       const aRate = data.data.map(i => +formatString(String((i.ezUsdRate * 10000 * 365) / 100)));
       setARate([...aRate]);
     },
   });
 
-  useQuery(['queryTreasuryValue', queryType], () => queryTreasuryValue(queryType), {
+  useQuery(['queryTreasuryValue', queryType], () => queryTreasuryValue(queryType, networkId), {
+    enabled: !!networkId,
     onSuccess: ({ data }) => {
       const XData = data.data.map(i => {
         if (queryType === 'hour') {

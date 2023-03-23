@@ -9,6 +9,7 @@ import { useQuery } from 'react-query';
 import { queryAccumulatedFees, queryDailyAccumulatedFees } from '../../../api/api';
 import { ColorModeContext } from '../../../theme';
 import { getDecimal, getYMax } from '../../wallet/helpers/utilities';
+import useWallet from '../../hooks/useWallet';
 
 export default function BarChart() {
   const [option, setOption] = React.useState<any>(null);
@@ -18,19 +19,22 @@ export default function BarChart() {
   const [AccumulatedFees, setAccumulatedFees] = React.useState<number[]>([]);
   const [XData, setXData] = React.useState<string[]>([]);
 
-  useQuery(['queryDailyAccumulatedFees'], queryDailyAccumulatedFees, {
+  const { networkId } = useWallet();
+
+  useQuery(['queryDailyAccumulatedFees'], () => queryDailyAccumulatedFees(networkId), {
+    enabled: !!networkId,
     onSuccess: ({ data }) => {
       setDailyAccumulatedFees(data.data.map(i => i.dailyAccumulatedFees));
       setXData(data.data.map(i => i.groupTime.substring(5)));
     },
   });
 
-  useQuery(['queryAccumulatedFees'], queryAccumulatedFees, {
+  useQuery(['queryAccumulatedFees'], () => queryAccumulatedFees(networkId), {
+    enabled: !!networkId,
     onSuccess: ({ data }) => {
       setAccumulatedFees(data.data.map(i => i.accumulatedFees));
     },
   });
-  // console.log('🚀 ~ file: BarChart.tsx:17 ~ BarChart ~ data:', AccumulatedFees);
 
   useEffect(() => {
     setOption({

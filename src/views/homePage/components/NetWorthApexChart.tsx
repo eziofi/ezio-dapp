@@ -25,10 +25,10 @@ export default function NetWorthApexChart() {
   }, [mode]);
 
   const [queryType, setQueryType] = useState('hour');
-  const { reverseCoin } = useWallet();
+  const { reverseCoin, networkId } = useWallet();
 
-  useQuery(['queryMaticPrice', queryType], () => queryMaticPrice(queryType), {
-    enabled: !!reverseCoin,
+  useQuery(['queryMaticPrice', queryType], () => queryMaticPrice(queryType, networkId), {
+    enabled: !!reverseCoin && !!networkId,
     onSuccess: ({ data }) => {
       const XData = data.data.map(i => {
         if (queryType === 'hour') {

@@ -7,14 +7,17 @@ import { getYMax } from '../../wallet/helpers/utilities';
 import { useContext, useEffect, useState } from 'react';
 import { ColorModeContext } from '../../../theme';
 import RenderSkeleton from '../../homePage/components/RenderSkeleton';
+import useWallet from '../../hooks/useWallet';
 
 export default function LineChart() {
   const [option, setOption] = useState<any>(null);
   const { mode } = useContext(ColorModeContext);
 
-  useQuery('convertDownPrice', convertDownPrice, {
+  const { networkId } = useWallet();
+
+  useQuery('convertDownPrice', () => convertDownPrice(networkId), {
+    enabled: !!networkId,
     onSuccess: data => {
-      // console.log(data);
       const XData = data.data.data.map(i => i.groupTime.substring(5));
       const ezMaticPrice = data.data.data.map(i => i.ezMaticPrice);
       const convertDownPrice = data.data.data.map(i => i.convertDownPrice);
@@ -96,7 +99,6 @@ export default function LineChart() {
       });
     },
   });
-  console.log('option', option);
   return (
     <Card>
       <CardHeader title={t('home.netWorthEzbtAxis') as string} />

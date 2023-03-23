@@ -17,7 +17,6 @@ export default function NetWorkPopover() {
   const id = open ? 'simple-popover' : undefined;
   const [checkNetworkId, setCheckNetworkId] = React.useState<NETWORK_ID | null>(null);
   const { networkId, switchNetwork } = useWallet();
-  console.log('🚀 ~ file: netWorkPopover.tsx:20 ~ NetWorkPopover ~ networkId:', networkId);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setFlag(true);

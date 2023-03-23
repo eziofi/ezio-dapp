@@ -54,7 +54,7 @@ export default function AnalyticsCard({
   const { ethersProvider } = useWallet();
 
   const theme = useTheme();
-  const { reverseCoin } = useWallet();
+  const { reverseCoin, networkId } = useWallet();
 
   const api = {
     [ANALYTICS_CARD_TYPE.USDC]: getPooledA,

@@ -9,6 +9,7 @@ import { queryAbTotalnetworth } from '../../../api/api';
 import { getYMax, getYMin } from '../../wallet/helpers/utilities';
 import { HomeCardHeader } from '../mainStyle';
 import RenderSelect from './RenderSelect';
+import useWallet from '../../hooks/useWallet';
 
 export default function TotleNetWorthApexChart() {
   const [option, setOption] = React.useState<any>(null);
@@ -21,7 +22,10 @@ export default function TotleNetWorthApexChart() {
 
   const [queryType, setQueryType] = React.useState('hour');
 
-  useQuery(['queryAbTotalnetworth', queryType], () => queryAbTotalnetworth(queryType), {
+  const { networkId } = useWallet();
+
+  useQuery(['queryAbTotalnetworth', queryType], () => queryAbTotalnetworth(queryType, networkId), {
+    enabled: !!networkId,
     onSuccess: ({ data }) => {
       const XData = data.data.map(i => {
         if (queryType === 'hour') {
