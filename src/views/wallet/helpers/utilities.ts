@@ -9,9 +9,6 @@ import { SwapQuoteStruct } from '../arbitrum/contract/contracts/interfaces/v1/IE
 // import { apiGetGasPrices, apiGetAccountNonce } from "./api";
 // import { convertAmountToRawNumber, convertStringToHex } from "./bignumber";
 
-const ZEROEX_API_QUOTE_URL = 'https://arbitrum.api.0x.org/swap/v1/quote';
-const ONEINCH_API_QUOTE_URL = 'https://api.1inch.io/v5.0/137/swap';
-
 const ezioJson = require('../arbitrum/contract/abi/EzioV1.json');
 
 export function capitalize(string: string): string {
@@ -261,7 +258,7 @@ export function getDecimal(data: number[]) {
   }
 }
 
-export async function getOneInchQuoteResponse(quoteParams: OneInchQuoteParams) {
+export async function getOneInchQuoteResponse(quoteParams: OneInchQuoteParams, ONEINCH_API_QUOTE_URL: string) {
   let quote: SwapQuoteStruct;
   let quoteUrl = `${ONEINCH_API_QUOTE_URL}?${qs.stringify(quoteParams)}`;
   let response = await getJson(quoteUrl);
@@ -275,7 +272,7 @@ export async function getOneInchQuoteResponse(quoteParams: OneInchQuoteParams) {
   return quote;
 }
 
-export async function getZeroExQuoteResponse(quoteParams: ZeroExQuoteParams) {
+export async function getZeroExQuoteResponse(quoteParams: ZeroExQuoteParams, ZEROEX_API_QUOTE_URL: string) {
   let quoteResponse: SwapQuoteStruct;
   let quoteUrl = `${ZEROEX_API_QUOTE_URL}?${qs.stringify(quoteParams)}`;
   let response = await getJson(quoteUrl);
@@ -307,6 +304,8 @@ export async function getQuote(
   toTokenAddress: string,
   amount: string,
   slippage: number,
+  ONEINCH_API_QUOTE_URL: string,
+  ZEROEX_API_QUOTE_URL: string,
 ) {
   const blankRes = {
     buyToken: '',
@@ -324,7 +323,7 @@ export async function getQuote(
         slippage,
         disableEstimate: true,
       };
-      return await getOneInchQuoteResponse(quoteParams);
+      return await getOneInchQuoteResponse(quoteParams, ONEINCH_API_QUOTE_URL);
     }
     if (channel === QUOTE_CHANNEL.ZeroEx) {
       const quoteParams: ZeroExQuoteParams = {
@@ -333,7 +332,7 @@ export async function getQuote(
         sellAmount: amount,
         slippagePercentage: String(slippage / 100),
       };
-      return await getZeroExQuoteResponse(quoteParams);
+      return await getZeroExQuoteResponse(quoteParams, ZEROEX_API_QUOTE_URL);
     }
     return blankRes;
   } catch (e) {

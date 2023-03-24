@@ -220,7 +220,7 @@ export async function getAllowance(
 ): Promise<BigNumber> {
   const res = await (tokenType === TOKEN_TYPE.USDC ? USDCConnect : USDTConnect)(signerOrProvider, network).allowance(
     address,
-    ezioJson['arbitrum'].address,
+    ezioJson[network as keyof typeof ezioJson].address,
   );
   console.log(TOKEN_TYPE[tokenType] + ' allowance =' + res.toString());
   return res;

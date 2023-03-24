@@ -33,6 +33,9 @@ export default function useTx() {
 
   const { networkName } = useWallet();
 
+  const ZEROEX_API_QUOTE_URL = `https://${networkName}.api.0x.org/swap/v1/quote`;
+  const ONEINCH_API_QUOTE_URL = 'https://api.1inch.io/v5.0/137/swap';
+
   async function approve(fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC, signerOrProvider: Signer | Provider) {
     console.log('approve');
     setBackLoadingText(t('message.approving'));
@@ -40,7 +43,7 @@ export default function useTx() {
       signerOrProvider,
       networkName as NETWORK_TYPE,
     ).approve(
-      ezioJson['arbitrum'].address,
+      ezioJson[networkName as keyof typeof ezioJson].address,
       MAX_UINT256.toString(),
       // '0',
     );
@@ -91,6 +94,8 @@ export default function useTx() {
         TOKENS[networkName as NETWORK_TYPE].USDC,
         String(amount * 1000000),
         slippage,
+        ONEINCH_API_QUOTE_URL,
+        ZEROEX_API_QUOTE_URL,
       );
     } else if (fromType === TOKEN_TYPE.USDC) {
       // 直接购买，不通过1inch
@@ -139,9 +144,11 @@ export default function useTx() {
       channel,
       fromTokenAddress,
       // @ts-ignore
-      TOKENS[networkName][REVERSE_COIN[network]],
+      TOKENS[networkName][REVERSE_COIN[networkName]],
       String(amount * 1000000),
       slippage,
+      ONEINCH_API_QUOTE_URL,
+      ZEROEX_API_QUOTE_URL,
     );
     // console.log('approve');
     // setBackLoadingText(t('message.approving'));
@@ -180,9 +187,11 @@ export default function useTx() {
         channel,
         TOKENS[networkName as NETWORK_TYPE].USDC,
         // @ts-ignore
-        TOKENS[networkName][REVERSE_COIN[network]],
+        TOKENS[networkName][REVERSE_COIN[networkName]],
         convertSellAmount.toString(),
         slippage,
+        ONEINCH_API_QUOTE_URL,
+        ZEROEX_API_QUOTE_URL,
       );
       quotes = [quoteResponse, quoteResponse2];
     } else {
@@ -240,10 +249,12 @@ export default function useTx() {
       const quoteResponse = await getQuote(
         channel,
         // @ts-ignore
-        TOKENS[networkName][REVERSE_COIN[network]],
+        TOKENS[networkName][REVERSE_COIN[networkName]],
         TOKENS[networkName as NETWORK_TYPE].USDC,
         convertAmount.toString(),
         slippage,
+        ONEINCH_API_QUOTE_URL,
+        ZEROEX_API_QUOTE_URL,
       );
       console.log('USDC储量不够，动用储备币换成USDC');
       await EzioConnect(signerOrProvider, networkName as NETWORK_TYPE)
@@ -287,24 +298,26 @@ export default function useTx() {
       const quoteResponse = await getQuote(
         channel,
         // @ts-ignore
-        TOKENS[networkName][REVERSE_COIN[network]],
+        TOKENS[networkName][REVERSE_COIN[networkName]],
         TOKENS[networkName as NETWORK_TYPE].USDC,
         convertAmount.toString(),
         slippage,
+        ONEINCH_API_QUOTE_URL,
+        ZEROEX_API_QUOTE_URL,
       );
       await EzioConnect(signerOrProvider, networkName as NETWORK_TYPE).redeem(
         1,
         channel,
         redeemAmount,
         // @ts-ignore
-        TOKENS[networkName][REVERSE_COIN[network]],
+        TOKENS[networkName][REVERSE_COIN[networkName]],
         quoteResponse,
       );
     } else {
       // convertAmount为零
       let quoteResponse6 = {
         // @ts-ignore
-        sellToken: TOKENS[networkName][REVERSE_COIN[network]],
+        sellToken: TOKENS[networkName][REVERSE_COIN[networkName]],
         buyToken: ethers.constants.AddressZero,
         sellAmount: convertAmount.toString(),
         swapCallData: ethers.constants.HashZero,
@@ -314,7 +327,7 @@ export default function useTx() {
         channel,
         convertAmount,
         // @ts-ignore
-        TOKENS[network][REVERSE_COIN[network]],
+        TOKENS[networkName][REVERSE_COIN[networkName]],
         quoteResponse6,
       );
       setBackLoadingText(t('message.waitingTx'));
@@ -344,7 +357,7 @@ export default function useTx() {
             .sub(await ezio.pooledA())
             .mul(BigNumber.from('10').pow(await reverseCoin.decimals()))
             // @ts-ignore
-            .div(await ezio.getPrice(TOKENS[network][REVERSE_COIN[network]]));
+            .div(await ezio.getPrice(TOKENS[networkName][REVERSE_COIN[networkName]]));
         }
       }
     } else {
