@@ -14,7 +14,7 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
   const { balance, refetchBalance, isBalanceFetching } = useBalance(type);
   const { price, refetchPrice, isPriceFetching } = usePrice(type);
   const { t } = useTranslation();
-  const { reverseCoin, networkName } = useWallet();
+  const { reverseCoin } = useWallet();
 
   useEffect(() => {
     if (refreshFlag > 0) {

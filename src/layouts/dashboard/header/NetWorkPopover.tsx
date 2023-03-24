@@ -75,8 +75,10 @@ export default function NetWorkPopover() {
         {checkNetworkName ? (
           checkNetworkName === NETWORK_TYPE.arbitrum ? (
             <BaseIconFont name="icon-arbitrum" style={{ width: 24, height: 24, marginRight: '4px' }} />
-          ) : (
+          ) : checkNetworkName === NETWORK_TYPE.polygon ? (
             <BaseIconFont name="icon-Polygon" style={{ width: 24, height: 24, marginRight: '4px' }} />
+          ) : (
+            t('header.selectNet')
           )
         ) : (
           t('header.selectNet')
