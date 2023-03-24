@@ -73,7 +73,7 @@ export default {
   },
   purchase: {
     purchaseValue: 'Purchase',
-    leftBalance: 'Balance',
+    leftBalance: 'Balance: ',
     leftAvailableAmount: 'Current available amount ',
     currentTime: 'Current time',
     purchaseAction: 'Purchase',

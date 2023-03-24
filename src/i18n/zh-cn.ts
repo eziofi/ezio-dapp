@@ -72,7 +72,7 @@ export default {
   },
   purchase: {
     purchaseValue: '购买',
-    leftBalance: '账户余额',
+    leftBalance: '账户余额：',
     leftAvailableAmount: '本轮剩余额度',
     currentTime: '当前时间',
     purchaseAction: '购买',

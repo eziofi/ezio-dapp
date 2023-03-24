@@ -174,7 +174,7 @@ function RanderOptions(
           alignItems: 'center',
         }}
       >
-        {t('purchase.leftBalance') + ': '}
+        {t('purchase.leftBalance') + ''}
         {balance ? formatString(balance, 6).toString() : <InlineSkeleton width={40} />}
         {showMaxVal && inputVal !== balance && (
           <Button
@@ -377,7 +377,7 @@ function MyCardContentSecond({
 
             {/* 显示账户余额 */}
             <span style={{ ...priceStyle, color: theme.palette.text.secondary }}>
-              {t('purchase.leftBalance') + ': '}
+              {t('purchase.leftBalance') + ''}
               {balance ? formatString(balance).toString() : <InlineSkeleton width={40} />}
             </span>
           </div>
