@@ -72,15 +72,9 @@ export default function AddressPopover() {
   });
 
   const copyText = () => {
-    var copyDOM = document.getElementById('account'); //需要复制文字的节点
-    var range = document.createRange(); //创建一个range
-    window.getSelection()?.removeAllRanges(); //清楚页面中已有的selection
-    range.selectNode(copyDOM as any); // 选中需要复制的节点
-    window.getSelection()?.addRange(range); // 执行选中元素
-    var successful = document.execCommand('copy');
-    setCopyFlag(true);
-    // message.success('复制成功!');
+    navigator.clipboard.writeText(addressToShowInPop);
   };
+
   const copyClose = (event: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
