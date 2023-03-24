@@ -5,9 +5,9 @@
 import { Contract, Signer, utils } from "ethers";
 import type { Provider } from "@ethersproject/providers";
 import type {
-  IEzio,
-  IEzioInterface,
-} from "../../../../contracts/interfaces/v1/IEzio";
+  IEzTreasury,
+  IEzTreasuryInterface,
+} from "../../../../contracts/interfaces/v1/IEzTreasury";
 
 const _abi = [
   {
@@ -78,7 +78,7 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "enum IEzio.TYPE",
+        internalType: "enum IEzTreasury.TYPE",
         name: "type_",
         type: "uint8",
       },
@@ -123,7 +123,7 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "enum IEzio.TYPE",
+        internalType: "enum IEzTreasury.TYPE",
         name: "type_",
         type: "uint8",
       },
@@ -190,12 +190,15 @@ const _abi = [
   },
 ] as const;
 
-export class IEzio__factory {
+export class IEzTreasury__factory {
   static readonly abi = _abi;
-  static createInterface(): IEzioInterface {
-    return new utils.Interface(_abi) as IEzioInterface;
+  static createInterface(): IEzTreasuryInterface {
+    return new utils.Interface(_abi) as IEzTreasuryInterface;
   }
-  static connect(address: string, signerOrProvider: Signer | Provider): IEzio {
-    return new Contract(address, _abi, signerOrProvider) as IEzio;
+  static connect(
+    address: string,
+    signerOrProvider: Signer | Provider
+  ): IEzTreasury {
+    return new Contract(address, _abi, signerOrProvider) as IEzTreasury;
   }
 }

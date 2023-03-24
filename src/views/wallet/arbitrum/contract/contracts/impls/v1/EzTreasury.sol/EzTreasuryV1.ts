@@ -41,7 +41,7 @@ export type SwapQuoteStructOutput = [string, string, BigNumber, string] & {
   swapCallData: string;
 };
 
-export interface EzioV1Interface extends utils.Interface {
+export interface EzTreasuryV1Interface extends utils.Interface {
   functions: {
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
     "GOVERNOR_ROLE()": FunctionFragment;
@@ -60,7 +60,7 @@ export interface EzioV1Interface extends utils.Interface {
     "getRoleMemberCount(bytes32)": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
-    "initialize(address,address,address,address,address,uint16,uint16)": FunctionFragment;
+    "initialize(address,address,address,address,uint16,uint16,uint16)": FunctionFragment;
     "interestRate()": FunctionFragment;
     "lastRebaseTime()": FunctionFragment;
     "leverage()": FunctionFragment;
@@ -69,19 +69,24 @@ export interface EzioV1Interface extends utils.Interface {
     "purchase(uint8,uint8,(address,address,uint256,bytes)[])": FunctionFragment;
     "rebase()": FunctionFragment;
     "redeem(uint8,uint8,uint256,address,(address,address,uint256,bytes))": FunctionFragment;
-    "redeemFeeRate()": FunctionFragment;
+    "redeemFeeRateA()": FunctionFragment;
+    "redeemFeeRateB()": FunctionFragment;
     "renounceRole(bytes32,address)": FunctionFragment;
     "revokeRole(bytes32,address)": FunctionFragment;
     "rewardRate()": FunctionFragment;
     "setAggregators(address,address)": FunctionFragment;
-    "setApprove(address,address,uint256)": FunctionFragment;
-    "setRedeemFeeRate(uint16)": FunctionFragment;
+    "setApprove(address,uint8,uint256)": FunctionFragment;
+    "setRedeemFeeRateA(uint16)": FunctionFragment;
+    "setRedeemFeeRateB(uint16)": FunctionFragment;
     "setRewardRate(uint16)": FunctionFragment;
+    "setStakeRewardRate(uint16)": FunctionFragment;
+    "stakeRewardRate()": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "tokenAggregators(address)": FunctionFragment;
+    "totalCommission()": FunctionFragment;
     "totalNetWorth()": FunctionFragment;
     "totalReserve()": FunctionFragment;
-    "withdraw(address,uint256)": FunctionFragment;
+    "withdraw(uint256,uint8,(address,address,uint256,bytes))": FunctionFragment;
   };
 
   getFunction(
@@ -112,16 +117,21 @@ export interface EzioV1Interface extends utils.Interface {
       | "purchase"
       | "rebase"
       | "redeem"
-      | "redeemFeeRate"
+      | "redeemFeeRateA"
+      | "redeemFeeRateB"
       | "renounceRole"
       | "revokeRole"
       | "rewardRate"
       | "setAggregators"
       | "setApprove"
-      | "setRedeemFeeRate"
+      | "setRedeemFeeRateA"
+      | "setRedeemFeeRateB"
       | "setRewardRate"
+      | "setStakeRewardRate"
+      | "stakeRewardRate"
       | "supportsInterface"
       | "tokenAggregators"
+      | "totalCommission"
       | "totalNetWorth"
       | "totalReserve"
       | "withdraw"
@@ -203,7 +213,7 @@ export interface EzioV1Interface extends utils.Interface {
       PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<string>,
-      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>
     ]
@@ -239,7 +249,11 @@ export interface EzioV1Interface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "redeemFeeRate",
+    functionFragment: "redeemFeeRateA",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "redeemFeeRateB",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -262,17 +276,29 @@ export interface EzioV1Interface extends utils.Interface {
     functionFragment: "setApprove",
     values: [
       PromiseOrValue<string>,
-      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "setRedeemFeeRate",
+    functionFragment: "setRedeemFeeRateA",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setRedeemFeeRateB",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "setRewardRate",
     values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setStakeRewardRate",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "stakeRewardRate",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
@@ -281,6 +307,10 @@ export interface EzioV1Interface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "tokenAggregators",
     values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "totalCommission",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "totalNetWorth",
@@ -292,7 +322,11 @@ export interface EzioV1Interface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "withdraw",
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      SwapQuoteStruct
+    ]
   ): string;
 
   decodeFunctionResult(
@@ -364,7 +398,11 @@ export interface EzioV1Interface extends utils.Interface {
   decodeFunctionResult(functionFragment: "rebase", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "redeem", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "redeemFeeRate",
+    functionFragment: "redeemFeeRateA",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "redeemFeeRateB",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -379,11 +417,23 @@ export interface EzioV1Interface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "setApprove", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "setRedeemFeeRate",
+    functionFragment: "setRedeemFeeRateA",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setRedeemFeeRateB",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "setRewardRate",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setStakeRewardRate",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "stakeRewardRate",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -392,6 +442,10 @@ export interface EzioV1Interface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "tokenAggregators",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "totalCommission",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -506,12 +560,12 @@ export type RoleRevokedEvent = TypedEvent<
 
 export type RoleRevokedEventFilter = TypedEventFilter<RoleRevokedEvent>;
 
-export interface EzioV1 extends BaseContract {
+export interface EzTreasuryV1 extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: EzioV1Interface;
+  interface: EzTreasuryV1Interface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -607,9 +661,9 @@ export interface EzioV1 extends BaseContract {
       reserveToken_: PromiseOrValue<string>,
       aToken_: PromiseOrValue<string>,
       bToken_: PromiseOrValue<string>,
-      cToken_: PromiseOrValue<string>,
       rewardRate_: PromiseOrValue<BigNumberish>,
-      redeemFeeRate_: PromiseOrValue<BigNumberish>,
+      redeemFeeRateA_: PromiseOrValue<BigNumberish>,
+      redeemFeeRateB_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -643,7 +697,9 @@ export interface EzioV1 extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    redeemFeeRate(overrides?: CallOverrides): Promise<[number]>;
+    redeemFeeRateA(overrides?: CallOverrides): Promise<[number]>;
+
+    redeemFeeRateB(overrides?: CallOverrides): Promise<[number]>;
 
     renounceRole(
       role: PromiseOrValue<BytesLike>,
@@ -667,13 +723,18 @@ export interface EzioV1 extends BaseContract {
 
     setApprove(
       token: PromiseOrValue<string>,
-      addr: PromiseOrValue<string>,
+      channel: PromiseOrValue<BigNumberish>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    setRedeemFeeRate(
-      redeemFeeRate_: PromiseOrValue<BigNumberish>,
+    setRedeemFeeRateA(
+      redeemFeeRateA_: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setRedeemFeeRateB(
+      redeemFeeRateB_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -681,6 +742,13 @@ export interface EzioV1 extends BaseContract {
       rewardRate_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    setStakeRewardRate(
+      stakeRewardRate_: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    stakeRewardRate(overrides?: CallOverrides): Promise<[number]>;
 
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
@@ -692,13 +760,16 @@ export interface EzioV1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    totalCommission(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     totalNetWorth(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     totalReserve(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     withdraw(
-      token: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
+      channel_: PromiseOrValue<BigNumberish>,
+      quote_: SwapQuoteStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
@@ -775,9 +846,9 @@ export interface EzioV1 extends BaseContract {
     reserveToken_: PromiseOrValue<string>,
     aToken_: PromiseOrValue<string>,
     bToken_: PromiseOrValue<string>,
-    cToken_: PromiseOrValue<string>,
     rewardRate_: PromiseOrValue<BigNumberish>,
-    redeemFeeRate_: PromiseOrValue<BigNumberish>,
+    redeemFeeRateA_: PromiseOrValue<BigNumberish>,
+    redeemFeeRateB_: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -811,7 +882,9 @@ export interface EzioV1 extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  redeemFeeRate(overrides?: CallOverrides): Promise<number>;
+  redeemFeeRateA(overrides?: CallOverrides): Promise<number>;
+
+  redeemFeeRateB(overrides?: CallOverrides): Promise<number>;
 
   renounceRole(
     role: PromiseOrValue<BytesLike>,
@@ -835,13 +908,18 @@ export interface EzioV1 extends BaseContract {
 
   setApprove(
     token: PromiseOrValue<string>,
-    addr: PromiseOrValue<string>,
+    channel: PromiseOrValue<BigNumberish>,
     amount: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  setRedeemFeeRate(
-    redeemFeeRate_: PromiseOrValue<BigNumberish>,
+  setRedeemFeeRateA(
+    redeemFeeRateA_: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setRedeemFeeRateB(
+    redeemFeeRateB_: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -849,6 +927,13 @@ export interface EzioV1 extends BaseContract {
     rewardRate_: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
+
+  setStakeRewardRate(
+    stakeRewardRate_: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  stakeRewardRate(overrides?: CallOverrides): Promise<number>;
 
   supportsInterface(
     interfaceId: PromiseOrValue<BytesLike>,
@@ -860,13 +945,16 @@ export interface EzioV1 extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  totalCommission(overrides?: CallOverrides): Promise<BigNumber>;
+
   totalNetWorth(overrides?: CallOverrides): Promise<BigNumber>;
 
   totalReserve(overrides?: CallOverrides): Promise<BigNumber>;
 
   withdraw(
-    token: PromiseOrValue<string>,
     amount: PromiseOrValue<BigNumberish>,
+    channel_: PromiseOrValue<BigNumberish>,
+    quote_: SwapQuoteStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -943,9 +1031,9 @@ export interface EzioV1 extends BaseContract {
       reserveToken_: PromiseOrValue<string>,
       aToken_: PromiseOrValue<string>,
       bToken_: PromiseOrValue<string>,
-      cToken_: PromiseOrValue<string>,
       rewardRate_: PromiseOrValue<BigNumberish>,
-      redeemFeeRate_: PromiseOrValue<BigNumberish>,
+      redeemFeeRateA_: PromiseOrValue<BigNumberish>,
+      redeemFeeRateB_: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -977,7 +1065,9 @@ export interface EzioV1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    redeemFeeRate(overrides?: CallOverrides): Promise<number>;
+    redeemFeeRateA(overrides?: CallOverrides): Promise<number>;
+
+    redeemFeeRateB(overrides?: CallOverrides): Promise<number>;
 
     renounceRole(
       role: PromiseOrValue<BytesLike>,
@@ -1001,13 +1091,18 @@ export interface EzioV1 extends BaseContract {
 
     setApprove(
       token: PromiseOrValue<string>,
-      addr: PromiseOrValue<string>,
+      channel: PromiseOrValue<BigNumberish>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setRedeemFeeRate(
-      redeemFeeRate_: PromiseOrValue<BigNumberish>,
+    setRedeemFeeRateA(
+      redeemFeeRateA_: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setRedeemFeeRateB(
+      redeemFeeRateB_: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1015,6 +1110,13 @@ export interface EzioV1 extends BaseContract {
       rewardRate_: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    setStakeRewardRate(
+      stakeRewardRate_: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    stakeRewardRate(overrides?: CallOverrides): Promise<number>;
 
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
@@ -1026,13 +1128,16 @@ export interface EzioV1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    totalCommission(overrides?: CallOverrides): Promise<BigNumber>;
+
     totalNetWorth(overrides?: CallOverrides): Promise<BigNumber>;
 
     totalReserve(overrides?: CallOverrides): Promise<BigNumber>;
 
     withdraw(
-      token: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
+      channel_: PromiseOrValue<BigNumberish>,
+      quote_: SwapQuoteStruct,
       overrides?: CallOverrides
     ): Promise<void>;
   };
@@ -1187,9 +1292,9 @@ export interface EzioV1 extends BaseContract {
       reserveToken_: PromiseOrValue<string>,
       aToken_: PromiseOrValue<string>,
       bToken_: PromiseOrValue<string>,
-      cToken_: PromiseOrValue<string>,
       rewardRate_: PromiseOrValue<BigNumberish>,
-      redeemFeeRate_: PromiseOrValue<BigNumberish>,
+      redeemFeeRateA_: PromiseOrValue<BigNumberish>,
+      redeemFeeRateB_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1223,7 +1328,9 @@ export interface EzioV1 extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    redeemFeeRate(overrides?: CallOverrides): Promise<BigNumber>;
+    redeemFeeRateA(overrides?: CallOverrides): Promise<BigNumber>;
+
+    redeemFeeRateB(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceRole(
       role: PromiseOrValue<BytesLike>,
@@ -1247,13 +1354,18 @@ export interface EzioV1 extends BaseContract {
 
     setApprove(
       token: PromiseOrValue<string>,
-      addr: PromiseOrValue<string>,
+      channel: PromiseOrValue<BigNumberish>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    setRedeemFeeRate(
-      redeemFeeRate_: PromiseOrValue<BigNumberish>,
+    setRedeemFeeRateA(
+      redeemFeeRateA_: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setRedeemFeeRateB(
+      redeemFeeRateB_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1261,6 +1373,13 @@ export interface EzioV1 extends BaseContract {
       rewardRate_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
+
+    setStakeRewardRate(
+      stakeRewardRate_: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    stakeRewardRate(overrides?: CallOverrides): Promise<BigNumber>;
 
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
@@ -1272,13 +1391,16 @@ export interface EzioV1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    totalCommission(overrides?: CallOverrides): Promise<BigNumber>;
+
     totalNetWorth(overrides?: CallOverrides): Promise<BigNumber>;
 
     totalReserve(overrides?: CallOverrides): Promise<BigNumber>;
 
     withdraw(
-      token: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
+      channel_: PromiseOrValue<BigNumberish>,
+      quote_: SwapQuoteStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
@@ -1364,9 +1486,9 @@ export interface EzioV1 extends BaseContract {
       reserveToken_: PromiseOrValue<string>,
       aToken_: PromiseOrValue<string>,
       bToken_: PromiseOrValue<string>,
-      cToken_: PromiseOrValue<string>,
       rewardRate_: PromiseOrValue<BigNumberish>,
-      redeemFeeRate_: PromiseOrValue<BigNumberish>,
+      redeemFeeRateA_: PromiseOrValue<BigNumberish>,
+      redeemFeeRateB_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1400,7 +1522,9 @@ export interface EzioV1 extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    redeemFeeRate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    redeemFeeRateA(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    redeemFeeRateB(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     renounceRole(
       role: PromiseOrValue<BytesLike>,
@@ -1424,13 +1548,18 @@ export interface EzioV1 extends BaseContract {
 
     setApprove(
       token: PromiseOrValue<string>,
-      addr: PromiseOrValue<string>,
+      channel: PromiseOrValue<BigNumberish>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    setRedeemFeeRate(
-      redeemFeeRate_: PromiseOrValue<BigNumberish>,
+    setRedeemFeeRateA(
+      redeemFeeRateA_: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setRedeemFeeRateB(
+      redeemFeeRateB_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1438,6 +1567,13 @@ export interface EzioV1 extends BaseContract {
       rewardRate_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
+
+    setStakeRewardRate(
+      stakeRewardRate_: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    stakeRewardRate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
@@ -1449,13 +1585,16 @@ export interface EzioV1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    totalCommission(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     totalNetWorth(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     totalReserve(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     withdraw(
-      token: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
+      channel_: PromiseOrValue<BigNumberish>,
+      quote_: SwapQuoteStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };

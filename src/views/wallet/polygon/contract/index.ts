@@ -78,7 +78,7 @@ export { EzioV1__factory } from './factories/contracts/impls/v1/Ezio.sol/EzioV1_
 export type { EzioERC20V1 } from './contracts/impls/v1/EzioERC20.sol/EzioERC20V1';
 export { EzioERC20V1__factory } from './factories/contracts/impls/v1/EzioERC20.sol/EzioERC20V1__factory';
 export type { EzMATICV1 } from './contracts/impls/v1/EzMATIC.sol/EzMATICV1';
-export { EzMATICV1__factory as REVERSE_COIN__factory } from './factories/contracts/impls/v1/EzMATIC.sol/EzMATICV1__factory';
+export { EzMATICV1__factory } from './factories/contracts/impls/v1/EzMATIC.sol/EzMATICV1__factory';
 export type { EzTokenV1 } from './contracts/impls/v1/EzToken.sol/EzTokenV1';
 export { EzTokenV1__factory } from './factories/contracts/impls/v1/EzToken.sol/EzTokenV1__factory';
 export type { EzUSDV1 } from './contracts/impls/v1/EzUSD.sol/EzUSDV1';

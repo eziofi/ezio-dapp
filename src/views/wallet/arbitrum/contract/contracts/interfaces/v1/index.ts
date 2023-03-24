@@ -3,4 +3,4 @@
 /* eslint-disable */
 export type { IConversion } from "./IConversion";
 export type { IEzToken } from "./IEzToken";
-export type { IEzio } from "./IEzio";
+export type { IEzTreasury } from "./IEzTreasury";

@@ -60,12 +60,12 @@ export default {
     totalSupplyAxis: 'Total Supply',
     aNetWorthSeries: 'ezUSD Price',
     bNetWorthSeries: 'E2LP Price',
-    E2LPPrice: 'E2LP Price',
+    wstETHPrice: 'wstETH Price',
     stMATICPrice: 'stMATIC Price',
     aTotalSupplySeries: 'ezUSD Supply',
     bTotalSupplySeries: 'E2LP Supply',
     copyText: 'Copy Succeeded',
-    ezWETHTotalnetworth: 'E2LP Total Networth',
+    E2LPTotalnetworth: 'E2LP Total Networth',
     ezUsdTotalnetworth: 'ezUSD Total Networth',
     abNetworth: 'Token Networth',
     ShowSevenDays: '7 days',
@@ -127,7 +127,7 @@ export default {
   analytics: {
     title: {
       usdc: 'Treasury USDC value',
-      E2LP: 'Treasury E2LP value',
+      wstETH: 'Treasury wstETH value',
       stMATIC: 'Treasury stMATIC value',
       fee: 'Fees Earned (last 24h)',
     },

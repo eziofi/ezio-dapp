@@ -40,7 +40,6 @@ export interface EzTokenV1Interface extends utils.Interface {
     "contact(address)": FunctionFragment;
     "decimals()": FunctionFragment;
     "decreaseAllowance(address,uint256)": FunctionFragment;
-    "ezio()": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
     "getRoleMember(bytes32,uint256)": FunctionFragment;
     "getRoleMemberCount(bytes32)": FunctionFragment;
@@ -58,6 +57,7 @@ export interface EzTokenV1Interface extends utils.Interface {
     "totalSupply()": FunctionFragment;
     "transfer(address,uint256)": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
+    "treasury()": FunctionFragment;
     "unpause()": FunctionFragment;
   };
 
@@ -74,7 +74,6 @@ export interface EzTokenV1Interface extends utils.Interface {
       | "contact"
       | "decimals"
       | "decreaseAllowance"
-      | "ezio"
       | "getRoleAdmin"
       | "getRoleMember"
       | "getRoleMemberCount"
@@ -92,6 +91,7 @@ export interface EzTokenV1Interface extends utils.Interface {
       | "totalSupply"
       | "transfer"
       | "transferFrom"
+      | "treasury"
       | "unpause"
   ): FunctionFragment;
 
@@ -136,7 +136,6 @@ export interface EzTokenV1Interface extends utils.Interface {
     functionFragment: "decreaseAllowance",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
-  encodeFunctionData(functionFragment: "ezio", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getRoleAdmin",
     values: [PromiseOrValue<BytesLike>]
@@ -197,6 +196,7 @@ export interface EzTokenV1Interface extends utils.Interface {
       PromiseOrValue<BigNumberish>
     ]
   ): string;
+  encodeFunctionData(functionFragment: "treasury", values?: undefined): string;
   encodeFunctionData(functionFragment: "unpause", values?: undefined): string;
 
   decodeFunctionResult(
@@ -225,7 +225,6 @@ export interface EzTokenV1Interface extends utils.Interface {
     functionFragment: "decreaseAllowance",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "ezio", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getRoleAdmin",
     data: BytesLike
@@ -267,6 +266,7 @@ export interface EzTokenV1Interface extends utils.Interface {
     functionFragment: "transferFrom",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "treasury", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "unpause", data: BytesLike): Result;
 
   events: {
@@ -431,7 +431,7 @@ export interface EzTokenV1 extends BaseContract {
     ): Promise<ContractTransaction>;
 
     contact(
-      ezio_: PromiseOrValue<string>,
+      treasury_: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -442,8 +442,6 @@ export interface EzTokenV1 extends BaseContract {
       subtractedValue: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-
-    ezio(overrides?: CallOverrides): Promise<[string]>;
 
     getRoleAdmin(
       role: PromiseOrValue<BytesLike>,
@@ -527,6 +525,8 @@ export interface EzTokenV1 extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    treasury(overrides?: CallOverrides): Promise<[string]>;
+
     unpause(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -564,7 +564,7 @@ export interface EzTokenV1 extends BaseContract {
   ): Promise<ContractTransaction>;
 
   contact(
-    ezio_: PromiseOrValue<string>,
+    treasury_: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -575,8 +575,6 @@ export interface EzTokenV1 extends BaseContract {
     subtractedValue: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
-
-  ezio(overrides?: CallOverrides): Promise<string>;
 
   getRoleAdmin(
     role: PromiseOrValue<BytesLike>,
@@ -660,6 +658,8 @@ export interface EzTokenV1 extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  treasury(overrides?: CallOverrides): Promise<string>;
+
   unpause(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -697,7 +697,7 @@ export interface EzTokenV1 extends BaseContract {
     ): Promise<void>;
 
     contact(
-      ezio_: PromiseOrValue<string>,
+      treasury_: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -708,8 +708,6 @@ export interface EzTokenV1 extends BaseContract {
       subtractedValue: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<boolean>;
-
-    ezio(overrides?: CallOverrides): Promise<string>;
 
     getRoleAdmin(
       role: PromiseOrValue<BytesLike>,
@@ -790,6 +788,8 @@ export interface EzTokenV1 extends BaseContract {
       amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    treasury(overrides?: CallOverrides): Promise<string>;
 
     unpause(overrides?: CallOverrides): Promise<void>;
   };
@@ -893,7 +893,7 @@ export interface EzTokenV1 extends BaseContract {
     ): Promise<BigNumber>;
 
     contact(
-      ezio_: PromiseOrValue<string>,
+      treasury_: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -904,8 +904,6 @@ export interface EzTokenV1 extends BaseContract {
       subtractedValue: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
-
-    ezio(overrides?: CallOverrides): Promise<BigNumber>;
 
     getRoleAdmin(
       role: PromiseOrValue<BytesLike>,
@@ -989,6 +987,8 @@ export interface EzTokenV1 extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    treasury(overrides?: CallOverrides): Promise<BigNumber>;
+
     unpause(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -1029,7 +1029,7 @@ export interface EzTokenV1 extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     contact(
-      ezio_: PromiseOrValue<string>,
+      treasury_: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1040,8 +1040,6 @@ export interface EzTokenV1 extends BaseContract {
       subtractedValue: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
-
-    ezio(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getRoleAdmin(
       role: PromiseOrValue<BytesLike>,
@@ -1124,6 +1122,8 @@ export interface EzTokenV1 extends BaseContract {
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
+
+    treasury(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     unpause(
       overrides?: Overrides & { from?: PromiseOrValue<string> }

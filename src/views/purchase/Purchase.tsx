@@ -382,7 +382,7 @@ export default function Purchase() {
             <CircularProgress size={16} sx={{ color: 'rgba(145, 158, 171, 0.8)' }} />
           </Box>
         ) : needApprove ? (
-          +TOKEN_TYPE[redeemTokenType]
+          t('purchase.approveAction') + TOKEN_TYPE[redeemTokenType]
         ) : type === TRANSFER_TYPE.PURCHASE ? (
           t('purchase.purchaseAction')
         ) : (

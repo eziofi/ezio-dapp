@@ -1,21 +1,31 @@
-import { EzioV1__factory, EzWETHV1, REVERSE_COIN__factory, EzUSDV1__factory } from '../arbitrum/contract';
+import {
+  EzTreasuryV1__factory,
+  EzUSDV1__factory as EzUSDV1__factory__arbitrum,
+  E2LPV1__factory,
+  EzTreasuryV1,
+} from '../arbitrum/contract';
+import {
+  EzioV1__factory,
+  EzUSDV1__factory as EzUSDV1__factory__polygon,
+  EzMATICV1__factory,
+  EzioV1,
+} from '../polygon/contract';
 
 import {
-  ERC20_ABI,
   ARBITRUM_TOKENS,
+  ERC20_ABI,
+  NETWORK_TYPE,
+  POLYGON_TOKENS,
+  REVERSE_COIN,
   TOKEN_DECIMAL,
   TOKEN_TYPE,
   TRANSFER_TYPE,
-  POLYGON_TOKENS,
-  REVERSE_COIN,
-  NETWORK_TYPE,
 } from './constant';
 import { BigNumber, ethers, Signer } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
 import { formatDecimal, formatString } from './utilities';
 
 import { queryAccumulatedFees24H } from '../../../api/api';
-import useWallet from '../../hooks/useWallet';
 
 export const ezUSDJson = {
   [NETWORK_TYPE.arbitrum]: require('../arbitrum/contract/abi/EzUSDV1.json'),
@@ -24,12 +34,12 @@ export const ezUSDJson = {
 
 // NETWORK CONFIG
 export const E2LPJson = {
-  [NETWORK_TYPE.arbitrum]: require('../arbitrum/contract/abi/EzWETHV1.json'),
+  [NETWORK_TYPE.arbitrum]: require('../arbitrum/contract/abi/E2LPV1.json'),
   [NETWORK_TYPE.polygon]: require('../polygon/contract/abi/EzMATICV1.json'),
 };
 
 export const ezioJson = {
-  [NETWORK_TYPE.arbitrum]: require('../arbitrum/contract/abi/EzioV1.json'),
+  [NETWORK_TYPE.arbitrum]: require('../arbitrum/contract/abi/EzTreasuryV1.json'),
   [NETWORK_TYPE.polygon]: require('../polygon/contract/abi/EzioV1.json'),
 };
 
@@ -54,12 +64,17 @@ const override = {
 };
 
 export function EzUSDConnect(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
-  console.log(ezUSDJson[network].address);
-  return EzUSDV1__factory.connect(ezUSDJson[network].address, signerOrProvider);
+  return (network === NETWORK_TYPE.arbitrum ? EzUSDV1__factory__arbitrum : EzUSDV1__factory__polygon).connect(
+    ezUSDJson[network].address,
+    signerOrProvider,
+  );
 }
 
-export function E2LPConnect(signerOrProvider: Signer | Provider, network: NETWORK_TYPE): EzWETHV1 {
-  return REVERSE_COIN__factory.connect(E2LPJson[network].address, signerOrProvider);
+export function E2LPConnect(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
+  return (network === NETWORK_TYPE.arbitrum ? E2LPV1__factory : EzMATICV1__factory).connect(
+    E2LPJson[network].address,
+    signerOrProvider,
+  );
 }
 
 export function USDTConnect(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
@@ -67,7 +82,10 @@ export function USDTConnect(signerOrProvider: Signer | Provider, network: NETWOR
 }
 
 export function EzioConnect(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
-  return EzioV1__factory.connect(ezioJson[network].address, signerOrProvider);
+  return (network === NETWORK_TYPE.arbitrum ? EzTreasuryV1__factory : EzioV1__factory).connect(
+    ezioJson[network].address,
+    signerOrProvider,
+  );
 }
 
 export function USDCConnect(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
@@ -150,7 +168,10 @@ export async function treasuryInterestRate(
  * @returns 手续费比率
  */
 export async function redeemFeeRate(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
-  const rawRate = await EzioConnect(signerOrProvider, network).redeemFeeRate();
+  const rawRate =
+    network === NETWORK_TYPE.arbitrum
+      ? await (EzioConnect(signerOrProvider, network) as EzTreasuryV1).redeemFeeRateB()
+      : await (EzioConnect(signerOrProvider, network) as EzioV1).redeemFeeRate();
   const denominator = await EzioConnect(signerOrProvider, network).REDEEM_RATE_DENOMINATOR();
   const rate = (rawRate / denominator.toNumber()) * 100 + '%';
   console.log('redeemFeeRate = ' + rate);

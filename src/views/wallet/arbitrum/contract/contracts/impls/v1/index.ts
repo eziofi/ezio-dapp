@@ -3,14 +3,14 @@
 /* eslint-disable */
 import type * as conversionSol from "./Conversion.sol";
 export type { conversionSol };
+import type * as e2LpSol from "./E2LP.sol";
+export type { e2LpSol };
 import type * as ezTokenSol from "./EzToken.sol";
 export type { ezTokenSol };
+import type * as ezTreasurySol from "./EzTreasury.sol";
+export type { ezTreasurySol };
 import type * as ezUsdSol from "./EzUSD.sol";
 export type { ezUsdSol };
-import type * as ezWethSol from "./EzWETH.sol";
-export type { ezWethSol };
-import type * as ezioSol from "./Ezio.sol";
-export type { ezioSol };
 import type * as ezioErc20Sol from "./EzioERC20.sol";
 export type { ezioErc20Sol };
 import type * as swapCollectorSol from "./SwapCollector.sol";

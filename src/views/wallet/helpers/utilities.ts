@@ -5,11 +5,10 @@ import { BigNumber, BigNumberish, FixedNumber, utils } from 'ethers';
 import qs from 'qs';
 import { formatUnits } from 'ethers/lib/utils';
 import { QUOTE_CHANNEL, TOKEN_DECIMAL, TOKEN_TYPE } from './constant';
-import { SwapQuoteStruct } from '../arbitrum/contract/contracts/interfaces/v1/IEzio';
+import { SwapQuoteStruct } from '../arbitrum/contract/contracts/interfaces/v1/IEzTreasury';
+import { ezioJson } from './contract_call';
 // import { apiGetGasPrices, apiGetAccountNonce } from "./api";
 // import { convertAmountToRawNumber, convertStringToHex } from "./bignumber";
-
-const ezioJson = require('../arbitrum/contract/abi/EzioV1.json');
 
 export function capitalize(string: string): string {
   return string
@@ -306,6 +305,7 @@ export async function getQuote(
   slippage: number,
   ONEINCH_API_QUOTE_URL: string,
   ZEROEX_API_QUOTE_URL: string,
+  ezioAddress: string,
 ) {
   const blankRes = {
     buyToken: '',
@@ -319,7 +319,7 @@ export async function getQuote(
         fromTokenAddress,
         toTokenAddress,
         amount,
-        fromAddress: ezioJson.address,
+        fromAddress: ezioAddress,
         slippage,
         disableEstimate: true,
       };

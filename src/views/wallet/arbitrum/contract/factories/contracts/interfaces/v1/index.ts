@@ -3,4 +3,4 @@
 /* eslint-disable */
 export { IConversion__factory } from "./IConversion__factory";
 export { IEzToken__factory } from "./IEzToken__factory";
-export { IEzio__factory } from "./IEzio__factory";
+export { IEzTreasury__factory } from "./IEzTreasury__factory";

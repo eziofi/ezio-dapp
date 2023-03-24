@@ -47,7 +47,7 @@ export default function TotleNetWorthApexChart() {
             data: ezUsdTotalnetworth,
           },
           {
-            name: t('home.ezWETHTotalnetworth'),
+            name: t('home.E2LPTotalnetworth'),
             type: 'area',
             data: ezMaticTotalnetworth,
           },
@@ -85,7 +85,7 @@ export default function TotleNetWorthApexChart() {
           yaxis: [
             {
               title: {
-                text: t('home.ezWETHTotalnetworth'),
+                text: t('home.E2LPTotalnetworth'),
               },
               decimalsInFloat: 0,
               max: getYMax(sum),

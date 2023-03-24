@@ -1,7 +1,6 @@
 import { BigNumber, ethers, Signer } from 'ethers';
 import { Provider } from '@ethersproject/providers';
 import { MAX_UINT256, QUOTE_CHANNEL, TOKEN_TYPE, NETWORK_TYPE, REVERSE_COIN } from '../views/wallet/helpers/constant';
-import { SwapQuoteStruct } from '../views/wallet/arbitrum/contract/contracts/interfaces/v1/IEzio';
 import { getQuote } from '../views/wallet/helpers/utilities';
 import {
   EzUSDConnect,
@@ -17,6 +16,7 @@ import { useContext } from 'react';
 import { UIContext } from '../layouts/dashboard/DashboardLayout';
 import { useTranslation } from 'react-i18next';
 import useWallet from '../views/hooks/useWallet';
+import { SwapQuoteStruct } from '../views/wallet/arbitrum/contract/contracts/interfaces/v1/IEzTreasury';
 
 const channel = process.env.REACT_APP_QUOTE_CHANNEL === '1inch' ? QUOTE_CHANNEL.OneInch : QUOTE_CHANNEL.ZeroEx;
 
@@ -89,6 +89,7 @@ export default function useTx() {
         slippage,
         ONEINCH_API_QUOTE_URL,
         ZEROEX_API_QUOTE_URL,
+        ezioJson[networkName as keyof typeof ezioJson].address,
       );
     } else if (fromType === TOKEN_TYPE.USDC) {
       // 直接购买，不通过1inch
@@ -142,6 +143,7 @@ export default function useTx() {
       slippage,
       ONEINCH_API_QUOTE_URL,
       ZEROEX_API_QUOTE_URL,
+      ezioJson[networkName as keyof typeof ezioJson].address,
     );
     // console.log('approve');
     // setBackLoadingText(t('message.approving'));
@@ -185,6 +187,7 @@ export default function useTx() {
         slippage,
         ONEINCH_API_QUOTE_URL,
         ZEROEX_API_QUOTE_URL,
+        ezioJson[networkName as keyof typeof ezioJson].address,
       );
       quotes = [quoteResponse, quoteResponse2];
     } else {
@@ -248,6 +251,7 @@ export default function useTx() {
         slippage,
         ONEINCH_API_QUOTE_URL,
         ZEROEX_API_QUOTE_URL,
+        ezioJson[networkName as keyof typeof ezioJson].address,
       );
       console.log('USDC储量不够，动用储备币换成USDC');
       await EzioConnect(signerOrProvider, networkName as NETWORK_TYPE)
@@ -297,6 +301,7 @@ export default function useTx() {
         slippage,
         ONEINCH_API_QUOTE_URL,
         ZEROEX_API_QUOTE_URL,
+        ezioJson[networkName as keyof typeof ezioJson].address,
       );
       await EzioConnect(signerOrProvider, networkName as NETWORK_TYPE).redeem(
         1,
