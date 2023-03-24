@@ -134,7 +134,7 @@ export default function TokenTypeDialog({ openDialog, handleColse, Options, toke
             style={{ ...item.iconStyle }}
           />
         </div>
-        {TOKEN_TYPE[item.value]}
+        {item.value === TOKEN_TYPE['ReverseCoin'] ? reverseCoin : TOKEN_TYPE[item.value]}
       </div>
     );
   }
