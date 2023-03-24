@@ -4,7 +4,7 @@ import { BalanceContent, BodyContent } from '../PurchaseStyle';
 import { t } from 'i18next';
 import { useBalance } from '../../../hooks/useBalance';
 import { formatDecimal, formatString } from '../../wallet/helpers/utilities';
-import { TOKEN_TYPE, TRANSFER_TYPE } from '../../wallet/helpers/constant';
+import { NETWORK_TYPE, REVERSE_COIN, TOKEN_TYPE, TRANSFER_TYPE } from '../../wallet/helpers/constant';
 import BaseIconFont from '../../components/BaseIconFont';
 import { usePrice } from '../../../hooks/usePrice';
 import { BigNumber } from 'ethers';
@@ -133,7 +133,7 @@ function RanderOptions(
   setInputVal?: (value: string) => void,
 ) {
   const theme = useTheme();
-  const { reverseCoin } = useWallet();
+  const { reverseCoin, networkName } = useWallet();
 
   return (
     <BalanceContent>
@@ -145,6 +145,7 @@ function RanderOptions(
         sx={{ height: 46 }}
       >
         {Options.map((item: IOptions, index: number) => {
+          console.log('item', item);
           return (
             <MenuItem value={item.value} key={index}>
               <>
@@ -159,7 +160,9 @@ function RanderOptions(
                     style={item.iconStyle}
                   />
                 </div>
-                {TOKEN_TYPE[item.value]}
+                {item.value === TOKEN_TYPE['ReverseCoin']
+                  ? networkName && REVERSE_COIN[networkName]
+                  : TOKEN_TYPE[item.value]}
               </>
             </MenuItem>
           );
