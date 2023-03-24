@@ -92,7 +92,7 @@ export default function Header({
           {/* <LanguagePopover /> */}
           {/*<NotificationsPopover />*/}
           {/*<AccountPopover />*/}
-          {networkName && <NetWorkPopover />}
+          <NetWorkPopover />
           <AddressPopover />
         </Stack>
       </StyledToolbar>

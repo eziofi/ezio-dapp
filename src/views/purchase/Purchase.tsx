@@ -22,11 +22,11 @@ import { useBalance } from '../../hooks/useBalance';
 import BaseIconFont from '../components/BaseIconFont';
 import { Provider } from '@ethersproject/providers';
 import { interestRateYear } from '../wallet/helpers/contract_call';
-import { UIContext } from '../../layouts/dashboard/DashboardLayout';
 import useTx from '../../hooks/useTx';
 import { InlineSkeleton } from '../components/Skeleton';
 import { useFeeRate } from '../../hooks/useFeeRate';
 import SlippagePopover from './components/SlippagePopover';
+import { UIContext } from '../context/UIProvider';
 
 interface IPurchaseArg {
   fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC;
@@ -72,7 +72,7 @@ export default function Purchase() {
 
   const { purchase, redeem, approve } = useTx();
 
-  const { openBackLoading, closeBackLoading, setBackLoadingText, setMsg, openMsg, closeMsg } = useContext(UIContext);
+  const { openBackLoading, closeBackLoading, setBackLoadingText, openMsg } = useContext(UIContext);
 
   // useEffect(() => {
   //   // 定时时间

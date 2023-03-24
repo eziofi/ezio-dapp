@@ -10,6 +10,7 @@ import ThemeProvider from './theme';
 import WalletProvider from './views/context/WalletProvider';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import './views/default.less';
+import UIProvider from './views/context/UIProvider';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,12 +26,13 @@ export default function App() {
   return (
     <div>
       <QueryClientProvider client={queryClient}>
-        <WalletProvider>
-          <ThemeProvider>
-            {/*<ScrollToTop />*/}
-            <Router />
-          </ThemeProvider>
-        </WalletProvider>
+        <ThemeProvider>
+          <UIProvider>
+            <WalletProvider>
+              <Router />
+            </WalletProvider>
+          </UIProvider>
+        </ThemeProvider>
       </QueryClientProvider>
     </div>
   );

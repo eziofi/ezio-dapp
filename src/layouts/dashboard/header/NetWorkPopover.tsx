@@ -9,6 +9,7 @@ import { Box } from '@mui/system';
 import { NETWORK_TYPE } from '../../../views/wallet/helpers/constant';
 import CheckIcon from '@mui/icons-material/Check';
 import useWallet from '../../../views/hooks/useWallet';
+import { useTranslation } from 'react-i18next';
 
 export default function NetWorkPopover() {
   const [flag, setFlag] = React.useState(false); // 控制上下箭头icon的切换
@@ -17,6 +18,8 @@ export default function NetWorkPopover() {
   const id = open ? 'simple-popover' : undefined;
   const [checkNetworkName, setCheckNetworkName] = React.useState<NETWORK_TYPE | ''>('');
   const { networkName, switchNetwork } = useWallet();
+
+  const { t } = useTranslation();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setFlag(true);
@@ -37,8 +40,6 @@ export default function NetWorkPopover() {
   }
 
   useEffect(() => {
-    console.log('networkName');
-    console.log(networkName);
     if (networkName) {
       setCheckNetworkName(networkName);
     }
@@ -68,17 +69,18 @@ export default function NetWorkPopover() {
     marginRight: '10px',
   };
 
-  return networkName ? (
-    <></>
-  ) : (
+  return (
     <>
       <Button onClick={handleClick} aria-describedby={id}>
-        {checkNetworkName &&
-          (checkNetworkName === NETWORK_TYPE.arbitrum ? (
+        {checkNetworkName ? (
+          checkNetworkName === NETWORK_TYPE.arbitrum ? (
             <BaseIconFont name="icon-arbitrum" style={{ width: 24, height: 24, marginRight: '4px' }} />
           ) : (
             <BaseIconFont name="icon-Polygon" style={{ width: 24, height: 24, marginRight: '4px' }} />
-          ))}
+          )
+        ) : (
+          t('header.selectNet')
+        )}
         {flag ? <ExpandLessIcon /> : <ExpandMoreIcon />}
       </Button>
 

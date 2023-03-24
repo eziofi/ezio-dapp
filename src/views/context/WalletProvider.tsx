@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import Web3Modal from 'web3modal';
@@ -7,6 +7,8 @@ import { useQuery } from 'react-query';
 import { getAllowance } from '../wallet/helpers/contract_call';
 import WalletConnect from '@walletconnect/client';
 import QRCodeModal from '@walletconnect/qrcode-modal';
+import { UIContext } from './UIProvider';
+import { useTranslation } from 'react-i18next';
 
 interface IWalletContext {
   account: string;
@@ -29,6 +31,8 @@ export default function WalletProvider({ children }: { children: ReactElement })
   const [account, setAccount] = React.useState('');
   const [walletProvider, setWalletProvider] = React.useState<any>();
   const [ethersProvider, setEthersProvider] = React.useState<ethers.providers.Web3Provider>();
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!account && connectState === 'unconnected') {
@@ -55,6 +59,8 @@ export default function WalletProvider({ children }: { children: ReactElement })
   const [allowanceUSDT, setAllowanceUSDT] = useState('');
 
   const [allowanceUSDC, setAllowanceUSDC] = useState('');
+
+  const { setMsg, openMsg, closeMsg } = useContext(UIContext);
 
   useQuery(
     ['allowance', TOKEN_TYPE.USDT],
@@ -125,7 +131,13 @@ export default function WalletProvider({ children }: { children: ReactElement })
       const signer = provider.getSigner();
       const address = await signer.getAddress();
       const chainId = await signer.getChainId();
-      setNetworkId(chainId);
+
+      if (!Object.keys(NETWORK_ID).includes(String(chainId))) {
+        console.log('请选择arbitrum或polygon链');
+        openMsg('请选择arbitrum或polygon链');
+        openMsg(t('message.errorNetTip'));
+      }
+
       setNetworkName(NETWORK_ID[chainId as keyof typeof NETWORK_ID]);
 
       setAccount(address || '');

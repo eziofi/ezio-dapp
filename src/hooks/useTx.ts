@@ -13,10 +13,10 @@ import {
   TOKENS,
 } from '../views/wallet/helpers/contract_call';
 import { useContext } from 'react';
-import { UIContext } from '../layouts/dashboard/DashboardLayout';
 import { useTranslation } from 'react-i18next';
 import useWallet from '../views/hooks/useWallet';
 import { SwapQuoteStruct } from '../views/wallet/arbitrum/contract/contracts/interfaces/v1/IEzTreasury';
+import { UIContext } from '../views/context/UIProvider';
 
 const channel = process.env.REACT_APP_QUOTE_CHANNEL === '1inch' ? QUOTE_CHANNEL.OneInch : QUOTE_CHANNEL.ZeroEx;
 

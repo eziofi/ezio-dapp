@@ -4,6 +4,9 @@ export default {
     warning: '警告',
     errorNetworkTip: '您连接的不是Arbitrum网络，请至您的钱包软件中切换网络。',
   },
+  header: {
+    selectNet: '请选择网络',
+  },
   nav: {
     home: '首页',
     swap: '兑换',
@@ -21,6 +24,7 @@ export default {
     waitingTx: '等待交易确认……',
     approved: '授权交易已确认',
     txConfirmed: '交易已确认',
+    errorNetTip: '请连接arbitrum或polygon链',
   },
   home: {
     card: {
