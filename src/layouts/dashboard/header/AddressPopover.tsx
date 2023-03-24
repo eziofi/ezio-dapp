@@ -142,7 +142,7 @@ export default function AddressPopover() {
       ) : connectState === 'connecting' ? (
         <Button variant="outlined">{t('home.connecting')}</Button>
       ) : (
-        <Button variant="outlined" onClick={connect}>
+        <Button variant="contained" onClick={connect}>
           {t('home.login')}
         </Button>
       )}

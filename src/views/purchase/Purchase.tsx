@@ -167,7 +167,7 @@ export default function Purchase() {
 
   const { balance, refetchBalance } = useBalance(type === TRANSFER_TYPE.PURCHASE ? redeemTokenType : tokenType);
 
-  const { ethersProvider, account, allowanceUSDT, allowanceUSDC, networkName } = useWallet();
+  const { connectState, ethersProvider, connect, allowanceUSDT, allowanceUSDC, networkName } = useWallet();
 
   const [needApprove, setNeedApprove] = useState(false);
 
@@ -361,9 +361,11 @@ export default function Purchase() {
         sx={{ width: '90%', marginTop: theme.spacing(5) }}
         variant="contained"
         disableElevation
-        disabled={(!needApprove && (!inputValue1 || !+inputValue1)) || loadingOpen}
+        disabled={((!needApprove && (!inputValue1 || !+inputValue1)) || loadingOpen) && connectState !== 'unconnected'}
         onClick={() =>
-          needApprove
+          connectState === 'unconnected'
+            ? connect()
+            : needApprove
             ? doApprove()
             : type === TRANSFER_TYPE.PURCHASE
             ? doPurchase()
@@ -372,13 +374,15 @@ export default function Purchase() {
             : null
         }
       >
-        {loadingOpen ? (
+        {connectState === 'unconnected' ? (
+          t('home.login')
+        ) : loadingOpen ? (
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Box sx={{ mr: 1 }}>{loadingText}</Box>
             <CircularProgress size={16} sx={{ color: 'rgba(145, 158, 171, 0.8)' }} />
           </Box>
         ) : needApprove ? (
-          t('purchase.approveAction') + TOKEN_TYPE[redeemTokenType]
+          +TOKEN_TYPE[redeemTokenType]
         ) : type === TRANSFER_TYPE.PURCHASE ? (
           t('purchase.purchaseAction')
         ) : (

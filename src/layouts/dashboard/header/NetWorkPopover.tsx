@@ -68,7 +68,9 @@ export default function NetWorkPopover() {
     marginRight: '10px',
   };
 
-  return (
+  return networkName ? (
+    <></>
+  ) : (
     <>
       <Button onClick={handleClick} aria-describedby={id}>
         {checkNetworkName &&

@@ -14,6 +14,7 @@ import NetWorkPopover from './NetWorkPopover';
 import Nav from '../nav/Nav';
 import React from 'react';
 import useResponsive from '../../../hooks/useResponsive';
+import useWallet from '../../../views/hooks/useWallet';
 
 // ----------------------------------------------------------------------
 
@@ -57,6 +58,7 @@ export default function Header({
 }) {
   const { pathname } = useLocation();
   const isDesktop = useResponsive('up', 'md', 'md');
+  const { networkName } = useWallet();
 
   return (
     <StyledRoot>
@@ -90,7 +92,7 @@ export default function Header({
           {/* <LanguagePopover /> */}
           {/*<NotificationsPopover />*/}
           {/*<AccountPopover />*/}
-          <NetWorkPopover />
+          {networkName && <NetWorkPopover />}
           <AddressPopover />
         </Stack>
       </StyledToolbar>

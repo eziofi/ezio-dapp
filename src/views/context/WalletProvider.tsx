@@ -30,7 +30,7 @@ export default function WalletProvider({ children }: { children: ReactElement })
 
   useEffect(() => {
     if (!account && connectState === 'unconnected') {
-      connect();
+      // connect();
     } else {
       subscribeProvider(walletProvider);
     }
@@ -66,70 +66,82 @@ export default function WalletProvider({ children }: { children: ReactElement })
   );
 
   const connect = async () => {
-    // const infuraId = 'd7c876c8797d474cb2227e81fda1cd39';
-    const web3Modal = new Web3Modal({
-      network: 'mainnet', // optional
-      cacheProvider: true, // optional
-      providerOptions: {
-        walletconnect: {
-          package: WalletConnectProvider,
-          options: {
-            // infuraId,
-            // rpc: {
-            //   1337: 'https://rpc-ezio.duoblock.cn',
-            // },
-            qrcodeModalOptions: {
-              desktopLinks: [
-                'ledger',
-                'tokenary',
-                'wallet',
-                'wallet 3',
-                'secuX',
-                'ambire',
-                'wallet3',
-                'apolloX',
-                'zerion',
-                'sequence',
-                'punkWallet',
-                'kryptoGO',
-                'nft',
-                'riceWallet',
-                'vision',
-                'keyring',
-              ],
-              mobileLinks: ['rainbow', 'metamask', 'argent', 'trust', 'imtoken', 'pillar'],
+    try {
+      // const infuraId = 'd7c876c8797d474cb2227e81fda1cd39';
+      const web3Modal = new Web3Modal({
+        network: 'mainnet', // optional
+        cacheProvider: true, // optional
+        providerOptions: {
+          walletconnect: {
+            package: WalletConnectProvider,
+            options: {
+              // infuraId,
+              // rpc: {
+              //   1337: 'https://rpc-ezio.duoblock.cn',
+              // },
+              qrcodeModalOptions: {
+                desktopLinks: [
+                  'ledger',
+                  'tokenary',
+                  'wallet',
+                  'wallet 3',
+                  'secuX',
+                  'ambire',
+                  'wallet3',
+                  'apolloX',
+                  'zerion',
+                  'sequence',
+                  'punkWallet',
+                  'kryptoGO',
+                  'nft',
+                  'riceWallet',
+                  'vision',
+                  'keyring',
+                ],
+                mobileLinks: ['rainbow', 'metamask', 'argent', 'trust', 'imtoken', 'pillar'],
+              },
             },
           },
-        },
-      }, // required
-    });
-    setConnectState('connecting');
-    const web3Connect = await web3Modal.connect();
-    setWalletProvider(web3Connect);
-    await subscribeProvider(web3Connect);
-    const provider = new ethers.providers.Web3Provider(web3Connect);
-    setEthersProvider(provider);
-    const signer = provider.getSigner();
-    const address = await signer.getAddress();
-    const chainId = await signer.getChainId();
-    setNetworkId(chainId);
-    setNetworkName(NETWORK_ID[chainId as keyof typeof NETWORK_ID]);
+        }, // required
+      });
+      setConnectState('connecting');
+      const web3Connect = await web3Modal.connect();
+      setWalletProvider(web3Connect);
+      await subscribeProvider(web3Connect);
+      const provider = new ethers.providers.Web3Provider(web3Connect);
+      setEthersProvider(provider);
+      const signer = provider.getSigner();
+      const address = await signer.getAddress();
+      const chainId = await signer.getChainId();
+      setNetworkId(chainId);
+      setNetworkName(NETWORK_ID[chainId as keyof typeof NETWORK_ID]);
 
-    setAccount(address);
-    setConnectState('connected');
-    provider.on('eth_subscribe', (p1: any, p2: any) => {
-      console.log(`eth_subscribe: ${p1}`);
-    });
+      setAccount(address || '');
+      setConnectState('connected');
+      provider.on('eth_subscribe', (p1: any, p2: any) => {
+        console.log(`eth_subscribe: ${p1}`);
+      });
+    } catch (e) {
+      setConnectState('unconnected');
+    } finally {
+    }
   };
 
   const subscribeProvider = async (provider: any) => {
     if (!provider.on) {
       return;
     }
-    // provider.on("close", () => this.resetApp());
+    provider.on('close', () => {
+      console.log('close');
+      window.location.reload();
+    });
     provider.on('accountsChanged', async (accounts: string[]) => {
       console.log(`accountsChanged: ${accounts}`);
-      setAccount(accounts[0]);
+      if (!accounts[0]) {
+        window.location.reload();
+      } else {
+        setAccount(accounts[0]);
+      }
       // await this.setState({ address: accounts[0] });
       // await this.getAccountAssets();
     });
@@ -146,10 +158,12 @@ export default function WalletProvider({ children }: { children: ReactElement })
     });
 
     provider.on('disconnect', (error: { code: number; message: string }) => {
-      console.log(error);
+      console.log('disconnect');
+      window.location.reload();
     });
 
     provider.on('eth_subscribe', (p1: any, p2: any) => {
+      debugger;
       console.log(`eth_subscribe: ${p1}`);
     });
   };
