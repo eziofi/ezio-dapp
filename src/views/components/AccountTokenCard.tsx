@@ -1,9 +1,9 @@
-import { TOKEN_TYPE } from '../wallet/helpers/constant';
+import { REVERSE_COIN_TYPE, TOKEN_TYPE } from '../wallet/helpers/constant';
 import { useBalance } from '../../hooks/useBalance';
 import { usePrice } from '../../hooks/usePrice';
 import { AccountCard, Content } from '../account/AccountStyle';
 import BaseIconFont from './BaseIconFont';
-import { formatDecimal, formatString } from '../wallet/helpers/utilities';
+import { formatString } from '../wallet/helpers/utilities';
 import { InlineSkeleton } from './Skeleton';
 import { useTranslation } from 'react-i18next';
 import { Box, Tooltip, useTheme } from '@mui/material';
@@ -14,7 +14,7 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
   const { balance, refetchBalance, isBalanceFetching } = useBalance(type);
   const { price, refetchPrice, isPriceFetching } = usePrice(type);
   const { t } = useTranslation();
-  const { reverseCoin } = useWallet();
+  const { reverseCoin, networkName } = useWallet();
 
   useEffect(() => {
     if (refreshFlag > 0) {
@@ -90,7 +90,7 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
           </div>
           <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Box>
-              <div style={{ fontSize: 20 }}>{TOKEN_TYPE[type]}</div>
+              <div style={{ fontSize: 20 }}>{type === TOKEN_TYPE.ReverseCoin ? reverseCoin : TOKEN_TYPE[type]}</div>
               {!isBalanceFetching || !isPriceFetching ? (
                 <div style={{ fontSize: 12, color: theme.palette.text.disabled }}>
                   {t('account.netWorth')}: {value} USDC
