@@ -1,5 +1,5 @@
 import { Button, InputBase, MenuItem, Select, Skeleton, styled, TextField, useTheme } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import { BalanceContent, BodyContent } from '../PurchaseStyle';
 import { t } from 'i18next';
 import { useBalance } from '../../../hooks/useBalance';
@@ -10,6 +10,7 @@ import { usePrice } from '../../../hooks/usePrice';
 import { BigNumber } from 'ethers';
 import { InlineSkeleton } from '../../components/Skeleton';
 import useWallet from '../../hooks/useWallet';
+import TokenTypeDialog from './TokenTypeDialog';
 
 interface IProps {
   isBuy?: boolean;
@@ -27,7 +28,7 @@ interface IProps {
 
 interface IOptions {
   value: TOKEN_TYPE;
-  iconParentStyle: { margin: string; background: string };
+  iconParentStyle: any;
   iconName: string;
   iconStyle: { width: number; height: number; fill: string };
 }
@@ -135,6 +136,21 @@ function RanderOptions(
   const theme = useTheme();
   const { reverseCoin, networkName } = useWallet();
 
+  const [openDialog, setopenDialog] = useState(false);
+
+  function handleClickOpen() {
+    setopenDialog(true);
+  }
+
+  function handleColse(tokenType?: TOKEN_TYPE) {
+    if (tokenType !== undefined || '' || null) {
+      // @ts-ignore
+      handleChange(tokenType as TOKEN_TYPE);
+    }
+
+    setopenDialog(false);
+  }
+
   return (
     <BalanceContent>
       <Select
@@ -143,9 +159,10 @@ function RanderOptions(
         onChange={e => handleChange(e.target.value as typeof TOKEN_TYPE)}
         input={<BootstrapInput />}
         sx={{ height: 46 }}
+        open={false}
+        onOpen={handleClickOpen}
       >
         {Options.map((item: IOptions, index: number) => {
-          console.log('item', item);
           return (
             <MenuItem value={item.value} key={index}>
               <>
@@ -156,11 +173,11 @@ function RanderOptions(
                   }}
                 >
                   <BaseIconFont
-                    name={item.iconName === 'icon-wstETH1' ? `icon-${reverseCoin}` : item.iconName}
+                    name={tokenType === TOKEN_TYPE['ReverseCoin'] ? `icon-${reverseCoin}` : item.iconName}
                     style={item.iconStyle}
                   />
                 </div>
-                {item.value === TOKEN_TYPE['ReverseCoin']
+                {tokenType === TOKEN_TYPE['ReverseCoin']
                   ? networkName && REVERSE_COIN[networkName]
                   : TOKEN_TYPE[item.value]}
               </>
@@ -177,7 +194,7 @@ function RanderOptions(
           alignItems: 'center',
         }}
       >
-        {t('purchase.leftBalance') + ''}
+        {t('purchase.leftBalance') + ': '}
         {balance ? formatString(balance, 6).toString() : <InlineSkeleton width={40} />}
         {showMaxVal && inputVal !== balance && (
           <Button
@@ -195,6 +212,9 @@ function RanderOptions(
           </Button>
         )}
       </div>
+      {openDialog && (
+        <TokenTypeDialog openDialog={openDialog} handleColse={handleColse} Options={Options} tokenType={tokenType} />
+      )}
     </BalanceContent>
   );
 }
@@ -202,13 +222,31 @@ function RanderOptions(
 const PurchasenOptions: IOptions[] = [
   {
     value: TOKEN_TYPE.ezUSD,
-    iconParentStyle: { margin: '0 10px', background: 'rgba(95, 69, 186, 1)' },
+    iconParentStyle: {
+      margin: '0 10px',
+      background: 'rgba(95, 69, 186, 1)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: 30,
+      height: 30,
+      borderRadius: '50%',
+    },
     iconName: 'icon-A',
     iconStyle: { width: 20, height: 20, fill: 'white' },
   },
   {
     value: TOKEN_TYPE.E2LP,
-    iconParentStyle: { margin: '0 10px', background: 'rgba(239, 89, 114, 1)' },
+    iconParentStyle: {
+      margin: '0 10px',
+      background: 'rgba(239, 89, 114, 1)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: 30,
+      height: 30,
+      borderRadius: '50%',
+    },
     iconName: 'icon-B',
     iconStyle: { width: 20, height: 20, fill: 'white' },
   },
@@ -355,45 +393,52 @@ function MyCardContentSecond({
           </div>
         </div>
 
-        {transactionType === TRANSFER_TYPE.PURCHASE ? (
-          // @ts-ignore
-          RanderOptions(PurchasenOptions, tokenType, handleChange, balance, false)
-        ) : tokenType === TOKEN_TYPE.ezUSD ? (
-          <div style={{ width: 142, height: 83, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-            <div style={{ display: 'flex', alignItems: 'center', height: 46 }}>
-              <div
-                style={{
-                  ...MenuItemStyle,
-                  background:
-                    redeemOptions[redeemOptions.findIndex(item => item.value === TOKEN_TYPE.USDC)].iconParentStyle
-                      .background,
-                  marginRight: 10,
-                }}
-              >
-                <BaseIconFont
-                  name="icon-usdc"
-                  style={redeemOptions[redeemOptions.findIndex(item => item.value === TOKEN_TYPE.USDC)].iconStyle}
-                />
-              </div>
-              <span style={{ fontSize: 14 }}>{TOKEN_TYPE[TOKEN_TYPE.USDC]}</span>
-            </div>
+        {transactionType === TRANSFER_TYPE.PURCHASE
+          ? // @ts-ignore
+            RanderOptions(PurchasenOptions, tokenType, handleChange, balance, false)
+          : tokenType === TOKEN_TYPE.ezUSD
+          ? // <div style={{ width: 142, height: 83, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+            //   <div style={{ display: 'flex', alignItems: 'center', height: 46 }}>
+            //     <div
+            //       style={{
+            //         ...MenuItemStyle,
+            //         background:
+            //           redeemOptions[redeemOptions.findIndex(item => item.value === TOKEN_TYPE.USDC)].iconParentStyle
+            //             .background,
+            //         marginRight: 10,
+            //       }}
+            //     >
+            //       <BaseIconFont
+            //         name="icon-usdc"
+            //         style={redeemOptions[redeemOptions.findIndex(item => item.value === TOKEN_TYPE.USDC)].iconStyle}
+            //       />
+            //     </div>`
+            //     <span style={{ fontSize: 14 }}>{TOKEN_TYPE[TOKEN_TYPE.USDC]}</span>
+            //   </div>
 
-            {/* 显示账户余额 */}
-            <span style={{ ...priceStyle, color: theme.palette.text.secondary }}>
-              {t('purchase.leftBalance') + ''}
-              {balance ? formatString(balance).toString() : <InlineSkeleton width={40} />}
-            </span>
-          </div>
-        ) : (
-          RanderOptions(
-            redeemOptions.filter(item => item.value !== TOKEN_TYPE.USDT),
-            redeemTokenType,
-            // @ts-ignore
-            redeemChange,
-            balance,
-            false,
-          )
-        )}
+            //   {/* 显示账户余额 */}
+            //   <span style={{ ...priceStyle, color: theme.palette.text.secondary }}>
+            //     {t('purchase.leftBalance') + ': '}
+            //     {balance ? formatString(balance).toString() : <InlineSkeleton width={40} />}
+            //   </span>
+            // </div>
+
+            RanderOptions(
+              redeemOptions.filter(item => item.value === TOKEN_TYPE.USDC),
+              TOKEN_TYPE.USDC,
+              // @ts-ignore
+              redeemChange,
+              balance,
+              false,
+            )
+          : RanderOptions(
+              redeemOptions.filter(item => item.value !== TOKEN_TYPE.USDT),
+              redeemTokenType,
+              // @ts-ignore
+              redeemChange,
+              balance,
+              false,
+            )}
       </BodyContent>
     </>
   );
