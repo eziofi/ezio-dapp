@@ -293,7 +293,7 @@ export async function ezUSDPrice(signerOrProvider: Signer | Provider, network: N
  * 获取 ezbt 净值
  * @returns ezbt 净值
  */
-export async function ezWETHPrice(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
+export async function E2LPPrice(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
   const data = await E2LPConnect(signerOrProvider, network).netWorth();
   const res = formatDecimal(data, TOKEN_TYPE.USDC, 6).toString();
   console.log('ezWETH netWorth = ' + res);

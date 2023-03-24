@@ -59,7 +59,7 @@ export default {
     totalSupplyAxis: '供应量',
     aNetWorthSeries: 'ezUSD价格',
     bNetWorthSeries: 'ezWETH价格',
-    wstETHPrice: 'wstETH价格',
+    E2LPPrice: 'E2LP价格',
     stMATICPrice: 'stMATIC价格',
     aTotalSupplySeries: 'ezUSD供应量',
     bTotalSupplySeries: 'ezWETH供应量',
@@ -126,7 +126,7 @@ export default {
   analytics: {
     title: {
       usdc: '金库USDC价值',
-      wstETH: '金库wstETH价值',
+      E2LP: '金库E2LP价值',
       stMATIC: '金库stMATIC价值',
       fee: '手续费收入(过去24h)',
     },

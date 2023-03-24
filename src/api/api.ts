@@ -140,7 +140,7 @@ export function queryAccumulatedFees(networkName: NETWORK_TYPE | undefined) {
   return httpClient.get<IAccumulatedFees>(`api/${networkName}/lineGraph/accumulatedFees`);
 }
 
-// 统计ezWETH的价格和下折价格
+// 统计E2LP的价格和下折价格
 
 interface IConvertDownPrice {
   code: number;

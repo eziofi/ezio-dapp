@@ -5,6 +5,8 @@ import Web3Modal from 'web3modal';
 import { NETWORK_ID, NETWORK_TYPE, TOKEN_TYPE } from '../wallet/helpers/constant';
 import { useQuery } from 'react-query';
 import { getAllowance } from '../wallet/helpers/contract_call';
+import WalletConnect from '@walletconnect/client';
+import QRCodeModal from '@walletconnect/qrcode-modal';
 
 interface IWalletContext {
   account: string;
@@ -30,7 +32,17 @@ export default function WalletProvider({ children }: { children: ReactElement })
 
   useEffect(() => {
     if (!account && connectState === 'unconnected') {
-      // connect();
+      // const connector = new WalletConnect({
+      //   bridge: 'https://bridge.walletconnect.org', // Required
+      //   qrcodeModal: QRCodeModal,
+      // });
+      // if (!connector.connected) {
+      //   // create new session
+      //   connector.createSession();
+      // }
+      if (getConnectedCache()) {
+        connect();
+      }
     } else {
       subscribeProvider(walletProvider);
     }
@@ -118,6 +130,7 @@ export default function WalletProvider({ children }: { children: ReactElement })
 
       setAccount(address || '');
       setConnectState('connected');
+      setConnectedCache(true);
       provider.on('eth_subscribe', (p1: any, p2: any) => {
         console.log(`eth_subscribe: ${p1}`);
       });
@@ -138,6 +151,7 @@ export default function WalletProvider({ children }: { children: ReactElement })
     provider.on('accountsChanged', async (accounts: string[]) => {
       console.log(`accountsChanged: ${accounts}`);
       if (!accounts[0]) {
+        setConnectedCache(false);
         window.location.reload();
       } else {
         setAccount(accounts[0]);
@@ -159,11 +173,11 @@ export default function WalletProvider({ children }: { children: ReactElement })
 
     provider.on('disconnect', (error: { code: number; message: string }) => {
       console.log('disconnect');
+      setConnectedCache(false);
       window.location.reload();
     });
 
     provider.on('eth_subscribe', (p1: any, p2: any) => {
-      debugger;
       console.log(`eth_subscribe: ${p1}`);
     });
   };
@@ -173,6 +187,14 @@ export default function WalletProvider({ children }: { children: ReactElement })
     setEthersProvider(undefined);
     setWalletProvider(undefined);
     setConnectState('unconnected');
+  };
+
+  const setConnectedCache = (connected: boolean) => {
+    localStorage.setItem('connected', connected ? '1' : '0');
+  };
+
+  const getConnectedCache = () => {
+    return localStorage.getItem('connected') === '1';
   };
 
   const networkInfo = {
