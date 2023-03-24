@@ -49,13 +49,6 @@ export default function AddressPopover() {
   const addressToShow = account.substring(0, 5) + '...' + account.substring(account.length - 5, account.length);
   const addressToShowInPop = account.substring(0, 12) + '...' + account.substring(account.length - 12, account.length);
 
-  // useEffect(() => {
-  //   if (!hasOpenDialog && networkId && networkId !== 'arbitrum') {
-  //     setDialogOpen(true);
-  //     setHasOpenDialog(true);
-  //   }
-  // });
-
   const logout = () => {
     disconnect();
     handleClose();
@@ -184,15 +177,7 @@ export default function AddressPopover() {
         </Box>
 
         <Box sx={{ my: 1.5, px: 2.5 }}>
-          {/*{balance ? <TextDiv>{formatString(balance).toString() + ' USDT'}</TextDiv> : <InlineSkeleton width={70} />}*/}
-          {/* <NetworkWrapper> */}
-          {/* <BaseIconFont name="icon-arbitrum" style={{ width: 32, height: 32 }} /> */}
-          {/* <TextDiv>Arbitrum</TextDiv> */}
-          {/*<div>您连接的网络是{networkName}</div>*/}
-          {/* </NetworkWrapper> */}
-
           <Divider />
-
           <Box sx={{ margin: '20px 0' }}>
             <Button sx={{ ...languageAndThemeStyle }} onClick={changeLang}>
               <span>语言</span>

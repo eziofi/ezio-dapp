@@ -1,13 +1,6 @@
 import { BigNumber, ethers, Signer } from 'ethers';
 import { Provider } from '@ethersproject/providers';
-import {
-  MAX_UINT256,
-  ARBITRUM_TOKENS,
-  QUOTE_CHANNEL,
-  TOKEN_TYPE,
-  NETWORK_TYPE,
-  REVERSE_COIN,
-} from '../views/wallet/helpers/constant';
+import { MAX_UINT256, QUOTE_CHANNEL, TOKEN_TYPE, NETWORK_TYPE, REVERSE_COIN } from '../views/wallet/helpers/constant';
 import { SwapQuoteStruct } from '../views/wallet/arbitrum/contract/contracts/interfaces/v1/IEzio';
 import { getQuote } from '../views/wallet/helpers/utilities';
 import {
