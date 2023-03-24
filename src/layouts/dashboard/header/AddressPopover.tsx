@@ -33,6 +33,7 @@ import NightlightIcon from '@mui/icons-material/Nightlight';
 import { ImageBox } from '../../../views/homePage/mainStyle';
 import icon_en from '../../../assets/header/ic_flag_en.svg';
 import icon_zh from '../../../assets/header/ic_flag_cn.svg';
+
 export default function AddressPopover() {
   const { connectState, connect, disconnect, account } = useWallet();
 
@@ -71,8 +72,9 @@ export default function AddressPopover() {
     fontSize: '32px',
   });
 
-  const copyText = () => {
-    navigator.clipboard.writeText(addressToShowInPop);
+  const copyText = async () => {
+    await navigator.clipboard.writeText(addressToShowInPop);
+    setCopyFlag(true);
   };
 
   const copyClose = (event: React.SyntheticEvent | Event, reason?: string) => {
