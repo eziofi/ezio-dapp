@@ -103,8 +103,8 @@ export default function MarketApexChart() {
             title: {
               text: t('home.treasuryValue'),
             },
-            decimalsInFloat: 0,
-            min: 0,
+            decimalsInFloat: 1,
+            min: getYMin(treasuryData),
             max: getYMax(treasuryData),
           },
           // {

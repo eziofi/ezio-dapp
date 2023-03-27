@@ -87,7 +87,7 @@ export default function TotleNetWorthApexChart() {
               title: {
                 text: t('home.E2LPTotalnetworth'),
               },
-              decimalsInFloat: 0,
+              decimalsInFloat: 1,
               max: getYMax(sum),
               min: getYMin(sum),
             },

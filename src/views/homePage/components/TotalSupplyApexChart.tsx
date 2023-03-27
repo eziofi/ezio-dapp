@@ -3,7 +3,7 @@ import ReactApexChart from 'react-apexcharts';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { queryTokenGroup } from '../../../api/api';
 import { t } from 'i18next';
-import { getYMax } from '../../wallet/helpers/utilities';
+import { getYMax, getYMin } from '../../wallet/helpers/utilities';
 import { useContext, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { ColorModeContext } from '../../../theme';
@@ -85,8 +85,8 @@ export default function TotalSupplyApexChart() {
               title: {
                 text: t('home.totalSupplyAxis'),
               },
-              decimalsInFloat: 0,
-              min: 0,
+              decimalsInFloat: 1,
+              min: getYMin([...aTotalSupply, ...bTatalSupply]),
               max: totalSupplyMax,
             },
           ],
