@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { ReactElement, ReactNode, useContext, useEffect, useState } from 'react';
 import './animation.less';
 import { Box, Button, CardContent, CircularProgress, IconButton, Toolbar, Typography, useTheme } from '@mui/material';
 import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
@@ -28,6 +28,7 @@ import { useFeeRate } from '../../hooks/useFeeRate';
 import SlippagePopover from './components/SlippagePopover';
 import { UIContext } from '../context/UIProvider';
 import { stringify } from 'querystring';
+import { ButtonTypeMap } from '@mui/material/Button/Button';
 
 interface IPurchaseArg {
   fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC;
@@ -301,6 +302,37 @@ export default function Purchase() {
     }
   }, [type]);
 
+  const MutationButton = ({
+    children,
+    disabled,
+    onClick,
+    loadingOpen,
+    loadingText,
+  }: {
+    children: ReactNode;
+    disabled?: boolean;
+    onClick: () => void;
+    loadingOpen?: boolean;
+    loadingText?: string;
+  }) => (
+    <Button
+      sx={{ width: '90%', marginTop: theme.spacing(5), borderRadius: '15px' }}
+      variant="contained"
+      size={'large'}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {loadingOpen ? (
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ mr: 1 }}>{loadingText || ''}</Box>
+          <CircularProgress size={16} sx={{ color: 'rgba(145, 158, 171, 0.8)' }} />
+        </Box>
+      ) : (
+        children
+      )}
+    </Button>
+  );
+
   return (
     <PurchaseContainer>
       <Toolbar sx={{ width: '98%', alignSelf: 'flex-start', margin: '0 auto' }}>
@@ -369,40 +401,37 @@ export default function Purchase() {
         <></>
       )}
 
-      {/* 购买、赎回按钮 */}
-      <Button
-        sx={{ width: '90%', marginTop: theme.spacing(5), borderRadius: '15px' }}
-        variant="contained"
-        disableElevation
-        size={'large'}
-        disabled={((!needApprove && (!inputValue1 || !+inputValue1)) || loadingOpen) && connectState !== 'unconnected'}
-        onClick={() =>
-          connectState === 'unconnected'
-            ? connect()
-            : needApprove
-            ? doApprove()
-            : type === TRANSFER_TYPE.PURCHASE
-            ? doPurchase()
-            : type === TRANSFER_TYPE.REDEEM
-            ? doRedeem()
-            : null
-        }
-      >
-        {connectState === 'unconnected' ? (
-          t('home.login')
-        ) : loadingOpen ? (
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Box sx={{ mr: 1 }}>{loadingText}</Box>
-            <CircularProgress size={16} sx={{ color: 'rgba(145, 158, 171, 0.8)' }} />
-          </Box>
-        ) : needApprove ? (
-          t('purchase.approveAction') + TOKEN_TYPE[redeemTokenType]
-        ) : type === TRANSFER_TYPE.PURCHASE ? (
-          t('purchase.purchaseAction')
-        ) : (
-          t('redeem.redeemAction')
-        )}
-      </Button>
+      {connectState === 'unconnected' ? (
+        // 连接钱包按钮
+        <MutationButton onClick={connect}>{t('home.login')}</MutationButton>
+      ) : needApprove ? (
+        // 授权按钮
+        <MutationButton disabled={loadingOpen} onClick={doApprove} loadingOpen={loadingOpen} loadingText={loadingText}>
+          {t('purchase.approveAction') + TOKEN_TYPE[redeemTokenType]}
+        </MutationButton>
+      ) : type === TRANSFER_TYPE.PURCHASE ? (
+        // 购买按钮
+        <MutationButton
+          disabled={!inputValue1 || !+inputValue1 || loadingOpen}
+          onClick={doPurchase}
+          loadingOpen={loadingOpen}
+          loadingText={loadingText}
+        >
+          {t('purchase.purchaseAction')}
+        </MutationButton>
+      ) : type === TRANSFER_TYPE.REDEEM ? (
+        // 赎回按钮
+        <MutationButton
+          disabled={!inputValue1 || !+inputValue1 || loadingOpen}
+          onClick={doRedeem}
+          loadingOpen={loadingOpen}
+          loadingText={loadingText}
+        >
+          {t('redeem.redeemAction')}
+        </MutationButton>
+      ) : (
+        <></>
+      )}
 
       <FooterContent>
         {/*<span>{t('purchase.unitPrice') + ' $' + formatNetWorth(netWorth, true)}</span>*/}
