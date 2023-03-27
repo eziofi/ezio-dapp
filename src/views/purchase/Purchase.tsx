@@ -316,7 +316,7 @@ export default function Purchase() {
     loadingText?: string;
   }) => (
     <Button
-      sx={{ width: '90%', marginTop: theme.spacing(5), borderRadius: '15px' }}
+      sx={{ width: '90%', marginTop: theme.spacing(5), borderRadius: '15px', fontSize: 18 }}
       variant="contained"
       size={'large'}
       disabled={disabled}

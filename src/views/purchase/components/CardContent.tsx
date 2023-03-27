@@ -152,7 +152,7 @@ function RanderOptions(
     setopenDialog(true);
   }
 
-  function handleColse(tokenType?: TOKEN_TYPE) {
+  function handleClose(tokenType?: TOKEN_TYPE) {
     if (tokenType !== undefined || '' || null) {
       // @ts-ignore
       handleChange(tokenType as TOKEN_TYPE);
@@ -204,7 +204,7 @@ function RanderOptions(
           alignItems: 'center',
         }}
       >
-        {t('purchase.leftBalance') + ': '}
+        {t('purchase.leftBalance') + ''}
         {balance ? formatString(balance, 6).toString() : <InlineSkeleton width={40} />}
         {showMaxVal && inputVal !== balance && (
           <Button
@@ -215,21 +215,20 @@ function RanderOptions(
               lineHeight: '0',
               // marginLeft: theme.spacing(1),
             }}
-            // @ts-ignore
-            onClick={() => setInputVal(formatString(balance, 6).toString())}
+            onClick={() => setInputVal!(formatString(balance || '', 6).toString())}
           >
             <>{t('purchase.maxValue')}</>
           </Button>
         )}
       </div>
       {openDialog && (
-        <TokenTypeDialog openDialog={openDialog} handleColse={handleColse} Options={Options} tokenType={tokenType} />
+        <TokenTypeDialog openDialog={openDialog} handleClose={handleClose} Options={Options} tokenType={tokenType} />
       )}
     </BalanceContent>
   );
 }
 
-const PurchasenOptions: IOptions[] = [
+const PurchaseOptions: IOptions[] = [
   {
     value: TOKEN_TYPE.ezUSD,
     iconParentStyle: {
@@ -356,7 +355,7 @@ function MyCardContentOne({
             getInputVal1,
           )
         : // @ts-ignore
-          RanderOptions(PurchasenOptions, tokenType, handleChange, balance, true, inputValue1, getInputVal1)}
+          RanderOptions(PurchaseOptions, tokenType, handleChange, balance, true, inputValue1, getInputVal1)}
     </BodyContent>
   );
 }
@@ -417,7 +416,7 @@ function MyCardContentSecond({
 
         {transactionType === TRANSFER_TYPE.PURCHASE
           ? // @ts-ignore
-            RanderOptions(PurchasenOptions, tokenType, handleChange, balance, false)
+            RanderOptions(PurchaseOptions, tokenType, handleChange, balance, false)
           : tokenType === TOKEN_TYPE.ezUSD
           ? // <div style={{ width: 142, height: 83, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
             //   <div style={{ display: 'flex', alignItems: 'center', height: 46 }}>

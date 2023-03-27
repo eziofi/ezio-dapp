@@ -36,7 +36,7 @@ interface IOptions {
 
 interface IProps {
   openDialog: boolean;
-  handleColse: (tokenType?: TOKEN_TYPE) => void;
+  handleClose: (tokenType?: TOKEN_TYPE) => void;
   Options: IOptions[];
   tokenType: TOKEN_TYPE;
 }
@@ -107,7 +107,7 @@ const MenuItemStyle = {
   height: 30,
   borderRadius: '50%',
 };
-export default function TokenTypeDialog({ openDialog, handleColse, Options, tokenType }: IProps) {
+export default function TokenTypeDialog({ openDialog, handleClose, Options, tokenType }: IProps) {
   const { reverseCoin, networkName } = useWallet();
 
   const [searchList, setSearchList] = React.useState<IOptions[]>([]);
@@ -142,7 +142,7 @@ export default function TokenTypeDialog({ openDialog, handleColse, Options, toke
   return (
     <Dialog
       open={openDialog}
-      onClose={() => handleColse()}
+      onClose={() => handleClose()}
       sx={{
         '.css-1is6lpg-MuiPaper-root-MuiDialog-paper': {
           borderRadius: '20px',
@@ -156,7 +156,7 @@ export default function TokenTypeDialog({ openDialog, handleColse, Options, toke
               选择代币
             </Typography>
             <Typography component="div" sx={{ fontWeight: 'bold' }}>
-              <ClearIcon sx={{ ':hover': { cursor: 'pointer' } }} onClick={() => handleColse()} />
+              <ClearIcon sx={{ ':hover': { cursor: 'pointer' } }} onClick={() => handleClose()} />
             </Typography>
           </Box>
 
@@ -181,7 +181,7 @@ export default function TokenTypeDialog({ openDialog, handleColse, Options, toke
                 <Tag
                   key={item.value}
                   style={TOKEN_TYPE[tokenType] === TOKEN_TYPE[item.value] ? { ...TagActive } : {}}
-                  onClick={() => handleColse(item.value)}
+                  onClick={() => handleClose(item.value)}
                 >
                   {renderIcon(item)}
                 </Tag>
@@ -202,7 +202,7 @@ export default function TokenTypeDialog({ openDialog, handleColse, Options, toke
                     key={item.value}
                     // @ts-ignore
                     sx={TOKEN_TYPE[tokenType] === TOKEN_TYPE[item.value] ? { opacity: '0.4' } : {}}
-                    onClick={() => handleColse(item.value)}
+                    onClick={() => handleClose(item.value)}
                   >
                     <div style={{ margin: '0 auto', width: '90%', display: 'flex', justifyContent: 'space-between' }}>
                       {renderIcon(item)}
