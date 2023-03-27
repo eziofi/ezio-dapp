@@ -18,12 +18,14 @@ interface IProps {
   transactionType: TRANSFER_TYPE.PURCHASE | TRANSFER_TYPE.REDEEM;
   getTokenType: (tokenType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP) => void;
   getInputVal1: (InputVal: string) => void | any;
+  getInputVal2: (InputVal: string) => void | any;
   inputValue2: string;
   tokenType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP;
   redeemTokenType: TOKEN_TYPE;
   setRedeemTokenType: (redeemTokenType: TOKEN_TYPE.USDC | TOKEN_TYPE.USDT | TOKEN_TYPE.ReverseCoin) => void;
   inputValue1: string;
   needApprove: boolean;
+  pricePercentage: string;
 }
 
 interface IOptions {
@@ -47,7 +49,15 @@ type CardContentOneProps = Pick<
 >;
 type CardContentSecondProps = Pick<
   IProps,
-  'transactionType' | 'inputValue2' | 'getTokenType' | 'tokenType' | 'redeemTokenType' | 'setRedeemTokenType' | 'isBuy'
+  | 'transactionType'
+  | 'inputValue2'
+  | 'getTokenType'
+  | 'tokenType'
+  | 'redeemTokenType'
+  | 'setRedeemTokenType'
+  | 'isBuy'
+  | 'getInputVal2'
+  | 'pricePercentage'
 >;
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
@@ -331,7 +341,7 @@ function MyCardContentOne({
           disabled={needApprove}
         />
         <div style={{ ...priceStyle, color: theme.palette.text.secondary }}>
-          {price ? t('purchase.unitPrice') + ': ' + price + ' USDC' : <Skeleton width={100} />}
+          {price ? t('purchase.unitPrice') + ': $' + price : <Skeleton width={100} />}
         </div>
       </div>
       {transactionType === TRANSFER_TYPE.PURCHASE
@@ -359,6 +369,8 @@ function MyCardContentSecond({
   redeemTokenType,
   setRedeemTokenType,
   isBuy,
+  getInputVal2,
+  pricePercentage,
 }: CardContentSecondProps) {
   const { price } = usePrice(isBuy ? tokenType : redeemTokenType);
   const { balance } = useBalance(transactionType === TRANSFER_TYPE.PURCHASE ? tokenType : redeemTokenType);
@@ -385,11 +397,21 @@ function MyCardContentSecond({
             placeholder="0"
             type="number"
             value={inputValue2}
-            disabled
+            onInput={(e: any) => {
+              if (e.target.value !== '') {
+                // 限制输入小数点后六位
+                getInputVal2(e.target.value.replace(/^\D*(\d*(?:\.\d{0,6})?).*$/g, '$1'));
+              } else {
+                // 禁止输入框输入 e + -符号
+                e.target.value = e.target.value.replace(/[e\+\-]/, '');
+                getInputVal2(e.target.value);
+              }
+            }}
           />
           <div style={{ ...priceStyle, color: theme.palette.text.secondary }}>
             {/*{t('purchase.estimated')}*/}
-            {price ? t('purchase.unitPrice') + ': ' + price + ' USDC' : <Skeleton width={100} />}
+            {price ? t('purchase.unitPrice') + ': $' + price : <Skeleton width={100} />}
+            {pricePercentage ? ` (${pricePercentage}%)` : ''}
           </div>
         </div>
 

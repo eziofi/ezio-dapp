@@ -85,7 +85,7 @@ export default {
     reward: '奖励',
     tipTitle: '下折规则说明',
     // rewardTips: '每满1000 USD奖励 1 EZIO',
-    unitPrice: '参考单价',
+    unitPrice: '单价',
     USDTEstimated: '预估获得',
     estimated: '预计获得',
     EZATRate: 'ezUSD参考年利率',

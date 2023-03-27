@@ -27,6 +27,7 @@ import { InlineSkeleton } from '../components/Skeleton';
 import { useFeeRate } from '../../hooks/useFeeRate';
 import SlippagePopover from './components/SlippagePopover';
 import { UIContext } from '../context/UIProvider';
+import { stringify } from 'querystring';
 
 interface IPurchaseArg {
   fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC;
@@ -53,9 +54,9 @@ export default function Purchase() {
   const queryClient: QueryClient = useQueryClient();
   const [type, setType] = useState(TRANSFER_TYPE.PURCHASE); // 0是购买 1是赎回
   // const [tipDrawerOpened, setTipDrawerOpened] = useState(false);
-  const [inputValue1, setInputValue1] = useState('');
-  const [inputValue2, setInputValue2] = useState('');
-  const [isClick, setIsClick] = useState(false);
+  const [inputValue1, setInputValue1] = useState(''); // 上方输入框
+  const [inputValue2, setInputValue2] = useState(''); // 下方输入框
+  const [pricePercentage, setPricePercentage] = useState('');
   const [tokenType, setTokenType] = useState<TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP>(TOKEN_TYPE.ezUSD); // 下拉框value
   const [redeemTokenType, setRedeemTokenType] = useState<TOKEN_TYPE.USDC | TOKEN_TYPE.USDT | TOKEN_TYPE.ReverseCoin>(
     TOKEN_TYPE.USDT,
@@ -91,6 +92,13 @@ export default function Purchase() {
     }
   }, [tokenType, redeemTokenType, fromPrice, toPrice, inputValue1]);
 
+  useEffect(() => {
+    if (fromPrice && toPrice) {
+      const percentage = ((parseFloat(toPrice) - parseFloat(fromPrice)) / parseFloat(fromPrice)) * 100;
+      setPricePercentage(percentage < 0 ? percentage.toFixed(2) : '+' + percentage.toFixed(2));
+    }
+  }, [toPrice, fromPrice]);
+
   const { t } = useTranslation();
 
   function getInputVal1(value: string) {
@@ -102,10 +110,21 @@ export default function Purchase() {
     }
   }
 
+  // 反算输入值
+  function getInputVal2(value: string) {
+    setInputValue2(value);
+    // 计算预计获得
+    if (fromPrice && toPrice) {
+      const estimatedValue1 = (parseFloat(value) * parseFloat(toPrice)) / parseFloat(fromPrice);
+      const flooredValue = Math.floor(estimatedValue1 * 10 ** 6) / 10 ** 6;
+      setInputValue1(flooredValue + '');
+    }
+  }
+
   // 改变购买 / 赎回 状态 清空value
-  function setAnimation() {
-    setInputValue1('');
-    setInputValue2('');
+  function convert() {
+    setInputValue1(inputValue2);
+    setInputValue2(inputValue1);
     setType(type === TRANSFER_TYPE.PURCHASE ? TRANSFER_TYPE.REDEEM : TRANSFER_TYPE.PURCHASE);
   }
 
@@ -297,49 +316,43 @@ export default function Purchase() {
 
       {/* 卡片1 */}
       <ContentBottom sx={{}} className="contentBottom">
-        {!isClick ? (
-          <CardContent>
-            <MyCardContentOne
-              isBuy={type === TRANSFER_TYPE.PURCHASE}
-              transactionType={type}
-              tokenType={tokenType}
-              getTokenType={getTokenType}
-              getInputVal1={getInputVal1}
-              redeemTokenType={redeemTokenType}
-              setRedeemTokenType={setRedeemTokenType}
-              inputValue1={inputValue1}
-              needApprove={needApprove}
-            />
-          </CardContent>
-        ) : (
-          <></>
-        )}
+        <CardContent>
+          <MyCardContentOne
+            isBuy={type === TRANSFER_TYPE.PURCHASE}
+            transactionType={type}
+            tokenType={tokenType}
+            getTokenType={getTokenType}
+            getInputVal1={getInputVal1}
+            redeemTokenType={redeemTokenType}
+            setRedeemTokenType={setRedeemTokenType}
+            inputValue1={inputValue1}
+            needApprove={needApprove}
+          />
+        </CardContent>
       </ContentBottom>
 
       {/* cover btn */}
       <ConverBtn className="coverBtn">
-        <IconButton className="iconBtn" onClick={() => setAnimation()}>
+        <IconButton className="iconBtn" onClick={() => convert()}>
           <BaseIconFont name="icon-qiehuan" style={{ fill: 'white', height: '100%' }} />
         </IconButton>
       </ConverBtn>
 
       {/* 卡片2 */}
       <ContentTop sx={{}} className="contentTop">
-        {!isClick ? (
-          <CardContent>
-            <MyCardContentSecond
-              isBuy={type === TRANSFER_TYPE.PURCHASE}
-              transactionType={type}
-              tokenType={tokenType}
-              getTokenType={getTokenType}
-              inputValue2={inputValue2}
-              redeemTokenType={redeemTokenType}
-              setRedeemTokenType={setRedeemTokenType}
-            />
-          </CardContent>
-        ) : (
-          <></>
-        )}
+        <CardContent>
+          <MyCardContentSecond
+            isBuy={type === TRANSFER_TYPE.PURCHASE}
+            transactionType={type}
+            tokenType={tokenType}
+            getTokenType={getTokenType}
+            inputValue2={inputValue2}
+            getInputVal2={getInputVal2}
+            redeemTokenType={redeemTokenType}
+            setRedeemTokenType={setRedeemTokenType}
+            pricePercentage={pricePercentage}
+          />
+        </CardContent>
       </ContentTop>
 
       {/* 单位换算/*/}
@@ -358,9 +371,10 @@ export default function Purchase() {
 
       {/* 购买、赎回按钮 */}
       <Button
-        sx={{ width: '90%', marginTop: theme.spacing(5) }}
+        sx={{ width: '90%', marginTop: theme.spacing(5), borderRadius: '15px' }}
         variant="contained"
         disableElevation
+        size={'large'}
         disabled={((!needApprove && (!inputValue1 || !+inputValue1)) || loadingOpen) && connectState !== 'unconnected'}
         onClick={() =>
           connectState === 'unconnected'
