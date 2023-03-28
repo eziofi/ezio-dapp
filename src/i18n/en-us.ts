@@ -108,6 +108,8 @@ export default {
     maxValue: 'Max',
     slippageTolerance: 'Slippage',
     voluntarily: 'Auto',
+    searchName: 'Search Name',
+    selectiveToken: 'Selective token',
   },
   redeem: {
     redeemValue: 'Redeem',

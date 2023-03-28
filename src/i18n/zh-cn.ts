@@ -107,6 +107,8 @@ export default {
     maxValue: '最大',
     slippageTolerance: '滑点容差',
     voluntarily: '自动',
+    searchName: '搜索名称',
+    selectiveToken: '选择代币',
   },
   redeem: {
     redeemValue: '赎回',

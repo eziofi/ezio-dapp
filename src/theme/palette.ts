@@ -108,6 +108,13 @@ const palette = {
     cardBg: 'rgba(245, 246, 252, 1)',
     menuItemBg: 'rgba(110, 77, 248, 0.1)',
     slippageBg: 'rgba(255, 255, 255, 1)',
+    tokenDialog: {
+      hover: 'rgba(152, 161, 192, 0.08)',
+      tag: {
+        active: '76, 130, 251',
+        default: 'rgb(210, 217, 238)',
+      },
+    },
   },
 };
 

@@ -4,28 +4,24 @@ import {
   CardContent,
   Dialog,
   Divider,
-  FormControl,
-  FormHelperText,
   IconButton,
-  InputAdornment,
   InputBase,
   List,
   ListItem,
-  OutlinedInput,
   Paper,
-  TextField,
   Typography,
+  useTheme,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { ElementType, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { TOKEN_TYPE } from '../../wallet/helpers/constant';
 import ClearIcon from '@mui/icons-material/Clear';
-import { MiscellaneousServicesOutlined } from '@mui/icons-material';
 import SearchIcon from '@mui/icons-material/Search';
 import BaseIconFont from '../../components/BaseIconFont';
 import useWallet from '../../hooks/useWallet';
 import { StyleProps } from '../../../types/styleType';
 import CheckIcon from '@mui/icons-material/Check';
+import { useTranslation } from 'react-i18next';
 
 interface IOptions {
   value: TOKEN_TYPE;
@@ -40,27 +36,6 @@ interface IProps {
   Options: IOptions[];
   tokenType: TOKEN_TYPE;
 }
-
-const Tag = styled('div')(() => {
-  return {
-    padding: '6px 12px 6px 6px',
-    border: '1px solid #ccc',
-    borderRadius: '16px',
-    marginRight: '10px',
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: '10px',
-    ':hover': {
-      cursor: 'pointer',
-    },
-  };
-});
-
-const TagActive = {
-  background: 'rgba(76, 130, 251, 0.24)',
-  border: '1px solid rgb(76, 130, 251)',
-  color: 'rgb(76, 130, 251)',
-};
 
 const MyPaper = styled((props: any) => {
   return <Paper {...props} />;
@@ -88,13 +63,15 @@ const TokenList = styled((props: StyleProps) => {
 });
 
 const MyListItem = styled((props: StyleProps) => <ListItem {...props} disablePadding />)(() => {
+  const theme = useTheme();
   return {
     padding: '10px 0',
     display: 'flex',
     justifyContent: 'space-between',
     ':hover': {
       cursor: 'pointer',
-      background: 'rgb(247,248,250)',
+      // @ts-ignore
+      background: theme.palette.purchase.tokenDialog.hover,
     },
   };
 });
@@ -108,6 +85,7 @@ const MenuItemStyle = {
   borderRadius: '50%',
 };
 export default function TokenTypeDialog({ openDialog, handleClose, Options, tokenType }: IProps) {
+  const { t } = useTranslation();
   const { reverseCoin, networkName } = useWallet();
 
   const [searchList, setSearchList] = React.useState<IOptions[]>([]);
@@ -117,12 +95,8 @@ export default function TokenTypeDialog({ openDialog, handleClose, Options, toke
     setSearchList([...list]);
   }
 
-  const [checkToken, setCheckToken] = React.useState<TOKEN_TYPE | null>(null);
-
   useEffect(() => {
     Options && setSearchList(Options);
-
-    setCheckToken(tokenType);
   }, [tokenType]);
 
   function renderIcon(item: IOptions) {
@@ -139,6 +113,27 @@ export default function TokenTypeDialog({ openDialog, handleClose, Options, toke
     );
   }
 
+  const Tag = styled('div')(() => {
+    const theme = useTheme();
+    return {
+      padding: '6px 12px 6px 6px',
+      // @ts-ignore
+      border: `1px solid ${theme.palette.purchase.tokenDialog.tag.default}`,
+      borderRadius: '16px',
+      marginRight: '10px',
+      display: 'flex',
+      alignItems: 'center',
+      marginBottom: '10px',
+      ':hover': {
+        cursor: 'pointer',
+        // @ts-ignore
+        background: theme.palette.purchase.tokenDialog.hover,
+      },
+    };
+  });
+
+  const theme = useTheme();
+
   return (
     <Dialog
       open={openDialog}
@@ -153,7 +148,7 @@ export default function TokenTypeDialog({ openDialog, handleClose, Options, toke
         <CardContent sx={{ width: '480px', flex: 1 }}>
           <Box sx={{ display: 'flex', alignItems: 'cneter', justifyContent: 'space-between' }}>
             <Typography component="div" sx={{ fontWeight: 'bold' }}>
-              选择代币
+              {t('purchase.selectiveToken')}
             </Typography>
             <Typography component="div" sx={{ fontWeight: 'bold' }}>
               <ClearIcon sx={{ ':hover': { cursor: 'pointer' } }} onClick={() => handleClose()} />
@@ -167,8 +162,8 @@ export default function TokenTypeDialog({ openDialog, handleClose, Options, toke
             </IconButton>
             <InputBase
               sx={{ ml: 1, flex: 1 }}
-              placeholder="搜索名称"
-              inputProps={{ 'aria-label': '搜索名称' }}
+              placeholder={t('purchase.searchName')}
+              inputProps={{ 'aria-label': t('purchase.searchName') }}
               // @ts-ignore
               onInput={e => search(e.target.value)}
             />
@@ -180,7 +175,18 @@ export default function TokenTypeDialog({ openDialog, handleClose, Options, toke
               return (
                 <Tag
                   key={item.value}
-                  style={TOKEN_TYPE[tokenType] === TOKEN_TYPE[item.value] ? { ...TagActive } : {}}
+                  style={
+                    TOKEN_TYPE[tokenType] === TOKEN_TYPE[item.value]
+                      ? {
+                          // @ts-ignore
+                          borderColor: `rgb(${theme.palette.purchase.tokenDialog.tag.active})`,
+                          // @ts-ignore
+                          background: `rgba(${theme.palette.purchase.tokenDialog.tag.active},0.24)`,
+                          // @ts-ignore
+                          color: `rgb(${theme.palette.purchase.tokenDialog.tag.active})`,
+                        }
+                      : {}
+                  }
                   onClick={() => handleClose(item.value)}
                 >
                   {renderIcon(item)}
