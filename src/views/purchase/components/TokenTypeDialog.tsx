@@ -112,7 +112,7 @@ export default function TokenTypeDialog({ openDialog, handleClose, Options, toke
         </div>
         {item.value === TOKEN_TYPE['ReverseCoin']
           ? reverseCoin
-          : networkName === NETWORK_TYPE.polygon
+          : networkName === NETWORK_TYPE.polygon && item.value === TOKEN_TYPE.E2LP
           ? ATokenMap[networkName]
           : TOKEN_TYPE[item.value as TOKEN_TYPE]}
       </div>

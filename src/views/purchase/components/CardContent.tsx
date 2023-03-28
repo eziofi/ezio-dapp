@@ -240,45 +240,40 @@ function RanderOptions(
 
 // item.value === TOKEN_TYPE.E2LP && networkName === NETWORK_TYPE.polygon ? ATokenMap[networkName] : item.value
 
-function backPurchaseOptions() {
-  const { networkName } = useWallet();
-
-  const PurchaseOptions: IOptions[] = [
-    {
-      value: TOKEN_TYPE.USDE,
-      iconParentStyle: {
-        margin: '0 10px',
-        background: 'rgba(95, 69, 186, 1)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: 30,
-        height: 30,
-        borderRadius: '50%',
-      },
-      iconName: 'icon-A',
-      iconStyle: { width: 20, height: 20, fill: 'white' },
+const PurchaseOptions: IOptions[] = [
+  {
+    value: TOKEN_TYPE.USDE,
+    iconParentStyle: {
+      margin: '0 10px',
+      background: 'rgba(95, 69, 186, 1)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: 30,
+      height: 30,
+      borderRadius: '50%',
     },
-    {
-      // @ts-ignore
-      // value: networkName === NETWORK_TYPE.polygon ? ATokenMap[networkName] : TOKEN_TYPE.E2LP,
-      value: TOKEN_TYPE.E2LP,
-      iconParentStyle: {
-        margin: '0 10px',
-        background: 'rgba(239, 89, 114, 1)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: 30,
-        height: 30,
-        borderRadius: '50%',
-      },
-      iconName: 'icon-B',
-      iconStyle: { width: 20, height: 20, fill: 'white' },
+    iconName: 'icon-A',
+    iconStyle: { width: 20, height: 20, fill: 'white' },
+  },
+  {
+    // @ts-ignore
+    // value: networkName === NETWORK_TYPE.polygon ? ATokenMap[networkName] : TOKEN_TYPE.E2LP,
+    value: TOKEN_TYPE.E2LP,
+    iconParentStyle: {
+      margin: '0 10px',
+      background: 'rgba(239, 89, 114, 1)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: 30,
+      height: 30,
+      borderRadius: '50%',
     },
-  ];
-  return PurchaseOptions;
-}
+    iconName: 'icon-B',
+    iconStyle: { width: 20, height: 20, fill: 'white' },
+  },
+];
 
 // 宽高 30 是因为他们没有背景色 显得图标会小 宽高30是同父级宽高,是button的宽高
 const redeemOptions: IOptions[] = [
@@ -374,7 +369,7 @@ function MyCardContentOne({
             getInputVal1,
           )
         : // @ts-ignore
-          RanderOptions(backPurchaseOptions(), tokenType, handleChange, balance, true, inputValue1, getInputVal1)}
+          RanderOptions(PurchaseOptions, tokenType, handleChange, balance, true, inputValue1, getInputVal1)}
     </BodyContent>
   );
 }
@@ -435,7 +430,7 @@ function MyCardContentSecond({
 
         {transactionType === TRANSFER_TYPE.PURCHASE
           ? // @ts-ignore
-            RanderOptions(backPurchaseOptions(), tokenType, handleChange, balance, false)
+            RanderOptions(PurchaseOptions, tokenType, handleChange, balance, false)
           : tokenType === TOKEN_TYPE.USDE
           ? // <div style={{ width: 142, height: 83, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
             //   <div style={{ display: 'flex', alignItems: 'center', height: 46 }}>
