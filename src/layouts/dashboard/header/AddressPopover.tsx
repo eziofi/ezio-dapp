@@ -187,7 +187,7 @@ export default function AddressPopover() {
 
             <Button sx={{ ...languageAndThemeStyle }} onClick={toggleColorMode}>
               <span>{mode} Theme</span>
-              <span>{mode === 'light' ? <NightlightIcon /> : <WbSunnyIcon />}</span>
+              <span>{mode === 'light' ? <WbSunnyIcon /> : <NightlightIcon />}</span>
             </Button>
           </Box>
           <Button
