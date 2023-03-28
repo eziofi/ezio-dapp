@@ -54,6 +54,7 @@ export interface EzTreasuryV1Interface extends utils.Interface {
     "REDEEM_RATE_DENOMINATOR()": FunctionFragment;
     "REWARD_RATE_DENOMINATOR()": FunctionFragment;
     "aggregatorAction(address)": FunctionFragment;
+    "changeList(uint8)": FunctionFragment;
     "check()": FunctionFragment;
     "convertAmt(address,address,uint256)": FunctionFragment;
     "convertDown(uint8,(address,address,uint256,bytes))": FunctionFragment;
@@ -80,9 +81,9 @@ export interface EzTreasuryV1Interface extends utils.Interface {
     "rewardRate()": FunctionFragment;
     "setAggregators(address,address)": FunctionFragment;
     "setApprove(address,uint8,uint256)": FunctionFragment;
-    "setRedeemFeeRateA(uint16)": FunctionFragment;
-    "setRedeemFeeRateB(uint16)": FunctionFragment;
-    "setRewardRate(uint16)": FunctionFragment;
+    "setRedeemFeeRateA(uint16,uint256)": FunctionFragment;
+    "setRedeemFeeRateB(uint16,uint256)": FunctionFragment;
+    "setRewardRate(uint16,uint256)": FunctionFragment;
     "setStakeRewardRate(uint16)": FunctionFragment;
     "stakeRewardRate()": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
@@ -106,6 +107,7 @@ export interface EzTreasuryV1Interface extends utils.Interface {
       | "REDEEM_RATE_DENOMINATOR"
       | "REWARD_RATE_DENOMINATOR"
       | "aggregatorAction"
+      | "changeList"
       | "check"
       | "convertAmt"
       | "convertDown"
@@ -188,6 +190,10 @@ export interface EzTreasuryV1Interface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "aggregatorAction",
     values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "changeList",
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(functionFragment: "check", values?: undefined): string;
   encodeFunctionData(
@@ -306,15 +312,15 @@ export interface EzTreasuryV1Interface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "setRedeemFeeRateA",
-    values: [PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "setRedeemFeeRateB",
-    values: [PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "setRewardRate",
-    values: [PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "setStakeRewardRate",
@@ -397,6 +403,7 @@ export interface EzTreasuryV1Interface extends utils.Interface {
     functionFragment: "aggregatorAction",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "changeList", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "check", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "convertAmt", data: BytesLike): Result;
   decodeFunctionResult(
@@ -499,6 +506,7 @@ export interface EzTreasuryV1Interface extends utils.Interface {
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
   events: {
+    "Change(uint8,uint16,uint256)": EventFragment;
     "ConvertDown(uint256,uint256,uint256)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "Purchase(address,uint8,uint256,uint256)": EventFragment;
@@ -508,6 +516,7 @@ export interface EzTreasuryV1Interface extends utils.Interface {
     "RoleRevoked(bytes32,address,address)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "Change"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ConvertDown"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Purchase"): EventFragment;
@@ -516,6 +525,18 @@ export interface EzTreasuryV1Interface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
 }
+
+export interface ChangeEventObject {
+  type_: number;
+  value_: number;
+  time_: BigNumber;
+}
+export type ChangeEvent = TypedEvent<
+  [number, number, BigNumber],
+  ChangeEventObject
+>;
+
+export type ChangeEventFilter = TypedEventFilter<ChangeEvent>;
 
 export interface ConvertDownEventObject {
   matchedA_: BigNumber;
@@ -652,6 +673,11 @@ export interface EzTreasuryV1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    changeList(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[number, BigNumber] & { value: number; deadLine: BigNumber }>;
+
     check(
       overrides?: CallOverrides
     ): Promise<[boolean] & { convertDownFlag: boolean }>;
@@ -778,16 +804,19 @@ export interface EzTreasuryV1 extends BaseContract {
 
     setRedeemFeeRateA(
       redeemFeeRateA_: PromiseOrValue<BigNumberish>,
+      deadLine_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     setRedeemFeeRateB(
       redeemFeeRateB_: PromiseOrValue<BigNumberish>,
+      deadLine_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     setRewardRate(
       rewardRate_: PromiseOrValue<BigNumberish>,
+      deadLine_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -846,6 +875,11 @@ export interface EzTreasuryV1 extends BaseContract {
     tokenAddress: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
+
+  changeList(
+    arg0: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<[number, BigNumber] & { value: number; deadLine: BigNumber }>;
 
   check(overrides?: CallOverrides): Promise<boolean>;
 
@@ -971,16 +1005,19 @@ export interface EzTreasuryV1 extends BaseContract {
 
   setRedeemFeeRateA(
     redeemFeeRateA_: PromiseOrValue<BigNumberish>,
+    deadLine_: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   setRedeemFeeRateB(
     redeemFeeRateB_: PromiseOrValue<BigNumberish>,
+    deadLine_: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   setRewardRate(
     rewardRate_: PromiseOrValue<BigNumberish>,
+    deadLine_: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -1039,6 +1076,11 @@ export interface EzTreasuryV1 extends BaseContract {
       tokenAddress: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    changeList(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[number, BigNumber] & { value: number; deadLine: BigNumber }>;
 
     check(overrides?: CallOverrides): Promise<boolean>;
 
@@ -1162,16 +1204,19 @@ export interface EzTreasuryV1 extends BaseContract {
 
     setRedeemFeeRateA(
       redeemFeeRateA_: PromiseOrValue<BigNumberish>,
+      deadLine_: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     setRedeemFeeRateB(
       redeemFeeRateB_: PromiseOrValue<BigNumberish>,
+      deadLine_: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     setRewardRate(
       rewardRate_: PromiseOrValue<BigNumberish>,
+      deadLine_: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1207,6 +1252,17 @@ export interface EzTreasuryV1 extends BaseContract {
   };
 
   filters: {
+    "Change(uint8,uint16,uint256)"(
+      type_?: PromiseOrValue<BigNumberish> | null,
+      value_?: PromiseOrValue<BigNumberish> | null,
+      time_?: PromiseOrValue<BigNumberish> | null
+    ): ChangeEventFilter;
+    Change(
+      type_?: PromiseOrValue<BigNumberish> | null,
+      value_?: PromiseOrValue<BigNumberish> | null,
+      time_?: PromiseOrValue<BigNumberish> | null
+    ): ChangeEventFilter;
+
     "ConvertDown(uint256,uint256,uint256)"(
       matchedA_?: PromiseOrValue<BigNumberish> | null,
       totalNetWorth_?: PromiseOrValue<BigNumberish> | null,
@@ -1306,6 +1362,11 @@ export interface EzTreasuryV1 extends BaseContract {
 
     aggregatorAction(
       tokenAddress: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    changeList(
+      arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1433,16 +1494,19 @@ export interface EzTreasuryV1 extends BaseContract {
 
     setRedeemFeeRateA(
       redeemFeeRateA_: PromiseOrValue<BigNumberish>,
+      deadLine_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     setRedeemFeeRateB(
       redeemFeeRateB_: PromiseOrValue<BigNumberish>,
+      deadLine_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     setRewardRate(
       rewardRate_: PromiseOrValue<BigNumberish>,
+      deadLine_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1514,6 +1578,11 @@ export interface EzTreasuryV1 extends BaseContract {
 
     aggregatorAction(
       tokenAddress: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    changeList(
+      arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1641,16 +1710,19 @@ export interface EzTreasuryV1 extends BaseContract {
 
     setRedeemFeeRateA(
       redeemFeeRateA_: PromiseOrValue<BigNumberish>,
+      deadLine_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     setRedeemFeeRateB(
       redeemFeeRateB_: PromiseOrValue<BigNumberish>,
+      deadLine_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     setRewardRate(
       rewardRate_: PromiseOrValue<BigNumberish>,
+      deadLine_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
