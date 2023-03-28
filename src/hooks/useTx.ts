@@ -3,7 +3,7 @@ import { Provider } from '@ethersproject/providers';
 import { MAX_UINT256, QUOTE_CHANNEL, TOKEN_TYPE, NETWORK_TYPE, REVERSE_COIN } from '../views/wallet/helpers/constant';
 import { getQuote } from '../views/wallet/helpers/utilities';
 import {
-  EzUSDConnect,
+  USDEConnect,
   E2LPConnect,
   EzioConnect,
   reverseCoinConnect,
@@ -57,12 +57,12 @@ export default function useTx() {
    */
   async function purchase(
     fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC,
-    toType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP,
+    toType: TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP,
     amount: number,
     slippage: number,
     signerOrProvider: Signer | Provider,
   ) {
-    await (toType === TOKEN_TYPE.ezUSD ? purchaseA : purchaseB)(signerOrProvider, fromType, amount, slippage);
+    await (toType === TOKEN_TYPE.USDE ? purchaseA : purchaseB)(signerOrProvider, fromType, amount, slippage);
     openMsg(t('message.txConfirmed'), 'success', 2000);
   }
 
@@ -112,7 +112,7 @@ export default function useTx() {
     // console.log('approved');
     setBackLoadingText(t('message.sendingTx'));
     const purchaseTx = await EzioConnect(signerOrProvider, networkName as NETWORK_TYPE).purchase(
-      TOKEN_TYPE.ezUSD,
+      TOKEN_TYPE.USDE,
       channel,
       [quoteResponse],
     );
@@ -210,7 +210,7 @@ export default function useTx() {
    * @param signerOrProvider signerOrProvider
    */
   async function redeem(
-    fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP,
+    fromType: TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP,
     toType: TOKEN_TYPE.USDC | TOKEN_TYPE.ReverseCoin,
     amount: number,
     signerOrProvider: Signer | Provider,
@@ -233,7 +233,7 @@ export default function useTx() {
    * @param signerOrProvider signerOrProvider
    */
   async function redeemToUSDC(
-    fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP,
+    fromType: TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP,
     amount: number,
     signerOrProvider: Signer | Provider,
     slippage: number,
@@ -283,7 +283,7 @@ export default function useTx() {
    * @param signerOrProvider signerOrProvider
    */
   async function redeemToReverseCoin(
-    fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP,
+    fromType: TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP,
     amount: number,
     signerOrProvider: Signer | Provider,
     slippage: number,
@@ -334,18 +334,18 @@ export default function useTx() {
   }
 
   const getRedeemQuoteQty = async (
-    fromToken: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP,
+    fromToken: TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP,
     qty: BigNumber,
     toToken: TOKEN_TYPE.USDC | TOKEN_TYPE.ReverseCoin,
     signerOrProvider: Signer | Provider,
   ) => {
     let amt: BigNumber;
     let quoteQty: BigNumber = BigNumber.from('0');
-    const aToken = EzUSDConnect(signerOrProvider, networkName as NETWORK_TYPE);
+    const aToken = USDEConnect(signerOrProvider, networkName as NETWORK_TYPE);
     const bToken = E2LPConnect(signerOrProvider, networkName as NETWORK_TYPE);
     const ezio = EzioConnect(signerOrProvider, networkName as NETWORK_TYPE);
     const reverseCoin = reverseCoinConnect(signerOrProvider, networkName as NETWORK_TYPE);
-    if (fromToken === TOKEN_TYPE.ezUSD) {
+    if (fromToken === TOKEN_TYPE.USDE) {
       if (toToken === TOKEN_TYPE.USDC) {
         amt = qty.mul(await aToken.netWorth()).div(BigNumber.from('10').pow(await aToken.decimals()));
         console.log('amt=' + amt.toString());

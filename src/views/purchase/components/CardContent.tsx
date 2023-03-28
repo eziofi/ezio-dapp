@@ -16,11 +16,11 @@ interface IProps {
   isBuy?: boolean;
   setIsBuy: (buy: boolean) => void;
   transactionType: TRANSFER_TYPE.PURCHASE | TRANSFER_TYPE.REDEEM;
-  getTokenType: (tokenType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP) => void;
+  getTokenType: (tokenType: TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP) => void;
   getInputVal1: (InputVal: string) => void | any;
   getInputVal2: (InputVal: string) => void | any;
   inputValue2: string;
-  tokenType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP;
+  tokenType: TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP;
   redeemTokenType: TOKEN_TYPE;
   setRedeemTokenType: (redeemTokenType: TOKEN_TYPE.USDC | TOKEN_TYPE.USDT | TOKEN_TYPE.ReverseCoin) => void;
   inputValue1: string;
@@ -230,7 +230,7 @@ function RanderOptions(
 
 const PurchaseOptions: IOptions[] = [
   {
-    value: TOKEN_TYPE.ezUSD,
+    value: TOKEN_TYPE.USDE,
     iconParentStyle: {
       margin: '0 10px',
       background: 'rgba(95, 69, 186, 1)',
@@ -305,7 +305,7 @@ function MyCardContentOne({
   const { price } = usePrice(isBuy ? redeemTokenType : tokenType);
 
   // const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
-  const handleChange = (value: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP) => {
+  const handleChange = (value: TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP) => {
     getTokenType(value);
     // SetCurrency(event.target.value as TOKEN_BALANCE_TYPE);
   };
@@ -337,7 +337,7 @@ function MyCardContentOne({
           }}
           type="number"
           value={inputValue1}
-          disabled={needApprove}
+          // disabled={needApprove}
         />
         <div style={{ ...priceStyle, color: theme.palette.text.secondary }}>
           {price ? t('purchase.unitPrice') + ': $' + price : <Skeleton width={100} />}
@@ -375,7 +375,7 @@ function MyCardContentSecond({
   const { balance } = useBalance(transactionType === TRANSFER_TYPE.PURCHASE ? tokenType : redeemTokenType);
 
   // const [currency, SetCurrency] = React.useState(TOKEN_BALANCE_TYPE.EZAT);
-  const handleChange = (value: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP) => {
+  const handleChange = (value: TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP) => {
     getTokenType(value);
     // SetCurrency(event.target.value as TOKEN_BALANCE_TYPE);
   };
@@ -417,7 +417,7 @@ function MyCardContentSecond({
         {transactionType === TRANSFER_TYPE.PURCHASE
           ? // @ts-ignore
             RanderOptions(PurchaseOptions, tokenType, handleChange, balance, false)
-          : tokenType === TOKEN_TYPE.ezUSD
+          : tokenType === TOKEN_TYPE.USDE
           ? // <div style={{ width: 142, height: 83, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
             //   <div style={{ display: 'flex', alignItems: 'center', height: 46 }}>
             //     <div

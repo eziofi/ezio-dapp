@@ -236,22 +236,19 @@ export default function WalletProvider({ children }: { children: ReactElement })
 
   //切换网络
   //walletProvider是上面的web3ModalProvider，而不是ethers获取的provider
-  async function switchNetwork(network: string) {
-    try {
-      await walletProvider.request({
+  function switchNetwork(network: string) {
+    return walletProvider
+      .request({
         method: 'wallet_switchEthereumChain',
         // @ts-ignore
         params: [{ chainId: networkInfo[network].chainId }],
+      })
+      .catch((error: any) => {
+        console.error(error);
+        return Promise.reject(error);
       });
-    } catch (error) {
-      console.error(error);
-      // @ts-ignore
-      if ((error.code = 4902)) {
-        return await addNetwork(network, walletProvider);
-      }
-      throw error;
-    }
   }
+
   //添加网络
   async function addNetwork(network: string, web3ModalProvider: any) {
     try {

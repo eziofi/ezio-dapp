@@ -1,7 +1,7 @@
 import { BigNumber } from 'ethers';
 
 export enum TOKEN_TYPE {
-  ezUSD,
+  USDE,
   E2LP,
   USDC,
   ReverseCoin, // wstETH or stMATIC
@@ -34,7 +34,7 @@ export enum TRANSFER_TYPE {
 }
 
 export const TOKEN_DECIMAL = {
-  [TOKEN_TYPE.ezUSD]: 18,
+  [TOKEN_TYPE.USDE]: 18,
   [TOKEN_TYPE.E2LP]: 18,
   [TOKEN_TYPE.USDT]: 6,
   [TOKEN_TYPE.USDC]: 6,

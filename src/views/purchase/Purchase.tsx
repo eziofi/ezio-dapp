@@ -32,14 +32,14 @@ import { ButtonTypeMap } from '@mui/material/Button/Button';
 
 interface IPurchaseArg {
   fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC;
-  toType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP;
+  toType: TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP;
   amount: number;
   slippage: number;
   signerOrProvider: Signer | Provider;
 }
 
 interface IRedeemArg {
-  fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP;
+  fromType: TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP;
   toType: TOKEN_TYPE.USDC | TOKEN_TYPE.ReverseCoin;
   amount: number;
   slippage: number;
@@ -58,13 +58,13 @@ export default function Purchase() {
   const [inputValue1, setInputValue1] = useState(''); // 上方输入框
   const [inputValue2, setInputValue2] = useState(''); // 下方输入框
   const [pricePercentage, setPricePercentage] = useState('');
-  const [tokenType, setTokenType] = useState<TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP>(TOKEN_TYPE.ezUSD); // 下拉框value
+  const [tokenType, setTokenType] = useState<TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP>(TOKEN_TYPE.USDE); // 下拉框value
   const [redeemTokenType, setRedeemTokenType] = useState<TOKEN_TYPE.USDC | TOKEN_TYPE.USDT | TOKEN_TYPE.ReverseCoin>(
     TOKEN_TYPE.USDT,
   ); // 下拉框value
   const theme = useTheme();
 
-  const [tokenRate, setTokenRate] = useState('1'); // eg. 1 USDT = xxx ezUSD
+  const [tokenRate, setTokenRate] = useState('1'); // eg. 1 USDT = xxx USDE
 
   const [slippage, setSlippage] = useState<number>(0.5);
   const [resetVal] = useState<number>(0.5);
@@ -129,7 +129,7 @@ export default function Purchase() {
     setType(type === TRANSFER_TYPE.PURCHASE ? TRANSFER_TYPE.REDEEM : TRANSFER_TYPE.PURCHASE);
   }
 
-  function getTokenType(tokenType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP) {
+  function getTokenType(tokenType: TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP) {
     setTokenType(tokenType);
   }
 
@@ -207,7 +207,7 @@ export default function Purchase() {
   }, [redeemTokenType, type, allowanceUSDT, allowanceUSDC]);
 
   const { data: rate } = useQuery(
-    ['ezUSDDayRate'],
+    ['USDEDayRate'],
     () => interestRateYear(ethersProvider!.getSigner(), networkName as NETWORK_TYPE),
     {
       enabled: !!ethersProvider && !!networkName,
@@ -240,7 +240,7 @@ export default function Purchase() {
         } else {
           const args: IPurchaseArg = {
             fromType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.USDT,
-            toType: tokenType as TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP,
+            toType: tokenType as TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP,
             amount: Number(inputValue1),
             slippage,
             signerOrProvider: ethersProvider!.getSigner(),
@@ -268,7 +268,7 @@ export default function Purchase() {
           openMsg(t('redeem.moreThanBalanceMsg'));
         } else {
           const args: IRedeemArg = {
-            fromType: tokenType as TOKEN_TYPE.ezUSD | TOKEN_TYPE.E2LP,
+            fromType: tokenType as TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP,
             toType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.ReverseCoin,
             amount: Number(inputValue1),
             signerOrProvider: ethersProvider!.getSigner(),

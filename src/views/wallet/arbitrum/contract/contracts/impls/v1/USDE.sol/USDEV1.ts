@@ -27,7 +27,7 @@ import type {
   PromiseOrValue,
 } from "../../../../common";
 
-export interface EzUSDV1Interface extends utils.Interface {
+export interface USDEV1Interface extends utils.Interface {
   functions: {
     "BURNER_ROLE()": FunctionFragment;
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
@@ -410,12 +410,12 @@ export type UnpausedEvent = TypedEvent<[string], UnpausedEventObject>;
 
 export type UnpausedEventFilter = TypedEventFilter<UnpausedEvent>;
 
-export interface EzUSDV1 extends BaseContract {
+export interface USDEV1 extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: EzUSDV1Interface;
+  interface: USDEV1Interface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

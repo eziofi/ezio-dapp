@@ -42,7 +42,7 @@ export default function TotleNetWorthApexChart() {
       setOption({
         series: [
           {
-            name: t('home.ezUsdTotalnetworth'),
+            name: t('home.USDETotalnetworth'),
             type: 'area',
             data: ezUsdTotalnetworth,
           },

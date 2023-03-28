@@ -32,11 +32,14 @@ export default function NetWorkPopover() {
   };
 
   function handleCheckNetWork(network: NETWORK_TYPE) {
-    switchNetwork(network).then(() => {
-      setCheckNetworkName('');
-      setCheckNetworkName(network);
-      handleClose();
-    });
+    switchNetwork(network)
+      .then(() => {
+        setCheckNetworkName(network);
+      })
+      .catch(() => {})
+      .finally(() => {
+        handleClose();
+      });
   }
 
   useEffect(() => {

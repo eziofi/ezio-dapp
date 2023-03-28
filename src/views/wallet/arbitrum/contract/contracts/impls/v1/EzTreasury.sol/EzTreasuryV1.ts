@@ -46,6 +46,10 @@ export interface EzTreasuryV1Interface extends utils.Interface {
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
     "GOVERNOR_ROLE()": FunctionFragment;
     "LEVERAGE_DENOMINATOR()": FunctionFragment;
+    "MAX_REDEEM_FEE_RATE_A()": FunctionFragment;
+    "MAX_REDEEM_FEE_RATE_B()": FunctionFragment;
+    "MAX_REWARD_RATE()": FunctionFragment;
+    "MAX_STAKE_REWARD_RATE()": FunctionFragment;
     "OPERATOR_ROLE()": FunctionFragment;
     "REDEEM_RATE_DENOMINATOR()": FunctionFragment;
     "REWARD_RATE_DENOMINATOR()": FunctionFragment;
@@ -94,6 +98,10 @@ export interface EzTreasuryV1Interface extends utils.Interface {
       | "DEFAULT_ADMIN_ROLE"
       | "GOVERNOR_ROLE"
       | "LEVERAGE_DENOMINATOR"
+      | "MAX_REDEEM_FEE_RATE_A"
+      | "MAX_REDEEM_FEE_RATE_B"
+      | "MAX_REWARD_RATE"
+      | "MAX_STAKE_REWARD_RATE"
       | "OPERATOR_ROLE"
       | "REDEEM_RATE_DENOMINATOR"
       | "REWARD_RATE_DENOMINATOR"
@@ -147,6 +155,22 @@ export interface EzTreasuryV1Interface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "LEVERAGE_DENOMINATOR",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "MAX_REDEEM_FEE_RATE_A",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "MAX_REDEEM_FEE_RATE_B",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "MAX_REWARD_RATE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "MAX_STAKE_REWARD_RATE",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -339,6 +363,22 @@ export interface EzTreasuryV1Interface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "LEVERAGE_DENOMINATOR",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "MAX_REDEEM_FEE_RATE_A",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "MAX_REDEEM_FEE_RATE_B",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "MAX_REWARD_RATE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "MAX_STAKE_REWARD_RATE",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -593,6 +633,14 @@ export interface EzTreasuryV1 extends BaseContract {
 
     LEVERAGE_DENOMINATOR(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    MAX_REDEEM_FEE_RATE_A(overrides?: CallOverrides): Promise<[number]>;
+
+    MAX_REDEEM_FEE_RATE_B(overrides?: CallOverrides): Promise<[number]>;
+
+    MAX_REWARD_RATE(overrides?: CallOverrides): Promise<[number]>;
+
+    MAX_STAKE_REWARD_RATE(overrides?: CallOverrides): Promise<[number]>;
+
     OPERATOR_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
     REDEEM_RATE_DENOMINATOR(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -780,6 +828,14 @@ export interface EzTreasuryV1 extends BaseContract {
 
   LEVERAGE_DENOMINATOR(overrides?: CallOverrides): Promise<BigNumber>;
 
+  MAX_REDEEM_FEE_RATE_A(overrides?: CallOverrides): Promise<number>;
+
+  MAX_REDEEM_FEE_RATE_B(overrides?: CallOverrides): Promise<number>;
+
+  MAX_REWARD_RATE(overrides?: CallOverrides): Promise<number>;
+
+  MAX_STAKE_REWARD_RATE(overrides?: CallOverrides): Promise<number>;
+
   OPERATOR_ROLE(overrides?: CallOverrides): Promise<string>;
 
   REDEEM_RATE_DENOMINATOR(overrides?: CallOverrides): Promise<BigNumber>;
@@ -964,6 +1020,14 @@ export interface EzTreasuryV1 extends BaseContract {
     GOVERNOR_ROLE(overrides?: CallOverrides): Promise<string>;
 
     LEVERAGE_DENOMINATOR(overrides?: CallOverrides): Promise<BigNumber>;
+
+    MAX_REDEEM_FEE_RATE_A(overrides?: CallOverrides): Promise<number>;
+
+    MAX_REDEEM_FEE_RATE_B(overrides?: CallOverrides): Promise<number>;
+
+    MAX_REWARD_RATE(overrides?: CallOverrides): Promise<number>;
+
+    MAX_STAKE_REWARD_RATE(overrides?: CallOverrides): Promise<number>;
 
     OPERATOR_ROLE(overrides?: CallOverrides): Promise<string>;
 
@@ -1226,6 +1290,14 @@ export interface EzTreasuryV1 extends BaseContract {
 
     LEVERAGE_DENOMINATOR(overrides?: CallOverrides): Promise<BigNumber>;
 
+    MAX_REDEEM_FEE_RATE_A(overrides?: CallOverrides): Promise<BigNumber>;
+
+    MAX_REDEEM_FEE_RATE_B(overrides?: CallOverrides): Promise<BigNumber>;
+
+    MAX_REWARD_RATE(overrides?: CallOverrides): Promise<BigNumber>;
+
+    MAX_STAKE_REWARD_RATE(overrides?: CallOverrides): Promise<BigNumber>;
+
     OPERATOR_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
     REDEEM_RATE_DENOMINATOR(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1413,6 +1485,20 @@ export interface EzTreasuryV1 extends BaseContract {
     GOVERNOR_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     LEVERAGE_DENOMINATOR(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    MAX_REDEEM_FEE_RATE_A(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    MAX_REDEEM_FEE_RATE_B(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    MAX_REWARD_RATE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    MAX_STAKE_REWARD_RATE(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

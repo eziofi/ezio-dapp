@@ -1,12 +1,12 @@
 import {
   EzTreasuryV1__factory,
-  EzUSDV1__factory as EzUSDV1__factory__arbitrum,
+  USDEV1__factory as USDEV1__factory__arbitrum,
   E2LPV1__factory,
   EzTreasuryV1,
 } from '../arbitrum/contract';
 import {
   EzioV1__factory,
-  EzUSDV1__factory as EzUSDV1__factory__polygon,
+  EzUSDV1__factory as USDEV1__factory__polygon,
   EzMATICV1__factory,
   EzioV1,
 } from '../polygon/contract';
@@ -27,8 +27,8 @@ import { formatDecimal, formatString } from './utilities';
 
 import { queryAccumulatedFees24H } from '../../../api/api';
 
-export const ezUSDJson = {
-  [NETWORK_TYPE.arbitrum]: require('../arbitrum/contract/abi/EzUSDV1.json'),
+export const USDEJson = {
+  [NETWORK_TYPE.arbitrum]: require('../arbitrum/contract/abi/USDEV1.json'),
   [NETWORK_TYPE.polygon]: require('../polygon/contract/abi/EzUSDV1.json'),
 };
 
@@ -63,9 +63,9 @@ const override = {
   gasLimit: 2000000,
 };
 
-export function EzUSDConnect(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
-  return (network === NETWORK_TYPE.arbitrum ? EzUSDV1__factory__arbitrum : EzUSDV1__factory__polygon).connect(
-    ezUSDJson[network].address,
+export function USDEConnect(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
+  return (network === NETWORK_TYPE.arbitrum ? USDEV1__factory__arbitrum : USDEV1__factory__polygon).connect(
+    USDEJson[network].address,
     signerOrProvider,
   );
 }
@@ -112,7 +112,7 @@ export async function treasuryTotalNetWorth(
 
 /**
  * 获取 金库储量
- * @returns ezUSD总净值
+ * @returns USDE总净值
  */
 export async function getPooledA(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
   const data = await EzioConnect(signerOrProvider, network).pooledA();
@@ -194,8 +194,8 @@ export async function getLeverage(signerOrProvider: Signer | Provider, network: 
  * @returns ezat token 数量
  */
 export async function ezatBalanceOf(signerOrProvider: Signer | Provider, address: string, network: NETWORK_TYPE) {
-  const data = await EzUSDConnect(signerOrProvider, network).balanceOf(address);
-  const res = formatDecimal(data, TOKEN_TYPE.ezUSD, 18).toString();
+  const data = await USDEConnect(signerOrProvider, network).balanceOf(address);
+  const res = formatDecimal(data, TOKEN_TYPE.USDE, 18).toString();
   console.log('ezat Balance = ' + res);
   return res;
 }
@@ -303,10 +303,10 @@ export async function convertDownPrice(signerOrProvider: Signer | Provider, netw
  * 获取 ezat 净值
  * @returns ezat 净值
  */
-export async function ezUSDPrice(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
-  const data = await EzUSDConnect(signerOrProvider, network).netWorth();
+export async function USDEPrice(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
+  const data = await USDEConnect(signerOrProvider, network).netWorth();
   const res = formatDecimal(data, TOKEN_TYPE.USDC, 6).toString();
-  console.log('ezUSD netWorth = ' + res);
+  console.log('USDE netWorth = ' + res);
   return res;
 }
 
@@ -358,7 +358,7 @@ export async function usdcPrice(signerOrProvider: Signer | Provider, network: NE
  * @returns ezat totalSupply
  */
 export async function ezatTotalSupply(signerOrProvider: Signer | Provider, network: NETWORK_TYPE): Promise<BigNumber> {
-  const res = await EzUSDConnect(signerOrProvider, network).totalSupply();
+  const res = await USDEConnect(signerOrProvider, network).totalSupply();
   console.log('ezatTotalSupply = ' + res.toString());
   return res;
 }

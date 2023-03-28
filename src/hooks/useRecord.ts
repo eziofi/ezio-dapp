@@ -6,8 +6,8 @@ import { queryPurchaseRecord, queryRedeemRecord } from '../views/wallet/helpers/
 export function useRecord() {
   const { account, ethersProvider, networkName } = useWallet();
   const { data: purchaseEzatRecords } = useQuery(
-    ['queryPurchaseRecord', account, TOKEN_TYPE.ezUSD],
-    () => queryPurchaseRecord(ethersProvider!.getSigner(), account, TOKEN_TYPE.ezUSD, networkName as NETWORK_TYPE),
+    ['queryPurchaseRecord', account, TOKEN_TYPE.USDE],
+    () => queryPurchaseRecord(ethersProvider!.getSigner(), account, TOKEN_TYPE.USDE, networkName as NETWORK_TYPE),
     {
       enabled: !!ethersProvider && !!networkName,
       onSuccess: data => {

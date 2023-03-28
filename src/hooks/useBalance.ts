@@ -14,7 +14,7 @@ import { formatDecimal } from '../views/wallet/helpers/utilities';
 export function useBalance(tokenType: TOKEN_TYPE) {
   const { account, ethersProvider, networkName } = useWallet();
   const balanceApi = {
-    [TOKEN_TYPE.ezUSD]: ezatBalanceOf,
+    [TOKEN_TYPE.USDE]: ezatBalanceOf,
     [TOKEN_TYPE.E2LP]: ezbtBalanceOf,
     [TOKEN_TYPE.USDT]: usdtBalanceOf,
     [TOKEN_TYPE.USDC]: usdcBalanceOf,
