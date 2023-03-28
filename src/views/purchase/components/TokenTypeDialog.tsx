@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useEffect } from 'react';
-import { TOKEN_TYPE } from '../../wallet/helpers/constant';
+import { AToken, ATokenMap, NETWORK_TYPE, TOKEN_TYPE } from '../../wallet/helpers/constant';
 import ClearIcon from '@mui/icons-material/Clear';
 import SearchIcon from '@mui/icons-material/Search';
 import BaseIconFont from '../../components/BaseIconFont';
@@ -24,7 +24,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { useTranslation } from 'react-i18next';
 
 interface IOptions {
-  value: TOKEN_TYPE;
+  value: TOKEN_TYPE | AToken;
   iconParentStyle: { margin: string; background: string };
   iconName: string;
   iconStyle: { width: number; height: number; fill: string };
@@ -32,9 +32,9 @@ interface IOptions {
 
 interface IProps {
   openDialog: boolean;
-  handleClose: (tokenType?: TOKEN_TYPE) => void;
+  handleClose: (tokenType?: TOKEN_TYPE | AToken) => void;
   Options: IOptions[];
-  tokenType: TOKEN_TYPE;
+  tokenType: TOKEN_TYPE | AToken;
 }
 
 const MyPaper = styled((props: any) => {
@@ -91,7 +91,9 @@ export default function TokenTypeDialog({ openDialog, handleClose, Options, toke
   const [searchList, setSearchList] = React.useState<IOptions[]>([]);
 
   function search(searchValue: string) {
-    const list = Options.filter(item => TOKEN_TYPE[item.value].toLowerCase().includes(searchValue.toLowerCase()));
+    const list = Options.filter(item =>
+      TOKEN_TYPE[item.value as TOKEN_TYPE].toLowerCase().includes(searchValue.toLowerCase()),
+    );
     setSearchList([...list]);
   }
 
@@ -108,7 +110,11 @@ export default function TokenTypeDialog({ openDialog, handleClose, Options, toke
             style={{ ...item.iconStyle }}
           />
         </div>
-        {item.value === TOKEN_TYPE['ReverseCoin'] ? reverseCoin : TOKEN_TYPE[item.value]}
+        {item.value === TOKEN_TYPE['ReverseCoin']
+          ? reverseCoin
+          : networkName === NETWORK_TYPE.polygon
+          ? ATokenMap[networkName]
+          : TOKEN_TYPE[item.value as TOKEN_TYPE]}
       </div>
     );
   }
@@ -176,7 +182,7 @@ export default function TokenTypeDialog({ openDialog, handleClose, Options, toke
                 <Tag
                   key={item.value}
                   style={
-                    TOKEN_TYPE[tokenType] === TOKEN_TYPE[item.value]
+                    TOKEN_TYPE[tokenType as TOKEN_TYPE] === TOKEN_TYPE[item.value as TOKEN_TYPE]
                       ? {
                           // @ts-ignore
                           borderColor: `rgb(${theme.palette.purchase.tokenDialog.tag.active})`,
@@ -213,7 +219,7 @@ export default function TokenTypeDialog({ openDialog, handleClose, Options, toke
                     <div style={{ margin: '0 auto', width: '90%', display: 'flex', justifyContent: 'space-between' }}>
                       {renderIcon(item)}
 
-                      {TOKEN_TYPE[tokenType] === TOKEN_TYPE[item.value] && (
+                      {TOKEN_TYPE[tokenType as TOKEN_TYPE] === TOKEN_TYPE[item.value as TOKEN_TYPE] && (
                         <CheckIcon sx={{ color: 'rgb(251, 17, 142)' }} />
                       )}
                     </div>

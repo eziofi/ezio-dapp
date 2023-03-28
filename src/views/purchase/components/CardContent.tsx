@@ -4,7 +4,14 @@ import { BalanceContent, BodyContent } from '../PurchaseStyle';
 import { t } from 'i18next';
 import { useBalance } from '../../../hooks/useBalance';
 import { formatDecimal, formatString } from '../../wallet/helpers/utilities';
-import { NETWORK_TYPE, REVERSE_COIN, TOKEN_TYPE, TRANSFER_TYPE } from '../../wallet/helpers/constant';
+import {
+  AToken,
+  ATokenMap,
+  NETWORK_TYPE,
+  REVERSE_COIN,
+  TOKEN_TYPE,
+  TRANSFER_TYPE,
+} from '../../wallet/helpers/constant';
 import BaseIconFont from '../../components/BaseIconFont';
 import { usePrice } from '../../../hooks/usePrice';
 import { BigNumber } from 'ethers';
@@ -29,7 +36,7 @@ interface IProps {
 }
 
 interface IOptions {
-  value: TOKEN_TYPE;
+  value: TOKEN_TYPE | AToken;
   iconParentStyle: any;
   iconName: string;
   iconStyle: { width: number; height: number; fill: string };
@@ -152,10 +159,11 @@ function RanderOptions(
     setopenDialog(true);
   }
 
-  function handleClose(tokenType?: TOKEN_TYPE) {
+  function handleClose(tokenType?: TOKEN_TYPE | AToken) {
     if (tokenType !== undefined || '' || null) {
       // @ts-ignore
       handleChange(tokenType as TOKEN_TYPE);
+      console.log(tokenType);
     }
 
     setopenDialog(false);
@@ -189,7 +197,9 @@ function RanderOptions(
                 </div>
                 {tokenType === TOKEN_TYPE['ReverseCoin']
                   ? networkName && REVERSE_COIN[networkName]
-                  : TOKEN_TYPE[item.value]}
+                  : tokenType === TOKEN_TYPE.E2LP
+                  ? networkName && ATokenMap[networkName]
+                  : TOKEN_TYPE[item.value as TOKEN_TYPE]}
               </>
             </MenuItem>
           );
@@ -228,38 +238,47 @@ function RanderOptions(
   );
 }
 
-const PurchaseOptions: IOptions[] = [
-  {
-    value: TOKEN_TYPE.USDE,
-    iconParentStyle: {
-      margin: '0 10px',
-      background: 'rgba(95, 69, 186, 1)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: 30,
-      height: 30,
-      borderRadius: '50%',
+// item.value === TOKEN_TYPE.E2LP && networkName === NETWORK_TYPE.polygon ? ATokenMap[networkName] : item.value
+
+function backPurchaseOptions() {
+  const { networkName } = useWallet();
+
+  const PurchaseOptions: IOptions[] = [
+    {
+      value: TOKEN_TYPE.USDE,
+      iconParentStyle: {
+        margin: '0 10px',
+        background: 'rgba(95, 69, 186, 1)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 30,
+        height: 30,
+        borderRadius: '50%',
+      },
+      iconName: 'icon-A',
+      iconStyle: { width: 20, height: 20, fill: 'white' },
     },
-    iconName: 'icon-A',
-    iconStyle: { width: 20, height: 20, fill: 'white' },
-  },
-  {
-    value: TOKEN_TYPE.E2LP,
-    iconParentStyle: {
-      margin: '0 10px',
-      background: 'rgba(239, 89, 114, 1)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: 30,
-      height: 30,
-      borderRadius: '50%',
+    {
+      // @ts-ignore
+      // value: networkName === NETWORK_TYPE.polygon ? ATokenMap[networkName] : TOKEN_TYPE.E2LP,
+      value: TOKEN_TYPE.E2LP,
+      iconParentStyle: {
+        margin: '0 10px',
+        background: 'rgba(239, 89, 114, 1)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 30,
+        height: 30,
+        borderRadius: '50%',
+      },
+      iconName: 'icon-B',
+      iconStyle: { width: 20, height: 20, fill: 'white' },
     },
-    iconName: 'icon-B',
-    iconStyle: { width: 20, height: 20, fill: 'white' },
-  },
-];
+  ];
+  return PurchaseOptions;
+}
 
 // 宽高 30 是因为他们没有背景色 显得图标会小 宽高30是同父级宽高,是button的宽高
 const redeemOptions: IOptions[] = [
@@ -355,7 +374,7 @@ function MyCardContentOne({
             getInputVal1,
           )
         : // @ts-ignore
-          RanderOptions(PurchaseOptions, tokenType, handleChange, balance, true, inputValue1, getInputVal1)}
+          RanderOptions(backPurchaseOptions(), tokenType, handleChange, balance, true, inputValue1, getInputVal1)}
     </BodyContent>
   );
 }
@@ -416,7 +435,7 @@ function MyCardContentSecond({
 
         {transactionType === TRANSFER_TYPE.PURCHASE
           ? // @ts-ignore
-            RanderOptions(PurchaseOptions, tokenType, handleChange, balance, false)
+            RanderOptions(backPurchaseOptions(), tokenType, handleChange, balance, false)
           : tokenType === TOKEN_TYPE.USDE
           ? // <div style={{ width: 142, height: 83, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
             //   <div style={{ display: 'flex', alignItems: 'center', height: 46 }}>
