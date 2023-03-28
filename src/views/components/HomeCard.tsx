@@ -8,7 +8,7 @@ import { useQuery } from 'react-query';
 import BaseIconFont from './BaseIconFont';
 import { InlineSkeleton } from './Skeleton';
 import * as Net from 'net';
-import { NETWORK_TYPE } from '../wallet/helpers/constant';
+import { ATokenMap, NETWORK_TYPE } from '../wallet/helpers/constant';
 
 export enum HOME_CARD_TYPE {
   Rate,
@@ -39,9 +39,9 @@ export default function HomeCard({
   };
   const title = {
     [HOME_CARD_TYPE.Rate]: t('home.card.rate'),
-    [HOME_CARD_TYPE.FundCost]: t('home.card.fundCost'),
-    [HOME_CARD_TYPE.RebalancePrice]: t('home.card.rebalancePrice'),
-    [HOME_CARD_TYPE.Leverage]: t('home.card.leverage'),
+    [HOME_CARD_TYPE.FundCost]: (networkName ? ATokenMap[networkName] : '') + t('home.card.fundCost'),
+    [HOME_CARD_TYPE.RebalancePrice]: (networkName ? ATokenMap[networkName] : '') + t('home.card.rebalancePrice'),
+    [HOME_CARD_TYPE.Leverage]: (networkName ? ATokenMap[networkName] : '') + t('home.card.leverage'),
   };
   const icon = {
     [HOME_CARD_TYPE.Rate]: 'icon-yuqinianhualishuai-copy',

@@ -8,7 +8,7 @@ import { useContext, useEffect, useState } from 'react';
 import { ColorModeContext } from '../../../theme';
 import RenderSkeleton from '../../homePage/components/RenderSkeleton';
 import useWallet from '../../hooks/useWallet';
-import { NETWORK_TYPE } from '../../wallet/helpers/constant';
+import { ATokenMap, NETWORK_TYPE } from '../../wallet/helpers/constant';
 
 export default function LineChart() {
   const [option, setOption] = useState<any>(null);
@@ -26,7 +26,7 @@ export default function LineChart() {
       setOption({
         series: [
           {
-            name: t('home.netWorthEzbtAxis'),
+            name: (networkName ? ATokenMap[networkName] : '') + t('home.netWorthEzbtAxis'),
             type: 'area',
             data: ezMaticPrice,
           },
@@ -63,7 +63,7 @@ export default function LineChart() {
           yaxis: [
             {
               title: {
-                text: t('home.netWorthEzbtAxis'),
+                text: (networkName ? ATokenMap[networkName] : '') + t('home.netWorthEzbtAxis'),
               },
               decimalsInFloat: 2, // 保留几位小数
               min: 0,
@@ -102,7 +102,7 @@ export default function LineChart() {
   });
   return (
     <Card>
-      <CardHeader title={t('home.netWorthEzbtAxis') as string} />
+      <CardHeader title={(networkName ? ATokenMap[networkName] : '') + t('home.netWorthEzbtAxis') + ''} />
 
       <Box dir="ltr">
         {/*<Box sx={{ p: 3, pb: 1 }} dir="ltr">*/}

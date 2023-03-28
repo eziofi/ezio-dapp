@@ -11,7 +11,7 @@ import RenderSkeleton from './RenderSkeleton';
 import { HomeCardHeader } from '../mainStyle';
 import RenderSelect from './RenderSelect';
 import useWallet from '../../hooks/useWallet';
-import { NETWORK_TYPE } from '../../wallet/helpers/constant';
+import { ATokenMap, NETWORK_TYPE } from '../../wallet/helpers/constant';
 
 export default function NetWorthApexChart() {
   const [option, setOption] = useState<any>(null);
@@ -49,7 +49,7 @@ export default function NetWorthApexChart() {
             data: stMaticPrice,
           },
           {
-            name: t('home.bNetWorthSeries'),
+            name: (networkName ? ATokenMap[networkName] : '') + t('home.bNetWorthSeries'),
             type: 'area',
             data: ezMaticPrice,
           },
@@ -101,7 +101,7 @@ export default function NetWorthApexChart() {
               opposite: true,
               decimalsInFloat: 1,
               title: {
-                text: t('home.bNetWorthSeries'),
+                text: (networkName ? ATokenMap[networkName] : '') + t('home.bNetWorthSeries'),
               },
               max: getYMax(ezMaticPrice),
               min: getYMin(ezMaticPrice),

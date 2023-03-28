@@ -10,7 +10,7 @@ import { getYMax, getYMin } from '../../wallet/helpers/utilities';
 import { HomeCardHeader } from '../mainStyle';
 import RenderSelect from './RenderSelect';
 import useWallet from '../../hooks/useWallet';
-import { NETWORK_TYPE } from '../../wallet/helpers/constant';
+import { ATokenMap, NETWORK_TYPE } from '../../wallet/helpers/constant';
 
 export default function TotleNetWorthApexChart() {
   const [option, setOption] = React.useState<any>(null);
@@ -47,7 +47,7 @@ export default function TotleNetWorthApexChart() {
             data: ezUsdTotalnetworth,
           },
           {
-            name: t('home.E2LPTotalnetworth'),
+            name: (networkName ? ATokenMap[networkName] : '') + t('home.BTokenTotalnetworth'),
             type: 'area',
             data: ezMaticTotalnetworth,
           },
@@ -85,7 +85,7 @@ export default function TotleNetWorthApexChart() {
           yaxis: [
             {
               title: {
-                text: t('home.E2LPTotalnetworth'),
+                text: (networkName ? ATokenMap[networkName] : '') + t('home.BTokenTotalnetworth'),
               },
               decimalsInFloat: 1,
               max: getYMax(sum),

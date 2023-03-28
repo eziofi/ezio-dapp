@@ -1,4 +1,4 @@
-import { REVERSE_COIN_TYPE, TOKEN_TYPE } from '../wallet/helpers/constant';
+import { ATokenMap, TOKEN_TYPE } from '../wallet/helpers/constant';
 import { useBalance } from '../../hooks/useBalance';
 import { usePrice } from '../../hooks/usePrice';
 import { AccountCard, Content } from '../account/AccountStyle';
@@ -14,7 +14,7 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
   const { balance, refetchBalance, isBalanceFetching } = useBalance(type);
   const { price, refetchPrice, isPriceFetching } = usePrice(type);
   const { t } = useTranslation();
-  const { reverseCoin } = useWallet();
+  const { reverseCoin, networkName } = useWallet();
 
   useEffect(() => {
     if (refreshFlag > 0) {
@@ -90,7 +90,15 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
           </div>
           <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Box>
-              <div style={{ fontSize: 20 }}>{type === TOKEN_TYPE.ReverseCoin ? reverseCoin : TOKEN_TYPE[type]}</div>
+              <div style={{ fontSize: 20 }}>
+                {type === TOKEN_TYPE.ReverseCoin
+                  ? reverseCoin
+                  : type === TOKEN_TYPE.E2LP
+                  ? networkName
+                    ? ATokenMap[networkName]
+                    : ''
+                  : TOKEN_TYPE[type]}
+              </div>
               {!isBalanceFetching || !isPriceFetching ? (
                 <div style={{ fontSize: 12, color: theme.palette.text.disabled }}>
                   {t('account.netWorth')}: {value} USDC

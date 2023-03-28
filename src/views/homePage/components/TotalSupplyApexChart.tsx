@@ -11,7 +11,7 @@ import RenderSkeleton from './RenderSkeleton';
 import { HomeCardHeader } from '../mainStyle';
 import RenderSelect from './RenderSelect';
 import useWallet from '../../hooks/useWallet';
-import { NETWORK_TYPE } from '../../wallet/helpers/constant';
+import { ATokenMap, NETWORK_TYPE } from '../../wallet/helpers/constant';
 
 export default function TotalSupplyApexChart() {
   const [option, setOption] = useState<any>(null);
@@ -52,7 +52,7 @@ export default function TotalSupplyApexChart() {
             data: aTotalSupply,
           },
           {
-            name: t('home.bTotalSupplySeries'),
+            name: (networkName ? ATokenMap[networkName] : '') + t('home.bTotalSupplySeries'),
             type: 'area',
             data: bTatalSupply,
           },

@@ -28,6 +28,16 @@ export const REVERSE_COIN = {
   [NETWORK_TYPE.polygon]: REVERSE_COIN_TYPE.stMATIC,
 };
 
+export enum AToken {
+  E2LP = 'E2LP',
+  M2LP = 'M2LP',
+}
+
+export const ATokenMap = {
+  [NETWORK_TYPE.arbitrum]: AToken.E2LP,
+  [NETWORK_TYPE.polygon]: AToken.M2LP,
+};
+
 export enum TRANSFER_TYPE {
   PURCHASE = 0,
   REDEEM = 1,
