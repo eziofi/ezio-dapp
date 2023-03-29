@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useEffect } from 'react';
-import { AToken, ATokenMap, NETWORK_TYPE, TOKEN_TYPE } from '../../wallet/helpers/constant';
+import { ATokenMap, NETWORK_TYPE, TOKEN_TYPE } from '../../wallet/helpers/constant';
 import ClearIcon from '@mui/icons-material/Clear';
 import SearchIcon from '@mui/icons-material/Search';
 import BaseIconFont from '../../components/BaseIconFont';
@@ -24,7 +24,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { useTranslation } from 'react-i18next';
 
 interface IOptions {
-  value: TOKEN_TYPE | AToken;
+  value: TOKEN_TYPE;
   iconParentStyle: { margin: string; background: string };
   iconName: string;
   iconStyle: { width: number; height: number; fill: string };
@@ -32,9 +32,9 @@ interface IOptions {
 
 interface IProps {
   openDialog: boolean;
-  handleClose: (tokenType?: TOKEN_TYPE | AToken) => void;
+  handleClose: (tokenType?: TOKEN_TYPE) => void;
   Options: IOptions[];
-  tokenType: TOKEN_TYPE | AToken;
+  tokenType: TOKEN_TYPE;
 }
 
 const MyPaper = styled((props: any) => {

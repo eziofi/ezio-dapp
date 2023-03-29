@@ -52,7 +52,7 @@ export default function SlippagePopover({
     <div>
       <IconButton aria-describedby={id} onClick={handleClick}>
         <BaseIconFont
-          name={theme.palette.mode === 'dark' ? 'icon-shezhi-copy2' : 'icon-shezhi'}
+          name={theme.palette.mode === 'dark' ? 'icon-shezhi-copy' : 'icon-shezhi'}
           style={{ width: 20, height: 20 }}
         />
       </IconButton>

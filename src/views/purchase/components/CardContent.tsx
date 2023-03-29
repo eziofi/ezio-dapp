@@ -3,18 +3,10 @@ import React, { useState } from 'react';
 import { BalanceContent, BodyContent } from '../PurchaseStyle';
 import { t } from 'i18next';
 import { useBalance } from '../../../hooks/useBalance';
-import { formatDecimal, formatString } from '../../wallet/helpers/utilities';
-import {
-  AToken,
-  ATokenMap,
-  NETWORK_TYPE,
-  REVERSE_COIN,
-  TOKEN_TYPE,
-  TRANSFER_TYPE,
-} from '../../wallet/helpers/constant';
+import { formatString } from '../../wallet/helpers/utilities';
+import { ATokenMap, REVERSE_COIN, TOKEN_TYPE, TRANSFER_TYPE } from '../../wallet/helpers/constant';
 import BaseIconFont from '../../components/BaseIconFont';
 import { usePrice } from '../../../hooks/usePrice';
-import { BigNumber } from 'ethers';
 import { InlineSkeleton } from '../../components/Skeleton';
 import useWallet from '../../hooks/useWallet';
 import TokenTypeDialog from './TokenTypeDialog';
@@ -36,7 +28,7 @@ interface IProps {
 }
 
 interface IOptions {
-  value: TOKEN_TYPE | AToken;
+  value: TOKEN_TYPE;
   iconParentStyle: any;
   iconName: string;
   iconStyle: { width: number; height: number; fill: string };
@@ -159,7 +151,7 @@ function RanderOptions(
     setopenDialog(true);
   }
 
-  function handleClose(tokenType?: TOKEN_TYPE | AToken) {
+  function handleClose(tokenType?: TOKEN_TYPE) {
     if (tokenType !== undefined || '' || null) {
       // @ts-ignore
       handleChange(tokenType as TOKEN_TYPE);
@@ -238,8 +230,6 @@ function RanderOptions(
   );
 }
 
-// item.value === TOKEN_TYPE.E2LP && networkName === NETWORK_TYPE.polygon ? ATokenMap[networkName] : item.value
-
 const PurchaseOptions: IOptions[] = [
   {
     value: TOKEN_TYPE.USDE,
@@ -257,8 +247,6 @@ const PurchaseOptions: IOptions[] = [
     iconStyle: { width: 20, height: 20, fill: 'white' },
   },
   {
-    // @ts-ignore
-    // value: networkName === NETWORK_TYPE.polygon ? ATokenMap[networkName] : TOKEN_TYPE.E2LP,
     value: TOKEN_TYPE.E2LP,
     iconParentStyle: {
       margin: '0 10px',
