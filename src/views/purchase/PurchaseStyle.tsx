@@ -192,7 +192,7 @@ const SlippagePopoverContent = styled((props: StyleProps) => {
   const theme = useTheme();
   return {
     width: 317,
-    height: 178,
+    // height: 178,
     // @ts-ignore
     background: theme.palette.purchase.slippageBg,
     div: {

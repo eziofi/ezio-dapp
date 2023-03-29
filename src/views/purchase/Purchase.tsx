@@ -323,12 +323,12 @@ export default function Purchase() {
   }: {
     children: ReactNode;
     disabled?: boolean;
-    onClick: () => void;
+    onClick?: () => void;
     loadingOpen?: boolean;
     loadingText?: string;
   }) => (
     <Button
-      sx={{ width: '90%', marginTop: theme.spacing(5), borderRadius: '15px', fontSize: 18 }}
+      sx={{ width: '90%', marginTop: theme.spacing(2), borderRadius: '15px', fontSize: 18 }}
       variant="contained"
       size={'large'}
       disabled={disabled}
@@ -421,6 +421,9 @@ export default function Purchase() {
         <MutationButton disabled={loadingOpen} onClick={doApprove} loadingOpen={loadingOpen} loadingText={loadingText}>
           {t('purchase.approveAction') + TOKEN_TYPE[redeemTokenType]}
         </MutationButton>
+      ) : parseFloat(inputValue1) > parseFloat(balance || '0') ? (
+        // 余额不足
+        <MutationButton disabled>{t('purchase.notEnoughBalance')}</MutationButton>
       ) : type === TRANSFER_TYPE.PURCHASE ? (
         // 购买按钮
         <MutationButton
