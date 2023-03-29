@@ -11,6 +11,7 @@ import {
   USDTConnect,
   ezioJson,
   TOKENS,
+  getAllowance,
 } from '../views/wallet/helpers/contract_call';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -24,7 +25,7 @@ export default function useTx() {
   const { setBackLoadingText, openMsg } = useContext(UIContext);
   const { t } = useTranslation();
 
-  const { networkName } = useWallet();
+  const { networkName, account } = useWallet();
 
   const ZEROEX_API_QUOTE_URL = `https://${networkName}.api.0x.org/swap/v1/quote`;
   const ONEINCH_API_QUOTE_URL = 'https://api.1inch.io/v5.0/137/swap';
@@ -44,6 +45,7 @@ export default function useTx() {
     setBackLoadingText(t('message.approveWaiting'));
     await approveTx.wait();
     console.log('approved');
+    await getAllowance(signerOrProvider, account, TOKEN_TYPE.USDC, networkName as NETWORK_TYPE);
     openMsg(t('message.approved'), 'success', 2000);
   }
 

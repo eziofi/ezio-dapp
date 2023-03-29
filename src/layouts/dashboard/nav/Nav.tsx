@@ -49,11 +49,11 @@ export default function Nav({ openNav, onCloseNav }: { openNav: boolean; onClose
       path: '/dashboard/swap',
       icon: icon('ic_cart'),
     },
-    {
-      title: t('nav.account'),
-      path: '/dashboard/account',
-      icon: icon('ic_user'),
-    },
+    // {
+    //   title: t('nav.account'),
+    //   path: '/dashboard/account',
+    //   icon: icon('ic_user'),
+    // },
     {
       title: t('nav.analytics'),
       path: '/dashboard/analytics',

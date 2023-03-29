@@ -160,6 +160,9 @@ export default function Purchase() {
   const { mutateAsync: approveMutate } = useMutation(
     (arg: IApproveArg) => approve(arg.fromType, arg.signerOrProvider),
     {
+      onSuccess: () => {
+        queryClient.invalidateQueries();
+      },
       onError: error => {
         console.error(error);
       },
@@ -174,9 +177,6 @@ export default function Purchase() {
         signerOrProvider: ethersProvider!.getSigner(),
       };
       await approveMutate(args);
-      await queryClient.invalidateQueries('allowance');
-      console.log('resetApproveState');
-      resetApproveState();
     } catch (e) {
       console.error(e);
     } finally {

@@ -32,7 +32,7 @@ export default function Router() {
         { path: 'homePage', element: <HomePage /> },
         { path: 'swap', element: <Purchase /> },
         // { path: 'redeem', element: <Redeem /> },
-        { path: 'account', element: <Account /> },
+        // { path: 'account', element: <Account /> },
         { path: 'analytics', element: <Analytics /> },
         // { path: 'user', element: <UserPage /> },
         // { path: 'products', element: <ProductsPage /> },
