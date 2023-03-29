@@ -5,8 +5,7 @@ import { useTranslation } from 'react-i18next';
 import useWallet from '../hooks/useWallet';
 import { commissionIncome, ezWETHReverse, getPooledA } from '../wallet/helpers/contract_call';
 import { useQuery } from 'react-query';
-import { formatDecimal } from '../wallet/helpers/utilities';
-import { NETWORK_TYPE, TOKEN_TYPE } from '../wallet/helpers/constant';
+import { NETWORK_TYPE } from '../wallet/helpers/constant';
 import { InlineSkeleton } from './Skeleton';
 
 import USDCIconDark from '../../assets/analytics/usdc_dark.png';
@@ -16,12 +15,12 @@ import USDCIconLight from '../../assets/analytics/usdc_light.png';
 const reverseCoinDark = {
   [NETWORK_TYPE.arbitrum]: require('../../assets/analytics/wstETH_dark.png'),
   [NETWORK_TYPE.polygon]: require('../../assets/analytics/stMatic_dark.png'),
-}[process.env.REACT_APP_NETWORK as keyof typeof NETWORK_TYPE];
+};
 
 const reverseCoinLight = {
   [NETWORK_TYPE.arbitrum]: require('../../assets/analytics/wstETH_light.png'),
   [NETWORK_TYPE.polygon]: require('../../assets/analytics/stMatic_light.png'),
-}[process.env.REACT_APP_NETWORK as keyof typeof NETWORK_TYPE];
+};
 
 const StyledIcon = styled('div')(({ theme }) => ({
   // margin: 'auto',
@@ -165,7 +164,17 @@ export default function AnalyticsCard({
             fill: theme.palette[color][theme.palette.mode === 'light' ? 'darker' : 'lighter'],
           }}
         /> */}
-        <img src={theme.palette.mode === 'dark' ? icon_Dark[type] : icon_light[type]} />
+        <img
+          src={
+            theme.palette.mode === 'dark'
+              ? type === ANALYTICS_CARD_TYPE.reverseCoin
+                ? icon_Dark[type][networkName || NETWORK_TYPE.arbitrum]
+                : icon_Dark[type]
+              : type === ANALYTICS_CARD_TYPE.reverseCoin
+              ? icon_light[type][networkName || NETWORK_TYPE.arbitrum]
+              : icon_light[type]
+          }
+        />
 
         {/*<Iconify icon={icon[type]} width={24} height={24} />*/}
       </StyledIcon>
