@@ -345,6 +345,10 @@ export default function Purchase() {
     </Button>
   );
 
+  console.log('parseFloat(allowanceUSDC) < parseFloat(inputValue1)');
+  console.log(parseFloat(allowanceUSDC));
+  console.log(parseFloat(inputValue1));
+
   return (
     <PurchaseContainer>
       <Toolbar sx={{ width: '98%', alignSelf: 'flex-start', margin: '0 auto' }}>
@@ -425,15 +429,32 @@ export default function Purchase() {
         // 余额不足
         <MutationButton disabled>{t('purchase.notEnoughBalance')}</MutationButton>
       ) : type === TRANSFER_TYPE.PURCHASE ? (
-        // 购买按钮
-        <MutationButton
-          disabled={!inputValue1 || !+inputValue1 || loadingOpen}
-          onClick={doPurchase}
-          loadingOpen={loadingOpen}
-          loadingText={loadingText}
-        >
-          {t('purchase.purchaseAction')}
-        </MutationButton>
+        // allowance不足
+        (
+          redeemTokenType === TOKEN_TYPE.USDC
+            ? parseFloat(allowanceUSDC) < parseFloat(inputValue1)
+            : parseFloat(allowanceUSDT) < parseFloat(inputValue1)
+        ) ? (
+          // allowance不足
+          <MutationButton
+            disabled={loadingOpen}
+            onClick={doApprove}
+            loadingOpen={loadingOpen}
+            loadingText={loadingText}
+          >
+            {t('purchase.approveAction') + TOKEN_TYPE[redeemTokenType]}
+          </MutationButton>
+        ) : (
+          // 购买按钮
+          <MutationButton
+            disabled={!inputValue1 || !+inputValue1 || loadingOpen}
+            onClick={doPurchase}
+            loadingOpen={loadingOpen}
+            loadingText={loadingText}
+          >
+            {t('purchase.purchaseAction')}
+          </MutationButton>
+        )
       ) : type === TRANSFER_TYPE.REDEEM ? (
         // 赎回按钮
         <MutationButton

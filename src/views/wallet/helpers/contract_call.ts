@@ -237,13 +237,14 @@ export async function getAllowance(
   address: string,
   tokenType: TOKEN_TYPE.USDC | TOKEN_TYPE.USDT,
   network: NETWORK_TYPE,
-): Promise<BigNumber> {
+): Promise<string> {
   const res = await (tokenType === TOKEN_TYPE.USDC ? USDCConnect : USDTConnect)(signerOrProvider, network).allowance(
     address,
     ezioJson[network as keyof typeof ezioJson].address,
   );
-  console.log(TOKEN_TYPE[tokenType] + ' allowance =' + res.toString());
-  return res;
+  const data = formatDecimal(res, tokenType).toString();
+  console.log(TOKEN_TYPE[tokenType] + ' allowance =' + data);
+  return data;
 }
 
 /**
