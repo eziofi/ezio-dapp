@@ -1,4 +1,5 @@
 import { BigNumber } from 'ethers';
+import { AddressZero } from '@ethersproject/constants/src.ts/addresses';
 
 export enum TOKEN_TYPE {
   USDE,
@@ -198,7 +199,8 @@ export const ARBITRUM_TOKENS = {
   MIM: '0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a',
   WBTC: '0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f',
   VST: '0x64343594ab9b56e99087bfa6f2335db24c2d1f17',
-  wstETH: '0x5979D7b546E38E414F7E9822514be443A4800529',
+  [REVERSE_COIN_TYPE.wstETH]: '0x5979D7b546E38E414F7E9822514be443A4800529',
+  [REVERSE_COIN_TYPE.stMATIC]: AddressZero,
 };
 
 export const POLYGON_TOKENS = {
@@ -219,7 +221,8 @@ export const POLYGON_TOKENS = {
   nUSD: '0xb6c473756050de474286bed418b77aeac39b02af',
   ANY: '0x6ab6d61428fde76768d7b45d8bfeec19c6ef91a8',
   WOO: '0x1b815d120b3ef02039ee11dc2d33de7aa4a8c603',
-  stMATIC: '0x3A58a54C066FdC0f2D55FC9C89F0415C92eBf3C4',
+  [REVERSE_COIN_TYPE.stMATIC]: '0x3A58a54C066FdC0f2D55FC9C89F0415C92eBf3C4',
+  [REVERSE_COIN_TYPE.wstETH]: AddressZero,
 };
 
 export const ERC20_ABI = [

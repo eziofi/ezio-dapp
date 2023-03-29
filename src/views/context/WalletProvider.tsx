@@ -185,7 +185,7 @@ export default function WalletProvider({ children }: { children: ReactElement })
 
     provider.on('disconnect', (error: { code: number; message: string }) => {
       console.log('disconnect');
-      setConnectedCache(false);
+      // setConnectedCache(false);
       window.location.reload();
     });
 

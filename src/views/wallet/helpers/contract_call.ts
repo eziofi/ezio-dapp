@@ -93,7 +93,6 @@ export function USDCConnect(signerOrProvider: Signer | Provider, network: NETWOR
 }
 
 export function reverseCoinConnect(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
-  // @ts-ignore
   return new ethers.Contract(TOKENS[network][REVERSE_COIN[network]], ERC20_ABI, signerOrProvider);
 }
 
@@ -326,7 +325,6 @@ export async function E2LPPrice(signerOrProvider: Signer | Provider, network: NE
  * @returns ezbt 净值
  */
 export async function reverseCoinPrice(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
-  // @ts-ignore
   const data = await EzioConnect(signerOrProvider, network).getPrice(TOKENS[network][REVERSE_COIN[network]]);
   const res = formatDecimal(data, TOKEN_TYPE.USDC, 6).toString();
   console.log('ReverseCoin Price = ' + res);
