@@ -102,12 +102,24 @@ export default function Purchase() {
 
   const { t } = useTranslation();
 
-  function getInputVal1(value: string) {
-    setInputValue1(value);
-    // 计算预计获得
+  function reCalcValue2(value: string) {
     if (fromPrice && toPrice) {
       const estimatedValue2 = (parseFloat(value) * parseFloat(fromPrice)) / parseFloat(toPrice);
       setInputValue2(estimatedValue2 + '');
+    }
+  }
+
+  function getInputVal1(value: string) {
+    setInputValue1(value);
+    // 计算预计获得
+    reCalcValue2(value);
+  }
+
+  function reCalcValue1(value: string) {
+    if (fromPrice && toPrice) {
+      const estimatedValue1 = (parseFloat(value) * parseFloat(toPrice)) / parseFloat(fromPrice);
+      const flooredValue = Math.floor(estimatedValue1 * 10 ** 6) / 10 ** 6;
+      setInputValue1(flooredValue + '');
     }
   }
 
@@ -115,12 +127,12 @@ export default function Purchase() {
   function getInputVal2(value: string) {
     setInputValue2(value);
     // 计算预计获得
-    if (fromPrice && toPrice) {
-      const estimatedValue1 = (parseFloat(value) * parseFloat(toPrice)) / parseFloat(fromPrice);
-      const flooredValue = Math.floor(estimatedValue1 * 10 ** 6) / 10 ** 6;
-      setInputValue1(flooredValue + '');
-    }
+    reCalcValue1(value);
   }
+
+  useEffect(() => {
+    reCalcValue2(inputValue1);
+  }, [redeemTokenType, tokenType]);
 
   // 改变购买 / 赎回 状态 清空value
   function convert() {
