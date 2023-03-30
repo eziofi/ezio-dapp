@@ -68,6 +68,9 @@ export default function TotalSupplyApexChart() {
             toolbar: {
               show: false,
             },
+            zoom: {
+              enabled: false,
+            },
           },
           stroke: {
             curve: 'smooth',

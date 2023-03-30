@@ -48,6 +48,9 @@ export default function LineChart() {
             toolbar: {
               show: false,
             },
+            zoom: {
+              enabled: false,
+            },
           },
           stroke: {
             curve: 'smooth',

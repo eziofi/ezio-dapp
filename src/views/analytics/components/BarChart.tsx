@@ -61,6 +61,9 @@ export default function BarChart() {
             show: false,
           },
           background: 'transparent',
+          zoom: {
+            enabled: false,
+          },
         },
         plotOptions: {
           bar: {
@@ -108,6 +111,89 @@ export default function BarChart() {
         },
       },
     });
+
+    // setOption({
+    //   series: [
+    //     {
+    //       name: 'PRODUCT A',
+    //       data: DailyAccumulatedFees,
+    //       type: 'column',
+    //     },
+    //     {
+    //       name: 'PRODUCT B',
+    //       data: AccumulatedFees,
+    //       type: 'line',
+    //     },
+    //   ],
+    //   options: {
+    //     theme: {
+    //       mode,
+    //     },
+    //     chart: {
+    //       type: 'area',
+    //       // stacked: false,
+    //       height: 350,
+    //       zoom: {
+    //         enabled: false,
+    //       },
+    //     },
+    //     dataLabels: {
+    //       enabled: false,
+    //     },
+    //     markers: {
+    //       size: 0,
+    //     },
+    //     fill: {
+    //       type: 'gradient',
+    //       gradient: {
+    //         shadeIntensity: 1,
+    //         inverseColors: false,
+    //         opacityFrom: 0.45,
+    //         opacityTo: 0.05,
+    //         stops: [20, 100, 100, 100],
+    //       },
+    //     },
+    //     yaxis: [
+    //       {
+    //         title: {
+    //           text: t('analytics.everyday'),
+    //         },
+    //         decimalsInFloat: getDecimal(DailyAccumulatedFees),
+    //         min: 0,
+    //         max: getYMax(DailyAccumulatedFees),
+    //       },
+    //       {
+    //         opposite: true,
+    //         title: {
+    //           text: t('analytics.accumulativeTotal'),
+    //         },
+    //         decimalsInFloat: getDecimal(DailyAccumulatedFees),
+    //         min: 0,
+    //         max: getYMax(AccumulatedFees),
+    //       },
+    //     ],
+    //     title: {
+    //       text: 'Irregular Data in Time Series',
+    //       align: 'left',
+    //       offsetX: 14,
+    //     },
+    //     // tooltip: {
+    //     // shared: true,
+    //     // },
+    //     tooltip: {
+    //       y: {
+    //         formatter: function (val: string) {
+    //           return val;
+    //         },
+    //       },
+    //     },
+    //     legend: {
+    //       position: 'top',
+    //       horizontalAlign: 'right',
+    //       offsetX: -10,
+    //     },
+    //   },
+    // });
   }, [DailyAccumulatedFees, AccumulatedFees]);
 
   return (

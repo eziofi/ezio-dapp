@@ -70,6 +70,9 @@ export default function TotleNetWorthApexChart() {
             toolbar: {
               show: false,
             },
+            zoom: {
+              enabled: false,
+            },
           },
           stroke: {
             curve: 'smooth',
