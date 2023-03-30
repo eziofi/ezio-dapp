@@ -1,3 +1,5 @@
+import { NETWORK_TYPE } from './../views/wallet/helpers/constant';
+import useWallet from '../views/hooks/useWallet';
 import httpClient from './request';
 
 interface ICommonRes<T> {
@@ -13,6 +15,14 @@ interface ITokenInfoRes {
   id: number;
   recordTime: string;
 }
+
+// function backNetwork(networkId: NETWORK_TYPE | undefined) {
+//   if (networkId === NETWORK_ID.arbitrum) {
+//     return 'arbitrum';
+//   } else {
+//     return 'polygon';
+//   }
+// }
 
 export function queryTokenInfo() {
   // return httpClient.get<ITokenInfoRes[]>('/api/queryTokenInfo');
@@ -40,9 +50,11 @@ interface ITokenGroup {
   groupTime: string;
 }
 // 市值曲线
-export function queryTokenGroup() {
+export function queryTokenGroup(QueryType: string, networkName: NETWORK_TYPE | undefined) {
   // return httpClient.get<ITokenGroup[]>('/api/queryTokenGroup');
-  return httpClient.get<ICommonRes<ITokenGroup[]>>('/api/v1/ezioGroupSupply');
+  return httpClient.get<ICommonRes<ITokenGroup[]>>(`/api/${networkName}/ezioGroupSupply`, {
+    params: { QueryType },
+  });
 }
 
 interface ITotalPurchase {
@@ -56,15 +68,16 @@ export function queryTotalPurchaseBy24h() {
 }
 
 // 金库市值
-
 interface ITreasuryValue {
   code: number;
   message: string;
   data: { groupTime: string; treasuryValue: string }[];
 }
 
-export function queryTreasuryValue() {
-  return httpClient.get<ITreasuryValue>('/api/v1/lineGraph/treasuryValue');
+export function queryTreasuryValue(QueryType: string, networkName: NETWORK_TYPE | undefined) {
+  return httpClient.get<ITreasuryValue>(`/api/${networkName}/lineGraph/treasuryValue`, {
+    params: { QueryType },
+  });
 }
 
 // ab总净值
@@ -75,11 +88,11 @@ interface IAbTotalnetworth {
   data: { groupTime: string; ezUsdTotalnetworth: number; ezMaticTotalnetworth: number }[];
 }
 
-export function queryAbTotalnetworth() {
-  return httpClient.get<IAbTotalnetworth>('api/v1/lineGraph/abTotalnetworth');
+export function queryAbTotalnetworth(QueryType: string, networkName: NETWORK_TYPE | undefined) {
+  return httpClient.get<IAbTotalnetworth>(`api/${networkName}/lineGraph/abTotalnetworth`, {
+    params: { QueryType },
+  });
 }
-
-// ezMATIC PRICE vs stMATIC PRICE ezMATIC 价格 vs stMATIC 价格
 
 interface IMaticPrice {
   code: number;
@@ -87,8 +100,8 @@ interface IMaticPrice {
   data: { groupTime: string; ezMaticPrice: number; stMaticPrice: number; ezUsdRate: number }[];
 }
 
-export function queryMaticPrice() {
-  return httpClient.get<IMaticPrice>('api/v1/lineGraph/maticPrice');
+export function queryMaticPrice(QueryType: string, networkName: NETWORK_TYPE | undefined) {
+  return httpClient.get<IMaticPrice>(`api/${networkName}/lineGraph/maticPrice`, { params: { QueryType } });
 }
 
 // AccumulatedFees24H 过去24h手续费收入
@@ -99,8 +112,8 @@ interface IAccumulatedFees24H {
   data: { fees24H: string };
 }
 
-export function queryAccumulatedFees24H() {
-  return httpClient.get<IAccumulatedFees24H>('api/v1/group/accumulatedFees24H');
+export function queryAccumulatedFees24H(networkName: NETWORK_TYPE | undefined) {
+  return httpClient.get<IAccumulatedFees24H>(`api/${networkName}/group/accumulatedFees24H`);
 }
 
 // DailyAccumulatedFees 按日分组手续费
@@ -111,8 +124,8 @@ interface IDailyAccumulatedFees {
   data: { groupTime: string; dailyAccumulatedFees: number }[];
 }
 
-export function queryDailyAccumulatedFees() {
-  return httpClient.get<IDailyAccumulatedFees>('api/v1/barChart/dailyAccumulatedFees');
+export function queryDailyAccumulatedFees(networkName: NETWORK_TYPE | undefined) {
+  return httpClient.get<IDailyAccumulatedFees>(`api/${networkName}/barChart/dailyAccumulatedFees`);
 }
 
 // AccumulatedFees 累计EZIO手续费
@@ -123,11 +136,11 @@ interface IAccumulatedFees {
   data: { groupTime: string; accumulatedFees: number }[];
 }
 
-export function queryAccumulatedFees() {
-  return httpClient.get<IAccumulatedFees>('api/v1/lineGraph/accumulatedFees');
+export function queryAccumulatedFees(networkName: NETWORK_TYPE | undefined) {
+  return httpClient.get<IAccumulatedFees>(`api/${networkName}/lineGraph/accumulatedFees`);
 }
 
-// 统计ezMatic的价格和下折价格
+// 统计E2LP的价格和下折价格
 
 interface IConvertDownPrice {
   code: number;
@@ -135,6 +148,6 @@ interface IConvertDownPrice {
   data: { ezMaticPrice: number; convertDownPrice: number; groupTime: string }[];
 }
 
-export function convertDownPrice() {
-  return httpClient.get<IConvertDownPrice>('/api/v1/lineGraph/convertDownPrice');
+export function convertDownPrice(networkName: NETWORK_TYPE | undefined) {
+  return httpClient.get<IConvertDownPrice>(`/api/${networkName}/lineGraph/convertDownPrice`);
 }

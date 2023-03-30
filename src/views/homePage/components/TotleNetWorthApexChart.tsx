@@ -6,7 +6,11 @@ import { ColorModeContext } from '../../../theme';
 import RenderSkeleton from './RenderSkeleton';
 import { Box, Card, CardHeader } from '@mui/material';
 import { queryAbTotalnetworth } from '../../../api/api';
-import { getYMax } from '../../wallet/helpers/utilities';
+import { getYMax, getYMin } from '../../wallet/helpers/utilities';
+import { HomeCardHeader } from '../mainStyle';
+import RenderSelect from './RenderSelect';
+import useWallet from '../../hooks/useWallet';
+import { ATokenMap, NETWORK_TYPE } from '../../wallet/helpers/constant';
 
 export default function TotleNetWorthApexChart() {
   const [option, setOption] = React.useState<any>(null);
@@ -17,22 +21,33 @@ export default function TotleNetWorthApexChart() {
     queryClient.invalidateQueries('queryTreasuryValue');
   }, [mode]);
 
-  useQuery(['queryAbTotalnetworth'], queryAbTotalnetworth, {
+  const [queryType, setQueryType] = React.useState('hour');
+
+  const { networkName } = useWallet();
+
+  useQuery(['queryAbTotalnetworth', queryType], () => queryAbTotalnetworth(queryType, networkName as NETWORK_TYPE), {
+    enabled: !!networkName,
     onSuccess: ({ data }) => {
-      // @ts-ignore
-      const XData = data.data.map(i => parseInt(i.groupTime?.split('-')[i.groupTime.split('-').length - 1]));
+      const XData = data.data.map(i => {
+        if (queryType === 'hour') {
+          return String(parseInt(i.groupTime.slice(-2)));
+        } else {
+          return i.groupTime.slice(5, 10);
+        }
+      });
+
       const ezMaticTotalnetworth = data.data.map(i => i.ezMaticTotalnetworth);
       const ezUsdTotalnetworth = data.data.map(i => i.ezUsdTotalnetworth);
-      const sum = getYMax([...ezMaticTotalnetworth, ...ezUsdTotalnetworth]);
+      const sum = [...ezMaticTotalnetworth, ...ezUsdTotalnetworth];
       setOption({
         series: [
           {
-            name: t('home.ezUsdTotalnetworth'),
+            name: t('home.USDETotalnetworth'),
             type: 'area',
             data: ezUsdTotalnetworth,
           },
           {
-            name: t('home.ezMaticTotalnetworth'),
+            name: (networkName ? ATokenMap[networkName] : '') + t('home.BTokenTotalnetworth'),
             type: 'area',
             data: ezMaticTotalnetworth,
           },
@@ -70,11 +85,11 @@ export default function TotleNetWorthApexChart() {
           yaxis: [
             {
               title: {
-                text: t('home.ezMaticTotalnetworth'),
+                text: (networkName ? ATokenMap[networkName] : '') + t('home.BTokenTotalnetworth'),
               },
-              decimalsInFloat: 0,
-              min: 0,
-              max: sum,
+              decimalsInFloat: 1,
+              max: getYMax(sum),
+              min: getYMin(sum),
             },
             // {
             //   title: {
@@ -109,7 +124,11 @@ export default function TotleNetWorthApexChart() {
 
   return (
     <Card>
-      <CardHeader title={t('home.abNetworth') as string} />
+      <HomeCardHeader>
+        <CardHeader title={t('home.abNetworth') as string} />
+
+        <RenderSelect value={queryType} onChange={setQueryType} />
+      </HomeCardHeader>
 
       <Box dir="ltr" sx={{ pl: 2, pr: 2 }}>
         {option ? (

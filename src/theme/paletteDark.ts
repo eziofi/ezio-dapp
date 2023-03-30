@@ -108,6 +108,13 @@ const paletteDark = {
     cardBg: 'rgba(22, 28, 36, 1)',
     menuItemBg: 'rgba(33, 43, 54, 1)',
     slippageBg: 'rgba(13, 17, 28, 1)',
+    tokenDialog: {
+      hover: 'rgba(152, 161, 192, 0.08)',
+      tag: {
+        active: '76, 130, 251',
+        default: 'rgba(152, 161, 192, 0.24)',
+      },
+    },
   },
 };
 

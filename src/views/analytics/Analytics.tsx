@@ -15,7 +15,7 @@ export default function Analytics() {
             <AnalyticsCard type={ANALYTICS_CARD_TYPE.USDC} color="warning" />
           </Grid>
           <Grid item xs={true} sm={true} md={true}>
-            <AnalyticsCard type={ANALYTICS_CARD_TYPE.stMATIC} color="error" />
+            <AnalyticsCard type={ANALYTICS_CARD_TYPE.reverseCoin} color="error" />
           </Grid>
           <Grid item xs={true} sm={true} md={true}>
             <AnalyticsCard type={ANALYTICS_CARD_TYPE.FEE} />

@@ -5,14 +5,10 @@ import { BigNumber, BigNumberish, FixedNumber, utils } from 'ethers';
 import qs from 'qs';
 import { formatUnits } from 'ethers/lib/utils';
 import { QUOTE_CHANNEL, TOKEN_DECIMAL, TOKEN_TYPE } from './constant';
-import { SwapQuoteStruct } from '../contract/contracts/interfaces/v1/IEzio';
+import { SwapQuoteStruct } from '../arbitrum/contract/contracts/interfaces/v1/IEzTreasury';
+import { ezioJson } from './contract_call';
 // import { apiGetGasPrices, apiGetAccountNonce } from "./api";
 // import { convertAmountToRawNumber, convertStringToHex } from "./bignumber";
-
-const ZEROEX_API_QUOTE_URL = 'https://polygon.api.0x.org/swap/v1/quote';
-const ONEINCH_API_QUOTE_URL = 'https://api.1inch.io/v5.0/137/swap';
-
-const ezioJson = require('../contract/abi/EzioV1.json');
 
 export function capitalize(string: string): string {
   return string
@@ -213,14 +209,42 @@ export function getYMax(data: number[]) {
     const float = max / Math.pow(10, length - 1);
     const first = Math.ceil(float);
     const maxYValue = first * Math.pow(10, length - 1);
+
     return maxYValue;
   } else {
     const floatString = max.toString().split('.')[1];
-    let firstNumDecimal = floatString.length - String(parseInt(floatString)).length; // 小数点后有多少个零
+    let firstNumDecimal = floatString?.length - String(parseInt(floatString)).length; // 小数点后有多少个零
     const roundMax = max * Math.pow(10, firstNumDecimal + 1); // 乘为整数
     const ceilNum = Math.ceil(roundMax); // 向上圆整到最小整数
     const res = ceilNum / Math.pow(10, firstNumDecimal + 1); //再除为原先的位数
     return res;
+  }
+}
+
+/**
+ * 计算Y轴最小值
+ * @param data，数据列表
+ * @returns Y轴最小值
+ */
+export function getYMin(data: number[]) {
+  if (data.length === 0) return 0;
+  const min = Math.min(...data);
+  if (min > 1) {
+    const length = min.toString().split('.')[0].length;
+    const float = min / Math.pow(10, length - 1);
+    const first = Math.floor(float);
+    const minValue = first * Math.pow(10, length - 1);
+
+    return minValue;
+  } else {
+    const floatString = min.toString().split('.')[1];
+    if (floatString) {
+      let firstNumDecimal = floatString.length + String(parseInt(floatString)).length; // 小数点后有多少个零
+      const roundMin = min * Math.pow(10, firstNumDecimal + 1); // 乘为整数
+      const ceilNum = Math.floor(roundMin); // 向下圆整到最小整数
+      const res = ceilNum / Math.pow(10, firstNumDecimal + 1); //再除为原先的位数
+      return res;
+    }
   }
 }
 
@@ -230,12 +254,12 @@ export function getDecimal(data: number[]) {
   if (max > 1) return 0;
   else {
     const floatString = max.toString().split('.')[1];
-    let firstNumDecimal = floatString.length - String(parseInt(floatString)).length; // 小数点后有多少个零
+    let firstNumDecimal = floatString?.length - String(parseInt(floatString)).length; // 小数点后有多少个零
     return firstNumDecimal + 2;
   }
 }
 
-export async function getOneInchQuoteResponse(quoteParams: OneInchQuoteParams) {
+export async function getOneInchQuoteResponse(quoteParams: OneInchQuoteParams, ONEINCH_API_QUOTE_URL: string) {
   let quote: SwapQuoteStruct;
   let quoteUrl = `${ONEINCH_API_QUOTE_URL}?${qs.stringify(quoteParams)}`;
   let response = await getJson(quoteUrl);
@@ -249,7 +273,7 @@ export async function getOneInchQuoteResponse(quoteParams: OneInchQuoteParams) {
   return quote;
 }
 
-export async function getZeroExQuoteResponse(quoteParams: ZeroExQuoteParams) {
+export async function getZeroExQuoteResponse(quoteParams: ZeroExQuoteParams, ZEROEX_API_QUOTE_URL: string) {
   let quoteResponse: SwapQuoteStruct;
   let quoteUrl = `${ZEROEX_API_QUOTE_URL}?${qs.stringify(quoteParams)}`;
   let response = await getJson(quoteUrl);
@@ -281,6 +305,9 @@ export async function getQuote(
   toTokenAddress: string,
   amount: string,
   slippage: number,
+  ONEINCH_API_QUOTE_URL: string,
+  ZEROEX_API_QUOTE_URL: string,
+  ezioAddress: string,
 ) {
   const blankRes = {
     buyToken: '',
@@ -294,11 +321,11 @@ export async function getQuote(
         fromTokenAddress,
         toTokenAddress,
         amount,
-        fromAddress: ezioJson.address,
+        fromAddress: ezioAddress,
         slippage,
         disableEstimate: true,
       };
-      return await getOneInchQuoteResponse(quoteParams);
+      return await getOneInchQuoteResponse(quoteParams, ONEINCH_API_QUOTE_URL);
     }
     if (channel === QUOTE_CHANNEL.ZeroEx) {
       const quoteParams: ZeroExQuoteParams = {
@@ -307,7 +334,7 @@ export async function getQuote(
         sellAmount: amount,
         slippagePercentage: String(slippage / 100),
       };
-      return await getZeroExQuoteResponse(quoteParams);
+      return await getZeroExQuoteResponse(quoteParams, ZEROEX_API_QUOTE_URL);
     }
     return blankRes;
   } catch (e) {

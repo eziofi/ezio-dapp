@@ -1,8 +1,8 @@
 import { Card, CardContent, styled, Toolbar } from '@mui/material';
 import { Box } from '@mui/system';
-import { IProps } from '../../types/styleType';
+import { StyleProps } from '../../types/styleType';
 
-export const AccountToolBar = styled((props: IProps) => {
+export const AccountToolBar = styled((props: StyleProps) => {
   return <Toolbar {...props} />;
 })(() => {
   return {
@@ -16,7 +16,7 @@ export const AccountToolBar = styled((props: IProps) => {
   };
 });
 
-export const AccountCardBox = styled((props: IProps) => {
+export const AccountCardBox = styled((props: StyleProps) => {
   return <Box {...props} />;
 })(() => {
   return {
@@ -29,7 +29,7 @@ export const AccountCardBox = styled((props: IProps) => {
   };
 });
 
-export const AccountCard = styled((props: IProps) => {
+export const AccountCard = styled((props: StyleProps) => {
   return <Card {...props} variant="outlined" />;
 })(() => {
   return {
@@ -40,7 +40,7 @@ export const AccountCard = styled((props: IProps) => {
   };
 });
 
-export const Content = styled((props: IProps) => <CardContent {...props} />)(() => {
+export const Content = styled((props: StyleProps) => <CardContent {...props} />)(() => {
   return {
     display: 'flex',
     alignItems: 'center',

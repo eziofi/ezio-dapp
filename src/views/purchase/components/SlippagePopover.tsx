@@ -52,7 +52,7 @@ export default function SlippagePopover({
     <div>
       <IconButton aria-describedby={id} onClick={handleClick}>
         <BaseIconFont
-          name={theme.palette.mode === 'dark' ? 'icon-shezhi-copy2' : 'icon-shezhi'}
+          name={theme.palette.mode === 'dark' ? 'icon-shezhi-copy' : 'icon-shezhi'}
           style={{ width: 20, height: 20 }}
         />
       </IconButton>
@@ -71,12 +71,10 @@ export default function SlippagePopover({
         }}
       >
         <SlippagePopoverContent>
-          <CardContent>
-            <Typography sx={{ fontSize: 20 }} gutterBottom>
-              {t('purchase.slippageSetting')}
-            </Typography>
+          <CardContent sx={{ padding: '15px' }}>
+            <Typography sx={{ fontSize: 20 }}>{t('purchase.slippageSetting')}</Typography>
             <div>
-              <header>
+              <header style={{ lineHeight: 1 }}>
                 <p>
                   {t('purchase.slippageTolerance')}
                   {/*<BaseIconFont name="icon-wenhaoxiao" />*/}
@@ -103,7 +101,7 @@ export default function SlippagePopover({
                   }
                   value={slippage}
                   onInput={(e: ChangeEvent<HTMLInputElement>) => toFixedSlippage(e)}
-                  sx={{ width: 200, marginLeft: '5px', color: 'rgba(81, 91, 119, 1)' }}
+                  sx={{ width: '100%', marginLeft: '5px', color: 'rgba(81, 91, 119, 1)' }}
                 />
               </footer>
             </div>

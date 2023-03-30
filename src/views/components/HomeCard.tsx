@@ -3,10 +3,12 @@ import { Card, SxProps, Theme, Typography } from '@mui/material';
 
 import { useTranslation } from 'react-i18next';
 import useWallet from '../hooks/useWallet';
-import { convertDownPrice, ezMATICFundCost, getLeverage, interestRateYear } from '../wallet/helpers/contract_call';
+import { convertDownPrice, ezWETHFundCost, getLeverage, interestRateYear } from '../wallet/helpers/contract_call';
 import { useQuery } from 'react-query';
 import BaseIconFont from './BaseIconFont';
 import { InlineSkeleton } from './Skeleton';
+import * as Net from 'net';
+import { ATokenMap, NETWORK_TYPE } from '../wallet/helpers/constant';
 
 export enum HOME_CARD_TYPE {
   Rate,
@@ -25,21 +27,21 @@ export default function HomeCard({
   sx?: SxProps<Theme>;
 }) {
   const { t } = useTranslation();
-  const { ethersProvider } = useWallet();
+  const { ethersProvider, networkName } = useWallet();
 
   const theme = useTheme();
 
   const api = {
     [HOME_CARD_TYPE.Rate]: interestRateYear,
-    [HOME_CARD_TYPE.FundCost]: ezMATICFundCost,
+    [HOME_CARD_TYPE.FundCost]: ezWETHFundCost,
     [HOME_CARD_TYPE.RebalancePrice]: convertDownPrice,
     [HOME_CARD_TYPE.Leverage]: getLeverage,
   };
   const title = {
     [HOME_CARD_TYPE.Rate]: t('home.card.rate'),
-    [HOME_CARD_TYPE.FundCost]: t('home.card.fundCost'),
-    [HOME_CARD_TYPE.RebalancePrice]: t('home.card.rebalancePrice'),
-    [HOME_CARD_TYPE.Leverage]: t('home.card.leverage'),
+    [HOME_CARD_TYPE.FundCost]: (networkName ? ATokenMap[networkName] : '') + t('home.card.fundCost'),
+    [HOME_CARD_TYPE.RebalancePrice]: (networkName ? ATokenMap[networkName] : '') + t('home.card.rebalancePrice'),
+    [HOME_CARD_TYPE.Leverage]: (networkName ? ATokenMap[networkName] : '') + t('home.card.leverage'),
   };
   const icon = {
     [HOME_CARD_TYPE.Rate]: 'icon-yuqinianhualishuai-copy',
@@ -47,13 +49,17 @@ export default function HomeCard({
     [HOME_CARD_TYPE.RebalancePrice]: 'icon-xiaoshoujiage-copy',
     [HOME_CARD_TYPE.Leverage]: 'icon-gangganshuai-copy',
   };
-  // @ts-ignore
-  const { data } = useQuery(['totalSupply', type], () => api[type](ethersProvider!.getSigner()), {
-    enabled: !!ethersProvider,
-    onError: err => {
-      // debugger;
+  const { data } = useQuery(
+    ['totalSupply', type],
+    // @ts-ignore
+    () => api[type](ethersProvider!.getSigner(), networkName as NETWORK_TYPE),
+    {
+      enabled: !!ethersProvider && !!networkName,
+      onError: err => {
+        // debugger;
+      },
     },
-  });
+  );
 
   const IconDivBorderColor = {
     [HOME_CARD_TYPE.Rate]: '#4481EB',

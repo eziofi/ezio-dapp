@@ -1,10 +1,10 @@
 import { Box, Button, Card, FormControl, useTheme } from '@mui/material';
 import { styled } from '@mui/system';
-import { IProps } from '../../types/styleType';
+import { StyleProps } from '../../types/styleType';
 
 const CONTAINER_WIDTH = '90%';
 
-const PurchaseContainer = styled((props: IProps) => {
+const PurchaseContainer = styled((props: StyleProps) => {
   const theme: any = useTheme();
   return (
     <div style={{ padding: '0 15px' }}>
@@ -26,7 +26,7 @@ const PurchaseContainer = styled((props: IProps) => {
   };
 });
 
-const ContentBottom = styled((props: IProps) => {
+const ContentBottom = styled((props: StyleProps) => {
   return <Card {...props} />;
 })(() => {
   const theme = useTheme();
@@ -51,7 +51,7 @@ const ContentBottom = styled((props: IProps) => {
   };
 });
 
-const ContentTop = styled((props: IProps) => {
+const ContentTop = styled((props: StyleProps) => {
   return <Card {...props} />;
 })(() => {
   const theme = useTheme();
@@ -127,7 +127,7 @@ const BalanceContent = styled('div')(() => {
   };
 });
 
-const FormControlStyle = styled((props: IProps) => {
+const FormControlStyle = styled((props: StyleProps) => {
   return <FormControl {...props} variant="standard" size="small" />;
 })(() => {
   return {
@@ -160,7 +160,7 @@ const FooterContent = styled('div')(() => {
   };
 });
 
-const UnitconverContent = styled((props: IProps) => {
+const UnitconverContent = styled((props: StyleProps) => {
   return <Card {...props} />;
 })(() => {
   const theme = useTheme();
@@ -186,13 +186,13 @@ const UnitconverContent = styled((props: IProps) => {
   };
 });
 
-const SlippagePopoverContent = styled((props: IProps) => {
+const SlippagePopoverContent = styled((props: StyleProps) => {
   return <Card {...props} />;
 })(() => {
   const theme = useTheme();
   return {
     width: 317,
-    height: 178,
+    // height: 178,
     // @ts-ignore
     background: theme.palette.purchase.slippageBg,
     div: {

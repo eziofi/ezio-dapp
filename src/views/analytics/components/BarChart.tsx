@@ -9,6 +9,8 @@ import { useQuery } from 'react-query';
 import { queryAccumulatedFees, queryDailyAccumulatedFees } from '../../../api/api';
 import { ColorModeContext } from '../../../theme';
 import { getDecimal, getYMax } from '../../wallet/helpers/utilities';
+import useWallet from '../../hooks/useWallet';
+import { NETWORK_TYPE } from '../../wallet/helpers/constant';
 
 export default function BarChart() {
   const [option, setOption] = React.useState<any>(null);
@@ -18,23 +20,22 @@ export default function BarChart() {
   const [AccumulatedFees, setAccumulatedFees] = React.useState<number[]>([]);
   const [XData, setXData] = React.useState<string[]>([]);
 
-  useQuery(['queryDailyAccumulatedFees'], queryDailyAccumulatedFees, {
+  const { networkName } = useWallet();
+
+  useQuery(['queryDailyAccumulatedFees'], () => queryDailyAccumulatedFees(networkName as NETWORK_TYPE), {
+    enabled: !!networkName,
     onSuccess: ({ data }) => {
       setDailyAccumulatedFees(data.data.map(i => i.dailyAccumulatedFees));
       setXData(data.data.map(i => i.groupTime.substring(5)));
     },
   });
 
-  useQuery(['queryAccumulatedFees'], queryAccumulatedFees, {
+  useQuery(['queryAccumulatedFees'], () => queryAccumulatedFees(networkName as NETWORK_TYPE), {
+    enabled: !!networkName,
     onSuccess: ({ data }) => {
-      setAccumulatedFees(
-        data.data.map(i => {
-          return !!i.accumulatedFees ? i.accumulatedFees : Math.max(...data.data.map(i => i.accumulatedFees));
-        }),
-      );
+      setAccumulatedFees(data.data.map(i => i.accumulatedFees));
     },
   });
-  // console.log('🚀 ~ file: BarChart.tsx:17 ~ BarChart ~ data:', AccumulatedFees);
 
   useEffect(() => {
     setOption({

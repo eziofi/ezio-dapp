@@ -3,11 +3,15 @@ import ReactApexChart from 'react-apexcharts';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { queryTokenGroup } from '../../../api/api';
 import { t } from 'i18next';
-import { getYMax } from '../../wallet/helpers/utilities';
+import { getYMax, getYMin } from '../../wallet/helpers/utilities';
 import { useContext, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { ColorModeContext } from '../../../theme';
 import RenderSkeleton from './RenderSkeleton';
+import { HomeCardHeader } from '../mainStyle';
+import RenderSelect from './RenderSelect';
+import useWallet from '../../hooks/useWallet';
+import { ATokenMap, NETWORK_TYPE } from '../../wallet/helpers/constant';
 
 export default function TotalSupplyApexChart() {
   const [option, setOption] = useState<any>(null);
@@ -21,11 +25,22 @@ export default function TotalSupplyApexChart() {
     queryClient.invalidateQueries('queryTreasuryValue');
   }, [mode]);
 
-  useQuery('queryTokenGroup', queryTokenGroup, {
-    onSuccess: data => {
-      const XData = data.data.data.map(i => parseInt(i.groupTime));
-      const aTotalSupply = data.data.data.map(i => i.ezatSupply);
-      const bTatalSupply = data.data.data.map(i => i.ezbtSupply);
+  const [queryType, setQueryType] = useState('hour');
+
+  const { networkName } = useWallet();
+
+  useQuery(['queryTokenGroup', queryType], () => queryTokenGroup(queryType, networkName as NETWORK_TYPE), {
+    enabled: !!networkName,
+    onSuccess: ({ data }) => {
+      const XData = data.data.map(i => {
+        if (queryType === 'hour') {
+          return String(parseInt(i.groupTime.slice(-2)));
+        } else {
+          return i.groupTime.slice(5, 10);
+        }
+      });
+      const aTotalSupply = data.data.map(i => i.ezatSupply);
+      const bTatalSupply = data.data.map(i => i.ezbtSupply);
 
       const totalSupplyMax = getYMax([...aTotalSupply, ...bTatalSupply]);
 
@@ -37,7 +52,7 @@ export default function TotalSupplyApexChart() {
             data: aTotalSupply,
           },
           {
-            name: t('home.bTotalSupplySeries'),
+            name: (networkName ? ATokenMap[networkName] : '') + t('home.bTotalSupplySeries'),
             type: 'area',
             data: bTatalSupply,
           },
@@ -70,8 +85,8 @@ export default function TotalSupplyApexChart() {
               title: {
                 text: t('home.totalSupplyAxis'),
               },
-              decimalsInFloat: 0,
-              min: 0,
+              decimalsInFloat: 1,
+              min: getYMin([...aTotalSupply, ...bTatalSupply]),
               max: totalSupplyMax,
             },
           ],
@@ -91,7 +106,11 @@ export default function TotalSupplyApexChart() {
 
   return (
     <Card>
-      <CardHeader title={t('home.totalSupplyTitle') as string} />
+      <HomeCardHeader>
+        <CardHeader title={t('home.totalSupplyTitle') as string} />
+
+        <RenderSelect value={queryType} onChange={setQueryType} />
+      </HomeCardHeader>
 
       <Box dir="ltr" sx={{ pl: 2, pr: 2 }}>
         {option ? (

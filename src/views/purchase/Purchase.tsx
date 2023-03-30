@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { ReactElement, ReactNode, useContext, useEffect, useState } from 'react';
 import './animation.less';
 import { Box, Button, CardContent, CircularProgress, IconButton, Toolbar, Typography, useTheme } from '@mui/material';
 import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
 import { Signer } from 'ethers';
-import { TOKEN_DECIMAL, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
+import { NETWORK_ID, NETWORK_TYPE, TOKEN_DECIMAL, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
 import useWallet from '../hooks/useWallet';
 import { formatDecimal, formatString, timestampFormat } from '../wallet/helpers/utilities';
 import { useTranslation } from 'react-i18next';
@@ -22,23 +22,25 @@ import { useBalance } from '../../hooks/useBalance';
 import BaseIconFont from '../components/BaseIconFont';
 import { Provider } from '@ethersproject/providers';
 import { interestRateYear } from '../wallet/helpers/contract_call';
-import { UIContext } from '../../layouts/dashboard/DashboardLayout';
 import useTx from '../../hooks/useTx';
 import { InlineSkeleton } from '../components/Skeleton';
 import { useFeeRate } from '../../hooks/useFeeRate';
 import SlippagePopover from './components/SlippagePopover';
+import { UIContext } from '../context/UIProvider';
+import { stringify } from 'querystring';
+import { ButtonTypeMap } from '@mui/material/Button/Button';
 
 interface IPurchaseArg {
   fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC;
-  toType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC;
+  toType: TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP;
   amount: number;
   slippage: number;
   signerOrProvider: Signer | Provider;
 }
 
 interface IRedeemArg {
-  fromType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC;
-  toType: TOKEN_TYPE.USDC | TOKEN_TYPE.stMATIC;
+  fromType: TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP;
+  toType: TOKEN_TYPE.USDC | TOKEN_TYPE.ReverseCoin;
   amount: number;
   slippage: number;
   signerOrProvider: Signer | Provider;
@@ -53,16 +55,16 @@ export default function Purchase() {
   const queryClient: QueryClient = useQueryClient();
   const [type, setType] = useState(TRANSFER_TYPE.PURCHASE); // 0是购买 1是赎回
   // const [tipDrawerOpened, setTipDrawerOpened] = useState(false);
-  const [inputValue1, setInputValue1] = useState('');
-  const [inputValue2, setInputValue2] = useState('');
-  const [isClick, setIsClick] = useState(false);
-  const [tokenType, setTokenType] = useState<TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC>(TOKEN_TYPE.ezUSD); // 下拉框value
-  const [redeemTokenType, setRedeemTokenType] = useState<TOKEN_TYPE.USDC | TOKEN_TYPE.USDT | TOKEN_TYPE.stMATIC>(
+  const [inputValue1, setInputValue1] = useState(''); // 上方输入框
+  const [inputValue2, setInputValue2] = useState(''); // 下方输入框
+  const [pricePercentage, setPricePercentage] = useState('');
+  const [tokenType, setTokenType] = useState<TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP>(TOKEN_TYPE.USDE); // 下拉框value
+  const [redeemTokenType, setRedeemTokenType] = useState<TOKEN_TYPE.USDC | TOKEN_TYPE.USDT | TOKEN_TYPE.ReverseCoin>(
     TOKEN_TYPE.USDT,
   ); // 下拉框value
   const theme = useTheme();
 
-  const [tokenRate, setTokenRate] = useState('1'); // eg. 1 USDT = xxx ezUSD
+  const [tokenRate, setTokenRate] = useState('1'); // eg. 1 USDT = xxx USDE
 
   const [slippage, setSlippage] = useState<number>(0.5);
   const [resetVal] = useState<number>(0.5);
@@ -72,7 +74,7 @@ export default function Purchase() {
 
   const { purchase, redeem, approve } = useTx();
 
-  const { openBackLoading, closeBackLoading, setBackLoadingText, setMsg, openMsg, closeMsg } = useContext(UIContext);
+  const { openBackLoading, closeBackLoading, setBackLoadingText, openMsg } = useContext(UIContext);
 
   // useEffect(() => {
   //   // 定时时间
@@ -91,25 +93,55 @@ export default function Purchase() {
     }
   }, [tokenType, redeemTokenType, fromPrice, toPrice, inputValue1]);
 
+  useEffect(() => {
+    if (fromPrice && toPrice) {
+      const percentage = ((parseFloat(toPrice) - parseFloat(fromPrice)) / parseFloat(fromPrice)) * 100;
+      setPricePercentage(percentage < 0 ? percentage.toFixed(2) : '+' + percentage.toFixed(2));
+    }
+  }, [toPrice, fromPrice]);
+
   const { t } = useTranslation();
 
-  function getInputVal1(value: string) {
-    setInputValue1(value);
-    // 计算预计获得
+  function reCalcValue2(value: string) {
     if (fromPrice && toPrice) {
       const estimatedValue2 = (parseFloat(value) * parseFloat(fromPrice)) / parseFloat(toPrice);
       setInputValue2(estimatedValue2 + '');
     }
   }
 
+  function getInputVal1(value: string) {
+    setInputValue1(value);
+    // 计算预计获得
+    reCalcValue2(value);
+  }
+
+  function reCalcValue1(value: string) {
+    if (fromPrice && toPrice) {
+      const estimatedValue1 = (parseFloat(value) * parseFloat(toPrice)) / parseFloat(fromPrice);
+      const flooredValue = Math.floor(estimatedValue1 * 10 ** 6) / 10 ** 6;
+      setInputValue1(flooredValue + '');
+    }
+  }
+
+  // 反算输入值
+  function getInputVal2(value: string) {
+    setInputValue2(value);
+    // 计算预计获得
+    reCalcValue1(value);
+  }
+
+  useEffect(() => {
+    reCalcValue2(inputValue1);
+  }, [redeemTokenType, tokenType]);
+
   // 改变购买 / 赎回 状态 清空value
-  function setAnimation() {
-    setInputValue1('');
-    setInputValue2('');
+  function convert() {
+    setInputValue1(inputValue2);
+    setInputValue2(inputValue1);
     setType(type === TRANSFER_TYPE.PURCHASE ? TRANSFER_TYPE.REDEEM : TRANSFER_TYPE.PURCHASE);
   }
 
-  function getTokenType(tokenType: TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC) {
+  function getTokenType(tokenType: TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP) {
     setTokenType(tokenType);
   }
 
@@ -128,6 +160,9 @@ export default function Purchase() {
   const { mutateAsync: approveMutate } = useMutation(
     (arg: IApproveArg) => approve(arg.fromType, arg.signerOrProvider),
     {
+      onSuccess: () => {
+        queryClient.invalidateQueries();
+      },
       onError: error => {
         console.error(error);
       },
@@ -142,9 +177,6 @@ export default function Purchase() {
         signerOrProvider: ethersProvider!.getSigner(),
       };
       await approveMutate(args);
-      await queryClient.invalidateQueries('allowance');
-      console.log('resetApproveState');
-      resetApproveState();
     } catch (e) {
       console.error(e);
     } finally {
@@ -167,7 +199,7 @@ export default function Purchase() {
 
   const { balance, refetchBalance } = useBalance(type === TRANSFER_TYPE.PURCHASE ? redeemTokenType : tokenType);
 
-  const { ethersProvider, account, allowanceUSDT, allowanceUSDC } = useWallet();
+  const { connectState, ethersProvider, connect, allowanceUSDT, allowanceUSDC, networkName } = useWallet();
 
   const [needApprove, setNeedApprove] = useState(false);
 
@@ -186,13 +218,17 @@ export default function Purchase() {
     }
   }, [redeemTokenType, type, allowanceUSDT, allowanceUSDC]);
 
-  const { data: rate } = useQuery(['ezUSDDayRate'], () => interestRateYear(ethersProvider!.getSigner()), {
-    enabled: !!ethersProvider,
-    // onSuccess: data => {
-    //   const res = formatNetWorth(data);
-    //   debugger;
-    // },
-  });
+  const { data: rate } = useQuery(
+    ['USDEDayRate'],
+    () => interestRateYear(ethersProvider!.getSigner(), networkName as NETWORK_TYPE),
+    {
+      enabled: !!ethersProvider && !!networkName,
+      // onSuccess: data => {
+      //   const res = formatNetWorth(data);
+      //   debugger;
+      // },
+    },
+  );
 
   function handleError(error: any) {
     if (error.reason) {
@@ -216,7 +252,7 @@ export default function Purchase() {
         } else {
           const args: IPurchaseArg = {
             fromType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.USDT,
-            toType: tokenType as TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC,
+            toType: tokenType as TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP,
             amount: Number(inputValue1),
             slippage,
             signerOrProvider: ethersProvider!.getSigner(),
@@ -244,8 +280,8 @@ export default function Purchase() {
           openMsg(t('redeem.moreThanBalanceMsg'));
         } else {
           const args: IRedeemArg = {
-            fromType: tokenType as TOKEN_TYPE.ezUSD | TOKEN_TYPE.ezMATIC,
-            toType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.stMATIC,
+            fromType: tokenType as TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP,
+            toType: redeemTokenType as TOKEN_TYPE.USDC | TOKEN_TYPE.ReverseCoin,
             amount: Number(inputValue1),
             signerOrProvider: ethersProvider!.getSigner(),
             slippage,
@@ -273,10 +309,45 @@ export default function Purchase() {
     if (type === TRANSFER_TYPE.REDEEM && redeemTokenType === 4) {
       setRedeemTokenType(TOKEN_TYPE.USDC);
     } else if (type === TRANSFER_TYPE.PURCHASE && redeemTokenType === 3) {
-      // type 为购买时 && redeemTokenType = stMatic, redeemTokenType赋值 为 USDT 因为购买时的下拉框value不存stMatic 会导致value为空
+      // type 为购买时 && redeemTokenType = reverseCoin, redeemTokenType赋值 为 USDT 因为购买时的下拉框value不存reverseCoin 会导致value为空
       setRedeemTokenType(TOKEN_TYPE.USDT);
     }
   }, [type]);
+
+  const MutationButton = ({
+    children,
+    disabled,
+    onClick,
+    loadingOpen,
+    loadingText,
+  }: {
+    children: ReactNode;
+    disabled?: boolean;
+    onClick?: () => void;
+    loadingOpen?: boolean;
+    loadingText?: string;
+  }) => (
+    <Button
+      sx={{ width: '90%', marginTop: theme.spacing(2), borderRadius: '15px', fontSize: 18 }}
+      variant="contained"
+      size={'large'}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {loadingOpen ? (
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ mr: 1 }}>{loadingText || ''}</Box>
+          <CircularProgress size={16} sx={{ color: 'rgba(145, 158, 171, 0.8)' }} />
+        </Box>
+      ) : (
+        children
+      )}
+    </Button>
+  );
+
+  console.log('parseFloat(allowanceUSDC) < parseFloat(inputValue1)');
+  console.log(parseFloat(allowanceUSDC));
+  console.log(parseFloat(inputValue1));
 
   return (
     <PurchaseContainer>
@@ -293,49 +364,43 @@ export default function Purchase() {
 
       {/* 卡片1 */}
       <ContentBottom sx={{}} className="contentBottom">
-        {!isClick ? (
-          <CardContent>
-            <MyCardContentOne
-              isBuy={type === TRANSFER_TYPE.PURCHASE}
-              transactionType={type}
-              tokenType={tokenType}
-              getTokenType={getTokenType}
-              getInputVal1={getInputVal1}
-              redeemTokenType={redeemTokenType}
-              setRedeemTokenType={setRedeemTokenType}
-              inputValue1={inputValue1}
-              needApprove={needApprove}
-            />
-          </CardContent>
-        ) : (
-          <></>
-        )}
+        <CardContent>
+          <MyCardContentOne
+            isBuy={type === TRANSFER_TYPE.PURCHASE}
+            transactionType={type}
+            tokenType={tokenType}
+            getTokenType={getTokenType}
+            getInputVal1={getInputVal1}
+            redeemTokenType={redeemTokenType}
+            setRedeemTokenType={setRedeemTokenType}
+            inputValue1={inputValue1}
+            needApprove={needApprove}
+          />
+        </CardContent>
       </ContentBottom>
 
       {/* cover btn */}
       <ConverBtn className="coverBtn">
-        <IconButton className="iconBtn" onClick={() => setAnimation()}>
+        <IconButton className="iconBtn" onClick={() => convert()}>
           <BaseIconFont name="icon-qiehuan" style={{ fill: 'white', height: '100%' }} />
         </IconButton>
       </ConverBtn>
 
       {/* 卡片2 */}
       <ContentTop sx={{}} className="contentTop">
-        {!isClick ? (
-          <CardContent>
-            <MyCardContentSecond
-              isBuy={type === TRANSFER_TYPE.PURCHASE}
-              transactionType={type}
-              tokenType={tokenType}
-              getTokenType={getTokenType}
-              inputValue2={inputValue2}
-              redeemTokenType={redeemTokenType}
-              setRedeemTokenType={setRedeemTokenType}
-            />
-          </CardContent>
-        ) : (
-          <></>
-        )}
+        <CardContent>
+          <MyCardContentSecond
+            isBuy={type === TRANSFER_TYPE.PURCHASE}
+            transactionType={type}
+            tokenType={tokenType}
+            getTokenType={getTokenType}
+            inputValue2={inputValue2}
+            getInputVal2={getInputVal2}
+            redeemTokenType={redeemTokenType}
+            setRedeemTokenType={setRedeemTokenType}
+            pricePercentage={pricePercentage}
+          />
+        </CardContent>
       </ContentTop>
 
       {/* 单位换算/*/}
@@ -352,35 +417,57 @@ export default function Purchase() {
         <></>
       )}
 
-      {/* 购买、赎回按钮 */}
-      <Button
-        sx={{ width: '90%', marginTop: theme.spacing(5) }}
-        variant="contained"
-        disableElevation
-        disabled={(!needApprove && (!inputValue1 || !+inputValue1)) || loadingOpen}
-        onClick={() =>
-          needApprove
-            ? doApprove()
-            : type === TRANSFER_TYPE.PURCHASE
-            ? doPurchase()
-            : type === TRANSFER_TYPE.REDEEM
-            ? doRedeem()
-            : null
-        }
-      >
-        {loadingOpen ? (
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Box sx={{ mr: 1 }}>{loadingText}</Box>
-            <CircularProgress size={16} sx={{ color: 'rgba(145, 158, 171, 0.8)' }} />
-          </Box>
-        ) : needApprove ? (
-          t('purchase.approveAction') + TOKEN_TYPE[redeemTokenType]
-        ) : type === TRANSFER_TYPE.PURCHASE ? (
-          t('purchase.purchaseAction')
+      {connectState === 'unconnected' ? (
+        // 连接钱包按钮
+        <MutationButton onClick={connect}>{t('home.login')}</MutationButton>
+      ) : needApprove ? (
+        // 授权按钮
+        <MutationButton disabled={loadingOpen} onClick={doApprove} loadingOpen={loadingOpen} loadingText={loadingText}>
+          {t('purchase.approveAction') + TOKEN_TYPE[redeemTokenType]}
+        </MutationButton>
+      ) : parseFloat(inputValue1) > parseFloat(balance || '0') ? (
+        // 余额不足
+        <MutationButton disabled>{t('purchase.notEnoughBalance')}</MutationButton>
+      ) : type === TRANSFER_TYPE.PURCHASE ? (
+        // allowance不足
+        (
+          redeemTokenType === TOKEN_TYPE.USDC
+            ? parseFloat(allowanceUSDC) < parseFloat(inputValue1)
+            : parseFloat(allowanceUSDT) < parseFloat(inputValue1)
+        ) ? (
+          // allowance不足
+          <MutationButton
+            disabled={loadingOpen}
+            onClick={doApprove}
+            loadingOpen={loadingOpen}
+            loadingText={loadingText}
+          >
+            {t('purchase.approveAction') + TOKEN_TYPE[redeemTokenType]}
+          </MutationButton>
         ) : (
-          t('redeem.redeemAction')
-        )}
-      </Button>
+          // 购买按钮
+          <MutationButton
+            disabled={!inputValue1 || !+inputValue1 || loadingOpen}
+            onClick={doPurchase}
+            loadingOpen={loadingOpen}
+            loadingText={loadingText}
+          >
+            {t('purchase.purchaseAction')}
+          </MutationButton>
+        )
+      ) : type === TRANSFER_TYPE.REDEEM ? (
+        // 赎回按钮
+        <MutationButton
+          disabled={!inputValue1 || !+inputValue1 || loadingOpen}
+          onClick={doRedeem}
+          loadingOpen={loadingOpen}
+          loadingText={loadingText}
+        >
+          {t('redeem.redeemAction')}
+        </MutationButton>
+      ) : (
+        <></>
+      )}
 
       <FooterContent>
         {/*<span>{t('purchase.unitPrice') + ' $' + formatNetWorth(netWorth, true)}</span>*/}
@@ -391,7 +478,7 @@ export default function Purchase() {
             type === TRANSFER_TYPE.PURCHASE ? (
               t('purchase.EZATRate') + ': ' + rate + '%'
             ) : (
-              t('purchase.feeRate') + ': ' + feeRate + '%'
+              t('purchase.feeRate') + ': ' + feeRate
             )
           ) : (
             <InlineSkeleton />

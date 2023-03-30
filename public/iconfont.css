@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3861749 */
-  src: url('iconfont.woff2?t=1678438542766') format('woff2'),
-       url('iconfont.woff?t=1678438542766') format('woff'),
-       url('iconfont.ttf?t=1678438542766') format('truetype');
+  src: url('iconfont.woff2?t=1679537706349') format('woff2'),
+       url('iconfont.woff?t=1679537706349') format('woff'),
+       url('iconfont.ttf?t=1679537706349') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,22 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-polygon:before {
+  content: "\e63b";
+}
+
+.icon-arbitrum:before {
+  content: "\e60b";
+}
+
+.icon-wstETH1:before {
+  content: "\e621";
+}
+
+.icon-wstETH:before {
+  content: "\e66a";
 }
 
 .icon-qiehuan:before {
@@ -25,7 +41,7 @@
   content: "\e8c8";
 }
 
-.icon-stMatic1:before {
+.icon-stMATIC1:before {
   content: "\e606";
 }
 
@@ -53,11 +69,7 @@
   content: "\e755";
 }
 
-.icon-stMatic-white:before {
-  content: "\e74e";
-}
-
-.icon-stMatic:before {
+.icon-stMATIC:before {
   content: "\e603";
 }
 
@@ -65,31 +77,15 @@
   content: "\e604";
 }
 
-.icon-USDT-white:before {
-  content: "\e74f";
-}
-
 .icon-USDC:before {
   content: "\e605";
-}
-
-.icon-USDC-white:before {
-  content: "\e750";
-}
-
-.icon-shezhi-copy:before {
-  content: "\e751";
-}
-
-.icon-shezhi-copy1:before {
-  content: "\e752";
 }
 
 .icon-shezhi:before {
   content: "\e608";
 }
 
-.icon-shezhi-copy2:before {
+.icon-shezhi-copy:before {
   content: "\e74d";
 }
 
@@ -107,14 +103,6 @@
 
 .icon-weidaizijinchilixichaxun:before {
   content: "\e658";
-}
-
-.icon-EZAT:before {
-  content: "\e753";
-}
-
-.icon-EZBT:before {
-  content: "\e754";
 }
 
 .icon-A-copy:before {

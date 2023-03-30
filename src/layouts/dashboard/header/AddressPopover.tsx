@@ -1,7 +1,22 @@
-import { Avatar, Box, Button, IconButton, Popover, Snackbar, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
+  IconButton,
+  Popover,
+  Snackbar,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import useWallet from '../../../views/hooks/useWallet';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import { styled } from '@mui/material/styles';
@@ -11,16 +26,26 @@ import { TOKEN_TYPE } from '../../../views/wallet/helpers/constant';
 import { formatDecimal, formatString } from '../../../views/wallet/helpers/utilities';
 import useResponsive from '../../../hooks/useResponsive';
 import { InlineSkeleton } from '../../../views/components/Skeleton';
+import BaseIconFont from '../../../views/components/BaseIconFont';
+import { ColorModeContext } from '../../../theme';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import NightlightIcon from '@mui/icons-material/Nightlight';
+import { ImageBox } from '../../../views/homePage/mainStyle';
+import icon_en from '../../../assets/header/ic_flag_en.svg';
+import icon_zh from '../../../assets/header/ic_flag_cn.svg';
 
 export default function AddressPopover() {
-  const { connectState, connect, disconnect, account, ethersProvider } = useWallet();
+  const { connectState, connect, disconnect, account } = useWallet();
+
   const [open, setOpen] = useState<(EventTarget & HTMLButtonElement) | null>(null);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [hasOpenDialog, setHasOpenDialog] = useState(false);
   const [copyFlag, setCopyFlag] = useState<boolean>(false);
   const { t } = useTranslation();
 
   const isDesktop = useResponsive('up', 'md', 'md');
 
-  const { balance } = useBalance(TOKEN_TYPE.USDT);
+  // const { balance } = useBalance(TOKEN_TYPE.USDT);
 
   const addressToShow = account.substring(0, 5) + '...' + account.substring(account.length - 5, account.length);
   const addressToShowInPop = account.substring(0, 12) + '...' + account.substring(account.length - 12, account.length);
@@ -34,29 +59,68 @@ export default function AddressPopover() {
     setOpen(null);
   };
 
-  const TextDiv = styled('div')({
-    textAlign: 'center',
-    fontSize: '40px',
+  const NetworkWrapper = styled('div')({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: '37px',
     marginTop: '37px',
   });
 
-  const copyText = () => {
-    var copyDOM = document.getElementById('account'); //需要复制文字的节点
-    var range = document.createRange(); //创建一个range
-    window.getSelection()?.removeAllRanges(); //清楚页面中已有的selection
-    range.selectNode(copyDOM as any); // 选中需要复制的节点
-    window.getSelection()?.addRange(range); // 执行选中元素
-    var successful = document.execCommand('copy');
+  const TextDiv = styled('span')({
+    marginLeft: 6,
+    fontSize: '32px',
+  });
+
+  const copyText = async () => {
+    await navigator.clipboard.writeText(addressToShowInPop);
     setCopyFlag(true);
-    // message.success('复制成功!');
   };
+
   const copyClose = (event: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
     setCopyFlag(false);
   };
+
+  const theme = useTheme();
+
+  const languageAndThemeStyle = {
+    width: '100%',
+    borderRadius: '12px',
+    // color: 'rgb(119, 128, 160)',
+    color: theme.palette.text.secondary,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '12px 8px',
+    fontWeight: 400,
+  };
+
+  const lang = localStorage.getItem('lang');
+
+  const { mode, toggleColorMode } = useContext(ColorModeContext);
+
+  type langType = 'en' | 'zh';
+
+  const LANGS = {
+    en: {
+      value: 'en',
+      label: 'English',
+      icon: icon_en,
+    },
+    zh: {
+      value: 'zh',
+      label: '简体中文',
+      icon: icon_zh,
+    },
+  };
+
+  function changeLang() {
+    localStorage.setItem('lang', lang === 'en' ? 'zh' : 'en');
+    window.location.reload();
+  }
 
   return (
     <>
@@ -74,10 +138,11 @@ export default function AddressPopover() {
       ) : connectState === 'connecting' ? (
         <Button variant="outlined">{t('home.connecting')}</Button>
       ) : (
-        <Button variant="outlined" onClick={connect}>
+        <Button variant="contained" onClick={connect}>
           {t('home.login')}
         </Button>
       )}
+
       <Popover
         open={Boolean(open)}
         anchorEl={open}
@@ -107,10 +172,24 @@ export default function AddressPopover() {
           </IconButton>
         </Box>
 
-        {/* <Divider sx={{ borderStyle: 'dashed' }} /> */}
-
         <Box sx={{ my: 1.5, px: 2.5 }}>
-          {balance ? <TextDiv>{formatString(balance).toString() + ' USDT'}</TextDiv> : <InlineSkeleton width={70} />}
+          <Divider />
+          <Box sx={{ margin: '20px 0' }}>
+            <Button sx={{ ...languageAndThemeStyle }} onClick={changeLang}>
+              <span>语言</span>
+              <span style={{ display: 'flex' }}>
+                {/* <ImageBox sx={{ background: 'rgba(255, 141, 26, 1)' }}>
+                <img src={LANGS[(lang || 'en') as langType].icon} alt={LANGS[(lang || 'en') as langType].label} />
+              </ImageBox> */}
+                {lang}
+              </span>
+            </Button>
+
+            <Button sx={{ ...languageAndThemeStyle }} onClick={toggleColorMode}>
+              <span>{mode} Theme</span>
+              <span>{mode === 'light' ? <WbSunnyIcon /> : <NightlightIcon />}</span>
+            </Button>
+          </Box>
           <Button
             sx={{
               width: '100%',
@@ -135,6 +214,15 @@ export default function AddressPopover() {
           }}
         />
       </Popover>
+      <Dialog open={dialogOpen} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+        <DialogTitle id="alert-dialog-title">{t('common.warning')}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">{t('common.errorNetworkTip')}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDialogOpen(false)}>{t('common.ok')}</Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

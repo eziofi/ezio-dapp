@@ -140,6 +140,22 @@ const LangForm = styled('div')(() => {
   };
 });
 
+const HomeCardHeader = styled('div')(() => {
+  return {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    '.homeCard_select': {
+      '.MuiSelect-select': {
+        width: 100,
+        fontSize: 14,
+        padding: '0',
+        textAlign: 'center',
+      },
+    },
+  };
+});
+
 export {
   TitleContainer,
   TitleBtnBox,
@@ -160,4 +176,5 @@ export {
   WalletConnectImg,
   NetForm,
   LangForm,
+  HomeCardHeader,
 };

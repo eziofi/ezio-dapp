@@ -35,9 +35,6 @@ export default function Account() {
             aria-label="refresh"
             onClick={() => {
               setRefreshFlag(refreshFlag + 1);
-              // queryClient.invalidateQueries(['balanceOf', TOKEN_TYPE.USDC]);
-              // queryClient.invalidateQueries(['balanceOf', TOKEN_TYPE.USDT]);
-              // queryClient.invalidateQueries(['balanceOf', TOKEN_TYPE.stMatic]);
             }}
           >
             <CachedIcon />
@@ -55,9 +52,9 @@ export default function Account() {
         <AccountCardBox>
           <AccountTokenCard type={TOKEN_TYPE.USDT} refreshFlag={refreshFlag} />
           <AccountTokenCard type={TOKEN_TYPE.USDC} refreshFlag={refreshFlag} />
-          <AccountTokenCard type={TOKEN_TYPE.stMATIC} refreshFlag={refreshFlag} />
-          <AccountTokenCard type={TOKEN_TYPE.ezUSD} refreshFlag={refreshFlag} />
-          <AccountTokenCard type={TOKEN_TYPE.ezMATIC} refreshFlag={refreshFlag} />
+          <AccountTokenCard type={TOKEN_TYPE.ReverseCoin} refreshFlag={refreshFlag} />
+          <AccountTokenCard type={TOKEN_TYPE.USDE} refreshFlag={refreshFlag} />
+          <AccountTokenCard type={TOKEN_TYPE.E2LP} refreshFlag={refreshFlag} />
         </AccountCardBox>
       ) : (
         <AccountDetail />

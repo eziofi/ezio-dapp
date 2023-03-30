@@ -1,12 +1,43 @@
 import { BigNumber } from 'ethers';
+import { AddressZero } from '@ethersproject/constants/src.ts/addresses';
 
 export enum TOKEN_TYPE {
-  ezUSD,
-  ezMATIC,
+  USDE,
+  E2LP,
   USDC,
-  stMATIC,
+  ReverseCoin, // wstETH or stMATIC
   USDT,
 }
+
+export enum NETWORK_TYPE {
+  arbitrum = 'arbitrum',
+  polygon = 'polygon',
+}
+
+export const NETWORK_ID = {
+  137: NETWORK_TYPE.polygon,
+  42161: NETWORK_TYPE.arbitrum,
+};
+
+export enum REVERSE_COIN_TYPE {
+  wstETH = 'wstETH',
+  stMATIC = 'stMATIC',
+}
+
+export const REVERSE_COIN = {
+  [NETWORK_TYPE.arbitrum]: REVERSE_COIN_TYPE.wstETH,
+  [NETWORK_TYPE.polygon]: REVERSE_COIN_TYPE.stMATIC,
+};
+
+export enum AToken {
+  E2LP = 'E2LP',
+  M2LP = 'M2LP',
+}
+
+export const ATokenMap = {
+  [NETWORK_TYPE.arbitrum]: AToken.E2LP,
+  [NETWORK_TYPE.polygon]: AToken.M2LP,
+};
 
 export enum TRANSFER_TYPE {
   PURCHASE = 0,
@@ -14,11 +45,11 @@ export enum TRANSFER_TYPE {
 }
 
 export const TOKEN_DECIMAL = {
-  [TOKEN_TYPE.ezUSD]: 18,
-  [TOKEN_TYPE.ezMATIC]: 18,
+  [TOKEN_TYPE.USDE]: 18,
+  [TOKEN_TYPE.E2LP]: 18,
   [TOKEN_TYPE.USDT]: 6,
   [TOKEN_TYPE.USDC]: 6,
-  [TOKEN_TYPE.stMATIC]: 18,
+  [TOKEN_TYPE.ReverseCoin]: 18,
 };
 
 export enum QUOTE_CHANNEL {
@@ -157,6 +188,21 @@ export const BSC_TOKENS = {
   WOO: '0x4691937a7508860f876c9c0a2a617e7d9e945d4b',
 };
 
+export const ARBITRUM_TOKENS = {
+  USDT: '0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9',
+  USDC: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
+  DAI: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
+  FRAX: '0x17fc002b466eec40dae837fc4be5c67993ddbd6f',
+  nETH: '0x3ea9b0ab55f34fb188824ee288ceaefc63cf908e',
+  WETH: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+  nUSD: '0x2913e812cf0dcca30fb28e6cac3d2dcff4497688',
+  MIM: '0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a',
+  WBTC: '0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f',
+  VST: '0x64343594ab9b56e99087bfa6f2335db24c2d1f17',
+  [REVERSE_COIN_TYPE.wstETH]: '0x5979D7b546E38E414F7E9822514be443A4800529',
+  [REVERSE_COIN_TYPE.stMATIC]: AddressZero,
+};
+
 export const POLYGON_TOKENS = {
   DAI: '0x8f3cf7ad23cd3cadbd9735aff958023239c6a063',
   USDC: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
@@ -175,7 +221,8 @@ export const POLYGON_TOKENS = {
   nUSD: '0xb6c473756050de474286bed418b77aeac39b02af',
   ANY: '0x6ab6d61428fde76768d7b45d8bfeec19c6ef91a8',
   WOO: '0x1b815d120b3ef02039ee11dc2d33de7aa4a8c603',
-  stMATIC: '0x3A58a54C066FdC0f2D55FC9C89F0415C92eBf3C4',
+  [REVERSE_COIN_TYPE.stMATIC]: '0x3A58a54C066FdC0f2D55FC9C89F0415C92eBf3C4',
+  [REVERSE_COIN_TYPE.wstETH]: AddressZero,
 };
 
 export const ERC20_ABI = [

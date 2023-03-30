@@ -3,17 +3,24 @@ import { Box, Card, SxProps, Theme } from '@mui/material';
 
 import { useTranslation } from 'react-i18next';
 import useWallet from '../hooks/useWallet';
-import { commissionIncome, ezMATICReverse, getPooledA } from '../wallet/helpers/contract_call';
+import { commissionIncome, ezWETHReverse, getPooledA } from '../wallet/helpers/contract_call';
 import { useQuery } from 'react-query';
-import { formatDecimal } from '../wallet/helpers/utilities';
-import { TOKEN_TYPE } from '../wallet/helpers/constant';
+import { NETWORK_TYPE } from '../wallet/helpers/constant';
 import { InlineSkeleton } from './Skeleton';
 
-import StMaticIconDrak from '../../assets/analytics/stMatic_drak.png';
-import USDCIconDrak from '../../assets/analytics/usdc_drak.png';
+import USDCIconDark from '../../assets/analytics/usdc_dark.png';
 import FeeValueIcon from '../../assets/analytics/feeValue.png';
-import StMaticIconLight from '../../assets/analytics/stMatic_light.png';
 import USDCIconLight from '../../assets/analytics/usdc_light.png';
+
+const reverseCoinDark = {
+  [NETWORK_TYPE.arbitrum]: require('../../assets/analytics/wstETH_dark.png'),
+  [NETWORK_TYPE.polygon]: require('../../assets/analytics/stMatic_dark.png'),
+};
+
+const reverseCoinLight = {
+  [NETWORK_TYPE.arbitrum]: require('../../assets/analytics/wstETH_light.png'),
+  [NETWORK_TYPE.polygon]: require('../../assets/analytics/stMatic_light.png'),
+};
 
 const StyledIcon = styled('div')(({ theme }) => ({
   // margin: 'auto',
@@ -29,7 +36,7 @@ const StyledIcon = styled('div')(({ theme }) => ({
 
 export enum ANALYTICS_CARD_TYPE {
   USDC,
-  stMATIC,
+  reverseCoin,
   FEE,
 }
 export default function AnalyticsCard({
@@ -46,47 +53,56 @@ export default function AnalyticsCard({
   const { ethersProvider } = useWallet();
 
   const theme = useTheme();
+  const { reverseCoin, networkName } = useWallet();
 
   const api = {
     [ANALYTICS_CARD_TYPE.USDC]: getPooledA,
-    [ANALYTICS_CARD_TYPE.stMATIC]: ezMATICReverse,
+    [ANALYTICS_CARD_TYPE.reverseCoin]: ezWETHReverse,
     [ANALYTICS_CARD_TYPE.FEE]: commissionIncome,
   };
 
   const title = {
     [ANALYTICS_CARD_TYPE.USDC]: t('analytics.title.usdc'),
-    [ANALYTICS_CARD_TYPE.stMATIC]: t('analytics.title.stMATIC'),
+    [ANALYTICS_CARD_TYPE.reverseCoin]: t(`analytics.title.${reverseCoin}`),
     [ANALYTICS_CARD_TYPE.FEE]: t('analytics.title.fee'),
   };
 
   // 深色
-  const icon_drak = {
-    [ANALYTICS_CARD_TYPE.USDC]: USDCIconDrak,
-    [ANALYTICS_CARD_TYPE.stMATIC]: StMaticIconDrak,
+  const icon_Dark = {
+    [ANALYTICS_CARD_TYPE.USDC]: USDCIconDark,
+    [ANALYTICS_CARD_TYPE.reverseCoin]: reverseCoinDark,
     [ANALYTICS_CARD_TYPE.FEE]: FeeValueIcon,
   };
 
   // 浅色
   const icon_light = {
     [ANALYTICS_CARD_TYPE.USDC]: USDCIconLight,
-    [ANALYTICS_CARD_TYPE.stMATIC]: StMaticIconLight,
+    [ANALYTICS_CARD_TYPE.reverseCoin]: reverseCoinLight,
     [ANALYTICS_CARD_TYPE.FEE]: FeeValueIcon,
   };
 
   // @ts-ignore
-  const { data, isLoading } = useQuery(['AnalyticsCard', type], () => api[type](ethersProvider!.getSigner()), {
-    enabled: !!ethersProvider,
-    // @ts-ignore
-    onSuccess: data1 => {
-      // if (type === ANALYSIS_CARD_TYPE.rate) {
-      //   const res = formatNetWorth(data1);
-      //   debugger;
-      // }
+  const { data, isLoading } = useQuery(
+    ['AnalyticsCard', type],
+    () => {
+      return type === ANALYTICS_CARD_TYPE.FEE
+        ? api[type](networkName as NETWORK_TYPE)
+        : api[type](ethersProvider!.getSigner(), networkName as NETWORK_TYPE);
     },
-    onError: err => {
-      // debugger;
+    {
+      enabled: !!ethersProvider && !!networkName,
+      // @ts-ignore
+      onSuccess: data1 => {
+        // if (type === ANALYSIS_CARD_TYPE.rate) {
+        //   const res = formatNetWorth(data1);
+        //   debugger;
+        // }
+      },
+      onError: err => {
+        // debugger;
+      },
     },
-  });
+  );
 
   return (
     <Card
@@ -148,7 +164,17 @@ export default function AnalyticsCard({
             fill: theme.palette[color][theme.palette.mode === 'light' ? 'darker' : 'lighter'],
           }}
         /> */}
-        <img src={theme.palette.mode === 'dark' ? icon_drak[type] : icon_light[type]} />
+        <img
+          src={
+            theme.palette.mode === 'dark'
+              ? type === ANALYTICS_CARD_TYPE.reverseCoin
+                ? icon_Dark[type][networkName || NETWORK_TYPE.arbitrum]
+                : icon_Dark[type]
+              : type === ANALYTICS_CARD_TYPE.reverseCoin
+              ? icon_light[type][networkName || NETWORK_TYPE.arbitrum]
+              : icon_light[type]
+          }
+        />
 
         {/*<Iconify icon={icon[type]} width={24} height={24} />*/}
       </StyledIcon>
