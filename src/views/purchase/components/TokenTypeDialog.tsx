@@ -93,11 +93,16 @@ export default function TokenTypeDialog({ openDialog, handleClose, Options, toke
   function search(searchValue: string) {
     const list = Options.filter(item =>
       // 网络为polygon时,TOKEN_TYPE为1时,用M2LP去查询
+      // TOKEN_TYPE为ReverseCoin 用变量reverseCoin查询
       (networkName === NETWORK_TYPE.polygon
         ? item.value === TOKEN_TYPE.E2LP
           ? AToken.M2LP
-          : ''
-        : TOKEN_TYPE[item.value as TOKEN_TYPE]
+          : item.value === TOKEN_TYPE.ReverseCoin
+          ? reverseCoin
+          : TOKEN_TYPE[item.value]
+        : item.value === TOKEN_TYPE.ReverseCoin
+        ? reverseCoin
+        : TOKEN_TYPE[item.value]
       )
         .toLowerCase()
         .includes(searchValue.toLowerCase()),
