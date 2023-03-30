@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useEffect } from 'react';
-import { ATokenMap, NETWORK_TYPE, TOKEN_TYPE } from '../../wallet/helpers/constant';
+import { AToken, ATokenMap, NETWORK_TYPE, TOKEN_TYPE } from '../../wallet/helpers/constant';
 import ClearIcon from '@mui/icons-material/Clear';
 import SearchIcon from '@mui/icons-material/Search';
 import BaseIconFont from '../../components/BaseIconFont';
@@ -92,7 +92,15 @@ export default function TokenTypeDialog({ openDialog, handleClose, Options, toke
 
   function search(searchValue: string) {
     const list = Options.filter(item =>
-      TOKEN_TYPE[item.value as TOKEN_TYPE].toLowerCase().includes(searchValue.toLowerCase()),
+      // 网络为polygon时,TOKEN_TYPE为1时,用M2LP去查询
+      (networkName === NETWORK_TYPE.polygon
+        ? item.value === TOKEN_TYPE.E2LP
+          ? AToken.M2LP
+          : ''
+        : TOKEN_TYPE[item.value as TOKEN_TYPE]
+      )
+        .toLowerCase()
+        .includes(searchValue.toLowerCase()),
     );
     setSearchList([...list]);
   }
@@ -172,6 +180,7 @@ export default function TokenTypeDialog({ openDialog, handleClose, Options, toke
               inputProps={{ 'aria-label': t('purchase.searchName') }}
               // @ts-ignore
               onInput={e => search(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && e.preventDefault()}
             />
           </MyPaper>
 
