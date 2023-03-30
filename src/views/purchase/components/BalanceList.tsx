@@ -22,7 +22,7 @@ export default function BalanceList({ item, tokenType }: { item: IOptions; token
         alignItems: 'center',
       }}
     >
-      {balance ? balance : <InlineSkeleton width={40} />}
+      {balance ? formatString(balance, 6).toString() : <InlineSkeleton width={40} />}
 
       {TOKEN_TYPE[tokenType as TOKEN_TYPE] === TOKEN_TYPE[item.value as TOKEN_TYPE] && (
         <CheckIcon sx={{ color: 'rgb(251, 17, 142)', marginLeft: '5px' }} />
