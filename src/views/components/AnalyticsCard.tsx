@@ -122,16 +122,7 @@ export default function AnalyticsCard({
     >
       <Box style={{ display: 'flex', flexDirection: 'column', marginLeft: theme.spacing(4) }}>
         <div style={{ width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>
-          {!isLoading ? (
-            type === ANALYTICS_CARD_TYPE.FEE ? (
-              // @ts-ignore
-              data
-            ) : (
-              data
-            )
-          ) : (
-            <InlineSkeleton />
-          )}
+          {!isLoading ? '$' + data : <InlineSkeleton />}
         </div>
         <div
           style={{

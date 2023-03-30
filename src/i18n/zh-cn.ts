@@ -137,8 +137,8 @@ export default {
       stMATIC: '金库stMATIC价值',
       fee: '手续费收入(过去24h)',
     },
-    everyday: '每日',
-    accumulativeTotal: '累计',
+    everyday: '每日($)',
+    accumulativeTotal: '累计($)',
     CommissionDetail: '手续费',
   },
   tips: {
