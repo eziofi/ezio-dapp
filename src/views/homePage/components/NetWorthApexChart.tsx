@@ -70,6 +70,9 @@ export default function NetWorthApexChart() {
             toolbar: {
               show: false,
             },
+            zoom: {
+              enabled: false,
+            },
           },
           stroke: {
             curve: 'smooth',
