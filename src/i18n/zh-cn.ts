@@ -75,7 +75,7 @@ export default {
     ShowTwelveHours: '12小时',
   },
   purchase: {
-    purchaseValue: '购买',
+    purchaseValue: 'SWAP',
     leftBalance: '账户余额：',
     leftAvailableAmount: '本轮剩余额度',
     currentTime: '当前时间',
@@ -112,7 +112,7 @@ export default {
     selectiveToken: '选择代币',
   },
   redeem: {
-    redeemValue: '赎回',
+    redeemValue: 'SWAP',
     title: '赎回',
     redeemInputLabel: '份数',
     redeemAction: 'SWAP',

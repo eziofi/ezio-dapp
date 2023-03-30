@@ -76,7 +76,7 @@ export default {
     ShowTwelveHours: '12 hours',
   },
   purchase: {
-    purchaseValue: 'Purchase',
+    purchaseValue: 'SWAP',
     leftBalance: 'Balance: ',
     leftAvailableAmount: 'Current available amount ',
     currentTime: 'Current time',
@@ -113,7 +113,7 @@ export default {
     selectiveToken: 'Selective token',
   },
   redeem: {
-    redeemValue: 'Redeem',
+    redeemValue: 'SWAP',
     title: 'Redeem',
     redeemInputLabel: 'Amount',
     redeemAction: 'SWAP',

@@ -1,17 +1,16 @@
-import React, { ReactElement, ReactNode, useContext, useEffect, useState } from 'react';
+import React, { ReactNode, useContext, useEffect, useState } from 'react';
 import './animation.less';
 import { Box, Button, CardContent, CircularProgress, IconButton, Toolbar, Typography, useTheme } from '@mui/material';
 import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
 import { Signer } from 'ethers';
-import { NETWORK_ID, NETWORK_TYPE, TOKEN_DECIMAL, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
+import { ATokenMap, NETWORK_TYPE, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
 import useWallet from '../hooks/useWallet';
-import { formatDecimal, formatString, timestampFormat } from '../wallet/helpers/utilities';
+import { formatString } from '../wallet/helpers/utilities';
 import { useTranslation } from 'react-i18next';
 import {
   ContentBottom,
   ContentTop,
   ConverBtn,
-  DateNow,
   FooterContent,
   PurchaseContainer,
   UnitconverContent,
@@ -27,8 +26,6 @@ import { InlineSkeleton } from '../components/Skeleton';
 import { useFeeRate } from '../../hooks/useFeeRate';
 import SlippagePopover from './components/SlippagePopover';
 import { UIContext } from '../context/UIProvider';
-import { stringify } from 'querystring';
-import { ButtonTypeMap } from '@mui/material/Button/Button';
 
 interface IPurchaseArg {
   fromType: TOKEN_TYPE.USDT | TOKEN_TYPE.USDC;
@@ -76,15 +73,9 @@ export default function Purchase() {
 
   const { openBackLoading, closeBackLoading, setBackLoadingText, openMsg } = useContext(UIContext);
 
-  // useEffect(() => {
-  //   // 定时时间
-  //   const timer = setInterval(() => setTime(timestampFormat(new Date().getTime())), 1000);
-  //   return () => clearInterval(timer);
-  // }, []);
-
   const { price: fromPrice } = usePrice(type === TRANSFER_TYPE.PURCHASE ? redeemTokenType : tokenType);
   const { price: toPrice } = usePrice(type === TRANSFER_TYPE.PURCHASE ? tokenType : redeemTokenType);
-  const { feeRate } = useFeeRate();
+  const { feeRate } = useFeeRate(tokenType);
 
   useEffect(() => {
     if (fromPrice && toPrice && inputValue1) {
@@ -145,12 +136,14 @@ export default function Purchase() {
     setTokenType(tokenType);
   }
 
+  useEffect(() => {
+    queryClient.invalidateQueries(['redeemFeeRate', tokenType]);
+  }, [tokenType]);
+
   const { mutateAsync: purchaseMutate } = useMutation(
     (arg: IPurchaseArg) => purchase(arg.fromType, arg.toType, arg.amount, arg.slippage, arg.signerOrProvider),
     {
-      onSuccess: () => {
-        queryClient.invalidateQueries();
-      },
+      onSuccess: () => {},
       onError: error => {
         console.error(error);
       },
@@ -345,10 +338,6 @@ export default function Purchase() {
     </Button>
   );
 
-  console.log('parseFloat(allowanceUSDC) < parseFloat(inputValue1)');
-  console.log(parseFloat(allowanceUSDC));
-  console.log(parseFloat(inputValue1));
-
   return (
     <PurchaseContainer>
       <Toolbar sx={{ width: '98%', alignSelf: 'flex-start', margin: '0 auto' }}>
@@ -357,7 +346,7 @@ export default function Purchase() {
           component="div"
           sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}
         >
-          <span>{type === 0 ? t('purchase.purchaseValue') : t('redeem.redeemValue')}</span>
+          <span>{type === TRANSFER_TYPE.PURCHASE ? t('purchase.purchaseValue') : t('redeem.redeemValue')}</span>
           <SlippagePopover slippage={slippage} setSlippage={setSlippage} resetVal={resetVal} />
         </Typography>
       </Toolbar>
@@ -478,7 +467,14 @@ export default function Purchase() {
             type === TRANSFER_TYPE.PURCHASE ? (
               t('purchase.EZATRate') + ': ' + rate + '%'
             ) : (
-              t('purchase.feeRate') + ': ' + feeRate
+              <>
+                {networkName === NETWORK_TYPE.arbitrum ? (
+                  <span>{TOKEN_TYPE[tokenType] + t('purchase.feeRate') + ': '}</span>
+                ) : (
+                  <span>{ATokenMap[NETWORK_TYPE.polygon] + t('purchase.feeRate') + ': '}</span>
+                )}
+                {feeRate ? <span>{feeRate}</span> : <InlineSkeleton width={40} />}
+              </>
             )
           ) : (
             <InlineSkeleton />

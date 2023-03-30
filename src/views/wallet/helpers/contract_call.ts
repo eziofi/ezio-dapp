@@ -1,14 +1,14 @@
 import {
-  EzTreasuryV1__factory,
-  USDEV1__factory as USDEV1__factory__arbitrum,
   E2LPV1__factory,
   EzTreasuryV1,
+  EzTreasuryV1__factory,
+  USDEV1__factory as USDEV1__factory__arbitrum,
 } from '../arbitrum/contract';
 import {
-  EzioV1__factory,
-  EzUSDV1__factory as USDEV1__factory__polygon,
-  EzMATICV1__factory,
   EzioV1,
+  EzioV1__factory,
+  EzMATICV1__factory,
+  EzUSDV1__factory as USDEV1__factory__polygon,
 } from '../polygon/contract';
 
 import {
@@ -145,8 +145,7 @@ export async function ezWETHReverse(signerOrProvider: Signer | Provider, network
  * @returns 过去24小时手续费汇总 fees24H
  */
 export async function commissionIncome(networkId?: NETWORK_TYPE | undefined) {
-  console.log('-----------', networkId);
-  const res = await (await queryAccumulatedFees24H(networkId)).data.data.fees24H;
+  const res = (await queryAccumulatedFees24H(networkId)).data.data.fees24H;
   return res;
 }
 
@@ -166,11 +165,23 @@ export async function treasuryInterestRate(
  * 获取 手续费比率
  * @returns 手续费比率
  */
-export async function redeemFeeRate(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
-  const rawRate =
-    network === NETWORK_TYPE.arbitrum
-      ? await (EzioConnect(signerOrProvider, network) as EzTreasuryV1).redeemFeeRateB()
-      : await (EzioConnect(signerOrProvider, network) as EzioV1).redeemFeeRate();
+export async function redeemFeeRate(
+  signerOrProvider: Signer | Provider,
+  network: NETWORK_TYPE,
+  tokenType: TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP,
+) {
+  let rawRate: number;
+  if (tokenType === TOKEN_TYPE.USDE) {
+    rawRate =
+      network === NETWORK_TYPE.arbitrum
+        ? await (EzioConnect(signerOrProvider, network) as EzTreasuryV1).redeemFeeRateA()
+        : await (EzioConnect(signerOrProvider, network) as EzioV1).redeemFeeRate();
+  } else {
+    rawRate =
+      network === NETWORK_TYPE.arbitrum
+        ? await (EzioConnect(signerOrProvider, network) as EzTreasuryV1).redeemFeeRateB()
+        : await (EzioConnect(signerOrProvider, network) as EzioV1).redeemFeeRate();
+  }
   const denominator = await EzioConnect(signerOrProvider, network).REDEEM_RATE_DENOMINATOR();
   const rate = (rawRate / denominator.toNumber()) * 100 + '%';
   console.log('redeemFeeRate = ' + rate);
