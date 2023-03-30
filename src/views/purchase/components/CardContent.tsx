@@ -442,7 +442,7 @@ function MyCardContentSecond({
             //   {/* 显示账户余额 */}
             //   <span style={{ ...priceStyle, color: theme.palette.text.secondary }}>
             //     {t('purchase.leftBalance') + ': '}
-            //     {balance ? formatString(balance).toString() : <InlineSkeleton width={40} />}
+            // {balance ? formatString(balance).toString() : <InlineSkeleton width={40} />}
             //   </span>
             // </div>
 

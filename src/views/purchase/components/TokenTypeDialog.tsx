@@ -20,8 +20,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import BaseIconFont from '../../components/BaseIconFont';
 import useWallet from '../../hooks/useWallet';
 import { StyleProps } from '../../../types/styleType';
-import CheckIcon from '@mui/icons-material/Check';
+
 import { useTranslation } from 'react-i18next';
+import BalanceList from './BalanceList';
 
 interface IOptions {
   value: TOKEN_TYPE;
@@ -232,10 +233,7 @@ export default function TokenTypeDialog({ openDialog, handleClose, Options, toke
                   >
                     <div style={{ margin: '0 auto', width: '90%', display: 'flex', justifyContent: 'space-between' }}>
                       {renderIcon(item)}
-
-                      {TOKEN_TYPE[tokenType as TOKEN_TYPE] === TOKEN_TYPE[item.value as TOKEN_TYPE] && (
-                        <CheckIcon sx={{ color: 'rgb(251, 17, 142)' }} />
-                      )}
+                      <BalanceList item={item} tokenType={tokenType} />
                     </div>
                   </MyListItem>
                 );
