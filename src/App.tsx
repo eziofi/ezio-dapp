@@ -23,7 +23,6 @@ const queryClient = new QueryClient({
 });
 
 export default function App() {
-  console.log(1123)
   return (
     <div>
       <QueryClientProvider client={queryClient}>
