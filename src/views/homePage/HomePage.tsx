@@ -11,19 +11,19 @@ export default function HomePage() {
     <>
       <Container maxWidth="xl">
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} lg={3}>
             <HomeCard type={HOME_CARD_TYPE.Rate} color="warning" />
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} lg={3}>
             <HomeCard type={HOME_CARD_TYPE.FundCost} color="error" />
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} lg={3}>
             <HomeCard type={HOME_CARD_TYPE.RebalancePrice} />
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} lg={3}>
             <HomeCard type={HOME_CARD_TYPE.Leverage} />
           </Grid>
 

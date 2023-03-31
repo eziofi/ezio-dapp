@@ -28,10 +28,10 @@ export default {
   },
   home: {
     card: {
-      rate: 'USDE APR',
-      fundCost: ' Year Cost',
-      rebalancePrice: ' Rebalancing Price',
-      leverage: ' Leverage Ratio',
+      rate: 'USDE YIELD',
+      fundCost: ' FUNDING COST',
+      rebalancePrice: ' REBALANCING PRICE',
+      leverage: ' LEVERAGE RATIO',
     },
     coin: 'Coin',
     price: 'Price',

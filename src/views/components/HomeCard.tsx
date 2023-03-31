@@ -1,5 +1,5 @@
 import { alpha, styled, useTheme } from '@mui/material/styles';
-import { Card, SxProps, Theme, Typography } from '@mui/material';
+import { Card, IconButton, SxProps, Theme, Tooltip, tooltipClasses, TooltipProps, Typography } from '@mui/material';
 
 import { useTranslation } from 'react-i18next';
 import useWallet from '../hooks/useWallet';
@@ -9,7 +9,7 @@ import BaseIconFont from './BaseIconFont';
 import { InlineSkeleton } from './Skeleton';
 import * as Net from 'net';
 import { ATokenMap, NETWORK_TYPE } from '../wallet/helpers/constant';
-
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 export enum HOME_CARD_TYPE {
   Rate,
   FundCost,
@@ -108,10 +108,27 @@ export default function HomeCard({
       }}
       {...other}
     >
-      <Typography variant="h5" sx={{ color: theme.palette.text.disabled, fontWeight: 400 }}>
+      <Typography
+        variant="h6"
+        sx={{
+          color: theme.palette.text.disabled,
+          fontWeight: 400,
+          marginBottom: '5px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
         {title[type]}
+        {(type === HOME_CARD_TYPE.RebalancePrice || type === HOME_CARD_TYPE.Leverage) && (
+          <CustomTooltip placement="top" title={title[type]}>
+            <IconButton size={'small'} sx={{ cursor: 'help' }}>
+              <InfoOutlinedIcon sx={{ fontSize: '14px' }} />
+            </IconButton>
+          </CustomTooltip>
+        )}
       </Typography>
-      <Typography variant="h5" sx={{ color: theme.palette.text.primary }}>
+      <Typography variant="h4" sx={{ color: theme.palette.text.primary }}>
         {data ? (
           type === HOME_CARD_TYPE.Rate ? (
             data + '%'
@@ -127,3 +144,18 @@ export default function HomeCard({
     </Card>
   );
 }
+
+const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.arrow}`]: {
+    color: theme.palette.mode === 'light' ? theme.palette.grey[300] : theme.palette.grey[900],
+    // boxShadow: theme.shadows[1],
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.mode === 'light' ? theme.palette.grey[300] : theme.palette.grey[900],
+    color: theme.palette.mode === 'light' ? theme.palette.grey[900] : theme.palette.grey[200],
+    // boxShadow: theme.shadows[1],
+    fontSize: 11,
+  },
+}));
