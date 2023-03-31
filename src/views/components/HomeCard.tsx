@@ -108,35 +108,10 @@ export default function HomeCard({
       }}
       {...other}
     >
-      <StyledIcon>
-        <div
-          style={{
-            border: '1px solid black',
-            width: theme.spacing(6),
-            height: theme.spacing(6),
-            borderRadius: '50%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            background: IconBgColor[type],
-            opacity: 1,
-            boxShadow: IconShadowColor[type],
-          }}
-        >
-          <BaseIconFont
-            name={icon[type]}
-            style={{
-              width: 22,
-              height: 22,
-              // @ts-ignore
-              // fill: theme.palette[color][theme.palette.mode === 'light' ? 'darker' : 'lighter'],
-              fill: 'white',
-            }}
-          />
-        </div>
-      </StyledIcon>
-
-      <Typography variant="h3" sx={{ color: theme.palette.text.primary }}>
+      <Typography variant="h5" sx={{ color: theme.palette.text.disabled, fontWeight: 400 }}>
+        {title[type]}
+      </Typography>
+      <Typography variant="h5" sx={{ color: theme.palette.text.primary }}>
         {data ? (
           type === HOME_CARD_TYPE.Rate ? (
             data + '%'
@@ -149,7 +124,6 @@ export default function HomeCard({
           <InlineSkeleton />
         )}
       </Typography>
-      <Typography sx={{ color: theme.palette.text.disabled }}>{title[type]}</Typography>
     </Card>
   );
 }
