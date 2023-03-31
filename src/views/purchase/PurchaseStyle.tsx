@@ -7,22 +7,30 @@ const CONTAINER_WIDTH = '90%';
 const PurchaseContainer = styled((props: StyleProps) => {
   const theme: any = useTheme();
   return (
-    <div style={{ padding: '0 15px' }}>
-      <Card {...props} sx={{ background: theme.palette.purchase.containerBg }} />
+    <div
+      style={{
+        width: '100%',
+        height: 'calc(100vh - 168px)',
+        display: 'flex',
+        alignItems: 'center',
+      }}
+    >
+      <Card {...props} sx={{ background: `${theme.palette.purchase.containerBg}` }} />
     </div>
   );
 })(() => {
+  const theme = useTheme();
   return {
-    maxWidth: 500,
-    height: '100%',
-    // maxHeight: document.body.offsetHeight - 196,
+    width: 500,
     paddingBottom: 30,
-    // margin: '0 30px 20px',
     margin: '0 auto',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     overflow: 'auto',
+    // @ts-ignore
+    border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(152, 161, 192, 0.24)' : 'rgb(210, 217, 238)'}`,
+    borderRadius: '16px',
   };
 });
 
@@ -37,17 +45,6 @@ const ContentBottom = styled((props: StyleProps) => {
     // @ts-ignore
     background: theme.palette.purchase.cardBg,
     boxShadow: 'none',
-    ':after': {
-      position: 'absolute',
-      content: '""',
-      width: 50,
-      height: 50,
-      borderRadius: '100%',
-      top: '100%',
-      left: '50%',
-      transform: 'translate(-50%, -25%)',
-      border: '1px solid  rgba(145, 158, 171, 0.24);',
-    },
   };
 });
 
@@ -62,49 +59,32 @@ const ContentTop = styled((props: StyleProps) => {
     // @ts-ignore
     background: theme.palette.purchase.cardBg,
     boxShadow: 'none',
-    ':after': {
-      position: 'absolute',
-      content: '""',
-      width: 50,
-      height: 50,
-      color: 'red',
-      borderRadius: '100%',
-      top: '0',
-      right: '50%',
-      transform: 'translate(50%, -75%)',
-      border: '1px solid  rgba(145, 158, 171, 0.24)',
-    },
   };
 });
 
 const ConverBtn = styled('div')(() => {
   const theme = useTheme();
+
   return {
-    minWidth: 48,
-    maxWidth: 48,
-    height: 45,
-    borderRadius: '50%',
-    alignContent: 'center',
-    margin: '-12px 0 -12px 0',
+    margin: '-19px auto',
+    zIndex: 2,
     // @ts-ignore
-    background: theme.palette.purchase.cardBg,
-    zIndex: 100,
-    // border: '1px solid rgba(145, 158, 171, 0.24)',
-    borderRight: 'none',
-    borderLeft: 'none',
-    // boxShadow: '0 0 2px 0 rgb(145 158 171 / 20%), 0 12px 24px -4px rgb(145 158 171 / 12%)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    border: `4px solid ${theme.palette.purchase.containerBg}`,
+    borderRadius: '12px',
     '.iconBtn': {
       width: 35,
       height: 35,
-      borderRadius: '50%',
-      background: theme.palette.primary.main,
-      border: 'none',
+      borderRadius: '12px',
+      // @ts-ignore
+      background: theme.palette.purchase.cardBg,
       ':hover': {
+        opacity: '0.7',
+      },
+      '.icon': {
+        width: 35,
+        height: 35,
         // @ts-ignore
-        background: theme.palette.action.btnHover,
+        fill: 'rgb(152, 161, 192)',
       },
     },
   };

@@ -371,12 +371,15 @@ export default function Purchase() {
       {/* cover btn */}
       <ConverBtn className="coverBtn">
         <IconButton className="iconBtn" onClick={() => convert()}>
-          <BaseIconFont name="icon-qiehuan" style={{ fill: 'white', height: '100%' }} />
+          <BaseIconFont name="icon-qiehuan" />
         </IconButton>
       </ConverBtn>
 
       {/* 卡片2 */}
-      <ContentTop sx={{}} className="contentTop">
+      <ContentTop
+        sx={inputValue1 ? { borderBottomRightRadius: '0', borderBottomLeftRadius: '0' } : {}}
+        className="contentTop"
+      >
         <CardContent>
           <MyCardContentSecond
             isBuy={type === TRANSFER_TYPE.PURCHASE}
