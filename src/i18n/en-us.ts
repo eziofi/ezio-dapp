@@ -91,7 +91,7 @@ export default {
     USDTEstimated: 'USDT Estimated',
     estimated: 'Estimated',
     EZATRate: 'USDE Year Rate',
-    feeRate: 'Redeem Fee Rate',
+    feeRate: ' Redeem Fee Rate',
     moreThanAvailableMsg: 'Purchase amount cannot be more than the available amount.',
     moreThanBalanceMsg: 'Purchase amount cannot be more than balance.',
     extractAction: 'extract',

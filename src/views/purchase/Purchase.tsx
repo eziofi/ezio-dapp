@@ -464,18 +464,14 @@ export default function Purchase() {
           style={{ color: theme.palette.mode === 'light' ? theme.palette.primary.main : theme.palette.text.primary }}
         >
           {rate ? (
-            type === TRANSFER_TYPE.PURCHASE ? (
-              t('purchase.EZATRate') + ': ' + rate + '%'
-            ) : (
-              <>
-                {networkName === NETWORK_TYPE.arbitrum ? (
-                  <span>{TOKEN_TYPE[tokenType] + t('purchase.feeRate') + ': '}</span>
-                ) : (
-                  <span>{ATokenMap[NETWORK_TYPE.polygon] + t('purchase.feeRate') + ': '}</span>
-                )}
-                {feeRate ? <span>{feeRate}</span> : <InlineSkeleton width={40} />}
-              </>
-            )
+            <>
+              {networkName === NETWORK_TYPE.arbitrum ? (
+                <span>{TOKEN_TYPE[tokenType] + t('purchase.feeRate') + ': '}</span>
+              ) : (
+                <span>{ATokenMap[NETWORK_TYPE.polygon] + t('purchase.feeRate') + ': '}</span>
+              )}
+              {feeRate ? <span>{feeRate}</span> : <InlineSkeleton width={40} />}
+            </>
           ) : (
             <InlineSkeleton />
           )}
