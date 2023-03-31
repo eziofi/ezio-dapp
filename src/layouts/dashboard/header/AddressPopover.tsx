@@ -8,6 +8,7 @@ import {
   DialogContentText,
   DialogTitle,
   Divider,
+  Drawer,
   IconButton,
   Popover,
   Snackbar,
@@ -33,6 +34,7 @@ import NightlightIcon from '@mui/icons-material/Nightlight';
 import { ImageBox } from '../../../views/homePage/mainStyle';
 import icon_en from '../../../assets/header/ic_flag_en.svg';
 import icon_zh from '../../../assets/header/ic_flag_cn.svg';
+import DrawerSetting from './DrawerSetting';
 
 export default function AddressPopover() {
   const { connectState, connect, disconnect, account } = useWallet();
@@ -73,7 +75,7 @@ export default function AddressPopover() {
   });
 
   const copyText = async () => {
-    await navigator.clipboard.writeText(addressToShowInPop);
+    await navigator.clipboard.writeText(account);
     setCopyFlag(true);
   };
 
@@ -122,28 +124,30 @@ export default function AddressPopover() {
     window.location.reload();
   }
 
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const USDEBALANCE = useBalance(TOKEN_TYPE.USDE).balance;
+  const E2LPBALANCE = useBalance(TOKEN_TYPE.E2LP).balance;
+
   return (
     <>
       {connectState === 'connected' ? (
-        <Button
-          variant="outlined"
+        <IconButton
           onClick={event => {
-            setOpen(event.currentTarget);
+            // setOpen(event.currentTarget);
+            setOpenDrawer(true);
           }}
-          endIcon={<KeyboardArrowDownOutlinedIcon />}
+          // endIcon={<KeyboardArrowDownOutlinedIcon />}
         >
-          <Avatar src={metamaskBtn} sx={{ width: 24, height: 24, marginRight: isDesktop ? 1 : 0 }} />
-          {isDesktop ? addressToShow : ''}
-        </Button>
+          <Avatar src={metamaskBtn} sx={{ width: 24, height: 24 }} />
+          {/* <Avatar src={metamaskBtn} sx={{ width: 24, height: 24, marginRight: isDesktop ? 1 : 0 }} /> */}
+          {/* {isDesktop ? addressToShow : ''} */}
+        </IconButton>
       ) : connectState === 'connecting' ? (
-        <Button variant="outlined">{t('home.connecting')}</Button>
+        <Button>{t('home.connecting')}</Button>
       ) : (
-        <Button variant="contained" onClick={connect}>
-          {t('home.login')}
-        </Button>
+        <Button onClick={connect}>{t('home.login')}</Button>
       )}
-
-      <Popover
+      {/* <Popover
         open={Boolean(open)}
         anchorEl={open}
         onClose={handleClose}
@@ -177,12 +181,7 @@ export default function AddressPopover() {
           <Box sx={{ margin: '20px 0' }}>
             <Button sx={{ ...languageAndThemeStyle }} onClick={changeLang}>
               <span>语言</span>
-              <span style={{ display: 'flex' }}>
-                {/* <ImageBox sx={{ background: 'rgba(255, 141, 26, 1)' }}>
-                <img src={LANGS[(lang || 'en') as langType].icon} alt={LANGS[(lang || 'en') as langType].label} />
-              </ImageBox> */}
-                {lang}
-              </span>
+              <span style={{ display: 'flex' }}>{lang}</span>
             </Button>
 
             <Button sx={{ ...languageAndThemeStyle }} onClick={toggleColorMode}>
@@ -193,7 +192,6 @@ export default function AddressPopover() {
           <Button
             sx={{
               width: '100%',
-              // background: 'linear-gradient(180deg, rgba(108, 75, 246, 1) 0%, rgba(113, 79, 251, 1) 100%)',
               borderRadius: '36px',
               marginBottom: '37px',
             }}
@@ -213,7 +211,8 @@ export default function AddressPopover() {
             horizontal: 'center',
           }}
         />
-      </Popover>
+      </Popover> */}
+      <DrawerSetting open={openDrawer} setOpen={setOpenDrawer} />
       <Dialog open={dialogOpen} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
         <DialogTitle id="alert-dialog-title">{t('common.warning')}</DialogTitle>
         <DialogContent>

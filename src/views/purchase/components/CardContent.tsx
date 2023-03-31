@@ -1,4 +1,4 @@
-import { Button, InputBase, MenuItem, Select, Skeleton, styled, TextField, useTheme } from '@mui/material';
+import { Box, Button, InputBase, MenuItem, Select, Skeleton, styled, TextField, useTheme } from '@mui/material';
 import React, { useState } from 'react';
 import { BalanceContent, BodyContent } from '../PurchaseStyle';
 import { t } from 'i18next';
@@ -65,7 +65,6 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
   },
   '& .MuiInputBase-input': {
     borderRadius: 15,
-    width: 130,
     position: 'relative',
     // @ts-ignore
     backgroundColor: theme.palette.purchase.menuItemBg,
@@ -105,7 +104,7 @@ const CssTextField = styled(TextField)(() => {
       },
       '#custom-css-outlined-input': {
         fontSize: 32,
-        width: 200,
+        maxWidth: 180,
         color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
         padding: 0,
       },
@@ -199,6 +198,7 @@ function RanderOptions(
       </Select>
       <div
         style={{
+          // width: 170,
           fontSize: 12,
           color: theme.palette.text.secondary,
           marginTop: 5,
@@ -207,20 +207,21 @@ function RanderOptions(
         }}
       >
         {t('purchase.leftBalance') + ''}
-        {balance ? formatString(balance, 6).toString() : <InlineSkeleton width={40} />}
+        <span> {balance ? formatString(balance, 6).toString() : <InlineSkeleton width={40} />}</span>
         {showMaxVal && inputVal !== balance && (
-          <Button
-            variant="text"
-            sx={{
-              size: 12,
-              padding: '0',
-              lineHeight: '0',
-              // marginLeft: theme.spacing(1),
-            }}
+          <Box
             onClick={() => setInputVal!(formatString(balance || '', 6).toString())}
+            sx={{
+              color: theme.palette.primary.main,
+              fontWeight: 'bold',
+              marginLeft: theme.spacing(1),
+              ':hover': {
+                cursor: 'pointer',
+              },
+            }}
           >
             <>{t('purchase.maxValue')}</>
-          </Button>
+          </Box>
         )}
       </div>
       {openDialog && (

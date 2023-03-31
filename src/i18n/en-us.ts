@@ -148,4 +148,10 @@ export default {
       'When the TokenB worth of the owners is less than 60 percent of TokenA worth，the owner of TokenA will decrease funds and sell 1/4 stEth in the treasury.',
     line3: 'The income will be stored in TokenA fund.',
   },
+  drawerSeting: {
+    tokens: 'Tokens',
+    setting: 'Settings',
+    preferences: 'Preferences',
+    theme: 'Theme',
+  },
 };

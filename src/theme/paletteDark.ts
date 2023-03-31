@@ -116,6 +116,11 @@ const paletteDark = {
       },
     },
   },
+  drawer: {
+    bgColor: '13, 17, 28',
+    textBgColor: '41, 50, 73',
+    modeBgColor: '76, 130, 251',
+  },
 };
 
 export default paletteDark;

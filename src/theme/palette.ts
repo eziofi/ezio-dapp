@@ -116,6 +116,11 @@ const palette = {
       },
     },
   },
+  drawer: {
+    bgColor: '255, 255, 255',
+    textBgColor: '232, 236, 251',
+    modeBgColor: '251, 17, 142',
+  },
 };
 
 export default palette;
