@@ -192,7 +192,7 @@ export default function Purchase() {
 
   const { balance, refetchBalance } = useBalance(type === TRANSFER_TYPE.PURCHASE ? redeemTokenType : tokenType);
 
-  const { connectState, ethersProvider, connect, allowanceUSDT, allowanceUSDC, networkName } = useWallet();
+  const { connectState, ethersProvider, connect, allowanceUSDT, allowanceUSDC, networkName, reverseCoin } = useWallet();
 
   const [needApprove, setNeedApprove] = useState(false);
 
@@ -401,7 +401,8 @@ export default function Purchase() {
           <p>
             <BaseIconFont name="icon-Prompt" />
             <span>
-              1 {TOKEN_TYPE[redeemTokenType]} ≈ {tokenRate + ' ' + TOKEN_TYPE[tokenType]}
+              1&nbsp;{redeemTokenType === TOKEN_TYPE.ReverseCoin ? reverseCoin : TOKEN_TYPE[redeemTokenType]}
+              {'≈ ' + tokenRate + ' ' + TOKEN_TYPE[tokenType]}
             </span>
           </p>
         </UnitconverContent>

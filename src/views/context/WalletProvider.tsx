@@ -68,7 +68,7 @@ export default function WalletProvider({ children }: { children: ReactElement })
     {
       enabled: !!ethersProvider && !!account && !!networkName,
       onSuccess: data => {
-        setAllowanceUSDT(data.toString());
+        setAllowanceUSDT(data);
       },
     },
   );
@@ -78,7 +78,7 @@ export default function WalletProvider({ children }: { children: ReactElement })
     {
       enabled: !!ethersProvider && !!account && !!networkName,
       onSuccess: data => {
-        setAllowanceUSDC(data.toString());
+        setAllowanceUSDC(data);
       },
     },
   );
