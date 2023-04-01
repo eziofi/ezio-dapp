@@ -416,7 +416,8 @@ export default function Purchase() {
       ) : needApprove ? (
         // 授权按钮
         <MutationButton disabled={loadingOpen} onClick={doApprove} loadingOpen={loadingOpen} loadingText={loadingText}>
-          {t('purchase.approveAction') + TOKEN_TYPE[redeemTokenType]}
+          {t('purchase.approveAction') +
+            (redeemTokenType === TOKEN_TYPE.ReverseCoin ? reverseCoin : TOKEN_TYPE[redeemTokenType])}
         </MutationButton>
       ) : parseFloat(inputValue1) > parseFloat(balance || '0') ? (
         // 余额不足
@@ -435,7 +436,8 @@ export default function Purchase() {
             loadingOpen={loadingOpen}
             loadingText={loadingText}
           >
-            {t('purchase.approveAction') + TOKEN_TYPE[redeemTokenType]}
+            {t('purchase.approveAction') +
+              (redeemTokenType === TOKEN_TYPE.ReverseCoin ? reverseCoin : TOKEN_TYPE[redeemTokenType])}
           </MutationButton>
         ) : (
           // 购买按钮
