@@ -5,7 +5,6 @@ import { StyleProps } from '../../types/styleType';
 const CONTAINER_WIDTH = '90%';
 
 const PurchaseContainer = styled((props: StyleProps) => {
-  const theme: any = useTheme();
   return (
     <div
       style={{
@@ -15,13 +14,12 @@ const PurchaseContainer = styled((props: StyleProps) => {
         alignItems: 'center',
       }}
     >
-      <Card {...props} sx={{ background: `${theme.palette.purchase.containerBg}` }} />
+      <Card {...props} />
     </div>
   );
 })(() => {
   const theme = useTheme();
   return {
-    width: 500,
     paddingBottom: 30,
     margin: '0 auto',
     display: 'flex',
@@ -31,6 +29,8 @@ const PurchaseContainer = styled((props: StyleProps) => {
     // @ts-ignore
     border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(152, 161, 192, 0.24)' : 'rgb(210, 217, 238)'}`,
     borderRadius: '16px',
+    // @ts-ignore
+    background: `${theme.palette.purchase.containerBg}`,
   };
 });
 

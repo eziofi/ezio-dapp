@@ -52,7 +52,7 @@ export default function TokenLIstItem({ item }: { item: IOptions }) {
   function renderIcon(item: IOptions) {
     return (
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div style={{ ...MenuItemStyle, ...item.iconParentStyle }}>
+        <div style={{ ...MenuItemStyle, ...item.iconParentStyle, marginRight: '10px' }}>
           <BaseIconFont
             name={item.iconName === 'icon-wstETH1' ? `icon-${reverseCoin}` : item.iconName}
             style={{ ...item.iconStyle }}
@@ -85,7 +85,7 @@ export default function TokenLIstItem({ item }: { item: IOptions }) {
       <MyListItem>
         <>
           {renderIcon(item)}
-          <span style={{ fontWeight: '500', marginRight: '10px' }}>
+          <span style={{ fontWeight: '500' }}>
             {item.balance ? (
               '$' + formatString('' + parseFloat(item.balance) * parseFloat(price || '0'), 6).toString()
             ) : (

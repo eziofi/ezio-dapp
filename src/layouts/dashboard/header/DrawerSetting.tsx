@@ -57,7 +57,6 @@ export default function DrawerSetting({ open, setOpen }: IProps) {
     {
       value: TOKEN_TYPE.E2LP,
       iconParentStyle: {
-        margin: '0 10px',
         background: 'rgba(239, 89, 114, 1)',
         display: 'flex',
         alignItems: 'center',
@@ -73,7 +72,6 @@ export default function DrawerSetting({ open, setOpen }: IProps) {
     {
       value: TOKEN_TYPE.USDE,
       iconParentStyle: {
-        margin: '0 10px',
         background: 'rgba(95, 69, 186, 1)',
         display: 'flex',
         alignItems: 'center',
@@ -136,19 +134,15 @@ export default function DrawerSetting({ open, setOpen }: IProps) {
   const { mode, toggleColorMode } = useContext(ColorModeContext);
 
   const DrawerRootStyle = {
-    '.css-14o8ask-MuiBackdrop-root-MuiModal-backdrop': {
-      // 取消遮罩层
-      background: 'none',
-    },
-    '.css-2hfvai-MuiPaper-root-MuiDrawer-paper,.css-1qktev8-MuiPaper-root-MuiDrawer-paper': {
-      width: 320,
-      padding: '14px',
+    '.MuiPaper-root': {
+      width: '300px',
+      padding: '14px 20px',
+      // margin: '10px 0',
       top: '10px',
       bottom: '10px',
+      height: '98%',
       borderRadius: '12px',
       fontFamily: 'Inter custom,sans-serif',
-      // @ts-ignore
-      // background: `rgb(${theme.palette.drawer.bgColor})`,
       boxShadow: 'none',
       border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(152, 161, 192, 0.24)' : 'rgb(210, 217, 238)'}`,
     },

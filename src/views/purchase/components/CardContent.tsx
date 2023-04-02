@@ -198,12 +198,12 @@ function RanderOptions(
       </Select>
       <div
         style={{
-          // width: 170,
+          width: '150px',
           fontSize: 12,
           color: theme.palette.text.secondary,
-          marginTop: 5,
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'flex-end',
         }}
       >
         {t('purchase.leftBalance') + ''}
@@ -291,7 +291,7 @@ const INPUT_PARENT_HEIGHT = 83; // 输入框父级高度
 //参考单价
 const priceStyle = {
   fontSize: 12,
-  marginTop: 5,
+  // marginTop: 5,
 };
 
 function MyCardContentOne({
