@@ -67,7 +67,7 @@ export default function TokenLIstItem({ item }: { item: IOptions }) {
               : TOKEN_TYPE[item.value as TOKEN_TYPE]}
           </span>
           <span style={{ fontSize: 14, color: theme.palette.text.secondary }}>
-            {price} {TOKEN_TYPE[item.value].substring(0, 3)}
+            {item.balance ? formatString(item.balance, 6).toString() : <InlineSkeleton />} {TOKEN_TYPE[item.value]}
           </span>
         </div>
       </div>
@@ -86,7 +86,11 @@ export default function TokenLIstItem({ item }: { item: IOptions }) {
         <>
           {renderIcon(item)}
           <span style={{ fontWeight: '500', marginRight: '10px' }}>
-            {item.balance ? '$' + formatString(item.balance, 6).toString() : <InlineSkeleton />}
+            {item.balance ? (
+              '$' + formatString('' + parseFloat(item.balance) * parseFloat(price || '0'), 6).toString()
+            ) : (
+              <InlineSkeleton />
+            )}
           </span>
         </>
       </MyListItem>

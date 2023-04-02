@@ -207,7 +207,7 @@ function RanderOptions(
         }}
       >
         {t('purchase.leftBalance') + ''}
-        <span> {balance ? formatString(balance, 6).toString() : <InlineSkeleton width={40} />}</span>
+        <span>{balance ? formatString(balance, 6).toString() : <InlineSkeleton width={40} />}</span>
         {showMaxVal && inputVal !== balance && (
           <Box
             onClick={() => setInputVal!(formatString(balance || '', 6).toString())}
