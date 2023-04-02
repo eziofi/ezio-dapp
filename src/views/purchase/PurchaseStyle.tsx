@@ -152,6 +152,7 @@ const UnitconverContent = styled((props: StyleProps) => {
     borderTopLeftRadius: '0',
     borderTopRightRadius: '0',
     boxShadow: 'none',
+    padding: '0 20px',
     p: {
       fontSize: 14,
       display: 'flex',

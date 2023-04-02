@@ -54,14 +54,16 @@ export default function Purchase() {
   // const [tipDrawerOpened, setTipDrawerOpened] = useState(false);
   const [inputValue1, setInputValue1] = useState(''); // 上方输入框
   const [inputValue2, setInputValue2] = useState(''); // 下方输入框
-  const [pricePercentage, setPricePercentage] = useState('');
+  // const [pricePercentage, setPricePercentage] = useState('');
   const [tokenType, setTokenType] = useState<TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP>(TOKEN_TYPE.USDE); // 下拉框value
   const [redeemTokenType, setRedeemTokenType] = useState<TOKEN_TYPE.USDC | TOKEN_TYPE.USDT | TOKEN_TYPE.ReverseCoin>(
     TOKEN_TYPE.USDT,
   ); // 下拉框value
   const theme = useTheme();
 
-  const [tokenRate, setTokenRate] = useState('1'); // eg. 1 USDT = xxx USDE
+  // const [tokenRate, setTokenRate] = useState('1'); // eg. 1 USDT = xxx USDE
+  // const [tokenReverseRate, setTokenReverseRate] = useState('1'); // eg. 1 USDE = xxx USDT
+  const [tokenRateReverseOpen, setTokenRateReverseOpen] = useState(false);
 
   const [slippage, setSlippage] = useState<number>(0.5);
   const [resetVal] = useState<number>(0.5);
@@ -75,28 +77,23 @@ export default function Purchase() {
 
   const { price: fromPrice } = usePrice(type === TRANSFER_TYPE.PURCHASE ? redeemTokenType : tokenType);
   const { price: toPrice } = usePrice(type === TRANSFER_TYPE.PURCHASE ? tokenType : redeemTokenType);
+
+  // 两个token的price比值
+  const _rate = fromPrice && toPrice ? parseFloat(fromPrice) / parseFloat(toPrice) : 1;
+  const interest = formatString('' + _rate, 6).toString();
+  const reverseInterest = formatString('' + 1 / _rate, 6).toString();
+  const percentage =
+    fromPrice && toPrice ? ((parseFloat(toPrice) - parseFloat(fromPrice)) / parseFloat(fromPrice)) * 100 : 0;
+  const pricePercentage = percentage < 0 ? percentage.toFixed(2) : '+' + percentage.toFixed(2);
+
   const { feeRate } = useFeeRate(tokenType);
-
-  useEffect(() => {
-    if (fromPrice && toPrice && inputValue1) {
-      const rate = formatString('' + parseFloat(fromPrice) / parseFloat(toPrice), 6).toString();
-      setTokenRate(rate);
-    }
-  }, [tokenType, redeemTokenType, fromPrice, toPrice, inputValue1]);
-
-  useEffect(() => {
-    if (fromPrice && toPrice) {
-      const percentage = ((parseFloat(toPrice) - parseFloat(fromPrice)) / parseFloat(fromPrice)) * 100;
-      setPricePercentage(percentage < 0 ? percentage.toFixed(2) : '+' + percentage.toFixed(2));
-    }
-  }, [toPrice, fromPrice]);
 
   const { t } = useTranslation();
 
   function reCalcValue2(value: string) {
-    if (fromPrice && toPrice) {
-      const estimatedValue2 = (parseFloat(value) * parseFloat(fromPrice)) / parseFloat(toPrice);
-      setInputValue2(estimatedValue2 + '');
+    if (value && fromPrice && toPrice) {
+      const estimatedValue2 = parseFloat(value) * parseFloat(interest);
+      setInputValue2(formatString(String(estimatedValue2), 6) + '');
     }
   }
 
@@ -199,8 +196,8 @@ export default function Purchase() {
   const resetApproveState = () => {
     setNeedApprove(
       type === TRANSFER_TYPE.PURCHASE &&
-        ((redeemTokenType === TOKEN_TYPE.USDT && (!allowanceUSDT || allowanceUSDT === '0')) ||
-          (redeemTokenType === TOKEN_TYPE.USDC && (!allowanceUSDC || allowanceUSDC === '0'))),
+        ((redeemTokenType === TOKEN_TYPE.USDT && (!allowanceUSDT || parseFloat(allowanceUSDT) === 0)) ||
+          (redeemTokenType === TOKEN_TYPE.USDC && (!allowanceUSDC || parseFloat(allowanceUSDC) === 0))),
     );
     // setNeedApprove(true);
   };
@@ -211,7 +208,7 @@ export default function Purchase() {
     }
   }, [redeemTokenType, type, allowanceUSDT, allowanceUSDC]);
 
-  const { data: rate } = useQuery(
+  const { data: dayRate } = useQuery(
     ['USDEDayRate'],
     () => interestRateYear(ethersProvider!.getSigner(), networkName as NETWORK_TYPE),
     {
@@ -338,6 +335,8 @@ export default function Purchase() {
     </Button>
   );
 
+  const redeemTokenName = redeemTokenType === TOKEN_TYPE.ReverseCoin ? reverseCoin : TOKEN_TYPE[redeemTokenType];
+
   return (
     <PurchaseContainer>
       <Toolbar sx={{ width: '98%', alignSelf: 'flex-start', margin: '0 auto' }}>
@@ -399,11 +398,20 @@ export default function Purchase() {
       {inputValue1 ? (
         <UnitconverContent>
           <p>
-            <BaseIconFont name="icon-Prompt" />
-            <span>
-              1&nbsp;{redeemTokenType === TOKEN_TYPE.ReverseCoin ? reverseCoin : TOKEN_TYPE[redeemTokenType]}
-              {'≈ ' + tokenRate + ' ' + TOKEN_TYPE[tokenType]}
-            </span>
+            {/*<BaseIconFont name="icon-Prompt" />*/}
+            {tokenRateReverseOpen ? (
+              <span onClick={() => setTokenRateReverseOpen(!tokenRateReverseOpen)} style={{ cursor: 'pointer' }}>
+                {type === TRANSFER_TYPE.PURCHASE
+                  ? `1 ${TOKEN_TYPE[tokenType]} ≈ ${reverseInterest} ${redeemTokenName}`
+                  : `1 ${redeemTokenName} ≈ ${reverseInterest} ${TOKEN_TYPE[tokenType]}`}
+              </span>
+            ) : (
+              <span onClick={() => setTokenRateReverseOpen(!tokenRateReverseOpen)} style={{ cursor: 'pointer' }}>
+                {type === TRANSFER_TYPE.PURCHASE
+                  ? `1 ${redeemTokenName} ≈ ${interest} ${TOKEN_TYPE[tokenType]}`
+                  : `1 ${TOKEN_TYPE[tokenType]} ≈ ${interest} ${redeemTokenName}`}
+              </span>
+            )}
           </p>
         </UnitconverContent>
       ) : (
@@ -469,7 +477,7 @@ export default function Purchase() {
         <span
           style={{ color: theme.palette.mode === 'light' ? theme.palette.primary.main : theme.palette.text.primary }}
         >
-          {rate ? (
+          {dayRate ? (
             <>
               {networkName === NETWORK_TYPE.arbitrum ? (
                 <span>{TOKEN_TYPE[tokenType] + t('purchase.feeRate') + ': '}</span>
