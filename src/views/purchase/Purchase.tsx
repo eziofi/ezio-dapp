@@ -218,18 +218,6 @@ export default function Purchase() {
     }
   }, [redeemTokenType, type, allowanceUSDT, allowanceUSDC]);
 
-  const { data: dayRate } = useQuery(
-    ['USDEDayRate'],
-    () => interestRateYear(ethersProvider!.getSigner(), networkName as NETWORK_TYPE),
-    {
-      enabled: !!ethersProvider && !!networkName,
-      // onSuccess: data => {
-      //   const res = formatNetWorth(data);
-      //   debugger;
-      // },
-    },
-  );
-
   function handleError(error: any) {
     if (error.reason) {
       openMsg(error.reason);
@@ -490,22 +478,26 @@ export default function Purchase() {
 
         <FooterContent>
           {/*<span>{t('purchase.unitPrice') + ' $' + formatNetWorth(netWorth, true)}</span>*/}
-          <span
-            style={{ color: theme.palette.mode === 'light' ? theme.palette.primary.main : theme.palette.text.primary }}
-          >
-            {dayRate ? (
-              <>
-                {networkName === NETWORK_TYPE.arbitrum ? (
-                  <span>{TOKEN_TYPE[tokenType] + t('purchase.feeRate') + ': '}</span>
-                ) : (
-                  <span>{ATokenMap[NETWORK_TYPE.polygon] + t('purchase.feeRate') + ': '}</span>
-                )}
-                {feeRate ? <span>{feeRate}</span> : <InlineSkeleton width={40} />}
-              </>
-            ) : (
-              <InlineSkeleton />
-            )}
-          </span>
+          {type === TRANSFER_TYPE.REDEEM && (
+            <span
+              style={{
+                color: theme.palette.mode === 'light' ? theme.palette.primary.main : theme.palette.text.primary,
+              }}
+            >
+              {feeRate ? (
+                <>
+                  {networkName === NETWORK_TYPE.arbitrum ? (
+                    <span>{TOKEN_TYPE[tokenType] + t('purchase.feeRate') + ': '}</span>
+                  ) : (
+                    <span>{ATokenMap[NETWORK_TYPE.polygon] + t('purchase.feeRate') + ': '}</span>
+                  )}
+                  {feeRate ? <span>{feeRate}</span> : <InlineSkeleton width={40} />}
+                </>
+              ) : (
+                <InlineSkeleton />
+              )}
+            </span>
+          )}
 
           {/* 当前时间 */}
           {/*<DateNow>*/}
