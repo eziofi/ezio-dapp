@@ -76,7 +76,7 @@ export default {
   },
   purchase: {
     purchaseValue: 'SWAP',
-    leftBalance: '账户余额：',
+    leftBalance: '余额：',
     leftAvailableAmount: '本轮剩余额度',
     currentTime: '当前时间',
     purchaseAction: 'SWAP',

@@ -63,11 +63,6 @@ export default function MarketApexChart() {
           type: 'area',
           data: treasuryData,
         },
-        // {
-        //   name: t('home.ethPrice'),
-        //   type: 'area',
-        //   data: ethData,
-        // },
         {
           name: t('home.aRateAxis'),
           type: 'area',
@@ -106,20 +101,12 @@ export default function MarketApexChart() {
             title: {
               text: t('home.treasuryValue'),
             },
-            decimalsInFloat: 1,
+            decimalsInFloat: 2,
             min: getYMin(treasuryData),
             max: getYMax(treasuryData),
           },
-          // {
-          //   opposite: true,
-          //   title: {
-          //     text: t('home.ethPrice'),
-          //   },
-          //   decimalsInFloat: 0,
-          //   max: getYMax(ethData),
-          // },
           {
-            decimalsInFloat: 1,
+            decimalsInFloat: 2,
             opposite: true,
             title: {
               text: t('home.aRateAxis') + ' ( % ) ',
@@ -149,7 +136,7 @@ export default function MarketApexChart() {
         <RenderSelect value={queryType} onChange={setQueryType} />
       </HomeCardHeader>
 
-      <Box dir="ltr" sx={{ pl: 2, pr: 2 }}>
+      <Box dir="ltr">
         {/*<Box sx={{ p: 3, pb: 1 }} dir="ltr">*/}
         {option ? (
           <ReactApexChart options={option.options} series={option.series} type="line" height={350} />

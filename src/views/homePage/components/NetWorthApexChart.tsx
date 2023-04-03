@@ -87,7 +87,7 @@ export default function NetWorthApexChart() {
           },
           yaxis: [
             {
-              decimalsInFloat: 0,
+              decimalsInFloat: 2,
               title: {
                 text: reverseCoin ? t(`home.${reverseCoin}Price`) : '',
                 y: {
@@ -102,7 +102,7 @@ export default function NetWorthApexChart() {
             {
               // show: false,
               opposite: true,
-              decimalsInFloat: 1,
+              decimalsInFloat: 2,
               title: {
                 text: (networkName ? ATokenMap[networkName] : '') + t('home.bNetWorthSeries'),
               },

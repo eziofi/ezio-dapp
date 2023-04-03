@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next';
 interface IProps {
   open: boolean;
   setOpen: (open: boolean) => void;
+  setCopyFlag: (copyFlag: boolean) => void;
 }
 
 interface TabPanelProps {
@@ -31,7 +32,7 @@ interface TabPanelProps {
   value: number;
 }
 
-export default function DrawerSetting({ open, setOpen }: IProps) {
+export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
   const theme = useTheme();
   const { t } = useTranslation();
   const { connectState, connect, disconnect, account } = useWallet();
@@ -43,6 +44,7 @@ export default function DrawerSetting({ open, setOpen }: IProps) {
 
   const copyText = async () => {
     await navigator.clipboard.writeText(account);
+    setCopyFlag(true);
   };
 
   const logout = () => {

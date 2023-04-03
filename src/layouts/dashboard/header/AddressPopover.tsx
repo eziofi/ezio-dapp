@@ -201,18 +201,19 @@ export default function AddressPopover() {
             {t('home.logout')}
           </Button>
         </Box>
-        <Snackbar
-          open={copyFlag}
-          autoHideDuration={1000}
-          onClose={copyClose}
-          message={t('home.copyText')}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
-        />
+
       </Popover> */}
-      <DrawerSetting open={openDrawer} setOpen={setOpenDrawer} />
+      <DrawerSetting open={openDrawer} setOpen={setOpenDrawer} setCopyFlag={setCopyFlag} />
+      <Snackbar
+        open={copyFlag}
+        autoHideDuration={1000}
+        onClose={copyClose}
+        message={t('home.copyText')}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      />
       <Dialog open={dialogOpen} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
         <DialogTitle id="alert-dialog-title">{t('common.warning')}</DialogTitle>
         <DialogContent>

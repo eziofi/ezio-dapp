@@ -204,10 +204,13 @@ function RanderOptions(
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'flex-end',
+          marginTop: '10px',
         }}
       >
         {t('purchase.leftBalance') + ''}
-        <span>{balance ? formatString(balance, 6).toString() : <InlineSkeleton width={40} />}</span>
+        <span style={{ width: 70, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          {balance ? formatString(balance, 6).toString() : <InlineSkeleton width={40} />}
+        </span>
         {showMaxVal && inputVal !== balance && (
           <Box
             onClick={() => setInputVal!(formatString(balance || '', 6).toString())}
@@ -291,7 +294,7 @@ const INPUT_PARENT_HEIGHT = 83; // 输入框父级高度
 //参考单价
 const priceStyle = {
   fontSize: 12,
-  // marginTop: 5,
+  marginTop: 10,
 };
 
 function MyCardContentOne({

@@ -88,7 +88,7 @@ export default function TotalSupplyApexChart() {
               title: {
                 text: t('home.totalSupplyAxis'),
               },
-              decimalsInFloat: 1,
+              decimalsInFloat: 2,
               min: getYMin([...aTotalSupply, ...bTatalSupply]),
               max: totalSupplyMax,
             },

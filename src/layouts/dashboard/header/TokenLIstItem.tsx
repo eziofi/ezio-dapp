@@ -67,7 +67,11 @@ export default function TokenLIstItem({ item }: { item: IOptions }) {
           </span>
           <span style={{ fontSize: 14, color: theme.palette.text.secondary }}>
             {item.balance ? formatString(item.balance, 6).toString() : <InlineSkeleton width={40} />}
-            {TOKEN_TYPE[item.value]}
+            {item.value === TOKEN_TYPE['ReverseCoin']
+              ? reverseCoin
+              : networkName === NETWORK_TYPE.polygon && item.value === TOKEN_TYPE.E2LP
+              ? ATokenMap[networkName]
+              : TOKEN_TYPE[item.value as TOKEN_TYPE]}
           </span>
         </div>
       </div>

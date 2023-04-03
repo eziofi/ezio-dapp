@@ -38,6 +38,7 @@ export default function TotleNetWorthApexChart() {
 
       const ezMaticTotalnetworth = data.data.map(i => i.ezMaticTotalnetworth);
       const ezUsdTotalnetworth = data.data.map(i => i.ezUsdTotalnetworth);
+      const total = data.data.map(i => i.ezMaticTotalnetworth + i.ezUsdTotalnetworth);
       const sum = [...ezMaticTotalnetworth, ...ezUsdTotalnetworth];
       setOption({
         series: [
@@ -46,17 +47,15 @@ export default function TotleNetWorthApexChart() {
             type: 'area',
             data: ezUsdTotalnetworth,
           },
-          {
-            name: (networkName ? ATokenMap[networkName] : '') + t('home.BTokenTotalnetworth'),
-            type: 'area',
-            data: ezMaticTotalnetworth,
-          },
-
           // {
-          //   name: t('home.ethPrice'),
-          //   type: 'area',
-          //   data: ethData,
+          //   name: (networkName ? ATokenMap[networkName] : '') + t('home.BTokenTotalnetworth'),
+          //   // type: 'area',
+          //   data: ezMaticTotalnetworth,
           // },
+          {
+            name: t('home.abNetworth'),
+            data: total,
+          },
         ],
         options: {
           theme: {
@@ -79,7 +78,7 @@ export default function TotleNetWorthApexChart() {
           },
           fill: {
             type: 'solid',
-            opacity: [0.2, 0.2],
+            opacity: [0.2, 1, 1],
           },
           labels: XData,
           markers: {
@@ -90,8 +89,8 @@ export default function TotleNetWorthApexChart() {
               title: {
                 text: (networkName ? ATokenMap[networkName] : '') + t('home.BTokenTotalnetworth'),
               },
-              decimalsInFloat: 1,
-              max: getYMax(sum),
+              decimalsInFloat: 2,
+              max: getYMax(total),
               min: getYMin(sum),
             },
             // {

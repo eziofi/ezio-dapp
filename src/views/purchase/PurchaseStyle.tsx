@@ -69,14 +69,14 @@ const ConverBtn = styled('div')(() => {
   const theme = useTheme();
 
   return {
-    margin: '-19px auto',
+    margin: '-15px auto',
     zIndex: 2,
     // @ts-ignore
     border: `4px solid ${theme.palette.purchase.containerBg}`,
     borderRadius: '12px',
     '.iconBtn': {
-      width: 35,
-      height: 35,
+      width: 30,
+      height: 30,
       borderRadius: '12px',
       // @ts-ignore
       background: theme.palette.purchase.cardBg,
@@ -84,8 +84,8 @@ const ConverBtn = styled('div')(() => {
         opacity: '0.7',
       },
       '.icon': {
-        width: 35,
-        height: 35,
+        width: 30,
+        height: 30,
         // @ts-ignore
         fill: 'rgb(152, 161, 192)',
       },
