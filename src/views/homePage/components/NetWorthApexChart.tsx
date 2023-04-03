@@ -3,7 +3,7 @@ import ReactApexChart from 'react-apexcharts';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { queryTokenGroup, queryMaticPrice } from '../../../api/api';
 import { t } from 'i18next';
-import { formatString, getYMax, getYMin } from '../../wallet/helpers/utilities';
+import { formatString, getYMax, getYMin, roundMinMaxValues } from '../../wallet/helpers/utilities';
 import { useContext, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { ColorModeContext } from '../../../theme';
@@ -53,11 +53,6 @@ export default function NetWorthApexChart() {
             type: 'area',
             data: ezMaticPrice,
           },
-          // {
-          //   name: t('home.aRateAxis'),
-          //   type: 'line',
-          //   data: aRate,
-          // },
         ],
         options: {
           theme: {
@@ -96,28 +91,18 @@ export default function NetWorthApexChart() {
                   },
                 },
               },
-              max: getYMax(stMaticPrice),
-              min: getYMin(stMaticPrice),
+              max: roundMinMaxValues(stMaticPrice).max,
+              min: roundMinMaxValues(stMaticPrice).min,
             },
             {
-              // show: false,
               opposite: true,
               decimalsInFloat: 2,
               title: {
                 text: (networkName ? ATokenMap[networkName] : '') + t('home.bNetWorthSeries'),
               },
-              max: getYMax(ezMaticPrice),
-              min: getYMin(ezMaticPrice),
+              max: roundMinMaxValues(ezMaticPrice).max,
+              min: roundMinMaxValues(ezMaticPrice).min,
             },
-
-            // {
-            //   decimalsInFloat: 1,
-            //   opposite: true,
-            //   title: {
-            //     text: t('home.aRateAxis') + ' ( % ) ',
-            //   },
-            //   max: getYMax(aRate),
-            // },
           ],
           tooltip: {
             shared: true,

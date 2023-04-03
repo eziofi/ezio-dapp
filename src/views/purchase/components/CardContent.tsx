@@ -208,7 +208,7 @@ function RanderOptions(
         }}
       >
         {t('purchase.leftBalance') + ''}
-        <span style={{ width: 70, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+        <span style={{ maxWidth: 70, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           {balance ? formatString(balance, 6).toString() : <InlineSkeleton width={40} />}
         </span>
         {showMaxVal && inputVal !== balance && (

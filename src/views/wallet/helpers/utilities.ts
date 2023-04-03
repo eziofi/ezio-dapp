@@ -248,6 +248,38 @@ export function getYMin(data: number[]) {
   }
 }
 
+function getMinMaxValues(data: number[]) {
+  let minValue = Math.min(...data);
+  let maxValue = Math.max(...data);
+  // 计算一个缓冲区，以便在绘制图表时确保Y轴上的所有数据都可以被完全显示
+  let buffer = (maxValue - minValue) * 0.5;
+
+  return {
+    min: minValue - buffer,
+    max: maxValue + buffer,
+  };
+}
+
+/**
+ *
+ * @param data numbers[]
+ * @returns {max,min} 接近data最大值和最小值，圆整后的最大值和最小值
+ *
+ */
+export function roundMinMaxValues(data: number[]) {
+  let yAxisRange = getMinMaxValues(data);
+  console.log(yAxisRange);
+  yAxisRange.min = Math.floor(yAxisRange.min / 10) * 10;
+  yAxisRange.max = Math.ceil(yAxisRange.max / 10) * 10;
+  // 将最大值向上舍入，以确保它们满足指定的步长（10、20、30、40...）。
+  // 如果最大值和最小值之间的距离小于15，则我们将使用更小的步长（5、15、25、35...）。
+  if (yAxisRange.max - yAxisRange.min < 15) {
+    yAxisRange.min = Math.floor(yAxisRange.min / 5) * 5;
+    yAxisRange.max = Math.ceil(yAxisRange.max / 5) * 5;
+  }
+  return yAxisRange;
+}
+
 export function getDecimal(data: number[]) {
   if (data.length === 0) return 0;
   const max = Math.max(...data);
