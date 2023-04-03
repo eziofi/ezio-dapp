@@ -1,5 +1,6 @@
 import { Box, Button, Card, FormControl, useTheme } from '@mui/material';
 import { styled } from '@mui/system';
+import useResponsive from '../../hooks/useResponsive';
 import { StyleProps } from '../../types/styleType';
 
 const CONTAINER_WIDTH = '90%';
@@ -19,7 +20,9 @@ const PurchaseContainer = styled((props: StyleProps) => {
   );
 })(() => {
   const theme = useTheme();
+  const isDesktop = useResponsive('up', 'sm', 'sm');
   return {
+    width: isDesktop ? '500px' : 'calc(100vw - 32px)',
     paddingBottom: 30,
     margin: '0 auto',
     display: 'flex',

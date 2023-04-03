@@ -4,6 +4,7 @@ import {
   CardContent,
   Dialog,
   Divider,
+  Drawer,
   IconButton,
   InputBase,
   List,
@@ -23,6 +24,7 @@ import { StyleProps } from '../../../types/styleType';
 
 import { useTranslation } from 'react-i18next';
 import BalanceList from './BalanceList';
+import useResponsive from '../../../hooks/useResponsive';
 
 interface IOptions {
   value: TOKEN_TYPE;
@@ -41,13 +43,14 @@ interface IProps {
 const MyPaper = styled((props: any) => {
   return <Paper {...props} />;
 })(() => {
+  const theme = useTheme();
   return {
     height: 40,
     p: '2px 4px',
     display: 'flex',
     alignItems: 'center',
-    border: '1px solid rgb(210, 217, 238)',
-    bgcolor: '#F5F6FC',
+    border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(152, 161, 192, 0.24)' : 'rgb(210, 217, 238)'}`,
+    background: theme.palette.background.default,
     margin: '15px 0 15px 0',
   };
 });
@@ -118,7 +121,7 @@ export default function TokenTypeDialog({ openDialog, handleClose, Options, toke
   function renderIcon(item: IOptions) {
     return (
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div style={{ ...MenuItemStyle, ...item.iconParentStyle }}>
+        <div style={{ ...MenuItemStyle, ...item.iconParentStyle, marginLeft: 0 }}>
           <BaseIconFont
             name={item.iconName === 'icon-wstETH1' ? `icon-${reverseCoin}` : item.iconName}
             style={{ ...item.iconStyle }}
@@ -136,7 +139,7 @@ export default function TokenTypeDialog({ openDialog, handleClose, Options, toke
   const Tag = styled('div')(() => {
     const theme = useTheme();
     return {
-      padding: '6px 12px 6px 6px',
+      padding: '6px',
       // @ts-ignore
       border: `1px solid ${theme.palette.purchase.tokenDialog.tag.default}`,
       borderRadius: '16px',
@@ -154,94 +157,211 @@ export default function TokenTypeDialog({ openDialog, handleClose, Options, toke
 
   const theme = useTheme();
 
+  const isDesktop = useResponsive('up', 'sm', 'sm');
+
   return (
-    <Dialog
-      open={openDialog}
-      onClose={() => handleClose()}
-      sx={{
-        '.css-1is6lpg-MuiPaper-root-MuiDialog-paper': {
-          borderRadius: '20px',
-        },
-      }}
-    >
-      <Card sx={{ height: 500, display: 'flex', flexDirection: 'column' }}>
-        <CardContent sx={{ width: '480px', flex: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'cneter', justifyContent: 'space-between' }}>
-            <Typography component="div" sx={{ fontWeight: 'bold' }}>
-              {t('purchase.selectiveToken')}
-            </Typography>
-            <Typography component="div" sx={{ fontWeight: 'bold' }}>
-              <ClearIcon sx={{ ':hover': { cursor: 'pointer' } }} onClick={() => handleClose()} />
-            </Typography>
-          </Box>
+    <>
+      {isDesktop ? (
+        <Dialog open={openDialog} onClose={() => handleClose()}>
+          <Card
+            sx={{
+              height: 500,
+              display: 'flex',
+              flexDirection: 'column',
+              background: theme.palette.background.default,
+            }}
+          >
+            <CardContent sx={{ width: '480px', flex: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'cneter', justifyContent: 'space-between' }}>
+                <Typography component="div" sx={{ fontWeight: 'bold' }}>
+                  {t('purchase.selectiveToken')}
+                </Typography>
+                <Typography component="div" sx={{ fontWeight: 'bold' }}>
+                  <ClearIcon sx={{ ':hover': { cursor: 'pointer' } }} onClick={() => handleClose()} />
+                </Typography>
+              </Box>
 
-          {/* header */}
-          <MyPaper component="form">
-            <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-              <SearchIcon />
-            </IconButton>
-            <InputBase
-              sx={{ ml: 1, flex: 1 }}
-              placeholder={t('purchase.searchName')}
-              inputProps={{ 'aria-label': t('purchase.searchName') }}
-              // @ts-ignore
-              onInput={e => search(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && e.preventDefault()}
-            />
-          </MyPaper>
+              {/* header */}
+              <MyPaper component="form" sx={{ borderRadius: '12px' }}>
+                <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+                  <SearchIcon />
+                </IconButton>
+                <InputBase
+                  sx={{ ml: 1, flex: 1 }}
+                  placeholder={t('purchase.searchName')}
+                  inputProps={{ 'aria-label': t('purchase.searchName') }}
+                  // @ts-ignore
+                  onInput={e => search(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && e.preventDefault()}
+                />
+              </MyPaper>
 
-          {/* main */}
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', mb: '20px' }}>
-            {searchList.map(item => {
-              return (
-                <Tag
-                  key={item.value}
-                  style={
-                    TOKEN_TYPE[tokenType as TOKEN_TYPE] === TOKEN_TYPE[item.value as TOKEN_TYPE]
-                      ? {
-                          // @ts-ignore
-                          borderColor: `rgb(${theme.palette.purchase.tokenDialog.tag.active})`,
-                          // @ts-ignore
-                          background: `rgba(${theme.palette.purchase.tokenDialog.tag.active},0.24)`,
-                          // @ts-ignore
-                          color: `rgb(${theme.palette.purchase.tokenDialog.tag.active})`,
-                        }
-                      : {}
-                  }
-                  onClick={() => handleClose(item.value)}
-                >
-                  {renderIcon(item)}
-                </Tag>
-              );
-            })}
-          </Box>
-        </CardContent>
-
-        {/* footer */}
-        <TokenList>
-          <Divider />
-
-          <nav aria-label="main mailbox folders">
-            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-              {searchList.map(item => {
-                return (
-                  <MyListItem
-                    key={item.value}
-                    // @ts-ignore
-                    sx={TOKEN_TYPE[tokenType] === TOKEN_TYPE[item.value] ? { opacity: '0.4' } : {}}
-                    onClick={() => handleClose(item.value)}
-                  >
-                    <div style={{ margin: '0 auto', width: '90%', display: 'flex', justifyContent: 'space-between' }}>
+              {/* main */}
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', mb: '20px' }}>
+                {searchList.map(item => {
+                  return (
+                    <Tag
+                      key={item.value}
+                      style={
+                        TOKEN_TYPE[tokenType as TOKEN_TYPE] === TOKEN_TYPE[item.value as TOKEN_TYPE]
+                          ? {
+                              // @ts-ignore
+                              borderColor: `rgb(${theme.palette.purchase.tokenDialog.tag.active})`,
+                              // @ts-ignore
+                              background: `rgba(${theme.palette.purchase.tokenDialog.tag.active},0.24)`,
+                              // @ts-ignore
+                              color: `rgb(${theme.palette.purchase.tokenDialog.tag.active})`,
+                            }
+                          : {}
+                      }
+                      onClick={() => handleClose(item.value)}
+                    >
                       {renderIcon(item)}
-                      <BalanceList item={item} tokenType={tokenType} />
-                    </div>
-                  </MyListItem>
-                );
-              })}
-            </List>
-          </nav>
-        </TokenList>
-      </Card>
-    </Dialog>
+                    </Tag>
+                  );
+                })}
+              </Box>
+            </CardContent>
+
+            {/* footer */}
+            <Divider />
+            <TokenList>
+              <nav aria-label="main mailbox folders">
+                <List sx={{ width: '100%' }}>
+                  {searchList.map(item => {
+                    return (
+                      <MyListItem
+                        key={item.value}
+                        // @ts-ignore
+                        sx={TOKEN_TYPE[tokenType] === TOKEN_TYPE[item.value] ? { opacity: '0.4' } : {}}
+                        onClick={() => handleClose(item.value)}
+                      >
+                        <div
+                          style={{
+                            margin: '0 auto',
+                            width: '90%',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            padding: '0px 6px',
+                          }}
+                        >
+                          {renderIcon(item)}
+                          <BalanceList item={item} tokenType={tokenType} />
+                        </div>
+                      </MyListItem>
+                    );
+                  })}
+                </List>
+              </nav>
+            </TokenList>
+          </Card>
+        </Dialog>
+      ) : (
+        <Drawer
+          anchor="bottom"
+          open={openDialog}
+          onClose={() => handleClose()}
+          sx={{
+            '.MuiPaper-root': {
+              borderTopLeftRadius: '12px',
+              borderTopRightRadius: '12px',
+            },
+          }}
+        >
+          <Card
+            sx={{
+              height: 'calc(100vh - 128px)',
+              display: 'flex',
+              flexDirection: 'column',
+              background: theme.palette.background.default,
+            }}
+          >
+            <CardContent sx={{ flex: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'cneter', justifyContent: 'space-between' }}>
+                <Typography component="div" sx={{ fontWeight: 'bold' }}>
+                  {t('purchase.selectiveToken')}
+                </Typography>
+                <Typography component="div" sx={{ fontWeight: 'bold' }}>
+                  <ClearIcon sx={{ ':hover': { cursor: 'pointer' } }} onClick={() => handleClose()} />
+                </Typography>
+              </Box>
+
+              {/* header */}
+              <MyPaper component="form" sx={{ borderRadius: '12px' }}>
+                <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+                  <SearchIcon />
+                </IconButton>
+                <InputBase
+                  sx={{ ml: 1, flex: 1 }}
+                  placeholder={t('purchase.searchName')}
+                  inputProps={{ 'aria-label': t('purchase.searchName') }}
+                  // @ts-ignore
+                  onInput={e => search(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && e.preventDefault()}
+                />
+              </MyPaper>
+
+              {/* main */}
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', mb: '20px' }}>
+                {searchList.map(item => {
+                  return (
+                    <Tag
+                      key={item.value}
+                      style={
+                        TOKEN_TYPE[tokenType as TOKEN_TYPE] === TOKEN_TYPE[item.value as TOKEN_TYPE]
+                          ? {
+                              // @ts-ignore
+                              borderColor: `rgb(${theme.palette.purchase.tokenDialog.tag.active})`,
+                              // @ts-ignore
+                              background: `rgba(${theme.palette.purchase.tokenDialog.tag.active},0.24)`,
+                              // @ts-ignore
+                              color: `rgb(${theme.palette.purchase.tokenDialog.tag.active})`,
+                            }
+                          : {}
+                      }
+                      onClick={() => handleClose(item.value)}
+                    >
+                      {renderIcon(item)}
+                    </Tag>
+                  );
+                })}
+              </Box>
+            </CardContent>
+
+            {/* footer */}
+            <Divider />
+            <TokenList>
+              <nav aria-label="main mailbox folders">
+                <List sx={{ width: '100%' }}>
+                  {searchList.map(item => {
+                    return (
+                      <MyListItem
+                        key={item.value}
+                        // @ts-ignore
+                        sx={TOKEN_TYPE[tokenType] === TOKEN_TYPE[item.value] ? { opacity: '0.4' } : {}}
+                        onClick={() => handleClose(item.value)}
+                      >
+                        <div
+                          style={{
+                            margin: '0 auto',
+                            width: '90%',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            padding: '0px 6px',
+                          }}
+                        >
+                          {renderIcon(item)}
+                          <BalanceList item={item} tokenType={tokenType} />
+                        </div>
+                      </MyListItem>
+                    );
+                  })}
+                </List>
+              </nav>
+            </TokenList>
+          </Card>
+        </Drawer>
+      )}
+    </>
   );
 }
