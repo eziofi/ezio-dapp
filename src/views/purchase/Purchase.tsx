@@ -336,92 +336,106 @@ export default function Purchase() {
   const redeemTokenName = redeemTokenType === TOKEN_TYPE.ReverseCoin ? reverseCoin : TOKEN_TYPE[redeemTokenType];
 
   return (
-    <Container maxWidth="lg">
-      <PurchaseContainer>
-        <Toolbar sx={{ width: '98%' }}>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-          >
-            <span>{type === TRANSFER_TYPE.PURCHASE ? t('purchase.purchaseValue') : t('redeem.redeemValue')}</span>
-            <SlippagePopover slippage={slippage} setSlippage={setSlippage} resetVal={resetVal} />
-          </Typography>
-        </Toolbar>
-
-        {/* 卡片1 */}
-        <ContentBottom sx={{}} className="contentBottom">
-          <CardContent>
-            <MyCardContentOne
-              isBuy={type === TRANSFER_TYPE.PURCHASE}
-              transactionType={type}
-              tokenType={tokenType}
-              getTokenType={getTokenType}
-              getInputVal1={getInputVal1}
-              redeemTokenType={redeemTokenType}
-              setRedeemTokenType={setRedeemTokenType}
-              inputValue1={inputValue1}
-              needApprove={needApprove}
-            />
-          </CardContent>
-        </ContentBottom>
-
-        {/* cover btn */}
-        <ConverBtn className="coverBtn">
-          <IconButton className="iconBtn" onClick={() => convert()}>
-            <BaseIconFont name="icon-qiehuan" />
-          </IconButton>
-        </ConverBtn>
-
-        {/* 卡片2 */}
-        <ContentTop
-          sx={inputValue1 ? { borderBottomRightRadius: '0', borderBottomLeftRadius: '0' } : {}}
-          className="contentTop"
+    <PurchaseContainer>
+      <Toolbar sx={{ width: '98%' }}>
+        <Typography
+          variant="h6"
+          component="div"
+          sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
         >
-          <CardContent>
-            <MyCardContentSecond
-              isBuy={type === TRANSFER_TYPE.PURCHASE}
-              transactionType={type}
-              tokenType={tokenType}
-              getTokenType={getTokenType}
-              inputValue2={inputValue2}
-              getInputVal2={getInputVal2}
-              redeemTokenType={redeemTokenType}
-              setRedeemTokenType={setRedeemTokenType}
-              pricePercentage={pricePercentage}
-            />
-          </CardContent>
-        </ContentTop>
+          <span>{type === TRANSFER_TYPE.PURCHASE ? t('purchase.purchaseValue') : t('redeem.redeemValue')}</span>
+          <SlippagePopover slippage={slippage} setSlippage={setSlippage} resetVal={resetVal} />
+        </Typography>
+      </Toolbar>
 
-        {/* 单位换算/*/}
-        {inputValue1 ? (
-          <UnitconverContent>
-            <p>
-              {/*<BaseIconFont name="icon-Prompt" />*/}
-              {tokenRateReverseOpen ? (
-                <span onClick={() => setTokenRateReverseOpen(!tokenRateReverseOpen)} style={{ cursor: 'pointer' }}>
-                  {type === TRANSFER_TYPE.PURCHASE
-                    ? `1 ${TOKEN_TYPE[tokenType]} ≈ ${reverseInterest} ${redeemTokenName}`
-                    : `1 ${redeemTokenName} ≈ ${reverseInterest} ${TOKEN_TYPE[tokenType]}`}
-                </span>
-              ) : (
-                <span onClick={() => setTokenRateReverseOpen(!tokenRateReverseOpen)} style={{ cursor: 'pointer' }}>
-                  {type === TRANSFER_TYPE.PURCHASE
-                    ? `1 ${redeemTokenName} ≈ ${interest} ${TOKEN_TYPE[tokenType]}`
-                    : `1 ${TOKEN_TYPE[tokenType]} ≈ ${interest} ${redeemTokenName}`}
-                </span>
-              )}
-            </p>
-          </UnitconverContent>
-        ) : (
-          <></>
-        )}
+      {/* 卡片1 */}
+      <ContentBottom sx={{}} className="contentBottom">
+        <CardContent>
+          <MyCardContentOne
+            isBuy={type === TRANSFER_TYPE.PURCHASE}
+            transactionType={type}
+            tokenType={tokenType}
+            getTokenType={getTokenType}
+            getInputVal1={getInputVal1}
+            redeemTokenType={redeemTokenType}
+            setRedeemTokenType={setRedeemTokenType}
+            inputValue1={inputValue1}
+            needApprove={needApprove}
+          />
+        </CardContent>
+      </ContentBottom>
 
-        {connectState === 'unconnected' ? (
-          // 连接钱包按钮
-          <MutationButton onClick={connect}>{t('home.login')}</MutationButton>
-        ) : needApprove ? (
-          // 授权按钮
+      {/* cover btn */}
+      <ConverBtn className="coverBtn">
+        <IconButton className="iconBtn" onClick={() => convert()}>
+          <BaseIconFont name="icon-qiehuan" />
+        </IconButton>
+      </ConverBtn>
+
+      {/* 卡片2 */}
+      <ContentTop
+        sx={inputValue1 ? { borderBottomRightRadius: '0', borderBottomLeftRadius: '0' } : {}}
+        className="contentTop"
+      >
+        <CardContent>
+          <MyCardContentSecond
+            isBuy={type === TRANSFER_TYPE.PURCHASE}
+            transactionType={type}
+            tokenType={tokenType}
+            getTokenType={getTokenType}
+            inputValue2={inputValue2}
+            getInputVal2={getInputVal2}
+            redeemTokenType={redeemTokenType}
+            setRedeemTokenType={setRedeemTokenType}
+            pricePercentage={pricePercentage}
+          />
+        </CardContent>
+      </ContentTop>
+
+      {/* 单位换算/*/}
+      {inputValue1 ? (
+        <UnitconverContent>
+          <p>
+            {/*<BaseIconFont name="icon-Prompt" />*/}
+            {tokenRateReverseOpen ? (
+              <span onClick={() => setTokenRateReverseOpen(!tokenRateReverseOpen)} style={{ cursor: 'pointer' }}>
+                {type === TRANSFER_TYPE.PURCHASE
+                  ? `1 ${TOKEN_TYPE[tokenType]} ≈ ${reverseInterest} ${redeemTokenName}`
+                  : `1 ${redeemTokenName} ≈ ${reverseInterest} ${TOKEN_TYPE[tokenType]}`}
+              </span>
+            ) : (
+              <span onClick={() => setTokenRateReverseOpen(!tokenRateReverseOpen)} style={{ cursor: 'pointer' }}>
+                {type === TRANSFER_TYPE.PURCHASE
+                  ? `1 ${redeemTokenName} ≈ ${interest} ${TOKEN_TYPE[tokenType]}`
+                  : `1 ${TOKEN_TYPE[tokenType]} ≈ ${interest} ${redeemTokenName}`}
+              </span>
+            )}
+          </p>
+        </UnitconverContent>
+      ) : (
+        <></>
+      )}
+
+      {connectState === 'unconnected' ? (
+        // 连接钱包按钮
+        <MutationButton onClick={connect}>{t('home.login')}</MutationButton>
+      ) : needApprove ? (
+        // 授权按钮
+        <MutationButton disabled={loadingOpen} onClick={doApprove} loadingOpen={loadingOpen} loadingText={loadingText}>
+          {t('purchase.approveAction') +
+            (redeemTokenType === TOKEN_TYPE.ReverseCoin ? reverseCoin : TOKEN_TYPE[redeemTokenType])}
+        </MutationButton>
+      ) : parseFloat(inputValue1) > parseFloat(balance || '0') ? (
+        // 余额不足
+        <MutationButton disabled>{t('purchase.notEnoughBalance')}</MutationButton>
+      ) : type === TRANSFER_TYPE.PURCHASE ? (
+        // allowance不足
+        (
+          redeemTokenType === TOKEN_TYPE.USDC
+            ? parseFloat(allowanceUSDC) < parseFloat(inputValue1)
+            : parseFloat(allowanceUSDT) < parseFloat(inputValue1)
+        ) ? (
+          // allowance不足
           <MutationButton
             disabled={loadingOpen}
             onClick={doApprove}
@@ -431,80 +445,59 @@ export default function Purchase() {
             {t('purchase.approveAction') +
               (redeemTokenType === TOKEN_TYPE.ReverseCoin ? reverseCoin : TOKEN_TYPE[redeemTokenType])}
           </MutationButton>
-        ) : parseFloat(inputValue1) > parseFloat(balance || '0') ? (
-          // 余额不足
-          <MutationButton disabled>{t('purchase.notEnoughBalance')}</MutationButton>
-        ) : type === TRANSFER_TYPE.PURCHASE ? (
-          // allowance不足
-          (
-            redeemTokenType === TOKEN_TYPE.USDC
-              ? parseFloat(allowanceUSDC) < parseFloat(inputValue1)
-              : parseFloat(allowanceUSDT) < parseFloat(inputValue1)
-          ) ? (
-            // allowance不足
-            <MutationButton
-              disabled={loadingOpen}
-              onClick={doApprove}
-              loadingOpen={loadingOpen}
-              loadingText={loadingText}
-            >
-              {t('purchase.approveAction') +
-                (redeemTokenType === TOKEN_TYPE.ReverseCoin ? reverseCoin : TOKEN_TYPE[redeemTokenType])}
-            </MutationButton>
-          ) : (
-            // 购买按钮
-            <MutationButton
-              disabled={!inputValue1 || !+inputValue1 || loadingOpen}
-              onClick={doPurchase}
-              loadingOpen={loadingOpen}
-              loadingText={loadingText}
-            >
-              {t('purchase.purchaseAction')}
-            </MutationButton>
-          )
-        ) : type === TRANSFER_TYPE.REDEEM ? (
-          // 赎回按钮
+        ) : (
+          // 购买按钮
           <MutationButton
             disabled={!inputValue1 || !+inputValue1 || loadingOpen}
-            onClick={doRedeem}
+            onClick={doPurchase}
             loadingOpen={loadingOpen}
             loadingText={loadingText}
           >
-            {t('redeem.redeemAction')}
+            {t('purchase.purchaseAction')}
           </MutationButton>
-        ) : (
-          <></>
+        )
+      ) : type === TRANSFER_TYPE.REDEEM ? (
+        // 赎回按钮
+        <MutationButton
+          disabled={!inputValue1 || !+inputValue1 || loadingOpen}
+          onClick={doRedeem}
+          loadingOpen={loadingOpen}
+          loadingText={loadingText}
+        >
+          {t('redeem.redeemAction')}
+        </MutationButton>
+      ) : (
+        <></>
+      )}
+
+      <FooterContent>
+        {/*<span>{t('purchase.unitPrice') + ' $' + formatNetWorth(netWorth, true)}</span>*/}
+        {type === TRANSFER_TYPE.REDEEM && (
+          <span
+            style={{
+              color: theme.palette.mode === 'light' ? theme.palette.primary.main : theme.palette.text.primary,
+            }}
+          >
+            {feeRate ? (
+              <>
+                {networkName === NETWORK_TYPE.arbitrum ? (
+                  <span>{TOKEN_TYPE[tokenType] + t('purchase.feeRate') + ': '}</span>
+                ) : (
+                  <span>{ATokenMap[NETWORK_TYPE.polygon] + t('purchase.feeRate') + ': '}</span>
+                )}
+                {feeRate ? <span>{feeRate}</span> : <InlineSkeleton width={40} />}
+              </>
+            ) : (
+              <InlineSkeleton />
+            )}
+          </span>
         )}
 
-        <FooterContent>
-          {/*<span>{t('purchase.unitPrice') + ' $' + formatNetWorth(netWorth, true)}</span>*/}
-          {type === TRANSFER_TYPE.REDEEM && (
-            <span
-              style={{
-                color: theme.palette.mode === 'light' ? theme.palette.primary.main : theme.palette.text.primary,
-              }}
-            >
-              {feeRate ? (
-                <>
-                  {networkName === NETWORK_TYPE.arbitrum ? (
-                    <span>{TOKEN_TYPE[tokenType] + t('purchase.feeRate') + ': '}</span>
-                  ) : (
-                    <span>{ATokenMap[NETWORK_TYPE.polygon] + t('purchase.feeRate') + ': '}</span>
-                  )}
-                  {feeRate ? <span>{feeRate}</span> : <InlineSkeleton width={40} />}
-                </>
-              ) : (
-                <InlineSkeleton />
-              )}
-            </span>
-          )}
-
-          {/* 当前时间 */}
-          {/*<DateNow>*/}
-          {/*  {t('purchase.currentTime')}: {time}*/}
-          {/*</DateNow>*/}
-        </FooterContent>
-      </PurchaseContainer>
-    </Container>
+        {/* 当前时间 */}
+        {/*<DateNow>*/}
+        {/*  {t('purchase.currentTime')}: {time}*/}
+        {/*</DateNow>*/}
+      </FooterContent>
+    </PurchaseContainer>
   );
 }

@@ -36,7 +36,7 @@ export default function DrawerSetting({ open, setOpen }: IProps) {
   const { t } = useTranslation();
   const { connectState, connect, disconnect, account } = useWallet();
 
-  const isDesktop = useResponsive('up', 'md', 'md');
+  const isDesktop = useResponsive('up', 'sm', 'sm');
   const addressToShow = account.substring(0, 5) + '...' + account.substring(account.length - 5, account.length);
 
   const [hiddenCopy, setHiddenCopy] = useState(false);
@@ -134,18 +134,13 @@ export default function DrawerSetting({ open, setOpen }: IProps) {
   const { mode, toggleColorMode } = useContext(ColorModeContext);
 
   const DrawerRootStyle = {
-    '.MuiPaper-root': {
-      width: '300px',
-      padding: '14px 20px',
-      // margin: '10px 0',
-      top: '10px',
-      bottom: '10px',
-      height: '98%',
-      borderRadius: '12px',
-      fontFamily: 'Inter custom,sans-serif',
-      boxShadow: 'none',
-      border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(152, 161, 192, 0.24)' : 'rgb(210, 217, 238)'}`,
-    },
+    width: isDesktop ? '300px' : '100vw',
+    padding: '14px 20px',
+    height: isDesktop ? 'calc(100% - 16px)' : '90%',
+    fontFamily: 'Inter custom,sans-serif',
+    boxShadow: 'none',
+    border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(152, 161, 192, 0.24)' : 'rgb(210, 217, 238)'}`,
+    background: theme.palette.background.default,
   };
 
   const copyBtnStyle = {
@@ -171,7 +166,6 @@ export default function DrawerSetting({ open, setOpen }: IProps) {
     // @ts-ignore
     background: `rgb(${theme.palette.drawer.textBgColor})`,
     borderRadius: '12px',
-    mr: theme.spacing(1),
   };
 
   const settingIconStyle = {
@@ -198,7 +192,30 @@ export default function DrawerSetting({ open, setOpen }: IProps) {
   };
 
   return (
-    <Drawer anchor={'right'} open={open} onClose={() => setOpen(false)} sx={DrawerRootStyle}>
+    <Drawer
+      anchor={isDesktop ? 'right' : 'bottom'}
+      open={open}
+      onClose={() => setOpen(false)}
+      sx={
+        isDesktop
+          ? {
+              '.MuiPaper-root': {
+                top: '8px',
+                right: '8px',
+                ...DrawerRootStyle,
+                borderRadius: '12px',
+              },
+            }
+          : {
+              '.MuiPaper-root': {
+                bottom: '0',
+                ...DrawerRootStyle,
+                borderTopLeftRadius: '12px',
+                borderTopRightRadius: '12px',
+              },
+            }
+      }
+    >
       {!isStting ? (
         <List>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -222,7 +239,7 @@ export default function DrawerSetting({ open, setOpen }: IProps) {
               <IconButton sx={iconBtnStyle} onClick={() => setIsSetting(true)}>
                 <SettingsOutlinedIcon sx={settingIconStyle} />
               </IconButton>
-              <IconButton sx={iconBtnStyle} onClick={logout}>
+              <IconButton sx={{ ...iconBtnStyle, ml: theme.spacing(1) }} onClick={logout}>
                 <LogoutOutlinedIcon sx={settingIconStyle} />
               </IconButton>
             </div>

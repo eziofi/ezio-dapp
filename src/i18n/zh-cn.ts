@@ -149,7 +149,7 @@ export default {
   drawerSeting: {
     tokens: '代币',
     setting: '设置',
-    preferences: '偏爱',
+    preferences: '偏好',
     theme: '主题',
   },
 };

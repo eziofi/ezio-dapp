@@ -131,17 +131,17 @@ export default function AddressPopover() {
   return (
     <>
       {connectState === 'connected' ? (
-        <IconButton
+        <Button
           onClick={event => {
             // setOpen(event.currentTarget);
             setOpenDrawer(true);
           }}
-          // endIcon={<KeyboardArrowDownOutlinedIcon />}
+          endIcon={<KeyboardArrowDownOutlinedIcon />}
         >
-          <Avatar src={metamaskBtn} sx={{ width: 24, height: 24 }} />
-          {/* <Avatar src={metamaskBtn} sx={{ width: 24, height: 24, marginRight: isDesktop ? 1 : 0 }} /> */}
-          {/* {isDesktop ? addressToShow : ''} */}
-        </IconButton>
+          {/* <Avatar src={metamaskBtn} sx={{ width: 24, height: 24 }} /> */}
+          <Avatar src={metamaskBtn} sx={{ width: 24, height: 24, marginRight: isDesktop ? 1 : 0 }} />
+          {isDesktop ? addressToShow : ''}
+        </Button>
       ) : connectState === 'connecting' ? (
         <Button>{t('home.connecting')}</Button>
       ) : (
