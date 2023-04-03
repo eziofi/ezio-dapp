@@ -43,13 +43,14 @@ interface IProps {
 const MyPaper = styled((props: any) => {
   return <Paper {...props} />;
 })(() => {
+  const theme = useTheme();
   return {
     height: 40,
     p: '2px 4px',
     display: 'flex',
     alignItems: 'center',
-    border: '1px solid rgb(210, 217, 238)',
-    bgcolor: '#F5F6FC',
+    border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(152, 161, 192, 0.24)' : 'rgb(210, 217, 238)'}`,
+    background: theme.palette.background.default,
     margin: '15px 0 15px 0',
   };
 });
