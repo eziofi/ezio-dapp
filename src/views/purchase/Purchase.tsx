@@ -129,7 +129,7 @@ export default function Purchase() {
 
   useEffect(() => {
     reCalcValue2(inputValue1);
-  }, [redeemTokenType, tokenType]);
+  }, [redeemTokenType, tokenType, fromPrice, toPrice]);
 
   // 改变购买 / 赎回 状态 清空value
   function convert() {
