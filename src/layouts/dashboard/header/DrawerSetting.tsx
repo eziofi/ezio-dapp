@@ -86,7 +86,7 @@ export default function DrawerSetting({ open, setOpen }: IProps) {
     },
   ];
 
-  const [totalValue, setTotalValue] = useState(0);
+  const [totalValue, setTotalValue] = useState<number | undefined>(0);
 
   useMemo(() => {
     if (USDEBALANCE && E2LPBALANCE) {
@@ -134,8 +134,8 @@ export default function DrawerSetting({ open, setOpen }: IProps) {
   const { mode, toggleColorMode } = useContext(ColorModeContext);
 
   const DrawerRootStyle = {
-    width: isDesktop ? '300px' : '100vw',
-    padding: '14px 20px',
+    width: isDesktop ? '320px' : '100vw',
+    // padding: '14px 20px',
     height: isDesktop ? 'calc(100% - 16px)' : '90%',
     fontFamily: 'Inter custom,sans-serif',
     boxShadow: 'none',
@@ -175,19 +175,17 @@ export default function DrawerSetting({ open, setOpen }: IProps) {
   };
 
   const listItemStyle = {
-    pl: 0,
-    pr: 0,
     mb: theme.spacing(3),
     height: '42px',
     display: 'flex',
     justifyContent: 'space-between',
+    padding: '14px 20px',
   };
 
   const langItemStyle = {
-    pl: 0,
-    pr: 0,
     fontSize: 14,
     mb: theme.spacing(1),
+    padding: '14px 20px',
     ':hover': { cursor: 'pointer', opacity: '0.7' },
   };
 
@@ -218,7 +216,7 @@ export default function DrawerSetting({ open, setOpen }: IProps) {
     >
       {!isStting ? (
         <List>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px' }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Avatar src={metamaskBtn} sx={{ width: 40, height: 40 }} />
               <Box
@@ -246,10 +244,12 @@ export default function DrawerSetting({ open, setOpen }: IProps) {
           </Box>
 
           {/* token总价值 */}
-          <Box sx={{ fontSize: '36px', fontWeight: '500', mt: theme.spacing(1) }}>${totalValue}</Box>
+          <Box sx={{ fontSize: '36px', fontWeight: '500', mt: theme.spacing(1), padding: '0px 20px' }}>
+            {totalValue ? '$' + totalValue : <InlineSkeleton />}
+          </Box>
 
           {/* tokens */}
-          <Box sx={{ margin: '10px 0' }}>{t('drawerSeting.tokens')}</Box>
+          <Box sx={{ margin: '10px 0', padding: '0px 20px' }}>{t('drawerSeting.tokens')}</Box>
           <TabPanel value={0} index={0}>
             {tokens.map((item, index: number) => {
               return <TokenLIstItem item={item} key={index} />;
@@ -258,7 +258,15 @@ export default function DrawerSetting({ open, setOpen }: IProps) {
         </List>
       ) : (
         <List>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: '20px' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              mb: '20px',
+              padding: '14px 20px',
+            }}
+          >
             <ArrowBackOutlinedIcon
               sx={{
                 ':hover': {
@@ -273,7 +281,7 @@ export default function DrawerSetting({ open, setOpen }: IProps) {
             <span style={{ margin: '0 auto', fontWeight: '500' }}></span>
           </Box>
 
-          <Typography sx={{ color: 'rgb(119, 128, 160)', mb: theme.spacing(3) }}>
+          <Typography sx={{ color: 'rgb(119, 128, 160)', mb: theme.spacing(3), padding: '0px 20px' }}>
             {t('drawerSeting.preferences')}
           </Typography>
 

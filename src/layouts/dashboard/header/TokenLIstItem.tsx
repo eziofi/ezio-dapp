@@ -24,7 +24,7 @@ export default function TokenLIstItem({ item }: { item: IOptions }) {
 
   const theme = useTheme();
 
-  const MenuItemStyle = {
+  const IconStyle = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -37,14 +37,13 @@ export default function TokenLIstItem({ item }: { item: IOptions }) {
     const theme = useTheme();
     return {
       marginTop: '10px',
-      padding: '10px 0',
+      padding: '10px 20px',
       display: 'flex',
       justifyContent: 'space-between',
       ':hover': {
         cursor: 'pointer',
         // @ts-ignore
         background: theme.palette.purchase.tokenDialog.hover,
-        borderRadius: '12px',
       },
     };
   });
@@ -52,7 +51,7 @@ export default function TokenLIstItem({ item }: { item: IOptions }) {
   function renderIcon(item: IOptions) {
     return (
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div style={{ ...MenuItemStyle, ...item.iconParentStyle, marginRight: '10px' }}>
+        <div style={{ ...IconStyle, ...item.iconParentStyle, marginRight: '10px' }}>
           <BaseIconFont
             name={item.iconName === 'icon-wstETH1' ? `icon-${reverseCoin}` : item.iconName}
             style={{ ...item.iconStyle }}
@@ -67,7 +66,8 @@ export default function TokenLIstItem({ item }: { item: IOptions }) {
               : TOKEN_TYPE[item.value as TOKEN_TYPE]}
           </span>
           <span style={{ fontSize: 14, color: theme.palette.text.secondary }}>
-            {item.balance ? formatString(item.balance, 6).toString() : <InlineSkeleton />} {TOKEN_TYPE[item.value]}
+            {item.balance ? formatString(item.balance, 6).toString() : <InlineSkeleton width={40} />}
+            {TOKEN_TYPE[item.value]}
           </span>
         </div>
       </div>
@@ -89,7 +89,7 @@ export default function TokenLIstItem({ item }: { item: IOptions }) {
             {item.balance ? (
               '$' + formatString('' + parseFloat(item.balance) * parseFloat(price || '0'), 6).toString()
             ) : (
-              <InlineSkeleton />
+              <InlineSkeleton width={40} />
             )}
           </span>
         </>
