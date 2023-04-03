@@ -11,7 +11,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
+import { QueryClient, useMutation, useQueryClient } from 'react-query';
 import { Signer } from 'ethers';
 import { ATokenMap, NETWORK_TYPE, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
 import useWallet from '../hooks/useWallet';
@@ -30,7 +30,6 @@ import { usePrice } from '../../hooks/usePrice';
 import { useBalance } from '../../hooks/useBalance';
 import BaseIconFont from '../components/BaseIconFont';
 import { Provider } from '@ethersproject/providers';
-import { interestRateYear } from '../wallet/helpers/contract_call';
 import useTx from '../../hooks/useTx';
 import { InlineSkeleton } from '../components/Skeleton';
 import { useFeeRate } from '../../hooks/useFeeRate';
@@ -333,6 +332,8 @@ export default function Purchase() {
     </Button>
   );
 
+  const purchaseTokenName =
+    tokenType === TOKEN_TYPE.E2LP ? ATokenMap[networkName || NETWORK_TYPE.arbitrum] : TOKEN_TYPE[tokenType];
   const redeemTokenName = redeemTokenType === TOKEN_TYPE.ReverseCoin ? reverseCoin : TOKEN_TYPE[redeemTokenType];
 
   return (
@@ -401,14 +402,14 @@ export default function Purchase() {
               {tokenRateReverseOpen ? (
                 <span onClick={() => setTokenRateReverseOpen(!tokenRateReverseOpen)} style={{ cursor: 'pointer' }}>
                   {type === TRANSFER_TYPE.PURCHASE
-                    ? `1 ${TOKEN_TYPE[tokenType]} ≈ ${reverseInterest} ${redeemTokenName}`
-                    : `1 ${redeemTokenName} ≈ ${reverseInterest} ${TOKEN_TYPE[tokenType]}`}
+                    ? `1 ${purchaseTokenName} ≈ ${reverseInterest} ${redeemTokenName}`
+                    : `1 ${redeemTokenName} ≈ ${reverseInterest} ${purchaseTokenName}`}
                 </span>
               ) : (
                 <span onClick={() => setTokenRateReverseOpen(!tokenRateReverseOpen)} style={{ cursor: 'pointer' }}>
                   {type === TRANSFER_TYPE.PURCHASE
-                    ? `1 ${redeemTokenName} ≈ ${interest} ${TOKEN_TYPE[tokenType]}`
-                    : `1 ${TOKEN_TYPE[tokenType]} ≈ ${interest} ${redeemTokenName}`}
+                    ? `1 ${redeemTokenName} ≈ ${interest} ${purchaseTokenName}`
+                    : `1 ${purchaseTokenName} ≈ ${interest} ${redeemTokenName}`}
                 </span>
               )}
             </p>
