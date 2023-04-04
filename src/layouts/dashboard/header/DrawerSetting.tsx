@@ -55,26 +55,10 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
 
   const USDEBALANCE = useBalance(TOKEN_TYPE.USDE).balance;
   const E2LPBALANCE = useBalance(TOKEN_TYPE.E2LP).balance;
-  const E2LPPrice = usePrice(TOKEN_TYPE.USDE).price;
-  const USDEPrice = usePrice(TOKEN_TYPE.E2LP).price;
+  const USDEPrice = usePrice(TOKEN_TYPE.USDE).price;
+  const E2LPPrice = usePrice(TOKEN_TYPE.E2LP).price;
 
   const tokens = [
-    {
-      value: TOKEN_TYPE.E2LP,
-      iconParentStyle: {
-        background: 'rgba(239, 89, 114, 1)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: 40,
-        height: 40,
-        borderRadius: '50%',
-      },
-      iconName: 'icon-B',
-      iconStyle: { width: 30, height: 30, fill: 'white' },
-      balance: E2LPBALANCE,
-      price: E2LPPrice,
-    },
     {
       value: TOKEN_TYPE.USDE,
       iconParentStyle: {
@@ -90,6 +74,22 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
       iconStyle: { width: 30, height: 30, fill: 'white' },
       balance: USDEBALANCE,
       price: USDEPrice,
+    },
+    {
+      value: TOKEN_TYPE.E2LP,
+      iconParentStyle: {
+        background: 'rgba(239, 89, 114, 1)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 40,
+        height: 40,
+        borderRadius: '50%',
+      },
+      iconName: 'icon-B',
+      iconStyle: { width: 30, height: 30, fill: 'white' },
+      balance: E2LPBALANCE,
+      price: E2LPPrice,
     },
   ];
 
