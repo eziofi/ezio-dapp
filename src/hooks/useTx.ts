@@ -48,7 +48,6 @@ export default function useTx() {
     setBackLoadingText(t('message.approveWaiting'));
     await approveTx.wait();
     console.log('approved');
-    await getAllowance(signerOrProvider, account, TOKEN_TYPE.USDC, networkName as NETWORK_TYPE);
     openMsg(t('message.approved'), 'success', 2000);
   }
 
