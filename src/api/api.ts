@@ -97,7 +97,7 @@ export function queryAbTotalnetworth(QueryType: string, networkName: NETWORK_TYP
 interface IMaticPrice {
   code: number;
   message: string;
-  data: { groupTime: string; ezMaticPrice: number; stMaticPrice: number; ezUsdRate: number }[];
+  data: { groupTime: string; ezMaticPrice: number; stMaticPrice: number; ezUsdRate: number; ezE2LpRate: number }[];
 }
 
 export function queryMaticPrice(QueryType: string, networkName: NETWORK_TYPE | undefined) {

@@ -3,7 +3,7 @@ import ReactApexChart from 'react-apexcharts';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { queryMaticPrice, queryTotalNetWorth, queryTreasuryValue } from '../../../api/api';
 import { t } from 'i18next';
-import { formatString, getYMax, getYMin } from '../../wallet/helpers/utilities';
+import { formatString, getYMax, getYMin, roundMinMaxValues } from '../../wallet/helpers/utilities';
 import { useContext, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { ColorModeContext } from '../../../theme';
@@ -11,7 +11,7 @@ import RenderSkeleton from './RenderSkeleton';
 import { HomeCardHeader } from '../mainStyle';
 import RenderSelect from './RenderSelect';
 import useWallet from '../../hooks/useWallet';
-import { NETWORK_TYPE } from '../../wallet/helpers/constant';
+import { ATokenMap, NETWORK_TYPE } from '../../wallet/helpers/constant';
 
 export default function MarketApexChart() {
   const [option, setOption] = useState<any>(null);
@@ -24,9 +24,11 @@ export default function MarketApexChart() {
     queryClient.invalidateQueries('queryTreasuryValue');
   }, [mode]);
 
-  const [aRate, setARate] = useState<number[]>([]);
-  const [XData, setXData] = useState<string[]>([]);
-  const [treasuryData, setTreasuryData] = useState<number[]>([]);
+  const [aRate, setARate] = useState<number[] | null>(null);
+  const [XData, setXData] = useState<string[] | null>(null);
+  // const [treasuryData, setTreasuryData] = useState<number[]>([]);
+  const [ezE2LpRate, setEzE2LpRate] = useState<number[] | null>(null);
+
   const [queryType, setQueryType] = useState('hour');
 
   const { networkName } = useWallet();
@@ -35,6 +37,8 @@ export default function MarketApexChart() {
     enabled: !!networkName,
     onSuccess: ({ data }) => {
       const aRate = data.data.map(i => +formatString(String((i.ezUsdRate * 10000 * 365) / 100)));
+      const ezE2LpRate = data.data.map(i => i.ezE2LpRate * 100 * 365);
+      setEzE2LpRate(ezE2LpRate);
       setARate([...aRate]);
     },
   });
@@ -49,89 +53,92 @@ export default function MarketApexChart() {
           return i.groupTime.slice(5, 10);
         }
       });
-      const treasuryData = data.data.map(i => parseFloat(i.treasuryValue));
+      // const treasuryData = data.data.map(i => parseFloat(i.treasuryValue));
+      // setTreasuryData([...treasuryData]);
+
       setXData([...XData]);
-      setTreasuryData([...treasuryData]);
     },
   });
 
   useEffect(() => {
-    setOption({
-      series: [
-        {
-          name: t('home.treasuryValue'),
-          type: 'area',
-          data: treasuryData,
-        },
-        {
-          name: t('home.aRateAxis'),
-          type: 'area',
-          data: [...aRate],
-        },
-      ],
-      options: {
-        theme: {
-          mode,
-        },
-        chart: {
-          // @ts-ignore
-          background: 'transparent',
-          height: 350,
-          type: 'line',
-          toolbar: {
-            show: false,
-          },
-          zoom: {
-            enabled: false,
-          },
-        },
-        stroke: {
-          curve: 'smooth',
-        },
-        fill: {
-          type: 'solid',
-          opacity: [0.2, 0.2],
-        },
-        labels: XData,
-        markers: {
-          size: 0,
-        },
-        yaxis: [
+    if (aRate && XData && ezE2LpRate) {
+      setOption({
+        series: [
           {
-            title: {
-              text: t('home.treasuryValue'),
-            },
-            decimalsInFloat: 2,
-            min: getYMin(treasuryData),
-            max: getYMax(treasuryData),
+            name: (networkName ? ATokenMap[networkName] : '') + t('home.card.fundCost'),
+            type: 'area',
+            data: ezE2LpRate,
           },
           {
-            decimalsInFloat: 2,
-            opposite: true,
-            title: {
-              text: t('home.aRateAxis') + ' ( % ) ',
-            },
-            min: getYMin(aRate),
-            max: getYMax(aRate),
+            name: t('home.aRateAxis'),
+            type: 'area',
+            data: aRate,
           },
         ],
-        tooltip: {
-          shared: true,
-          intersect: false,
-          y: {
-            formatter: function (val: string) {
-              return val;
+        options: {
+          theme: {
+            mode,
+          },
+          chart: {
+            // @ts-ignore
+            background: 'transparent',
+            height: 350,
+            type: 'line',
+            toolbar: {
+              show: false,
+            },
+            zoom: {
+              enabled: false,
+            },
+          },
+          stroke: {
+            curve: 'smooth',
+          },
+          fill: {
+            type: 'solid',
+            opacity: [0.2, 0.2],
+          },
+          labels: XData,
+          markers: {
+            size: 0,
+          },
+          yaxis: [
+            {
+              title: {
+                text: (networkName ? ATokenMap[networkName] : '') + t('home.card.fundCost'),
+              },
+              decimalsInFloat: 2,
+              min: getYMin(ezE2LpRate),
+              max: getYMax(ezE2LpRate),
+            },
+            {
+              opposite: true,
+              title: {
+                text: t('home.aRateAxis') + ' ( % ) ',
+              },
+              decimalsInFloat: 2,
+              min: getYMin(aRate),
+              max: getYMax(aRate),
+            },
+          ],
+          tooltip: {
+            shared: true,
+            intersect: false,
+            y: {
+              formatter: function (val: string) {
+                return val;
+              },
             },
           },
         },
-      },
-    });
-  }, [aRate, XData, treasuryData]);
+      });
+    }
+  }, [aRate, XData, ezE2LpRate]);
 
   return (
     <Card>
       <HomeCardHeader>
-        <CardHeader title={t('home.treasuryValue') as string} />
+        <CardHeader title={((networkName ? ATokenMap[networkName] : '') + t('home.card.fundCost')) as string} />
 
         <RenderSelect value={queryType} onChange={setQueryType} />
       </HomeCardHeader>
