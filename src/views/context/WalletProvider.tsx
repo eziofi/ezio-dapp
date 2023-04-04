@@ -133,8 +133,6 @@ export default function WalletProvider({ children }: { children: ReactElement })
       const chainId = await signer.getChainId();
 
       if (!Object.keys(NETWORK_ID).includes(String(chainId))) {
-        console.log('请选择arbitrum或polygon链');
-        openMsg('请选择arbitrum或polygon链');
         openMsg(t('message.errorNetTip'));
       }
 

@@ -217,7 +217,7 @@ export default function AddressPopover() {
       <Dialog open={dialogOpen} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
         <DialogTitle id="alert-dialog-title">{t('common.warning')}</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">{t('common.errorNetworkTip')}</DialogContentText>
+          <DialogContentText id="alert-dialog-description">{t('message.errorNetTip')}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDialogOpen(false)}>{t('common.ok')}</Button>

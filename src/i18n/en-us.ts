@@ -2,7 +2,6 @@ export default {
   common: {
     ok: 'OK',
     warning: 'Wrong Network',
-    errorNetworkTip: 'Not connected to the Arbitrum network, please switch the network in your wallet software.',
   },
   header: {
     selectNet: 'Select Network',
@@ -24,7 +23,7 @@ export default {
     waitingTx: 'waiting response...',
     approved: 'approval tx confirmed',
     txConfirmed: 'tx confirmed',
-    errorNetTip: 'Please connect arbitrum or polygon',
+    errorNetTip: 'Please connect Arbitrum',
   },
   home: {
     card: {

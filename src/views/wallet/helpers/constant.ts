@@ -15,7 +15,7 @@ export enum NETWORK_TYPE {
 }
 
 export const NETWORK_ID = {
-  137: NETWORK_TYPE.polygon,
+  // 137: NETWORK_TYPE.polygon,
   42161: NETWORK_TYPE.arbitrum,
 };
 
