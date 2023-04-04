@@ -229,9 +229,10 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
                 onMouseOut={() => {
                   setHiddenCopy(false);
                 }}
+                onClick={copyText}
               >
                 <span style={{ marginLeft: theme.spacing(1) }}>{isDesktop ? addressToShow : ''}</span>
-                {hiddenCopy && <ContentCopyRoundedIcon sx={copyBtnStyle} onClick={copyText} />}
+                {hiddenCopy && <ContentCopyRoundedIcon sx={copyBtnStyle} />}
               </Box>
             </Box>
 
