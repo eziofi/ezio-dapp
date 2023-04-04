@@ -47,43 +47,28 @@ export default function TotleNetWorthApexChart() {
             type: 'area',
             data: ezUsdTotalnetworth,
           },
-          // {
-          //   name: (networkName ? ATokenMap[networkName] : '') + t('home.BTokenTotalnetworth'),
-          //   // type: 'area',
-          //   data: ezMaticTotalnetworth,
-          // },
           {
-            name: t('home.abNetworth'),
+            name: (networkName ? ATokenMap[networkName] : '') + t('home.BTokenTotalnetworth'),
+            type: 'area',
             data: total,
           },
         ],
         options: {
-          theme: {
-            mode,
-          },
+          theme: { mode },
           chart: {
-            // @ts-ignore
             background: 'transparent',
             height: 350,
             type: 'line',
-            toolbar: {
-              show: false,
-            },
-            zoom: {
-              enabled: false,
-            },
+            toolbar: { show: false },
+            zoom: { enabled: false },
           },
-          stroke: {
-            curve: 'smooth',
-          },
+          stroke: { curve: 'smooth' },
           fill: {
             type: 'solid',
-            opacity: [0.2, 1, 1],
+            // opacity: [0.5, 0.5],
           },
           labels: XData,
-          markers: {
-            size: 0,
-          },
+          markers: { size: 0 },
           yaxis: [
             {
               title: {
@@ -93,28 +78,16 @@ export default function TotleNetWorthApexChart() {
               max: getYMax(total),
               min: getYMin(sum),
             },
-            // {
-            //   title: {
-            //     text: 'ezUsdTotalnetworth',
-            //   },
-            //   decimalsInFloat: 0,
-            //   min: 0,
-            //   max: getYMax(ezUsdTotalnetworth),
-            // },
-            // {
-            //   opposite: true,
-            //   title: {
-            //     text: t('home.ethPrice'),
-            //   },
-            //   decimalsInFloat: 0,
-            //   max: getYMax(ethData),
-            // },
           ],
           tooltip: {
             shared: true,
             intersect: false,
             y: {
-              formatter: function (val: string) {
+              formatter: function (val: string, obj: any) {
+                if (obj.seriesIndex === 1) {
+                  // 总净值 减去 usde = e2lp
+                  return +val + ' - ' + obj.series[0][obj.dataPointIndex];
+                }
                 return val;
               },
             },
