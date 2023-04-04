@@ -47,11 +47,13 @@ export default function NetWorthApexChart() {
             name: reverseCoin ? t(`home.${reverseCoin}Price`) : '',
             type: 'area',
             data: stMaticPrice,
+            color: '#008FFB',
           },
           {
             name: (networkName ? ATokenMap[networkName] : '') + t('home.bNetWorthSeries'),
             type: 'area',
             data: ezMaticPrice,
+            color: '#00E396',
           },
         ],
         options: {

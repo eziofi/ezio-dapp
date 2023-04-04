@@ -29,11 +29,13 @@ export default function LineChart() {
             name: (networkName ? ATokenMap[networkName] : '') + t('home.netWorthEzbtAxis'),
             type: 'area',
             data: ezMaticPrice,
+            color: '#008FFB',
           },
           {
             name: t('home.card.rebalancePrice'),
             type: 'area',
             data: convertDownPrice,
+            color: '#00E396',
           },
         ],
         options: {

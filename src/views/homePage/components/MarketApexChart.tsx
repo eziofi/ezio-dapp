@@ -68,11 +68,13 @@ export default function MarketApexChart() {
             name: (networkName ? ATokenMap[networkName] : '') + t('home.card.fundCost'),
             type: 'area',
             data: ezE2LpRate,
+            color: '#008FFB',
           },
           {
             name: t('home.aRateAxis'),
             type: 'area',
             data: aRate,
+            color: '#00E396',
           },
         ],
         options: {

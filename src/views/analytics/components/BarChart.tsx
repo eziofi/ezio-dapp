@@ -45,11 +45,13 @@ export default function BarChart() {
             name: t('analytics.everyday'),
             data: DailyAccumulatedFees,
             type: 'column',
+            color: '#008FFB',
           },
           {
             name: t('analytics.accumulativeTotal'),
             data: AccumulatedFees,
             type: 'line',
+            color: '#00E396',
           },
         ],
         options: {

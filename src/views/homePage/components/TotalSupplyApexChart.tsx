@@ -50,11 +50,13 @@ export default function TotalSupplyApexChart() {
             name: t('home.aTotalSupplySeries'),
             type: 'area',
             data: aTotalSupply,
+            color: '#008FFB',
           },
           {
             name: (networkName ? ATokenMap[networkName] : '') + t('home.bTotalSupplySeries'),
             type: 'area',
             data: bTatalSupply,
+            color: '#00E396',
           },
         ],
         options: {
