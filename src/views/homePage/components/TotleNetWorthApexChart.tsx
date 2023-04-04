@@ -86,7 +86,7 @@ export default function TotleNetWorthApexChart() {
               formatter: function (val: string, obj: any) {
                 if (obj.seriesIndex === 0) {
                   // 总净值 减去 usde = e2lp
-                  return +parseFloat(val).toFixed(2) - +parseFloat(obj.series[1][obj.dataPointIndex]).toFixed(2);
+                  return (+parseFloat(val).toFixed(2) - +parseFloat(obj.series[1][obj.dataPointIndex])).toFixed(2);
                 }
                 return parseFloat(val).toFixed(2);
               },
