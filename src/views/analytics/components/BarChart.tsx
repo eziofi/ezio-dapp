@@ -16,9 +16,9 @@ export default function BarChart() {
   const [option, setOption] = React.useState<any>(null);
   const theme = useTheme();
   const { mode } = React.useContext(ColorModeContext);
-  const [DailyAccumulatedFees, setDailyAccumulatedFees] = React.useState<number[]>([]);
-  const [AccumulatedFees, setAccumulatedFees] = React.useState<number[]>([]);
-  const [XData, setXData] = React.useState<string[]>([]);
+  const [DailyAccumulatedFees, setDailyAccumulatedFees] = React.useState<number[] | null>(null);
+  const [AccumulatedFees, setAccumulatedFees] = React.useState<number[] | null>(null);
+  const [XData, setXData] = React.useState<string[] | null>(null);
 
   const { networkName } = useWallet();
 
@@ -38,79 +38,81 @@ export default function BarChart() {
   });
 
   useEffect(() => {
-    setOption({
-      series: [
-        {
-          name: t('analytics.everyday'),
-          data: DailyAccumulatedFees,
-          type: 'column',
-        },
-        {
-          name: t('analytics.accumulativeTotal'),
-          data: AccumulatedFees,
-          type: 'line',
-        },
-      ],
-      options: {
-        theme: {
-          mode,
-        },
-        chart: {
-          height: 350,
-          toolbar: {
-            show: false,
-          },
-          background: 'transparent',
-          zoom: {
-            enabled: false,
-          },
-        },
-        plotOptions: {
-          bar: {
-            horizontal: false,
-            columnWidth: '55%',
-            endingShape: 'rounded',
-          },
-        },
-        dataLabels: {
-          enabled: false,
-        },
-        stroke: {
-          width: [4, 4],
-        },
-        fill: {
-          type: 'solid',
-          opacity: 1,
-        },
-        labels: XData,
-        yaxis: [
+    if (DailyAccumulatedFees && AccumulatedFees) {
+      setOption({
+        series: [
           {
-            title: {
-              text: t('analytics.everyday'),
-            },
-            decimalsInFloat: getDecimal(DailyAccumulatedFees),
-            min: 0,
-            max: getYMax(DailyAccumulatedFees),
+            name: t('analytics.everyday'),
+            data: DailyAccumulatedFees,
+            type: 'column',
           },
           {
-            opposite: true,
-            title: {
-              text: t('analytics.accumulativeTotal'),
-            },
-            decimalsInFloat: getDecimal(DailyAccumulatedFees),
-            min: 0,
-            max: getYMax(AccumulatedFees),
+            name: t('analytics.accumulativeTotal'),
+            data: AccumulatedFees,
+            type: 'line',
           },
         ],
-        tooltip: {
-          y: {
-            formatter: function (val: string) {
-              return val;
+        options: {
+          theme: {
+            mode,
+          },
+          chart: {
+            height: 350,
+            toolbar: {
+              show: false,
+            },
+            background: 'transparent',
+            zoom: {
+              enabled: false,
+            },
+          },
+          plotOptions: {
+            bar: {
+              horizontal: false,
+              columnWidth: '55%',
+              endingShape: 'rounded',
+            },
+          },
+          dataLabels: {
+            enabled: false,
+          },
+          stroke: {
+            width: [4, 4],
+          },
+          fill: {
+            type: 'solid',
+            opacity: 1,
+          },
+          labels: XData,
+          yaxis: [
+            {
+              title: {
+                text: t('analytics.everyday'),
+              },
+              decimalsInFloat: getDecimal(DailyAccumulatedFees as number[]),
+              min: 0,
+              max: getYMax(DailyAccumulatedFees as number[]),
+            },
+            {
+              opposite: true,
+              title: {
+                text: t('analytics.accumulativeTotal'),
+              },
+              decimalsInFloat: getDecimal(DailyAccumulatedFees as number[]),
+              min: 0,
+              max: getYMax(AccumulatedFees as number[]),
+            },
+          ],
+          tooltip: {
+            y: {
+              formatter: function (val: string) {
+                return val;
+              },
             },
           },
         },
-      },
-    });
+      });
+    }
 
     // setOption({
     //   series: [
