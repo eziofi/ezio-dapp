@@ -63,7 +63,7 @@ export default function AnalyticsCard({
 
   const title = {
     [ANALYTICS_CARD_TYPE.USDC]: t('analytics.title.usdc'),
-    [ANALYTICS_CARD_TYPE.reverseCoin]: t(`analytics.title.${reverseCoin}`),
+    [ANALYTICS_CARD_TYPE.reverseCoin]: reverseCoin ? t(`analytics.title.${reverseCoin}`) : '',
     [ANALYTICS_CARD_TYPE.FEE]: t('analytics.title.fee'),
   };
 

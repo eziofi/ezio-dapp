@@ -414,9 +414,8 @@ function MyCardContentSecond({
             }}
           />
           <div style={{ ...priceStyle, color: theme.palette.text.secondary }}>
-            {/*{t('purchase.estimated')}*/}
-            {price ? t('purchase.unitPrice') + ': $' + price : <Skeleton width={100} />}
-            {pricePercentage ? ` (${pricePercentage}%)` : ''}
+            {t('purchase.unitPrice') + ': '}
+            {price && pricePercentage ? `$${price} (${pricePercentage}%)` : <InlineSkeleton width={70} />}
           </div>
         </div>
 
