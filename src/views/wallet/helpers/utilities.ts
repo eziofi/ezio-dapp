@@ -243,17 +243,18 @@ function getMinMaxValues(data: number[]) {
   let minValue = Math.min(...data);
   let maxValue = Math.max(...data);
 
-  if (minValue > 1 && maxValue - minValue > 1) {
-    // 计算一个缓冲区，以便在绘制图表时确保Y轴上的所有数据都可以被完全显示
-    let buffer = (maxValue - minValue) * 0.5;
+  // 计算一个缓冲区，以便在绘制图表时确保Y轴上的所有数据都可以被完全显示
+  let buffer = (maxValue - minValue) * 0.5;
+
+  if (maxValue - minValue > 1) {
     return {
-      min: minValue - buffer,
+      min: minValue - buffer > 0 ? minValue - buffer : 0,
       max: maxValue + buffer,
     };
   } else {
     return {
-      min: Math.min(Math.floor(minValue)),
-      max: Math.max(Math.ceil(maxValue)),
+      min: Math.min(Math.floor(minValue)) > 0 ? Math.min(Math.floor(minValue)) : 0,
+      max: maxValue + buffer,
     };
   }
 }
