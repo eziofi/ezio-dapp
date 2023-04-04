@@ -74,7 +74,7 @@ export default function TotleNetWorthApexChart() {
               title: {
                 text: (networkName ? ATokenMap[networkName] : '') + t('home.BTokenTotalnetworth'),
               },
-              decimalsInFloat: 2,
+              decimalsInFloat: 0,
               max: getYMax(total),
               min: getYMin(sum),
             },

@@ -71,7 +71,7 @@ export default function LineChart() {
               title: {
                 text: (networkName ? ATokenMap[networkName] : '') + t('home.netWorthEzbtAxis'),
               },
-              decimalsInFloat: 2, // 保留几位小数
+              decimalsInFloat: 1,
               min: 0,
               max: getYMax(ezMaticPrice),
             },
@@ -80,7 +80,7 @@ export default function LineChart() {
               title: {
                 text: t('home.card.rebalancePrice'),
               },
-              decimalsInFloat: 2,
+              decimalsInFloat: 1,
               min: 0,
               max: getYMax(ezMaticPrice),
             },

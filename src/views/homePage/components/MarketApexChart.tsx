@@ -111,7 +111,7 @@ export default function MarketApexChart() {
               title: {
                 text: (networkName ? ATokenMap[networkName] : '') + t('home.card.fundCost'),
               },
-              decimalsInFloat: 2,
+              decimalsInFloat: 1,
               min: getYMin(ezE2LpRate),
               max: getYMax(ezE2LpRate),
             },
@@ -120,7 +120,7 @@ export default function MarketApexChart() {
               title: {
                 text: t('home.aRateAxis') + ' ( % ) ',
               },
-              decimalsInFloat: 2,
+              decimalsInFloat: 1,
               min: getYMin(aRate),
               max: getYMax(aRate),
             },

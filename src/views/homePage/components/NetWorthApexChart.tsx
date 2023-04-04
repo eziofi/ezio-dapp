@@ -85,7 +85,7 @@ export default function NetWorthApexChart() {
           labels: XData,
           yaxis: [
             {
-              decimalsInFloat: 2,
+              decimalsInFloat: 0,
               title: {
                 text: reverseCoin ? t(`home.${reverseCoin}Price`) : '',
                 y: {
