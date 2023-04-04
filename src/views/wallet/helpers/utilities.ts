@@ -236,21 +236,13 @@ export function getYMin(data: number[]) {
     const minValue = first * Math.pow(10, length - 1);
 
     return minValue;
-  } else {
-    const floatString = min.toString().split('.')[1];
-    if (floatString) {
-      let firstNumDecimal = floatString.length + String(parseInt(floatString)).length; // 小数点后有多少个零
-      const roundMin = min * Math.pow(10, firstNumDecimal + 1); // 乘为整数
-      const ceilNum = Math.floor(roundMin); // 向下圆整到最小整数
-      const res = ceilNum / Math.pow(10, firstNumDecimal + 1); //再除为原先的位数
-      return res;
-    }
   }
 }
 
 function getMinMaxValues(data: number[]) {
   let minValue = Math.min(...data);
   let maxValue = Math.max(...data);
+
   // 计算一个缓冲区，以便在绘制图表时确保Y轴上的所有数据都可以被完全显示
   let buffer = (maxValue - minValue) * 0.5;
 
@@ -268,11 +260,15 @@ function getMinMaxValues(data: number[]) {
  */
 export function roundMinMaxValues(data: number[]) {
   let yAxisRange = getMinMaxValues(data);
-  console.log(yAxisRange);
+
   yAxisRange.min = Math.floor(yAxisRange.min / 10) * 10;
   yAxisRange.max = Math.ceil(yAxisRange.max / 10) * 10;
   // 将最大值向上舍入，以确保它们满足指定的步长（10、20、30、40...）。
-  // 如果最大值和最小值之间的距离小于15，则我们将使用更小的步长（5、15、25、35...）。
+
+  if (yAxisRange.min < 1) {
+    yAxisRange.min = 0;
+  }
+
   if (yAxisRange.max - yAxisRange.min < 15) {
     yAxisRange.min = Math.floor(yAxisRange.min / 5) * 5;
     yAxisRange.max = Math.ceil(yAxisRange.max / 5) * 5;
