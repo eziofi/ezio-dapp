@@ -125,7 +125,10 @@ export default function MarketApexChart() {
             shared: true,
             intersect: false,
             y: {
-              formatter: function (val: string) {
+              formatter: function (val: string, obj: any) {
+                if (obj.seriesIndex === 0) {
+                  return parseFloat(val).toFixed(2) + '%';
+                }
                 return val;
               },
             },
