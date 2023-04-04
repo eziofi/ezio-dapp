@@ -92,7 +92,7 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
 
   useMemo(() => {
     if (USDEBALANCE && E2LPBALANCE) {
-      const sum = formatString(String(Number(USDEBALANCE) + Number(E2LPBALANCE)), 6).toString();
+      const sum = formatString(String(Number(USDEBALANCE) + Number(E2LPBALANCE)), 2).toString();
       setTotalValue(+sum);
     }
   }, [USDEBALANCE, E2LPBALANCE]);
