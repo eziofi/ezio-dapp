@@ -243,13 +243,19 @@ function getMinMaxValues(data: number[]) {
   let minValue = Math.min(...data);
   let maxValue = Math.max(...data);
 
-  // 计算一个缓冲区，以便在绘制图表时确保Y轴上的所有数据都可以被完全显示
-  let buffer = (maxValue - minValue) * 0.5;
-
-  return {
-    min: minValue - buffer,
-    max: maxValue + buffer,
-  };
+  if (minValue > 1 && maxValue - minValue > 1) {
+    // 计算一个缓冲区，以便在绘制图表时确保Y轴上的所有数据都可以被完全显示
+    let buffer = (maxValue - minValue) * 0.5;
+    return {
+      min: minValue - buffer,
+      max: maxValue + buffer,
+    };
+  } else {
+    return {
+      min: Math.min(Math.floor(minValue)),
+      max: Math.max(Math.ceil(maxValue)),
+    };
+  }
 }
 
 /**
@@ -261,18 +267,17 @@ function getMinMaxValues(data: number[]) {
 export function roundMinMaxValues(data: number[]) {
   let yAxisRange = getMinMaxValues(data);
 
-  yAxisRange.min = Math.floor(yAxisRange.min / 10) * 10;
-  yAxisRange.max = Math.ceil(yAxisRange.max / 10) * 10;
-  // 将最大值向上舍入，以确保它们满足指定的步长（10、20、30、40...）。
+  if (yAxisRange.max - yAxisRange.min > 1) {
+    yAxisRange.min = Math.floor(yAxisRange.min / 10) * 10;
+    yAxisRange.max = Math.ceil(yAxisRange.max / 10) * 10;
 
-  if (yAxisRange.min < 1) {
-    yAxisRange.min = 0;
+    // 将最大值向上舍入，以确保它们满足指定的步长（10、20、30、40...）。
+    if (yAxisRange.max - yAxisRange.min < 15) {
+      yAxisRange.min = Math.floor(yAxisRange.min / 5) * 5;
+      yAxisRange.max = Math.ceil(yAxisRange.max / 5) * 5;
+    }
   }
 
-  if (yAxisRange.max - yAxisRange.min < 15) {
-    yAxisRange.min = Math.floor(yAxisRange.min / 5) * 5;
-    yAxisRange.max = Math.ceil(yAxisRange.max / 5) * 5;
-  }
   return yAxisRange;
 }
 
