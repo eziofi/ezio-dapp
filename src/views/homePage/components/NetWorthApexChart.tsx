@@ -100,8 +100,10 @@ export default function NetWorthApexChart() {
               title: {
                 text: (networkName ? ATokenMap[networkName] : '') + t('home.bNetWorthSeries'),
               },
-              max: roundMinMaxValues(ezMaticPrice).max,
-              min: roundMinMaxValues(ezMaticPrice).min,
+              tickAmount: 10,
+              forceNiceScale: true,
+              // max: roundMinMaxValues(ezMaticPrice).max,
+              // min: roundMinMaxValues(ezMaticPrice).min,
             },
           ],
           tooltip: {
