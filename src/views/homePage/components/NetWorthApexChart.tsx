@@ -110,7 +110,7 @@ export default function NetWorthApexChart() {
             intersect: false,
             y: {
               formatter: function (val: string, { seriesIndex }: any) {
-                return seriesIndex === 2 ? val + '%' : val;
+                return seriesIndex === 2 ? parseFloat(val).toFixed(2) + '%' : parseFloat(val).toFixed(2);
               },
             },
           },

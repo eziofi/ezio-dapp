@@ -98,7 +98,7 @@ export default function TotalSupplyApexChart() {
             intersect: false,
             y: {
               formatter: function (val: string) {
-                return val;
+                return parseFloat(val).toFixed(2);
               },
             },
           },

@@ -129,7 +129,7 @@ export default function MarketApexChart() {
                 if (obj.seriesIndex === 0) {
                   return parseFloat(val).toFixed(2) + '%';
                 }
-                return val;
+                return parseFloat(val).toFixed(2);
               },
             },
           },

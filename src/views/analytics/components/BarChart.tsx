@@ -106,7 +106,7 @@ export default function BarChart() {
           tooltip: {
             y: {
               formatter: function (val: string) {
-                return val;
+                return parseFloat(val).toFixed(2);
               },
             },
           },
