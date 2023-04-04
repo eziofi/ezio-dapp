@@ -43,14 +43,14 @@ export default function TotleNetWorthApexChart() {
       setOption({
         series: [
           {
-            name: t('home.USDETotalnetworth'),
-            type: 'area',
-            data: ezUsdTotalnetworth,
-          },
-          {
             name: (networkName ? ATokenMap[networkName] : '') + t('home.BTokenTotalnetworth'),
             type: 'area',
             data: total,
+          },
+          {
+            name: t('home.USDETotalnetworth'),
+            type: 'area',
+            data: ezUsdTotalnetworth,
           },
         ],
         options: {
@@ -65,7 +65,7 @@ export default function TotleNetWorthApexChart() {
           stroke: { curve: 'smooth' },
           fill: {
             type: 'solid',
-            // opacity: [0.5, 0.5],
+            opacity: [1, 1],
           },
           labels: XData,
           markers: { size: 0 },
@@ -84,9 +84,9 @@ export default function TotleNetWorthApexChart() {
             intersect: false,
             y: {
               formatter: function (val: string, obj: any) {
-                if (obj.seriesIndex === 1) {
+                if (obj.seriesIndex === 0) {
                   // 总净值 减去 usde = e2lp
-                  return +val + ' - ' + obj.series[0][obj.dataPointIndex];
+                  return val + ' - ' + obj.series[1][obj.dataPointIndex];
                 }
                 return val;
               },
