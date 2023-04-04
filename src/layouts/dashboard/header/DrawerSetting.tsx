@@ -98,7 +98,7 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
   useMemo(() => {
     if (USDEBALANCE && E2LPBALANCE) {
       const sum = formatString(
-        String(Number(USDEBALANCE) * Number(USDEPrice) + Number(E2LPBALANCE) * Number(E2LPPrice)),
+        String(Number(USDEBALANCE) * Number(USDEPrice || 0) + Number(E2LPBALANCE) * Number(E2LPPrice || 0)),
         2,
       ).toString();
       setTotalValue(+sum);
