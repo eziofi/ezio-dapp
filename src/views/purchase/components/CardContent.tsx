@@ -130,6 +130,7 @@ const MenuItemStyle = {
  * @param showMaxVal 是否显示最大值
  * @param inputVal 购买值
  * @param setInputVal 设置购买值
+ * @param transactionType 购买还是赎回
  * @returns SelectItem
  */
 function RanderOptions(
@@ -138,6 +139,7 @@ function RanderOptions(
   handleChange: (value: keyof TOKEN_TYPE) => void,
   balance: undefined | string,
   showMaxVal: boolean,
+  transactionType: TRANSFER_TYPE.PURCHASE | TRANSFER_TYPE.REDEEM,
   inputVal?: string,
   setInputVal?: (value: string) => void,
 ) {
@@ -213,7 +215,13 @@ function RanderOptions(
         </span>
         {showMaxVal && inputVal !== balance && (
           <Box
-            onClick={() => setInputVal!(formatString(balance || '', 6).toString())}
+            onClick={() => {
+              if (transactionType === TRANSFER_TYPE.PURCHASE) {
+                setInputVal!(formatString(balance || '', 6).toString());
+              } else if (transactionType === TRANSFER_TYPE.REDEEM) {
+                setInputVal!(formatString(balance || '', 18).toString());
+              }
+            }}
             sx={{
               color: theme.palette.primary.main,
               fontWeight: 'bold',
@@ -333,8 +341,9 @@ function MyCardContentOne({
           placeholder="0"
           onInput={(e: any) => {
             if (e.target.value !== '') {
-              // 限制输入小数点后六位
-              getInputVal1(e.target.value.replace(/^\D*(\d*(?:\.\d{0,6})?).*$/g, '$1'));
+              transactionType === TRANSFER_TYPE.PURCHASE
+                ? getInputVal1(e.target.value.replace(/^\D*(\d*(?:\.\d{0,6})?).*$/g, '$1'))
+                : getInputVal1(e.target.value.replace(/^\D*(\d*(?:\.\d{0,18})?).*$/g, '$1'));
             } else {
               // 禁止输入框输入 e + -符号
               e.target.value = e.target.value.replace(/[e\+\-]/, '');
@@ -357,11 +366,21 @@ function MyCardContentOne({
             redeemChange,
             balance,
             true,
+            transactionType,
             inputValue1,
             getInputVal1,
           )
-        : // @ts-ignore
-          RanderOptions(PurchaseOptions, tokenType, handleChange, balance, true, inputValue1, getInputVal1)}
+        : RanderOptions(
+            PurchaseOptions,
+            tokenType,
+            // @ts-ignore
+            handleChange,
+            balance,
+            true,
+            transactionType,
+            inputValue1,
+            getInputVal1,
+          )}
     </BodyContent>
   );
 }
@@ -404,8 +423,9 @@ function MyCardContentSecond({
             value={inputValue2}
             onInput={(e: any) => {
               if (e.target.value !== '') {
-                // 限制输入小数点后六位
-                getInputVal2(e.target.value.replace(/^\D*(\d*(?:\.\d{0,6})?).*$/g, '$1'));
+                transactionType === TRANSFER_TYPE.PURCHASE
+                  ? getInputVal2(e.target.value.replace(/^\D*(\d*(?:\.\d{0,6})?).*$/g, '$1'))
+                  : getInputVal2(e.target.value.replace(/^\D*(\d*(?:\.\d{0,18})?).*$/g, '$1'));
               } else {
                 // 禁止输入框输入 e + -符号
                 e.target.value = e.target.value.replace(/[e\+\-]/, '');
@@ -421,7 +441,7 @@ function MyCardContentSecond({
 
         {transactionType === TRANSFER_TYPE.PURCHASE
           ? // @ts-ignore
-            RanderOptions(PurchaseOptions, tokenType, handleChange, balance, false)
+            RanderOptions(PurchaseOptions, tokenType, handleChange, balance, false, transactionType)
           : tokenType === TOKEN_TYPE.USDE
           ? // <div style={{ width: 142, height: 83, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
             //   <div style={{ display: 'flex', alignItems: 'center', height: 46 }}>
@@ -456,6 +476,7 @@ function MyCardContentSecond({
               redeemChange,
               balance,
               false,
+              transactionType,
             )
           : RanderOptions(
               redeemOptions.filter(item => item.value !== TOKEN_TYPE.USDT),
@@ -464,6 +485,7 @@ function MyCardContentSecond({
               redeemChange,
               balance,
               false,
+              transactionType,
             )}
       </BodyContent>
     </>
