@@ -244,7 +244,7 @@ function getMinMaxValues(data: number[]) {
   let maxValue = Math.max(...data);
 
   // 计算一个缓冲区，以便在绘制图表时确保Y轴上的所有数据都可以被完全显示
-  let buffer = (maxValue - minValue) * 0.5;
+  let buffer = (maxValue - minValue) * 2.5;
 
   if (maxValue - minValue > 1) {
     return {
