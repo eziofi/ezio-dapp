@@ -93,15 +93,19 @@ export default function MarketApexChart() {
           },
           stroke: {
             curve: 'smooth',
+            width: 3,
+          },
+          markers: {
+            size: 2,
+            colors: ['#008FFB', '#00E396'],
+            strokeColors: ['#008FFB', '#00E396'],
           },
           fill: {
             type: 'solid',
-            opacity: [0.2, 0.2],
+            opacity: [0.1, 0.1],
           },
           labels: XData,
-          markers: {
-            size: 0,
-          },
+
           yaxis: [
             {
               title: {
@@ -126,10 +130,10 @@ export default function MarketApexChart() {
             intersect: false,
             y: {
               formatter: function (val: string, obj: any) {
-                if (obj.seriesIndex === 0) {
-                  return parseFloat(val).toFixed(2) + '%';
-                }
-                return parseFloat(val).toFixed(2);
+                // if (obj.seriesIndex === 0) {
+                return parseFloat(val).toFixed(2) + '%';
+                // }
+                // return val;
               },
             },
           },
@@ -141,7 +145,7 @@ export default function MarketApexChart() {
   return (
     <Card>
       <HomeCardHeader>
-        <CardHeader title={((networkName ? ATokenMap[networkName] : '') + t('home.card.fundCost')) as string} />
+        <CardHeader title={t('home.card.fundCostTitle') + ''} />
 
         <RenderSelect value={queryType} onChange={setQueryType} />
       </HomeCardHeader>

@@ -77,7 +77,13 @@ export default function BarChart() {
             enabled: false,
           },
           stroke: {
-            width: [4, 4],
+            curve: 'smooth',
+            width: [3, 3],
+          },
+          markers: {
+            size: 2,
+            colors: ['#008FFB', '#00E396'],
+            strokeColors: ['#008FFB', '#00E396'],
           },
           fill: {
             type: 'solid',

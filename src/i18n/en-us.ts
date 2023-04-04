@@ -29,6 +29,7 @@ export default {
   home: {
     card: {
       rate: 'USDE YIELD',
+      fundCostTitle: 'Token Funding Cost/Yield',
       fundCost: ' FUNDING COST',
       rebalancePrice: ' REBALANCING PRICE',
       leverage: ' LEVERAGE RATIO',
@@ -59,7 +60,7 @@ export default {
     netWorthAxis: 'Price',
     netWorthEzatAxis: 'USDE Price',
     netWorthEzbtAxis: ' Price',
-    aRateAxis: 'USDE Rate',
+    aRateAxis: 'USDE YIELD',
     totalSupplyTitle: 'Total Supply',
     totalSupplyAxis: 'Total Supply',
     aNetWorthSeries: 'USDE Price',

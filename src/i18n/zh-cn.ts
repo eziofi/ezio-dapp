@@ -29,6 +29,7 @@ export default {
   home: {
     card: {
       rate: 'USDE年化收益',
+      fundCostTitle: 'Token年化成本/收益',
       fundCost: '年化成本',
       rebalancePrice: '下折价格',
       leverage: '杠杆率',

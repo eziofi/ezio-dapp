@@ -71,15 +71,18 @@ export default function NetWorthApexChart() {
           },
           stroke: {
             curve: 'smooth',
+            width: 3,
+          },
+          markers: {
+            size: 2,
+            colors: ['#008FFB', '#00E396'],
+            strokeColors: ['#008FFB', '#00E396'],
           },
           fill: {
             type: 'solid',
-            opacity: [0.2, 0.2],
+            opacity: [0.1, 0.1],
           },
           labels: XData,
-          markers: {
-            size: 0,
-          },
           yaxis: [
             {
               decimalsInFloat: 2,
