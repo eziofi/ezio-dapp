@@ -149,7 +149,9 @@ export default function Purchase() {
   const { mutateAsync: purchaseMutate } = useMutation(
     (arg: IPurchaseArg) => purchase(arg.fromType, arg.toType, arg.amount, arg.slippage, arg.signerOrProvider),
     {
-      onSuccess: () => {},
+      onSuccess: () => {
+        queryClient.invalidateQueries();
+      },
       onError: error => {
         console.error(error);
       },

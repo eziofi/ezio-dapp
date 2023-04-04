@@ -1,17 +1,20 @@
 import { BigNumber, ethers, Signer } from 'ethers';
 import { Provider } from '@ethersproject/providers';
-import { MAX_UINT256, QUOTE_CHANNEL, TOKEN_TYPE, NETWORK_TYPE, REVERSE_COIN } from '../views/wallet/helpers/constant';
+import { MAX_UINT256, NETWORK_TYPE, QUOTE_CHANNEL, REVERSE_COIN, TOKEN_TYPE } from '../views/wallet/helpers/constant';
 import { getQuote } from '../views/wallet/helpers/utilities';
 import {
-  USDEConnect,
   E2LPConnect,
+  ezatBalanceOf,
+  ezbtBalanceOf,
   EzioConnect,
-  reverseCoinConnect,
-  USDCConnect,
-  USDTConnect,
   ezioJson,
-  TOKENS,
   getAllowance,
+  getBalanceOfABToken,
+  reverseCoinConnect,
+  TOKENS,
+  USDCConnect,
+  USDEConnect,
+  USDTConnect,
 } from '../views/wallet/helpers/contract_call';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -65,7 +68,6 @@ export default function useTx() {
     signerOrProvider: Signer | Provider,
   ) {
     await (toType === TOKEN_TYPE.USDE ? purchaseA : purchaseB)(signerOrProvider, fromType, amount, slippage);
-    openMsg(t('message.txConfirmed'), 'success', 2000);
   }
 
   async function purchaseA(
@@ -102,24 +104,55 @@ export default function useTx() {
         swapCallData: ethers.constants.HashZero,
       };
     }
-    // console.log('approve');
-    // setBackLoadingText(t('message.approving'));
-    // const approveTx = await (fromType === TOKEN_TYPE.USDT ? USDTConnect : USDCConnect)(signerOrProvider).approve(
-    //   ezioJson.address,
-    //   quoteResponse.sellAmount,
-    // );
-    // console.log('approve waiting');
-    // setBackLoadingText(t('message.approveWaiting'));
-    // await approveTx.wait();
-    // console.log('approved');
     setBackLoadingText(t('message.sendingTx'));
+    let initBalance = await getBalanceOfABToken(
+      signerOrProvider,
+      TOKEN_TYPE.USDE,
+      account,
+      networkName as NETWORK_TYPE,
+    );
+
     const purchaseTx = await EzioConnect(signerOrProvider, networkName as NETWORK_TYPE).purchase(
       TOKEN_TYPE.USDE,
       channel,
       [quoteResponse],
     );
     setBackLoadingText(t('message.waitingTx'));
-    await purchaseTx.wait();
+    // await purchaseTx.wait();
+    await pollBalance(signerOrProvider, TOKEN_TYPE.USDE, account, networkName as NETWORK_TYPE, initBalance);
+  }
+
+  async function pollBalance(
+    signerOrProvider: Signer | Provider,
+    tokenType: TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP,
+    address: string,
+    networkName: NETWORK_TYPE,
+    initBalance: string,
+  ) {
+    let retryCount = 0;
+    let oldBalance = initBalance;
+    let newBalance = await getBalanceOfABToken(signerOrProvider, tokenType, address, networkName);
+    console.log('oldBalance = ' + oldBalance);
+    console.log('newBalance = ' + newBalance);
+    while (oldBalance === newBalance && retryCount < 15) {
+      console.log('retryCount');
+      console.log(retryCount);
+      oldBalance = newBalance;
+      console.log('oldBalance = ' + oldBalance);
+      await timeout(2000);
+      newBalance = await getBalanceOfABToken(signerOrProvider, tokenType, address, networkName);
+      console.log('newBalance = ' + newBalance);
+      retryCount++;
+    }
+    if (retryCount >= 15) {
+      openMsg(t('message.txNotConfirmed'), 'warning', 2000);
+    } else {
+      openMsg(t('message.txConfirmed'), 'success', 2000);
+    }
+  }
+
+  function timeout(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   async function purchaseB(
@@ -147,17 +180,6 @@ export default function useTx() {
       ZEROEX_API_QUOTE_URL,
       ezioJson[networkName as keyof typeof ezioJson].address,
     );
-    // console.log('approve');
-    // setBackLoadingText(t('message.approving'));
-    // const approveTx = await (fromType === TOKEN_TYPE.USDT ? USDTConnect : USDCConnect)(signerOrProvider).approve(
-    //   ezioJson.address,
-    //   quoteResponse.sellAmount,
-    // );
-    // console.log('approve waiting');
-    // setBackLoadingText(t('message.approveWaiting'));
-    // await approveTx.wait();
-    // console.log('approved');
-
     const quoteNetWorth =
       fromType === TOKEN_TYPE.USDT
         ? BigNumber.from(amount * 1000000)
@@ -197,10 +219,17 @@ export default function useTx() {
       quotes = [quoteResponse];
     }
     console.log(quotes);
+    let initBalance = await getBalanceOfABToken(
+      signerOrProvider,
+      TOKEN_TYPE.E2LP,
+      account,
+      networkName as NETWORK_TYPE,
+    );
     setBackLoadingText(t('message.sendingTx'));
     const purchaseTx = await ezio.purchase(TOKEN_TYPE.E2LP, channel, quotes);
     setBackLoadingText(t('message.waitingTx'));
-    await purchaseTx.wait();
+    // await purchaseTx.wait();
+    await pollBalance(signerOrProvider, TOKEN_TYPE.E2LP, account, networkName as NETWORK_TYPE, initBalance);
   }
 
   /**
@@ -224,7 +253,6 @@ export default function useTx() {
       signerOrProvider,
       slippage,
     );
-    openMsg(t('message.txConfirmed'), 'success', 2000);
   }
 
   /**
@@ -256,9 +284,13 @@ export default function useTx() {
         ezioJson[networkName as keyof typeof ezioJson].address,
       );
       console.log('USDC储量不够，动用储备币换成USDC');
+      let initBalance = await getBalanceOfABToken(signerOrProvider, fromType, account, networkName as NETWORK_TYPE);
+      setBackLoadingText(t('message.sendingTx'));
       await EzioConnect(signerOrProvider, networkName as NETWORK_TYPE)
         .connect(signerOrProvider)
         .redeem(fromType, channel, redeemAmount, TOKENS[networkName as NETWORK_TYPE].USDC, quoteResponse);
+      setBackLoadingText(t('message.waitingTx'));
+      await pollBalance(signerOrProvider, fromType, account, networkName as NETWORK_TYPE, initBalance);
     } else {
       // 把USDC直接转给用户
       console.log('把USDC直接转给用户');
@@ -268,17 +300,19 @@ export default function useTx() {
         sellAmount: convertAmount,
         swapCallData: ethers.constants.HashZero,
       };
+      let initBalance = await getBalanceOfABToken(signerOrProvider, fromType, account, networkName as NETWORK_TYPE);
       setBackLoadingText(t('message.sendingTx'));
       const purchaseTx = await EzioConnect(signerOrProvider, networkName as NETWORK_TYPE)
         .connect(signerOrProvider)
         .redeem(fromType, channel, redeemAmount, TOKENS[networkName as NETWORK_TYPE].USDC, quoteResponse);
       setBackLoadingText(t('message.waitingTx'));
-      await purchaseTx.wait();
+      // await purchaseTx.wait();
+      await pollBalance(signerOrProvider, fromType, account, networkName as NETWORK_TYPE, initBalance);
     }
   }
 
   /**
-   * 赎回成USDC
+   * 赎回成wstMatic
    * @param fromType 卖出token类型，tokenA或者tokenB
    * @param amount
    * @param slippage 滑点
@@ -305,6 +339,8 @@ export default function useTx() {
         ZEROEX_API_QUOTE_URL,
         ezioJson[networkName as keyof typeof ezioJson].address,
       );
+      let initBalance = await getBalanceOfABToken(signerOrProvider, fromType, account, networkName as NETWORK_TYPE);
+      setBackLoadingText(t('message.sendingTx'));
       await EzioConnect(signerOrProvider, networkName as NETWORK_TYPE).redeem(
         1,
         channel,
@@ -313,6 +349,8 @@ export default function useTx() {
         TOKENS[networkName][REVERSE_COIN[networkName]],
         quoteResponse,
       );
+      setBackLoadingText(t('message.waitingTx'));
+      await pollBalance(signerOrProvider, fromType, account, networkName as NETWORK_TYPE, initBalance);
     } else {
       // convertAmount为零
       let quoteResponse6 = {
@@ -322,6 +360,8 @@ export default function useTx() {
         sellAmount: convertAmount.toString(),
         swapCallData: ethers.constants.HashZero,
       };
+      let initBalance = await getBalanceOfABToken(signerOrProvider, fromType, account, networkName as NETWORK_TYPE);
+      setBackLoadingText(t('message.sendingTx'));
       const purchaseTx = await EzioConnect(signerOrProvider, networkName as NETWORK_TYPE).redeem(
         1,
         channel,
@@ -331,7 +371,8 @@ export default function useTx() {
         quoteResponse6,
       );
       setBackLoadingText(t('message.waitingTx'));
-      await purchaseTx.wait();
+      // await purchaseTx.wait();
+      await pollBalance(signerOrProvider, fromType, account, networkName as NETWORK_TYPE, initBalance);
     }
   }
 

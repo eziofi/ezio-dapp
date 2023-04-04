@@ -23,6 +23,7 @@ export default {
     waitingTx: 'waiting response...',
     approved: 'approval tx confirmed',
     txConfirmed: 'tx confirmed',
+    txNotConfirmed: 'confirmation Timeout and please manually refresh',
     errorNetTip: 'Please connect Arbitrum',
   },
   home: {

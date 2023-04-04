@@ -23,6 +23,7 @@ export default {
     waitingTx: '等待交易确认……',
     approved: '授权交易已确认',
     txConfirmed: '交易已确认',
+    txNotConfirmed: '交易确认时间过长，请手动刷新',
     errorNetTip: '请连接arbitrum链',
   },
   home: {

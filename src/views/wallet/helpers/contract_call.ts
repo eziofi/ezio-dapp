@@ -479,3 +479,20 @@ export async function queryRedeemRecord(
   // return records.sort((a, b) => b.timestamp - a.timestamp);
   return records;
 }
+
+/**
+ * 获取A、B token的余额，用于交易提交后的轮询
+ * @param signerOrProvider ether signer or provider
+ * @param tokenType
+ * @param address 账户地址
+ * @param networkName
+ * @returns 账户赎回记录
+ */
+export const getBalanceOfABToken = async (
+  signerOrProvider: Signer | Provider,
+  tokenType: TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP,
+  address: string,
+  networkName: NETWORK_TYPE,
+) => {
+  return await (tokenType === TOKEN_TYPE.USDE ? ezatBalanceOf : ezbtBalanceOf)(signerOrProvider, address, networkName);
+};
