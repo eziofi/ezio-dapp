@@ -19,6 +19,7 @@ import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import { ColorModeContext } from '../../../theme';
 import { useBalance } from '../../../hooks/useBalance';
 import { useTranslation } from 'react-i18next';
+import { usePrice } from '../../../hooks/usePrice';
 
 interface IProps {
   open: boolean;
@@ -54,6 +55,8 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
 
   const USDEBALANCE = useBalance(TOKEN_TYPE.USDE).balance;
   const E2LPBALANCE = useBalance(TOKEN_TYPE.E2LP).balance;
+  const E2LPPrice = usePrice(TOKEN_TYPE.USDE).price;
+  const USDEPrice = usePrice(TOKEN_TYPE.E2LP).price;
 
   const tokens = [
     {
@@ -70,6 +73,7 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
       iconName: 'icon-B',
       iconStyle: { width: 30, height: 30, fill: 'white' },
       balance: E2LPBALANCE,
+      price: E2LPPrice,
     },
     {
       value: TOKEN_TYPE.USDE,
@@ -85,6 +89,7 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
       iconName: 'icon-A',
       iconStyle: { width: 30, height: 30, fill: 'white' },
       balance: USDEBALANCE,
+      price: USDEPrice,
     },
   ];
 
@@ -92,10 +97,13 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
 
   useMemo(() => {
     if (USDEBALANCE && E2LPBALANCE) {
-      const sum = formatString(String(Number(USDEBALANCE) + Number(E2LPBALANCE)), 2).toString();
+      const sum = formatString(
+        String(Number(USDEBALANCE) * Number(USDEPrice) + Number(E2LPBALANCE) * Number(E2LPPrice)),
+        2,
+      ).toString();
       setTotalValue(+sum);
     }
-  }, [USDEBALANCE, E2LPBALANCE]);
+  }, [USDEBALANCE, E2LPBALANCE, E2LPPrice, USDEPrice]);
 
   function TabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;

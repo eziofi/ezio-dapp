@@ -15,11 +15,10 @@ interface IOptions {
   iconName: string;
   iconStyle: { width: number; height: number; fill: string };
   balance: string | undefined;
+  price: string | undefined;
 }
 
 export default function TokenLIstItem({ item }: { item: IOptions }) {
-  const { price } = usePrice(item.value);
-
   const { reverseCoin, networkName } = useWallet();
 
   const theme = useTheme();
@@ -93,7 +92,11 @@ export default function TokenLIstItem({ item }: { item: IOptions }) {
         <>
           {renderIcon(item)}
           <span style={{ fontWeight: '500' }}>
-            {item.balance ? '$' + formatString(item.balance, 2) : <InlineSkeleton width={40} />}
+            {item.balance ? (
+              '$' + formatString('' + parseFloat(item.balance) * parseFloat(item.price || '0'), 2).toString()
+            ) : (
+              <InlineSkeleton width={40} />
+            )}
           </span>
         </>
       </MyListItem>
