@@ -62,7 +62,6 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
     {
       value: TOKEN_TYPE.USDE,
       iconParentStyle: {
-        background: 'rgba(95, 69, 186, 1)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -70,7 +69,7 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
         height: 40,
         borderRadius: '50%',
       },
-      iconName: 'icon-A',
+      iconName: 'icon-USDE1',
       iconStyle: { width: 30, height: 30, fill: 'white' },
       balance: USDEBALANCE,
       price: USDEPrice,
@@ -78,7 +77,6 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
     {
       value: TOKEN_TYPE.E2LP,
       iconParentStyle: {
-        background: 'rgba(239, 89, 114, 1)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -86,7 +84,7 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
         height: 40,
         borderRadius: '50%',
       },
-      iconName: 'icon-B',
+      iconName: 'icon-E2LP',
       iconStyle: { width: 30, height: 30, fill: 'white' },
       balance: E2LPBALANCE,
       price: E2LPPrice,

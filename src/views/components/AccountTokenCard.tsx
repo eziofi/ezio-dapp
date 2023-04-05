@@ -55,8 +55,8 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
     [TOKEN_TYPE.USDT]: 'icon-usdt',
     [TOKEN_TYPE.USDC]: 'icon-usdc',
     [TOKEN_TYPE.ReverseCoin]: `icon-${reverseCoin}1`,
-    [TOKEN_TYPE.USDE]: 'icon-A',
-    [TOKEN_TYPE.E2LP]: 'icon-B',
+    [TOKEN_TYPE.USDE]: 'icon-USDE1',
+    [TOKEN_TYPE.E2LP]: 'icon-E2LP',
   };
 
   const iconDibBgColor = {

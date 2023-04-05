@@ -245,33 +245,15 @@ function RanderOptions(
 const PurchaseOptions: IOptions[] = [
   {
     value: TOKEN_TYPE.USDE,
-    iconParentStyle: {
-      margin: '0 10px',
-      background: 'rgba(95, 69, 186, 1)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: 30,
-      height: 30,
-      borderRadius: '50%',
-    },
-    iconName: 'icon-A',
-    iconStyle: { width: 20, height: 20, fill: 'white' },
+    iconParentStyle: { margin: '0 10px', background: 'none' },
+    iconName: 'icon-USDE1',
+    iconStyle: { width: 30, height: 30, fill: 'red' },
   },
   {
     value: TOKEN_TYPE.E2LP,
-    iconParentStyle: {
-      margin: '0 10px',
-      background: 'rgba(239, 89, 114, 1)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: 30,
-      height: 30,
-      borderRadius: '50%',
-    },
-    iconName: 'icon-B',
-    iconStyle: { width: 20, height: 20, fill: 'white' },
+    iconParentStyle: { margin: '0 10px', background: 'none' },
+    iconName: 'icon-E2LP',
+    iconStyle: { width: 30, height: 30, fill: 'white' },
   },
 ];
 
