@@ -73,7 +73,9 @@ export default function TotleNetWorthApexChart() {
             opacity: [1, 1, 0],
           },
           labels: XData,
-          markers: { size: 0 },
+          markers: {
+            colors: ['rgb(0, 143, 251)', 'rgb(0, 227, 150)', 'rgb(0, 143, 251)'],
+          },
           yaxis: [
             {
               title: {
