@@ -12,7 +12,7 @@ import {
   useTheme,
 } from '@mui/material';
 import { QueryClient, useMutation, useQueryClient } from 'react-query';
-import { Signer } from 'ethers';
+import { FixedNumber, Signer } from 'ethers';
 import { ATokenMap, NETWORK_TYPE, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
 import useWallet from '../hooks/useWallet';
 import { formatString } from '../wallet/helpers/utilities';
@@ -101,8 +101,8 @@ export default function Purchase() {
 
   function reCalcValue2(value: string) {
     if (value && fromPrice && toPrice) {
-      const estimatedValue2 = parseFloat(value) * parseFloat(interest);
-      setInputValue2(formatString(String(estimatedValue2), 6) + '');
+      const estimatedValue2 = FixedNumber.from(value).mulUnsafe(FixedNumber.from(interest));
+      setInputValue2(formatString(estimatedValue2.toString(), 6) + '');
     }
   }
 
@@ -114,8 +114,10 @@ export default function Purchase() {
 
   function reCalcValue1(value: string) {
     if (fromPrice && toPrice) {
-      const estimatedValue1 = (parseFloat(value) * parseFloat(toPrice)) / parseFloat(fromPrice);
-      const flooredValue = Math.floor(estimatedValue1 * 10 ** 6) / 10 ** 6;
+      const estimatedValue1 = FixedNumber.from(value)
+        .mulUnsafe(FixedNumber.from(toPrice))
+        .divUnsafe(FixedNumber.from(fromPrice));
+      const flooredValue = Math.floor(estimatedValue1.toUnsafeFloat() * 10 ** 6) / 10 ** 6;
       setInputValue1(flooredValue + '');
     }
   }

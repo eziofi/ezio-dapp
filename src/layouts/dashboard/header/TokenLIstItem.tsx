@@ -8,6 +8,7 @@ import { InlineSkeleton } from '../../../views/components/Skeleton';
 import useWallet from '../../../views/hooks/useWallet';
 import { ATokenMap, NETWORK_TYPE, TOKEN_TYPE } from '../../../views/wallet/helpers/constant';
 import { formatString } from '../../../views/wallet/helpers/utilities';
+import { FixedNumber } from 'ethers';
 
 interface IOptions {
   value: TOKEN_TYPE;
@@ -80,6 +81,9 @@ export default function TokenLIstItem({ item }: { item: IOptions }) {
     );
   }
 
+  const rawTotalValue = FixedNumber.from(item.balance || '0').mulUnsafe(FixedNumber.from(item.price || '0'));
+  const totalValue = formatString(rawTotalValue.toString(), 2).toString();
+
   return (
     <div
       style={{
@@ -91,13 +95,7 @@ export default function TokenLIstItem({ item }: { item: IOptions }) {
       <MyListItem>
         <>
           {renderIcon(item)}
-          <span style={{ fontWeight: '500' }}>
-            {item.balance ? (
-              '$' + formatString('' + parseFloat(item.balance) * parseFloat(item.price || '0'), 2).toString()
-            ) : (
-              <InlineSkeleton width={40} />
-            )}
-          </span>
+          <span style={{ fontWeight: '500' }}>{item.balance ? '$' + totalValue : <InlineSkeleton width={40} />}</span>
         </>
       </MyListItem>
     </div>

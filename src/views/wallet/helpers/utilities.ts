@@ -182,7 +182,10 @@ export const formatString = (str: string, decimal: number = 2) => {
     return FixedNumber.from(numArr[0]);
   }
 
-  return FixedNumber.from(`${numArr[0]}.${numArr[1].length > decimal ? numArr[1].substring(0, decimal) : numArr[1]}`);
+  const res = FixedNumber.from(
+    `${numArr[0]}.${numArr[1].length > decimal ? numArr[1].substring(0, decimal) : numArr[1]}`,
+  );
+  return res;
 };
 
 export function timestampFormat(timestamp: number) {
