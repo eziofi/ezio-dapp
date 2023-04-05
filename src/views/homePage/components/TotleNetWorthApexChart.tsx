@@ -52,7 +52,12 @@ export default function TotleNetWorthApexChart() {
             type: 'area',
             data: ezUsdTotalnetworth,
           },
+          {
+            name: t('home.treasury_totalValue'),
+            data: total,
+          },
         ],
+
         options: {
           theme: { mode },
           chart: {
@@ -65,7 +70,7 @@ export default function TotleNetWorthApexChart() {
           stroke: { curve: 'smooth' },
           fill: {
             type: 'solid',
-            opacity: [1, 1],
+            opacity: [1, 1, 0],
           },
           labels: XData,
           markers: { size: 0 },
@@ -82,6 +87,7 @@ export default function TotleNetWorthApexChart() {
           tooltip: {
             shared: true,
             intersect: false,
+
             y: {
               formatter: function (val: string, obj: any) {
                 if (obj.seriesIndex === 0) {
@@ -91,6 +97,12 @@ export default function TotleNetWorthApexChart() {
                 return parseFloat(val).toFixed(2);
               },
             },
+          },
+          legend: {
+            customLegendItems: [
+              (networkName ? ATokenMap[networkName] : '') + t('home.BTokenTotalnetworth'),
+              t('home.USDETotalnetworth'),
+            ],
           },
         },
       });
