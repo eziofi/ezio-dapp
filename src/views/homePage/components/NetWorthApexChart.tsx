@@ -124,7 +124,7 @@ export default function NetWorthApexChart() {
   return (
     <Card>
       <HomeCardHeader>
-        <CardHeader title={t('home.priceTitle') as string} />
+        <CardHeader title={t('home.cumulativeRateOfReturn') as string} />
 
         <RenderSelect value={queryType} onChange={setQueryType} />
       </HomeCardHeader>
