@@ -82,7 +82,7 @@ export default function TotleNetWorthApexChart() {
           yaxis: [
             {
               title: {
-                text: (networkName ? ATokenMap[networkName] : '') + t('home.BTokenTotalnetworth'),
+                text: t('home.abNetworth'),
               },
               decimalsInFloat: 0,
               max: getYMax(total),
