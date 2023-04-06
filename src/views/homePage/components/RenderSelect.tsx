@@ -24,8 +24,8 @@ export default function RenderSelect({ value, onChange }: IProps) {
         onChange={e => onChange(e.target.value)}
         variant="standard"
       >
-        <MenuItem value={QueryType.day}>{t('home.ShowSevenDays')}</MenuItem>
-        <MenuItem value={QueryType.hour}>{t('home.ShowTwelveHours')}</MenuItem>
+        <MenuItem value={QueryType.day}>{t('home.showSevenDays')}</MenuItem>
+        <MenuItem value={QueryType.hour}>{t('home.showTwelveHours')}</MenuItem>
       </Select>
     </FormControl>
   );

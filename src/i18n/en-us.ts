@@ -73,9 +73,10 @@ export default {
     BTokenTotalnetworth: ' Total Value',
     USDETotalnetworth: 'USDE Total Value',
     abNetworth: 'Token Value',
-    ShowSevenDays: '7 days',
-    ShowTwelveHours: '12 hours',
-    ContractValue: 'Contract Value',
+    showSevenDays: '7 days',
+    showTwelveHours: '12 hours',
+    contractValue: 'Contract Value',
+    totalValue: 'Total Value',
   },
   purchase: {
     purchaseValue: 'SWAP',
