@@ -85,7 +85,13 @@ export function queryTreasuryValue(QueryType: string, networkName: NETWORK_TYPE 
 interface IAbTotalnetworth {
   code: number;
   message: string;
-  data: { groupTime: string; ezUsdTotalnetworth: number; ezMaticTotalnetworth: number }[];
+  data: {
+    groupTime: string;
+    ezUsdTotalnetworth: number;
+    ezMaticTotalnetworth: number;
+    usdcValue: number;
+    wstethValue: number;
+  }[];
 }
 
 export function queryAbTotalnetworth(QueryType: string, networkName: NETWORK_TYPE | undefined) {

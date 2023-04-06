@@ -5,6 +5,8 @@ import HomeCard, { HOME_CARD_TYPE } from '../components/HomeCard';
 import NetWorthApexChart from './components/NetWorthApexChart';
 import TotalSupplyApexChart from './components/TotalSupplyApexChart';
 import TotleNetWorthApexChart from './components/TotleNetWorthApexChart';
+import LineChart from '../analytics/components/LineChart';
+import ContractValue from './components/ContractValue';
 
 export default function HomePage() {
   return (
@@ -30,16 +32,18 @@ export default function HomePage() {
           {/* <Grid item xs={12} md={12} lg={12}>
             <PriceTable />
           </Grid> */}
-
           <Grid item xs={12} md={6} lg={6}>
-            <MarketApexChart />
+            <LineChart />
           </Grid>
+
           <Grid item xs={12} md={6} lg={6}>
             <NetWorthApexChart />
           </Grid>
+
           <Grid item xs={12} md={6} lg={6}>
-            <TotalSupplyApexChart />
+            <ContractValue />
           </Grid>
+
           <Grid item xs={12} md={6} lg={6}>
             <TotleNetWorthApexChart />
           </Grid>
