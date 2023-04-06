@@ -40,19 +40,21 @@ export default function NetWorthApexChart() {
       });
       const ezMaticPrice = data.data.map(i => +i.ezMaticPrice);
       const stMaticPrice = data.data.map(i => +i.stMaticPrice);
+      const e2lpSum = data.data.map(i => i.e2lpSum * 100);
+      const wstethSum = data.data.map(i => i.wstethSum * 100);
 
       setOption({
         series: [
           {
             name: (networkName ? ATokenMap[networkName] : '') + t('home.bNetWorthSeries'),
             type: 'area',
-            data: ezMaticPrice,
+            data: e2lpSum,
             color: '#008FFB',
           },
           {
             name: reverseCoin ? t(`home.${reverseCoin}Price`) : '',
             type: 'area',
-            data: stMaticPrice,
+            data: wstethSum,
             color: '#00E396',
           },
         ],
@@ -87,27 +89,27 @@ export default function NetWorthApexChart() {
           labels: XData,
           yaxis: [
             {
-              decimalsInFloat: 2,
+              decimalsInFloat: 3,
               title: {
-                text: (networkName ? ATokenMap[networkName] : '') + t('home.bNetWorthSeries'),
+                text: (networkName ? ATokenMap[networkName] : '') + t('home.bNetWorthSeries') + '%',
               },
 
-              max: roundMinMaxValues(ezMaticPrice).max,
-              min: roundMinMaxValues(ezMaticPrice).min,
+              max: roundMinMaxValues([...e2lpSum, ...wstethSum]).max,
+              min: roundMinMaxValues([...e2lpSum, ...wstethSum]).min,
             },
             {
               opposite: true,
-              decimalsInFloat: 0,
+              decimalsInFloat: 3,
               title: {
-                text: reverseCoin ? t(`home.${reverseCoin}Price`) : '',
+                text: reverseCoin ? t(`home.${reverseCoin}Price`) + '%' : '',
                 y: {
                   formatter: function (val: string) {
                     return val;
                   },
                 },
               },
-              max: roundMinMaxValues(stMaticPrice).max,
-              min: roundMinMaxValues(stMaticPrice).min,
+              max: roundMinMaxValues([...wstethSum, ...e2lpSum]).max,
+              min: roundMinMaxValues([...wstethSum, ...e2lpSum]).min,
             },
           ],
           tooltip: {
@@ -115,7 +117,8 @@ export default function NetWorthApexChart() {
             intersect: false,
             y: {
               formatter: function (val: string, { seriesIndex }: any) {
-                return seriesIndex === 2 ? parseFloat(val).toFixed(2) + '%' : parseFloat(val).toFixed(2);
+                // return seriesIndex === 2 ? parseFloat(val).toFixed(3) + '%' : parseFloat(val).toFixed(3);
+                return parseFloat(val).toFixed(3) + '%';
               },
             },
           },
