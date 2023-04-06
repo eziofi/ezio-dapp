@@ -76,6 +76,7 @@ export default {
     showTwelveHours: '12小时',
     contractValue: '合约价值',
     totalValue: '总价值',
+    cumulativeRateOfReturn: '累积收益率',
   },
   purchase: {
     purchaseValue: 'SWAP',

@@ -77,6 +77,7 @@ export default {
     showTwelveHours: '12 hours',
     contractValue: 'Contract Value',
     totalValue: 'Total Value',
+    cumulativeRateOfReturn: 'cumulative rate of return',
   },
   purchase: {
     purchaseValue: 'SWAP',

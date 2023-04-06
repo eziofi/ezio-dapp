@@ -46,13 +46,13 @@ export default function NetWorthApexChart() {
       setOption({
         series: [
           {
-            name: (networkName ? ATokenMap[networkName] : '') + t('home.bNetWorthSeries'),
+            name: (networkName ? ATokenMap[networkName] : '') + t('home.cumulativeRateOfReturn'),
             type: 'area',
             data: e2lpSum,
             color: '#008FFB',
           },
           {
-            name: reverseCoin ? t(`home.${reverseCoin}Price`) : '',
+            name: reverseCoin ? reverseCoin + t(`home.cumulativeRateOfReturn`) : '',
             type: 'area',
             data: wstethSum,
             color: '#00E396',
@@ -91,7 +91,7 @@ export default function NetWorthApexChart() {
             {
               decimalsInFloat: 3,
               title: {
-                text: (networkName ? ATokenMap[networkName] : '') + t('home.bNetWorthSeries') + '%',
+                text: (networkName ? ATokenMap[networkName] : '') + t('home.cumulativeRateOfReturn') + '%',
               },
 
               max: roundMinMaxValues([...e2lpSum, ...wstethSum]).max,
@@ -101,12 +101,7 @@ export default function NetWorthApexChart() {
               opposite: true,
               decimalsInFloat: 3,
               title: {
-                text: reverseCoin ? t(`home.${reverseCoin}Price`) + '%' : '',
-                y: {
-                  formatter: function (val: string) {
-                    return val;
-                  },
-                },
+                text: reverseCoin ? reverseCoin + t(`home.cumulativeRateOfReturn`) + '%' : '',
               },
               max: roundMinMaxValues([...wstethSum, ...e2lpSum]).max,
               min: roundMinMaxValues([...wstethSum, ...e2lpSum]).min,
@@ -116,8 +111,7 @@ export default function NetWorthApexChart() {
             shared: true,
             intersect: false,
             y: {
-              formatter: function (val: string, { seriesIndex }: any) {
-                // return seriesIndex === 2 ? parseFloat(val).toFixed(3) + '%' : parseFloat(val).toFixed(3);
+              formatter: function (val: string) {
                 return parseFloat(val).toFixed(3) + '%';
               },
             },
