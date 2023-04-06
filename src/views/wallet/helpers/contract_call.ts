@@ -130,11 +130,19 @@ export async function ezWETHReverse(signerOrProvider: Signer | Provider, network
     // @ts-ignore
     TOKENS[network][REVERSE_COIN[network]],
   );
+
+  // const res = formatDecimal(
+  //   totalReserve.mul(reverseCoinPrice),
+  //   TOKEN_TYPE.USDC, // 此参数无用
+  //   2,
+  //   TOKEN_DECIMAL[TOKEN_TYPE.USDC] + TOKEN_DECIMAL[TOKEN_TYPE.ReverseCoin],
+  // ).toString();
+
   const res = formatDecimal(
-    totalReserve.mul(reverseCoinPrice),
+    totalReserve,
     TOKEN_TYPE.USDC, // 此参数无用
     2,
-    TOKEN_DECIMAL[TOKEN_TYPE.USDC] + TOKEN_DECIMAL[TOKEN_TYPE.ReverseCoin],
+    18,
   ).toString();
   console.log('ezWETH Reverse = ' + res);
   return res;

@@ -63,8 +63,8 @@ export default function AnalyticsCard({
   const { reverseCoin, networkName, account } = useWallet();
 
   const api = {
-    [ANALYTICS_CARD_TYPE.USDC]: usdcBalanceOf,
-    [ANALYTICS_CARD_TYPE.reverseCoin]: reverseCoinBalanceOf,
+    [ANALYTICS_CARD_TYPE.USDC]: getPooledA,
+    [ANALYTICS_CARD_TYPE.reverseCoin]: ezWETHReverse,
     [ANALYTICS_CARD_TYPE.FEE]: commissionIncome,
   };
 
@@ -94,7 +94,7 @@ export default function AnalyticsCard({
     () => {
       return type === ANALYTICS_CARD_TYPE.FEE
         ? api[type](networkName as NETWORK_TYPE)
-        : api[type](ethersProvider!.getSigner(), account, networkName as NETWORK_TYPE);
+        : api[type](ethersProvider!.getSigner(), networkName as NETWORK_TYPE);
     },
     {
       enabled: !!ethersProvider && !!networkName,
