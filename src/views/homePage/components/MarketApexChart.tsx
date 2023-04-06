@@ -111,7 +111,7 @@ export default function MarketApexChart() {
           yaxis: [
             {
               title: {
-                text: (networkName ? ATokenMap[networkName] : '') + t('home.card.fundCost'),
+                text: (networkName ? ATokenMap[networkName] : '') + t('home.card.fundCost') + ' ( % ) ',
               },
               decimalsInFloat: 1,
               min: getYMin(ezE2LpRate),

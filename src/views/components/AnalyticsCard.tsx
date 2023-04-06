@@ -130,7 +130,7 @@ export default function AnalyticsCard({
       <Box style={{ display: 'flex', flexDirection: 'column', marginLeft: theme.spacing(4) }}>
         {type === ANALYTICS_CARD_TYPE.FEE ? (
           <div style={{ width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>
-            {data ? '$' + !!data && data : <InlineSkeleton />}
+            {data ? !!data && '$' + data : <InlineSkeleton />}
           </div>
         ) : (
           <div style={{ width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>

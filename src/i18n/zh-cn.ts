@@ -42,7 +42,7 @@ export default {
     EZAT_totalSupply: 'USDE发行数量',
     // EZBT_totalSupply: '发行数量',
     EZIO_totalSupply: 'eZIO发行数量',
-    treasury_totalValue: '金库总净值($)',
+    treasury_totalValue: '金库总净值',
     EZAT_Rate: 'USDE日利率',
     net: '网络',
     lang: '语言',
@@ -133,8 +133,8 @@ export default {
   },
   analytics: {
     title: {
-      usdc: 'USDC余额',
-      wstETH: 'wstETH余额',
+      usdc: '金库USDC数量',
+      wstETH: '金库wstETH数量',
       stMATIC: '金库stMATIC价值',
       fee: '手续费收入(过去24h)',
     },
