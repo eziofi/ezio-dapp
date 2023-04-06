@@ -25,6 +25,7 @@ export default function TotleNetWorthApexChart() {
 
   const { networkName } = useWallet();
 
+  const colors = ['rgb(0, 227, 150)', 'rgb(0, 143, 251)', 'rgb(0, 227, 150)'];
   useQuery(['queryAbTotalnetworth', queryType], () => queryAbTotalnetworth(queryType, networkName as NETWORK_TYPE), {
     enabled: !!networkName,
     onSuccess: ({ data }) => {
@@ -46,11 +47,13 @@ export default function TotleNetWorthApexChart() {
             name: (networkName ? ATokenMap[networkName] : '') + t('home.BTokenTotalnetworth'),
             type: 'area',
             data: total,
+            color: colors[0],
           },
           {
             name: t('home.USDETotalnetworth'),
             type: 'area',
             data: ezUsdTotalnetworth,
+            color: colors[1],
           },
           {
             name: t('home.treasury_totalValue'),
@@ -74,7 +77,7 @@ export default function TotleNetWorthApexChart() {
           },
           labels: XData,
           markers: {
-            colors: ['rgb(0, 143, 251)', 'rgb(0, 227, 150)', 'rgb(0, 143, 251)'],
+            colors,
           },
           yaxis: [
             {
