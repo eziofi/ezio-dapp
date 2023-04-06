@@ -134,8 +134,8 @@ export default {
   },
   analytics: {
     title: {
-      usdc: 'USDC Balance',
-      wstETH: 'wstETH Balance',
+      usdc: 'Coffers USDC amount',
+      wstETH: 'Coffers wstETH amount',
       stMATIC: 'Treasury stMATIC value',
       fee: 'Fees Earned (last 24h)',
     },

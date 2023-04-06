@@ -25,7 +25,7 @@ export default function TotleNetWorthApexChart() {
 
   const { networkName } = useWallet();
 
-  const colors = ['rgb(0, 227, 150)', 'rgb(0, 143, 251)', 'rgb(0, 227, 150)'];
+  const colors = ['rgb(0, 143, 251)', 'rgb(0, 227, 150)', 'rgb(0, 143, 251)'];
   useQuery(['queryAbTotalnetworth', queryType], () => queryAbTotalnetworth(queryType, networkName as NETWORK_TYPE), {
     enabled: !!networkName,
     onSuccess: ({ data }) => {

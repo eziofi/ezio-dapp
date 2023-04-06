@@ -44,15 +44,15 @@ export default function NetWorthApexChart() {
       setOption({
         series: [
           {
-            name: reverseCoin ? t(`home.${reverseCoin}Price`) : '',
-            type: 'area',
-            data: stMaticPrice,
-            color: '#008FFB',
-          },
-          {
             name: (networkName ? ATokenMap[networkName] : '') + t('home.bNetWorthSeries'),
             type: 'area',
             data: ezMaticPrice,
+            color: '#008FFB',
+          },
+          {
+            name: reverseCoin ? t(`home.${reverseCoin}Price`) : '',
+            type: 'area',
+            data: stMaticPrice,
             color: '#00E396',
           },
         ],
@@ -87,6 +87,16 @@ export default function NetWorthApexChart() {
           labels: XData,
           yaxis: [
             {
+              decimalsInFloat: 2,
+              title: {
+                text: (networkName ? ATokenMap[networkName] : '') + t('home.bNetWorthSeries'),
+              },
+
+              max: roundMinMaxValues(ezMaticPrice).max,
+              min: roundMinMaxValues(ezMaticPrice).min,
+            },
+            {
+              opposite: true,
               decimalsInFloat: 0,
               title: {
                 text: reverseCoin ? t(`home.${reverseCoin}Price`) : '',
@@ -98,16 +108,6 @@ export default function NetWorthApexChart() {
               },
               max: roundMinMaxValues(stMaticPrice).max,
               min: roundMinMaxValues(stMaticPrice).min,
-            },
-            {
-              opposite: true,
-              decimalsInFloat: 2,
-              title: {
-                text: (networkName ? ATokenMap[networkName] : '') + t('home.bNetWorthSeries'),
-              },
-
-              max: roundMinMaxValues(ezMaticPrice).max,
-              min: roundMinMaxValues(ezMaticPrice).min,
             },
           ],
           tooltip: {
