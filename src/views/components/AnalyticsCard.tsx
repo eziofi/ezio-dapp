@@ -18,6 +18,7 @@ import USDCIconDark from '../../assets/analytics/usdc_dark.png';
 import FeeValueIcon from '../../assets/analytics/feeValue.png';
 import USDCIconLight from '../../assets/analytics/usdc_light.png';
 import { formatString } from '../wallet/helpers/utilities';
+import { CustomTooltip } from './HomeCard';
 
 const reverseCoinDark = {
   [NETWORK_TYPE.arbitrum]: require('../../assets/analytics/wstETH_dark.png'),
@@ -135,11 +136,14 @@ export default function AnalyticsCard({
         ) : (
           <div style={{ width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>
             {data ? (
-              <Tooltip title={data} placement="top">
-                <div style={{ width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>
-                  {formatString(data || '0', 6).toString()}
-                </div>
-              </Tooltip>
+              // <CustomTooltip title={data} placement="top-start">
+              //   <div style={{ width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>
+              //     {formatString(data || '0', 6).toString()}
+              //   </div>
+              // </CustomTooltip>
+              <div style={{ width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>
+                {formatString(data || '0', 6).toString()}
+              </div>
             ) : (
               <InlineSkeleton />
             )}

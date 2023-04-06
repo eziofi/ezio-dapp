@@ -145,7 +145,7 @@ export default function HomeCard({
   );
 }
 
-const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
+export const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
 ))(({ theme }) => ({
   [`& .${tooltipClasses.arrow}`]: {
