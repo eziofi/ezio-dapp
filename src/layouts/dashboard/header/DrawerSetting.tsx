@@ -9,7 +9,7 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import BalanceList from '../../../views/purchase/components/BalanceList';
 import { TOKEN_TYPE } from '../../../views/wallet/helpers/constant';
-import TokenLIstItem from './TokenLIstItem';
+import TokenListItem from './TokenLIstItem';
 import { formatString } from '../../../views/wallet/helpers/utilities';
 import { InlineSkeleton } from '../../../views/components/Skeleton';
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
@@ -261,7 +261,7 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
           <Box sx={{ margin: '10px 0', padding: '0px 20px' }}>{t('drawerSeting.tokens')}</Box>
           <TabPanel value={0} index={0}>
             {tokens.map((item, index: number) => {
-              return <TokenLIstItem item={item} key={index} />;
+              return <TokenListItem item={item} key={index} />;
             })}
           </TabPanel>
         </List>

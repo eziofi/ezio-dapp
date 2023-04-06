@@ -1,9 +1,15 @@
 import { styled, useTheme } from '@mui/material/styles';
-import { Box, Card, SxProps, Theme } from '@mui/material';
+import { Box, Card, SxProps, Theme, Tooltip } from '@mui/material';
 
 import { useTranslation } from 'react-i18next';
 import useWallet from '../hooks/useWallet';
-import { commissionIncome, ezWETHReverse, getPooledA } from '../wallet/helpers/contract_call';
+import {
+  commissionIncome,
+  ezWETHReverse,
+  getPooledA,
+  reverseCoinBalanceOf,
+  usdcBalanceOf,
+} from '../wallet/helpers/contract_call';
 import { useQuery } from 'react-query';
 import { NETWORK_TYPE } from '../wallet/helpers/constant';
 import { InlineSkeleton } from './Skeleton';
@@ -11,6 +17,7 @@ import { InlineSkeleton } from './Skeleton';
 import USDCIconDark from '../../assets/analytics/usdc_dark.png';
 import FeeValueIcon from '../../assets/analytics/feeValue.png';
 import USDCIconLight from '../../assets/analytics/usdc_light.png';
+import { formatString } from '../wallet/helpers/utilities';
 
 const reverseCoinDark = {
   [NETWORK_TYPE.arbitrum]: require('../../assets/analytics/wstETH_dark.png'),
@@ -53,11 +60,11 @@ export default function AnalyticsCard({
   const { ethersProvider } = useWallet();
 
   const theme = useTheme();
-  const { reverseCoin, networkName } = useWallet();
+  const { reverseCoin, networkName, account } = useWallet();
 
   const api = {
-    [ANALYTICS_CARD_TYPE.USDC]: getPooledA,
-    [ANALYTICS_CARD_TYPE.reverseCoin]: ezWETHReverse,
+    [ANALYTICS_CARD_TYPE.USDC]: usdcBalanceOf,
+    [ANALYTICS_CARD_TYPE.reverseCoin]: reverseCoinBalanceOf,
     [ANALYTICS_CARD_TYPE.FEE]: commissionIncome,
   };
 
@@ -82,12 +89,12 @@ export default function AnalyticsCard({
   };
 
   // @ts-ignore
-  const { data, isLoading } = useQuery(
+  const { data } = useQuery(
     ['AnalyticsCard', type],
     () => {
       return type === ANALYTICS_CARD_TYPE.FEE
         ? api[type](networkName as NETWORK_TYPE)
-        : api[type](ethersProvider!.getSigner(), networkName as NETWORK_TYPE);
+        : api[type](ethersProvider!.getSigner(), account, networkName as NETWORK_TYPE);
     },
     {
       enabled: !!ethersProvider && !!networkName,
@@ -121,9 +128,23 @@ export default function AnalyticsCard({
       {...other}
     >
       <Box style={{ display: 'flex', flexDirection: 'column', marginLeft: theme.spacing(4) }}>
-        <div style={{ width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>
-          {data ? '$' + !!data && data : <InlineSkeleton />}
-        </div>
+        {type === ANALYTICS_CARD_TYPE.FEE ? (
+          <div style={{ width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>
+            {data ? '$' + !!data && data : <InlineSkeleton />}
+          </div>
+        ) : (
+          <div style={{ width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>
+            {data ? (
+              <Tooltip title={data} placement="top">
+                <div style={{ width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>
+                  {formatString(data || '0', 6).toString()}
+                </div>
+              </Tooltip>
+            ) : (
+              <InlineSkeleton />
+            )}
+          </div>
+        )}
         <div
           style={{
             opacity: 0.72,

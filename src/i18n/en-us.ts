@@ -134,8 +134,8 @@ export default {
   },
   analytics: {
     title: {
-      usdc: 'Treasury USDC value',
-      wstETH: 'Treasury wstETH value',
+      usdc: 'USDC Balance',
+      wstETH: 'wstETH Balance',
       stMATIC: 'Treasury stMATIC value',
       fee: 'Fees Earned (last 24h)',
     },

@@ -133,8 +133,8 @@ export default {
   },
   analytics: {
     title: {
-      usdc: '金库USDC价值',
-      wstETH: '金库wstETH价值',
+      usdc: 'USDC余额',
+      wstETH: 'wstETH余额',
       stMATIC: '金库stMATIC价值',
       fee: '手续费收入(过去24h)',
     },
