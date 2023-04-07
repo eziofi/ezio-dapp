@@ -1,7 +1,5 @@
 import { ListItem, styled, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useBalance } from '../../../hooks/useBalance';
-import { usePrice } from '../../../hooks/usePrice';
 import { StyleProps } from '../../../types/styleType';
 import BaseIconFont from '../../../views/components/BaseIconFont';
 import { InlineSkeleton } from '../../../views/components/Skeleton';

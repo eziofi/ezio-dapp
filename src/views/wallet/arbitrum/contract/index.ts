@@ -44,8 +44,6 @@ export type { ConversionUpgradeable } from "./contracts/impls/v1/Conversion.sol/
 export { ConversionUpgradeable__factory } from "./factories/contracts/impls/v1/Conversion.sol/ConversionUpgradeable__factory";
 export type { E2LPV1 } from "./contracts/impls/v1/E2LP.sol/E2LPV1";
 export { E2LPV1__factory } from "./factories/contracts/impls/v1/E2LP.sol/E2LPV1__factory";
-export type { EzioERC20V1 } from "./contracts/impls/v1/EzioERC20.sol/EzioERC20V1";
-export { EzioERC20V1__factory } from "./factories/contracts/impls/v1/EzioERC20.sol/EzioERC20V1__factory";
 export type { EzTokenV1 } from "./contracts/impls/v1/EzToken.sol/EzTokenV1";
 export { EzTokenV1__factory } from "./factories/contracts/impls/v1/EzToken.sol/EzTokenV1__factory";
 export type { EzTreasuryV1 } from "./contracts/impls/v1/EzTreasury.sol/EzTreasuryV1";

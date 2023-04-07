@@ -510,7 +510,7 @@ export interface EzTreasuryV1Interface extends utils.Interface {
     "ConvertDown(uint256,uint256,uint256)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "Purchase(address,uint8,uint256,uint256)": EventFragment;
-    "Redeem(address,uint8,uint256,uint256,uint256)": EventFragment;
+    "Redeem(address,uint8,uint256,uint256,uint256,uint256,uint256)": EventFragment;
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
     "RoleGranted(bytes32,address,address)": EventFragment;
     "RoleRevoked(bytes32,address,address)": EventFragment;
@@ -576,9 +576,11 @@ export interface RedeemEventObject {
   qty_: BigNumber;
   amt_: BigNumber;
   commission_: BigNumber;
+  totalNetWorth_: BigNumber;
+  totalSupply_: BigNumber;
 }
 export type RedeemEvent = TypedEvent<
-  [string, number, BigNumber, BigNumber, BigNumber],
+  [string, number, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber],
   RedeemEventObject
 >;
 
@@ -1290,19 +1292,23 @@ export interface EzTreasuryV1 extends BaseContract {
       qty_?: null
     ): PurchaseEventFilter;
 
-    "Redeem(address,uint8,uint256,uint256,uint256)"(
+    "Redeem(address,uint8,uint256,uint256,uint256,uint256,uint256)"(
       account?: PromiseOrValue<string> | null,
       type_?: PromiseOrValue<BigNumberish> | null,
       qty_?: PromiseOrValue<BigNumberish> | null,
       amt_?: null,
-      commission_?: null
+      commission_?: null,
+      totalNetWorth_?: null,
+      totalSupply_?: null
     ): RedeemEventFilter;
     Redeem(
       account?: PromiseOrValue<string> | null,
       type_?: PromiseOrValue<BigNumberish> | null,
       qty_?: PromiseOrValue<BigNumberish> | null,
       amt_?: null,
-      commission_?: null
+      commission_?: null,
+      totalNetWorth_?: null,
+      totalSupply_?: null
     ): RedeemEventFilter;
 
     "RoleAdminChanged(bytes32,bytes32,bytes32)"(
