@@ -246,7 +246,7 @@ const PurchaseOptions: IOptions[] = [
   {
     value: TOKEN_TYPE.USDE,
     iconParentStyle: { margin: '0 10px', background: 'none' },
-    iconName: 'icon-USDE1',
+    iconName: 'icon-USDE',
     iconStyle: { width: 30, height: 30, fill: 'red' },
   },
   {

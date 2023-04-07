@@ -69,7 +69,7 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
         height: 40,
         borderRadius: '50%',
       },
-      iconName: 'icon-USDE1',
+      iconName: 'icon-USDE',
       iconStyle: { width: 30, height: 30, fill: 'white' },
       balance: USDEBALANCE,
       price: USDEPrice,
