@@ -340,6 +340,7 @@ export default function useTx() {
       );
       let initBalance = await getBalanceOfABToken(signerOrProvider, fromType, account, networkName as NETWORK_TYPE);
       setBackLoadingText(t('message.sendingTx'));
+
       await EzioConnect(signerOrProvider, networkName as NETWORK_TYPE).redeem(
         1,
         channel,
@@ -356,15 +357,16 @@ export default function useTx() {
         // @ts-ignore
         sellToken: TOKENS[networkName][REVERSE_COIN[networkName]],
         buyToken: ethers.constants.AddressZero,
-        sellAmount: convertAmount.toString(),
+        sellAmount: redeemAmount.toString(),
         swapCallData: ethers.constants.HashZero,
       };
       let initBalance = await getBalanceOfABToken(signerOrProvider, fromType, account, networkName as NETWORK_TYPE);
       setBackLoadingText(t('message.sendingTx'));
+      debugger;
       const purchaseTx = await EzioConnect(signerOrProvider, networkName as NETWORK_TYPE).redeem(
-        1,
+        fromType,
         channel,
-        convertAmount,
+        redeemAmount,
         // @ts-ignore
         TOKENS[networkName][REVERSE_COIN[networkName]],
         quoteResponse6,
@@ -410,6 +412,7 @@ export default function useTx() {
         const DENOMINATOR = await ezio.LEVERAGE_DENOMINATOR();
         const scaledLeverage = leverage.sub(DENOMINATOR);
         quoteQty = redeemReserveQty.mul(scaledLeverage).div(leverage);
+        debugger;
         const _DENOMINATOR = DENOMINATOR.toString();
         const _scaledLeverage = scaledLeverage.toString();
         const _leverage = leverage.toString();
