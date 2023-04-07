@@ -7,6 +7,7 @@ import TotalSupplyApexChart from './components/TotalSupplyApexChart';
 import TotleNetWorthApexChart from './components/TotleNetWorthApexChart';
 import LineChart from '../analytics/components/LineChart';
 import ContractValue from './components/ContractValue';
+import TokenPriceChart from './components/TokenPriceChart';
 
 export default function HomePage() {
   return (
@@ -29,11 +30,12 @@ export default function HomePage() {
             <HomeCard type={HOME_CARD_TYPE.Leverage} />
           </Grid>
 
-          {/* <Grid item xs={12} md={12} lg={12}>
-            <PriceTable />
-          </Grid> */}
-          <Grid item xs={12} md={6} lg={6}>
+          {/* <Grid item xs={12} md={6} lg={6}>
             <LineChart />
+          </Grid> */}
+
+          <Grid item xs={12} md={6} lg={6}>
+            <TokenPriceChart />
           </Grid>
 
           <Grid item xs={12} md={6} lg={6}>
