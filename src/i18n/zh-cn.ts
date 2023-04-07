@@ -42,7 +42,7 @@ export default {
     EZAT_totalSupply: 'USDE发行数量',
     // EZBT_totalSupply: '发行数量',
     EZIO_totalSupply: 'eZIO发行数量',
-    treasury_totalValue: '金库总净值',
+    token_totalValue: 'Token总净值',
     EZAT_Rate: 'USDE日利率',
     net: '网络',
     lang: '语言',

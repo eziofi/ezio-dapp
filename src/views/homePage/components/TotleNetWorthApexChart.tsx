@@ -56,7 +56,7 @@ export default function TotleNetWorthApexChart() {
             color: colors[1],
           },
           {
-            name: t('home.treasury_totalValue'),
+            name: t('home.token_totalValue'),
             data: total,
           },
         ],
