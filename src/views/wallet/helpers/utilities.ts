@@ -247,17 +247,17 @@ function getMinMaxValues(data: number[], smSection?: boolean) {
   let maxValue = Math.max(...data);
 
   // 计算一个缓冲区，以便在绘制图表时确保Y轴上的所有数据都可以被完全显示
-  let buffer = (maxValue - minValue) * 0.5;
+  let buffer = maxValue - minValue;
 
   if (!smSection) {
     return {
-      min: Math.floor(minValue) - buffer,
-      max: maxValue + buffer,
+      min: Math.floor(minValue) - buffer * 10,
+      max: maxValue + buffer * 10,
     };
   } else {
     return {
-      min: minValue - buffer,
-      max: maxValue + buffer,
+      min: minValue - buffer * 0.5,
+      max: maxValue + buffer * 0.5,
     };
   }
 }
