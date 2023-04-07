@@ -137,11 +137,10 @@ export async function ezWETHReverse(signerOrProvider: Signer | Provider, network
   //   2,
   //   TOKEN_DECIMAL[TOKEN_TYPE.USDC] + TOKEN_DECIMAL[TOKEN_TYPE.ReverseCoin],
   // ).toString();
-
   const res = formatDecimal(
     totalReserve,
     TOKEN_TYPE.USDC, // 此参数无用
-    2,
+    3,
     18,
   ).toString();
   console.log('ezWETH Reverse = ' + res);
