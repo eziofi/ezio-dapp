@@ -1,3 +1,4 @@
+// 累计收益率图表
 import { Box, Card, CardHeader } from '@mui/material';
 import ReactApexChart from 'react-apexcharts';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
@@ -13,7 +14,7 @@ import RenderSelect from './RenderSelect';
 import useWallet from '../../hooks/useWallet';
 import { ATokenMap, NETWORK_TYPE } from '../../wallet/helpers/constant';
 
-export default function NetWorthApexChart() {
+export default function CumulativeRateOfReturn() {
   const [option, setOption] = useState<any>(null);
   const theme = useTheme();
 
@@ -93,9 +94,8 @@ export default function NetWorthApexChart() {
               title: {
                 text: (networkName ? ATokenMap[networkName] : '') + t('home.cumulativeRateOfReturn') + '%',
               },
-
-              max: roundMinMaxValues([...e2lpSum, ...wstethSum]).max,
-              min: roundMinMaxValues([...e2lpSum, ...wstethSum]).min,
+              max: roundMinMaxValues([...e2lpSum, ...wstethSum], true).max,
+              min: roundMinMaxValues([...e2lpSum, ...wstethSum], true).min,
             },
             {
               opposite: true,
@@ -103,8 +103,8 @@ export default function NetWorthApexChart() {
               title: {
                 text: reverseCoin ? reverseCoin + t(`home.cumulativeRateOfReturn`) + '%' : '',
               },
-              max: roundMinMaxValues([...wstethSum, ...e2lpSum]).max,
-              min: roundMinMaxValues([...wstethSum, ...e2lpSum]).min,
+              max: roundMinMaxValues([...wstethSum, ...e2lpSum], true).max,
+              min: roundMinMaxValues([...wstethSum, ...e2lpSum], true).min,
             },
           ],
           tooltip: {

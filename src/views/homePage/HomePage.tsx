@@ -2,7 +2,7 @@ import { Container, Grid } from '@mui/material';
 
 import MarketApexChart from './components/MarketApexChart';
 import HomeCard, { HOME_CARD_TYPE } from '../components/HomeCard';
-import NetWorthApexChart from './components/NetWorthApexChart';
+import NetWorthApexChart from './components/CumulativeRateOfReturn';
 import TotalSupplyApexChart from './components/TotalSupplyApexChart';
 import TotleNetWorthApexChart from './components/TotleNetWorthApexChart';
 import LineChart from '../analytics/components/LineChart';
