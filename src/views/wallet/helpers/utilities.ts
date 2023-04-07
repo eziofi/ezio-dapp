@@ -242,36 +242,46 @@ export function getYMin(data: number[]) {
   }
 }
 
-function getMinMaxValues(data: number[]) {
+function getMinMaxValues(data: number[], smSection?: boolean) {
   let minValue = Math.min(...data);
   let maxValue = Math.max(...data);
 
   // 计算一个缓冲区，以便在绘制图表时确保Y轴上的所有数据都可以被完全显示
   let buffer = (maxValue - minValue) * 0.5;
 
-  return {
-    min: minValue - buffer,
-    max: maxValue + buffer,
-  };
+  if (!smSection) {
+    return {
+      min: Math.floor(minValue) - buffer,
+      max: maxValue + buffer,
+    };
+  } else {
+    return {
+      min: minValue - buffer,
+      max: maxValue + buffer,
+    };
+  }
 }
 
 /**
  *
  * @param data numbers[]
+ * @param smSection boolean 更小的区间
  * @returns {max,min} 接近data最大值和最小值，圆整后的最大值和最小值
  *
  */
-export function roundMinMaxValues(data: number[]) {
-  let yAxisRange = getMinMaxValues(data);
+export function roundMinMaxValues(data: number[], smSection?: boolean) {
+  let yAxisRange = getMinMaxValues(data, smSection);
 
-  if (yAxisRange.max - yAxisRange.min > 1) {
-    yAxisRange.min = Math.floor(yAxisRange.min / 10) * 10;
-    yAxisRange.max = Math.ceil(yAxisRange.max / 10) * 10;
+  if (!smSection) {
+    if (yAxisRange.max - yAxisRange.min > 1) {
+      yAxisRange.min = Math.floor(yAxisRange.min / 10) * 10;
+      yAxisRange.max = Math.ceil(yAxisRange.max / 10) * 10;
 
-    // 将最大值向上舍入，以确保它们满足指定的步长（10、20、30、40...）。
-    if (yAxisRange.max - yAxisRange.min < 15) {
-      yAxisRange.min = Math.floor(yAxisRange.min / 5) * 5;
-      yAxisRange.max = Math.ceil(yAxisRange.max / 5) * 5;
+      // 将最大值向上舍入，以确保它们满足指定的步长（10、20、30、40...）。
+      if (yAxisRange.max - yAxisRange.min < 15) {
+        yAxisRange.min = Math.floor(yAxisRange.min / 5) * 5;
+        yAxisRange.max = Math.ceil(yAxisRange.max / 5) * 5;
+      }
     }
   }
 
