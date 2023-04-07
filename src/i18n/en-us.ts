@@ -43,7 +43,7 @@ export default {
     EZAT_totalSupply: 'USDE Total Supply',
     // EZBT_totalSupply: ' Total Supply',
     EZIO_totalSupply: 'ezIO Total Supply',
-    token_totalValue: 'Token Total Value ($)',
+    token_totalValue: 'Token Total Value',
     EZAT_Rate: 'USDE Daily Rate',
     net: 'Network',
     lang: 'Language',
