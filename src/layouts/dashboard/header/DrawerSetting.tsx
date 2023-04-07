@@ -263,7 +263,7 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
 
           {/* token总价值 */}
           <Box sx={{ fontSize: '36px', fontWeight: '500', mt: theme.spacing(1), padding: '0px 20px' }}>
-            {totalValue ? '$' + totalValue : <InlineSkeleton />}
+            {totalValue !== undefined ? '$' + totalValue : <InlineSkeleton />}
           </Box>
 
           {/* tokens */}
