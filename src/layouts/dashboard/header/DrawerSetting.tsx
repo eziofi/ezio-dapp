@@ -20,6 +20,7 @@ import { ColorModeContext } from '../../../theme';
 import { useBalance } from '../../../hooks/useBalance';
 import { useTranslation } from 'react-i18next';
 import { usePrice } from '../../../hooks/usePrice';
+import { FixedNumber } from 'ethers';
 
 interface IProps {
   open: boolean;
@@ -94,12 +95,20 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
   const [totalValue, setTotalValue] = useState<number | undefined>(0);
 
   useMemo(() => {
-    if (USDEBALANCE && E2LPBALANCE) {
-      const sum = formatString(
-        String(Number(USDEBALANCE) * Number(USDEPrice || 0) + Number(E2LPBALANCE) * Number(E2LPPrice || 0)),
+    if (USDEBALANCE && E2LPBALANCE && E2LPPrice && USDEPrice) {
+      const USDEBALANCETotalValue = formatString(
+        FixedNumber.from(USDEBALANCE).mulUnsafe(FixedNumber.from(USDEPrice)).toString(),
         2,
       ).toString();
-      setTotalValue(+sum);
+
+      const E2LPBALANCETotalValue = formatString(
+        FixedNumber.from(E2LPBALANCE).mulUnsafe(FixedNumber.from(E2LPPrice)).toString(),
+        2,
+      ).toString();
+
+      const sum = +USDEBALANCETotalValue + +E2LPBALANCETotalValue;
+
+      setTotalValue(sum);
     }
   }, [USDEBALANCE, E2LPBALANCE, E2LPPrice, USDEPrice]);
 
