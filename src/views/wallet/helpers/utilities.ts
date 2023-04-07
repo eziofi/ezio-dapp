@@ -251,8 +251,8 @@ function getMinMaxValues(data: number[], smSection?: boolean) {
 
   if (!smSection) {
     return {
-      min: Math.floor(minValue) - buffer * 10,
-      max: maxValue + buffer * 10,
+      min: Math.floor(minValue) - buffer,
+      max: maxValue + buffer * 5,
     };
   } else {
     return {
