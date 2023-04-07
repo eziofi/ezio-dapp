@@ -136,15 +136,19 @@ export default function AnalyticsCard({
         ) : (
           <div style={{ width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>
             {data ? (
-              <CustomTooltip title={data} placement="top-start">
-                <div style={{ width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>
-                  {formatString(data || '0', 6).toString()}
-                </div>
-              </CustomTooltip>
+              <>
+                {/*<div style={{width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start'}}>*/}
+                {/*  {formatString(data || '0', 6).toString()}*/}
+                {/*</div>*/}
+                <CustomTooltip title={data} placement="top-start">
+                  <div
+                    style={{ width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}
+                  >
+                    {formatString(data || '0', 6).toString()}
+                  </div>
+                </CustomTooltip>
+              </>
             ) : (
-              // <div style={{ width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>
-              //   {formatString(data || '0', 6).toString()}
-              // </div>
               <InlineSkeleton />
             )}
           </div>
