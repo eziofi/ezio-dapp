@@ -45,17 +45,18 @@ export default function TotleNetWorthApexChart() {
       setOption({
         series: [
           {
-            name: TOKEN_TYPE[2] + ' ' + t('home.totalValue'),
+            name: reverseCoin + t('home.totalValue'),
             type: 'area',
             data: total,
             color: colors[0],
           },
           {
-            name: reverseCoin + t('home.totalValue'),
+            name: TOKEN_TYPE[2] + ' ' + t('home.totalValue'),
             type: 'area',
-            data: wstethTotalValue,
+            data: usdcTotalValue,
             color: colors[1],
           },
+
           {
             name: t('home.contractValue'),
             data: total,
@@ -87,7 +88,7 @@ export default function TotleNetWorthApexChart() {
               },
               decimalsInFloat: 0,
               max: getYMax(total),
-              min: getYMin(sum),
+              min: 0,
             },
           ],
           tooltip: {
@@ -104,7 +105,7 @@ export default function TotleNetWorthApexChart() {
             },
           },
           legend: {
-            customLegendItems: [TOKEN_TYPE[2] + ' ' + t('home.totalValue'), reverseCoin + t('home.totalValue')],
+            customLegendItems: [reverseCoin + t('home.totalValue'), TOKEN_TYPE[2] + ' ' + t('home.totalValue')],
           },
         },
       });

@@ -86,7 +86,7 @@ export default function TotleNetWorthApexChart() {
               },
               decimalsInFloat: 0,
               max: getYMax(total),
-              min: getYMin(sum),
+              min: 0,
             },
           ],
           tooltip: {
