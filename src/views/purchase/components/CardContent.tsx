@@ -161,6 +161,7 @@ function RanderOptions(
 
     setopenDialog(false);
   }
+  console.log('sxf', balance);
 
   return (
     <BalanceContent>
@@ -200,7 +201,7 @@ function RanderOptions(
       </Select>
       <div
         style={{
-          width: '150px',
+          width: '170px',
           fontSize: 12,
           color: theme.palette.text.secondary,
           display: 'flex',
@@ -214,7 +215,7 @@ function RanderOptions(
           {balance ? formatString(balance, 6).toString() : <InlineSkeleton width={40} />}
         </span>
         {showMaxVal && inputVal !== balance && (
-          <Box
+          <Button
             onClick={() => {
               // if (transactionType === TRANSFER_TYPE.PURCHASE) {
               //   setInputVal!(formatString(balance || '', 6).toString());
@@ -223,17 +224,18 @@ function RanderOptions(
               // }
               setInputVal!(formatString(balance || '', 6).toString());
             }}
+            size="small"
+            variant="text"
             sx={{
               color: theme.palette.primary.main,
               fontWeight: 'bold',
-              marginLeft: theme.spacing(1),
-              ':hover': {
-                cursor: 'pointer',
-              },
+              // marginLeft: theme.spacing(1),
+              padding: '0px ',
             }}
+            disabled={balance && +formatString(balance || '', 6).toString() < 0.000001 ? true : false}
           >
             <>{t('purchase.maxValue')}</>
-          </Box>
+          </Button>
         )}
       </div>
       {openDialog && (
