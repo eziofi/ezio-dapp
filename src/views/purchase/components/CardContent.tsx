@@ -216,11 +216,12 @@ function RanderOptions(
         {showMaxVal && inputVal !== balance && (
           <Box
             onClick={() => {
-              if (transactionType === TRANSFER_TYPE.PURCHASE) {
-                setInputVal!(formatString(balance || '', 6).toString());
-              } else if (transactionType === TRANSFER_TYPE.REDEEM) {
-                setInputVal!(formatString(balance || '', 18).toString());
-              }
+              // if (transactionType === TRANSFER_TYPE.PURCHASE) {
+              //   setInputVal!(formatString(balance || '', 6).toString());
+              // } else if (transactionType === TRANSFER_TYPE.REDEEM) {
+              //   setInputVal!(formatString(balance || '', 18).toString());
+              // }
+              setInputVal!(formatString(balance || '', 6).toString());
             }}
             sx={{
               color: theme.palette.primary.main,
@@ -323,9 +324,10 @@ function MyCardContentOne({
           placeholder="0"
           onInput={(e: any) => {
             if (e.target.value !== '') {
-              transactionType === TRANSFER_TYPE.PURCHASE
-                ? getInputVal1(e.target.value.replace(/^\D*(\d*(?:\.\d{0,6})?).*$/g, '$1'))
-                : getInputVal1(e.target.value.replace(/^\D*(\d*(?:\.\d{0,18})?).*$/g, '$1'));
+              // transactionType === TRANSFER_TYPE.PURCHASE
+              //   ? getInputVal1(e.target.value.replace(/^\D*(\d*(?:\.\d{0,6})?).*$/g, '$1'))
+              //   : getInputVal1(e.target.value.replace(/^\D*(\d*(?:\.\d{0,18})?).*$/g, '$1'));
+              getInputVal1(e.target.value.replace(/^\D*(\d*(?:\.\d{0,6})?).*$/g, '$1'));
             } else {
               // 禁止输入框输入 e + -符号
               e.target.value = e.target.value.replace(/[e\+\-]/, '');
@@ -405,9 +407,10 @@ function MyCardContentSecond({
             value={inputValue2}
             onInput={(e: any) => {
               if (e.target.value !== '') {
-                transactionType === TRANSFER_TYPE.PURCHASE
-                  ? getInputVal2(e.target.value.replace(/^\D*(\d*(?:\.\d{0,6})?).*$/g, '$1'))
-                  : getInputVal2(e.target.value.replace(/^\D*(\d*(?:\.\d{0,18})?).*$/g, '$1'));
+                // transactionType === TRANSFER_TYPE.PURCHASE
+                //   ? getInputVal2(e.target.value.replace(/^\D*(\d*(?:\.\d{0,6})?).*$/g, '$1'))
+                //   : getInputVal2(e.target.value.replace(/^\D*(\d*(?:\.\d{0,18})?).*$/g, '$1'));
+                getInputVal2(e.target.value.replace(/^\D*(\d*(?:\.\d{0,6})?).*$/g, '$1'));
               } else {
                 // 禁止输入框输入 e + -符号
                 e.target.value = e.target.value.replace(/[e\+\-]/, '');
