@@ -341,7 +341,7 @@ function MyCardContentOne({
           // disabled={needApprove}
         />
         <div style={{ ...priceStyle, color: theme.palette.text.secondary }}>
-          {price ? t('purchase.unitPrice') + ': $' + price : <Skeleton width={100} />}
+          {price ? t('purchase.unitPrice') + ': $' + formatString(price, 2) : <Skeleton width={100} />}
         </div>
       </div>
       {transactionType === TRANSFER_TYPE.PURCHASE
@@ -422,7 +422,11 @@ function MyCardContentSecond({
           />
           <div style={{ ...priceStyle, color: theme.palette.text.secondary }}>
             {t('purchase.unitPrice') + ': '}
-            {price && pricePercentage ? `$${price} (${pricePercentage}%)` : <InlineSkeleton width={70} />}
+            {price && pricePercentage ? (
+              `$${formatString(price, 2)} (${pricePercentage}%)`
+            ) : (
+              <InlineSkeleton width={70} />
+            )}
           </div>
         </div>
 
