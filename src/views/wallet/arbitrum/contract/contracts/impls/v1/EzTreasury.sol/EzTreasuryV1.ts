@@ -65,7 +65,7 @@ export interface EzTreasuryV1Interface extends utils.Interface {
     "getRoleMemberCount(bytes32)": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
-    "initialize(address,address,address,address,uint16,uint16,uint16)": FunctionFragment;
+    "initialize(address,address,address,address,uint16,uint16,uint16,uint256)": FunctionFragment;
     "interestRate()": FunctionFragment;
     "lastRebaseTime()": FunctionFragment;
     "leverage()": FunctionFragment;
@@ -243,6 +243,7 @@ export interface EzTreasuryV1Interface extends utils.Interface {
       PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>
@@ -740,6 +741,7 @@ export interface EzTreasuryV1 extends BaseContract {
       rewardRate_: PromiseOrValue<BigNumberish>,
       redeemFeeRateA_: PromiseOrValue<BigNumberish>,
       redeemFeeRateB_: PromiseOrValue<BigNumberish>,
+      lastRebaseTime_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -941,6 +943,7 @@ export interface EzTreasuryV1 extends BaseContract {
     rewardRate_: PromiseOrValue<BigNumberish>,
     redeemFeeRateA_: PromiseOrValue<BigNumberish>,
     redeemFeeRateB_: PromiseOrValue<BigNumberish>,
+    lastRebaseTime_: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -1142,6 +1145,7 @@ export interface EzTreasuryV1 extends BaseContract {
       rewardRate_: PromiseOrValue<BigNumberish>,
       redeemFeeRateA_: PromiseOrValue<BigNumberish>,
       redeemFeeRateB_: PromiseOrValue<BigNumberish>,
+      lastRebaseTime_: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1434,6 +1438,7 @@ export interface EzTreasuryV1 extends BaseContract {
       rewardRate_: PromiseOrValue<BigNumberish>,
       redeemFeeRateA_: PromiseOrValue<BigNumberish>,
       redeemFeeRateB_: PromiseOrValue<BigNumberish>,
+      lastRebaseTime_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1650,6 +1655,7 @@ export interface EzTreasuryV1 extends BaseContract {
       rewardRate_: PromiseOrValue<BigNumberish>,
       redeemFeeRateA_: PromiseOrValue<BigNumberish>,
       redeemFeeRateB_: PromiseOrValue<BigNumberish>,
+      lastRebaseTime_: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
