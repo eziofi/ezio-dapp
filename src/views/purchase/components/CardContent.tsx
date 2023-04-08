@@ -225,12 +225,9 @@ function RanderOptions(
               setInputVal!(formatString(balance || '', 6).toString());
             }}
             size="small"
-            variant="text"
             sx={{
-              color: theme.palette.primary.main,
-              fontWeight: 'bold',
-              // marginLeft: theme.spacing(1),
-              padding: '0px ',
+              ml: theme.spacing(1),
+              minWidth: 32,
             }}
             disabled={balance && +formatString(balance || '', 6).toString() < 0.000001 ? true : false}
           >

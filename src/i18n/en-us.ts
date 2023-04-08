@@ -81,7 +81,7 @@ export default {
   },
   purchase: {
     purchaseValue: 'SWAP',
-    leftBalance: 'Balance: ',
+    leftBalance: 'Balance：',
     leftAvailableAmount: 'Current available amount ',
     currentTime: 'Current time',
     purchaseAction: 'SWAP',
