@@ -92,7 +92,7 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
     },
   ];
 
-  const [totalValue, setTotalValue] = useState<number | undefined>(0);
+  const [totalValue, setTotalValue] = useState<string | undefined>('0');
 
   useMemo(() => {
     if (USDEBALANCE && E2LPBALANCE && E2LPPrice && USDEPrice) {
@@ -106,7 +106,7 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
         2,
       ).toString();
 
-      const sum = +USDEBALANCETotalValue + +E2LPBALANCETotalValue;
+      const sum = formatString(String(+USDEBALANCETotalValue + +E2LPBALANCETotalValue).toString(), 2).toString();
 
       setTotalValue(sum);
     }
