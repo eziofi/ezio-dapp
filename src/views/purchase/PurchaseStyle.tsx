@@ -6,13 +6,16 @@ import { StyleProps } from '../../types/styleType';
 const CONTAINER_WIDTH = '90%';
 
 const PurchaseContainer = styled((props: StyleProps) => {
+  const isDesktop = useResponsive('up', 'sm', 'sm');
+  const theme = useTheme();
   return (
     <div
       style={{
         width: '100%',
         height: 'calc(100vh - 168px)',
         display: 'flex',
-        alignItems: 'center',
+        alignItems: isDesktop ? 'start' : 'center',
+        marginTop: isDesktop ? theme.spacing(2) : 0,
       }}
     >
       <Card {...props} />
