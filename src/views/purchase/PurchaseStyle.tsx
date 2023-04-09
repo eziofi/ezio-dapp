@@ -15,7 +15,7 @@ const PurchaseContainer = styled((props: StyleProps) => {
         height: 'calc(100vh - 168px)',
         display: 'flex',
         alignItems: isDesktop ? 'start' : 'center',
-        marginTop: isDesktop ? theme.spacing(2) : 0,
+        marginTop: isDesktop ? theme.spacing(7) : 0,
       }}
     >
       <Card {...props} />

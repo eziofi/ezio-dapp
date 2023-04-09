@@ -93,8 +93,10 @@ export default function TokenPriceChart() {
                 text: (networkName ? ATokenMap[networkName] : '') + t('home.bNetWorthSeries'),
               },
 
-              max: roundMinMaxValues(ezMaticPrice).max,
-              min: roundMinMaxValues(ezMaticPrice).min,
+              // max: roundMinMaxValues(ezMaticPrice).max,
+              // min: roundMinMaxValues(ezMaticPrice).min,
+              max: 3,
+              min: 0,
             },
             {
               opposite: true,
