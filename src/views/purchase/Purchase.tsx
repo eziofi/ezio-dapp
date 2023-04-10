@@ -88,12 +88,17 @@ export default function Purchase() {
   const { price: toPrice } = usePrice(type === TRANSFER_TYPE.PURCHASE ? tokenType : redeemTokenType);
 
   // 两个token的price比值
-  const _rate = fromPrice && toPrice ? parseFloat(fromPrice) / parseFloat(toPrice) : 1;
+  // const _rate = fromPrice && toPrice ? parseFloat(fromPrice) / parseFloat(toPrice) : 1;
+  const _rate = fromPrice && toPrice ? fromPrice.divUnsafe(toPrice).toUnsafeFloat() : 1;
   const interest = formatString('' + _rate, 6).toString();
   const reverseInterest = formatString('' + 1 / _rate, 6).toString();
+  // const percentage =
+  //   fromPrice && toPrice ? ((parseFloat(toPrice) - parseFloat(fromPrice)) / parseFloat(fromPrice)) * 100 : 0;
   const percentage =
-    fromPrice && toPrice ? ((parseFloat(toPrice) - parseFloat(fromPrice)) / parseFloat(fromPrice)) * 100 : 0;
-  const pricePercentage = percentage < 0 ? percentage.toFixed(2) : '+' + percentage.toFixed(2);
+    fromPrice && toPrice
+      ? toPrice.subUnsafe(fromPrice).divUnsafe(fromPrice).mulUnsafe(FixedNumber.from(100)).toUnsafeFloat().toFixed(2)
+      : 0;
+  const pricePercentage = (percentage < 0 ? '' : '+') + percentage;
 
   const { feeRate } = useFeeRate(tokenType);
 
@@ -209,16 +214,16 @@ export default function Purchase() {
   const resetApproveState = () => {
     setNeedApprove(
       type === TRANSFER_TYPE.PURCHASE &&
-        ((redeemTokenType === TOKEN_TYPE.USDT && (!allowanceUSDT || parseFloat(allowanceUSDT) === 0)) ||
-          (redeemTokenType === TOKEN_TYPE.USDC && (!allowanceUSDC || parseFloat(allowanceUSDC) === 0))),
+        ((redeemTokenType === TOKEN_TYPE.USDT && allowanceUSDT.isZero()) ||
+          (redeemTokenType === TOKEN_TYPE.USDC && (!allowanceUSDC || allowanceUSDC.isZero()))),
     );
     // setNeedApprove(true);
   };
 
   useEffect(() => {
-    if (allowanceUSDT && allowanceUSDC) {
-      resetApproveState();
-    }
+    // if (!allowanceUSDT.isZero() && !allowanceUSDC.isZero()) {
+    resetApproveState();
+    // }
   }, [redeemTokenType, type, allowanceUSDT, allowanceUSDC]);
 
   function handleError(error: any) {
@@ -237,7 +242,7 @@ export default function Purchase() {
     refetchBalance()
       .then(({ data }) => {
         if (!data) return Promise.reject();
-        const balance = parseFloat(data);
+        const balance = data.toUnsafeFloat();
         if (parseFloat(inputValue1) > balance) {
           openMsg(t('purchase.moreThanBalanceMsg'));
         } else {
@@ -266,7 +271,7 @@ export default function Purchase() {
     refetchBalance()
       .then(({ data }) => {
         if (!data) return Promise.reject();
-        const balance = parseFloat(data);
+        const balance = data.toUnsafeFloat();
         if (parseFloat(inputValue1) > balance) {
           openMsg(t('redeem.moreThanBalanceMsg'));
         } else {
@@ -424,21 +429,21 @@ export default function Purchase() {
       {connectState === 'unconnected' ? (
         // 连接钱包按钮
         <MutationButton onClick={connect}>{t('home.login')}</MutationButton>
+      ) : parseFloat(inputValue1) > (balance?.toUnsafeFloat() || 0) ? (
+        // 余额不足
+        <MutationButton disabled>{t('purchase.notEnoughBalance')}</MutationButton>
       ) : needApprove ? (
         // 授权按钮
         <MutationButton disabled={loadingOpen} onClick={doApprove} loadingOpen={loadingOpen} loadingText={loadingText}>
           {t('purchase.approveAction') +
             (redeemTokenType === TOKEN_TYPE.ReverseCoin ? reverseCoin : TOKEN_TYPE[redeemTokenType])}
         </MutationButton>
-      ) : parseFloat(inputValue1) > parseFloat(balance || '0') ? (
-        // 余额不足
-        <MutationButton disabled>{t('purchase.notEnoughBalance')}</MutationButton>
       ) : type === TRANSFER_TYPE.PURCHASE ? (
         // allowance不足
         (
           redeemTokenType === TOKEN_TYPE.USDC
-            ? parseFloat(allowanceUSDC) < parseFloat(inputValue1)
-            : parseFloat(allowanceUSDT) < parseFloat(inputValue1)
+            ? allowanceUSDC.toUnsafeFloat() < parseFloat(inputValue1)
+            : allowanceUSDT.toUnsafeFloat() < parseFloat(inputValue1)
         ) ? (
           // allowance不足
           <MutationButton

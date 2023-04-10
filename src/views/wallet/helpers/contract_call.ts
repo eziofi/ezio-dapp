@@ -21,7 +21,7 @@ import {
   TOKEN_TYPE,
   TRANSFER_TYPE,
 } from './constant';
-import { BigNumber, ethers, Signer } from 'ethers';
+import { BigNumber, ethers, FixedNumber, Signer } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
 import { formatDecimal, formatString } from './utilities';
 
@@ -115,8 +115,8 @@ export async function treasuryTotalNetWorth(
  */
 export async function getPooledA(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
   const data = await EzioConnect(signerOrProvider, network).pooledA();
-  const res = formatDecimal(data, TOKEN_TYPE.USDC).toString();
-  console.log('pooledA = ' + res);
+  const res = formatDecimal(data, TOKEN_TYPE.USDC);
+  console.log('pooledA = ' + res.toString());
   return res;
 }
 
@@ -142,7 +142,7 @@ export async function ezWETHReverse(signerOrProvider: Signer | Provider, network
     TOKEN_TYPE.USDC, // 此参数无用
     3,
     18,
-  ).toString();
+  );
   console.log('ezWETH Reverse = ' + res);
   return res;
 }
@@ -153,7 +153,7 @@ export async function ezWETHReverse(signerOrProvider: Signer | Provider, network
  */
 export async function commissionIncome(networkId?: NETWORK_TYPE | undefined) {
   const res = (await queryAccumulatedFees24H(networkId)).data.data.fees24H;
-  return res;
+  return FixedNumber.from(res);
 }
 
 /**
@@ -199,7 +199,7 @@ export async function redeemFeeRate(
  * @returns 杠杆率
  */
 export async function getLeverage(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
-  const res = formatDecimal(await EzioConnect(signerOrProvider, network).leverage(), TOKEN_TYPE.USDC).toString();
+  const res = formatDecimal(await EzioConnect(signerOrProvider, network).leverage(), TOKEN_TYPE.USDC);
   console.log('leverage = ' + res.toString());
   return res;
 }
@@ -212,7 +212,7 @@ export async function getLeverage(signerOrProvider: Signer | Provider, network: 
  */
 export async function ezatBalanceOf(signerOrProvider: Signer | Provider, address: string, network: NETWORK_TYPE) {
   const data = await USDEConnect(signerOrProvider, network).balanceOf(address);
-  const res = formatDecimal(data, TOKEN_TYPE.USDE, 18).toString();
+  const res = formatDecimal(data, TOKEN_TYPE.USDE, 18);
   console.log('ezat Balance = ' + res);
   return res;
 }
@@ -225,7 +225,7 @@ export async function ezatBalanceOf(signerOrProvider: Signer | Provider, address
  */
 export async function ezbtBalanceOf(signerOrProvider: Signer | Provider, address: string, network: NETWORK_TYPE) {
   const data = await E2LPConnect(signerOrProvider, network).balanceOf(address);
-  const res = formatDecimal(data, TOKEN_TYPE.E2LP, 18).toString();
+  const res = formatDecimal(data, TOKEN_TYPE.E2LP, 18);
   console.log('ezbt Balance = ' + res);
   return res;
 }
@@ -238,7 +238,7 @@ export async function ezbtBalanceOf(signerOrProvider: Signer | Provider, address
  */
 export async function usdtBalanceOf(signerOrProvider: Signer | Provider, address: string, network: NETWORK_TYPE) {
   const data = await USDTConnect(signerOrProvider, network).balanceOf(address);
-  const res = formatDecimal(data, TOKEN_TYPE.USDT, 6).toString();
+  const res = formatDecimal(data, TOKEN_TYPE.USDT, 6);
   console.log('usdt Balance = ' + res);
   return res;
 }
@@ -255,12 +255,12 @@ export async function getAllowance(
   address: string,
   tokenType: TOKEN_TYPE.USDC | TOKEN_TYPE.USDT,
   network: NETWORK_TYPE,
-): Promise<string> {
+) {
   const res = await (tokenType === TOKEN_TYPE.USDC ? USDCConnect : USDTConnect)(signerOrProvider, network).allowance(
     address,
     ezioJson[network as keyof typeof ezioJson].address,
   );
-  const data = formatDecimal(res, tokenType).toString();
+  const data = formatDecimal(res, tokenType);
   console.log(TOKEN_TYPE[tokenType] + ' allowance =' + data);
   return data;
 }
@@ -273,7 +273,7 @@ export async function getAllowance(
  */
 export async function usdcBalanceOf(signerOrProvider: Signer | Provider, address: string, network: NETWORK_TYPE) {
   const data = await USDCConnect(signerOrProvider, network).balanceOf(address);
-  const res = formatDecimal(data, TOKEN_TYPE.USDC, 6).toString();
+  const res = formatDecimal(data, TOKEN_TYPE.USDC, 6);
   console.log('usdc Balance = ' + res);
   return res;
 }
@@ -290,7 +290,7 @@ export async function reverseCoinBalanceOf(
   network: NETWORK_TYPE,
 ) {
   const data = await reverseCoinConnect(signerOrProvider, network).balanceOf(address);
-  const res = formatDecimal(data, TOKEN_TYPE.ReverseCoin, 18).toString();
+  const res = formatDecimal(data, TOKEN_TYPE.ReverseCoin, 18);
   console.log('reverseCoin Balance = ' + res);
   return res;
 }
@@ -303,7 +303,7 @@ export async function ezWETHFundCost(signerOrProvider: Signer | Provider, networ
   const data = await EzioConnect(signerOrProvider, network).rewardRate();
   const yearRate = '' + (data / 1000000) * 365 * 100;
   console.log('ezWETH Fund Cost = ' + yearRate);
-  return formatString(yearRate) + '%';
+  return formatString(yearRate);
 }
 
 /**
@@ -312,7 +312,7 @@ export async function ezWETHFundCost(signerOrProvider: Signer | Provider, networ
  */
 export async function convertDownPrice(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
   const data = await EzioConnect(signerOrProvider, network).convertDownPrice();
-  const res = formatDecimal(data, TOKEN_TYPE.USDT, 3).toString();
+  const res = formatDecimal(data, TOKEN_TYPE.USDT, 3);
   console.log('convertDown Price = ' + res);
   return res;
 }
@@ -323,7 +323,7 @@ export async function convertDownPrice(signerOrProvider: Signer | Provider, netw
  */
 export async function USDEPrice(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
   const data = await USDEConnect(signerOrProvider, network).netWorth();
-  const res = formatDecimal(data, TOKEN_TYPE.USDC, 6).toString();
+  const res = formatDecimal(data, TOKEN_TYPE.USDC, 6);
   console.log('USDE netWorth = ' + res);
   return res;
 }
@@ -334,7 +334,7 @@ export async function USDEPrice(signerOrProvider: Signer | Provider, network: NE
  */
 export async function E2LPPrice(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
   const data = await E2LPConnect(signerOrProvider, network).netWorth();
-  const res = formatDecimal(data, TOKEN_TYPE.USDC, 6).toString();
+  const res = formatDecimal(data, TOKEN_TYPE.USDC, 6);
   console.log('ezWETH netWorth = ' + res);
   return res;
 }
@@ -345,7 +345,7 @@ export async function E2LPPrice(signerOrProvider: Signer | Provider, network: NE
  */
 export async function reverseCoinPrice(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
   const data = await EzioConnect(signerOrProvider, network).getPrice(TOKENS[network][REVERSE_COIN[network]]);
-  const res = formatDecimal(data, TOKEN_TYPE.USDC, 6).toString();
+  const res = formatDecimal(data, TOKEN_TYPE.USDC, 6);
   console.log('ReverseCoin Price = ' + res);
   return res;
 }
@@ -355,7 +355,7 @@ export async function reverseCoinPrice(signerOrProvider: Signer | Provider, netw
  */
 export async function usdtPrice(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
   const data = await EzioConnect(signerOrProvider, network).getPrice(TOKENS[network].USDT);
-  const res = formatDecimal(data, TOKEN_TYPE.USDC, 6).toString();
+  const res = formatDecimal(data, TOKEN_TYPE.USDC, 6);
   console.log('usdt Price = ' + res);
   return res;
 }
@@ -365,7 +365,7 @@ export async function usdtPrice(signerOrProvider: Signer | Provider, network: NE
  */
 export async function usdcPrice(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
   const data = await EzioConnect(signerOrProvider, network).getPrice(TOKENS[network].USDC);
-  const res = formatDecimal(data, TOKEN_TYPE.USDC, 6).toString();
+  const res = formatDecimal(data, TOKEN_TYPE.USDC, 6);
   console.log('usdc Price = ' + res);
   return res;
 }
@@ -493,7 +493,6 @@ export async function queryRedeemRecord(
  * @param tokenType
  * @param address 账户地址
  * @param networkName
- * @returns 账户赎回记录
  */
 export const getBalanceOfABToken = async (
   signerOrProvider: Signer | Provider,
@@ -501,5 +500,7 @@ export const getBalanceOfABToken = async (
   address: string,
   networkName: NETWORK_TYPE,
 ) => {
-  return await (tokenType === TOKEN_TYPE.USDE ? ezatBalanceOf : ezbtBalanceOf)(signerOrProvider, address, networkName);
+  return (
+    await (tokenType === TOKEN_TYPE.USDE ? ezatBalanceOf : ezbtBalanceOf)(signerOrProvider, address, networkName)
+  ).toUnsafeFloat();
 };

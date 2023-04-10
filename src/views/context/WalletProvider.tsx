@@ -1,5 +1,5 @@
 import React, { ReactElement, useContext, useEffect, useState } from 'react';
-import { ethers } from 'ethers';
+import { ethers, FixedNumber } from 'ethers';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import Web3Modal from 'web3modal';
 import { NETWORK_ID, NETWORK_TYPE, TOKEN_TYPE } from '../wallet/helpers/constant';
@@ -17,8 +17,8 @@ interface IWalletContext {
   walletProvider?: any;
   ethersProvider?: ethers.providers.Web3Provider;
   connectState: string;
-  allowanceUSDT: string;
-  allowanceUSDC: string;
+  allowanceUSDT: FixedNumber;
+  allowanceUSDC: FixedNumber;
   // networkId: number | undefined;
   networkName: NETWORK_TYPE | '';
   switchNetwork: (network: string) => Promise<any>;
@@ -56,9 +56,9 @@ export default function WalletProvider({ children }: { children: ReactElement })
   const [networkName, setNetworkName] = useState<NETWORK_TYPE | ''>('');
 
   // const getNetwork = () => getChainData(this.state.chainId).network;
-  const [allowanceUSDT, setAllowanceUSDT] = useState('');
+  const [allowanceUSDT, setAllowanceUSDT] = useState<FixedNumber>(FixedNumber.from(0));
 
-  const [allowanceUSDC, setAllowanceUSDC] = useState('');
+  const [allowanceUSDC, setAllowanceUSDC] = useState<FixedNumber>(FixedNumber.from(0));
 
   const { setMsg, openMsg, closeMsg } = useContext(UIContext);
 

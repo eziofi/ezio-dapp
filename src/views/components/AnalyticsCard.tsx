@@ -99,16 +99,6 @@ export default function AnalyticsCard({
     },
     {
       enabled: !!ethersProvider && !!networkName,
-      // @ts-ignore
-      onSuccess: data1 => {
-        // if (type === ANALYSIS_CARD_TYPE.rate) {
-        //   const res = formatNetWorth(data1);
-        //   debugger;
-        // }
-      },
-      onError: err => {
-        // debugger;
-      },
     },
   );
 
@@ -140,7 +130,7 @@ export default function AnalyticsCard({
                 {/*<div style={{width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start'}}>*/}
                 {/*  {formatString(data || '0', 6).toString()}*/}
                 {/*</div>*/}
-                <CustomTooltip title={data} placement="top-start">
+                <CustomTooltip title={data.toString()} placement="top-start">
                   <div
                     style={{ width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}
                   >

@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { Box, Tooltip, useTheme } from '@mui/material';
 import { useEffect } from 'react';
 import useWallet from '../hooks/useWallet';
+import { FixedNumber } from 'ethers';
 
 export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TYPE; refreshFlag: number }) {
   const { balance, refetchBalance, isBalanceFetching } = useBalance(type);
@@ -23,9 +24,10 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
     }
   }, [refreshFlag]);
 
-  const calcValue = (price: string | undefined, balance: string | undefined) => {
+  const calcValue = (price: FixedNumber | undefined, balance: FixedNumber | undefined) => {
     if (price && balance) {
-      return (parseFloat(price) * parseFloat(balance)).toFixed(2);
+      // return (parseFloat(price) * parseFloat(balance)).toFixed(2);
+      return price.mulUnsafe(balance).toUnsafeFloat().toFixed(2);
     } else {
       return 0;
     }
@@ -109,7 +111,7 @@ export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TY
             </Box>
             <div>
               {!isBalanceFetching ? (
-                <Tooltip title={balance} placement="top">
+                <Tooltip title={balance?.toUnsafeFloat() || 0} placement="top">
                   <div style={{ fontSize: 28, color: 'rgba(67, 207, 124, 1)' }}>
                     {formatString(balance || '0', 6).toString()}
                   </div>

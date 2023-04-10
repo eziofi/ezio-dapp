@@ -13,8 +13,8 @@ interface IOptions {
   iconParentStyle: any;
   iconName: string;
   iconStyle: { width: number; height: number; fill: string };
-  balance: string | undefined;
-  price: string | undefined;
+  balance: FixedNumber | undefined;
+  price: FixedNumber | undefined;
 }
 
 export default function TokenLIstItem({ item }: { item: IOptions }) {

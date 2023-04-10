@@ -51,7 +51,6 @@ export default function HomeCard({
   };
   const { data } = useQuery(
     ['totalSupply', type],
-    // @ts-ignore
     () => api[type](ethersProvider!.getSigner(), networkName as NETWORK_TYPE),
     {
       enabled: !!ethersProvider && !!networkName,
@@ -130,12 +129,12 @@ export default function HomeCard({
       </Typography>
       <Typography variant="h4" sx={{ color: theme.palette.text.primary }}>
         {data ? (
-          type === HOME_CARD_TYPE.Rate ? (
+          type === HOME_CARD_TYPE.Rate || type === HOME_CARD_TYPE.FundCost ? (
             data + '%'
           ) : type === HOME_CARD_TYPE.RebalancePrice ? (
             '$' + data
           ) : (
-            data
+            data + ''
           )
         ) : (
           <InlineSkeleton />

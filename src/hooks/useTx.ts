@@ -1,4 +1,4 @@
-import { BigNumber, ethers, Signer } from 'ethers';
+import { BigNumber, ethers, FixedNumber, Signer } from 'ethers';
 import { Provider } from '@ethersproject/providers';
 import { MAX_UINT256, NETWORK_TYPE, QUOTE_CHANNEL, REVERSE_COIN, TOKEN_TYPE } from '../views/wallet/helpers/constant';
 import { getQuote } from '../views/wallet/helpers/utilities';
@@ -126,7 +126,7 @@ export default function useTx() {
     tokenType: TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP,
     address: string,
     networkName: NETWORK_TYPE,
-    initBalance: string,
+    initBalance: number,
   ) {
     let retryCount = 0;
     let oldBalance = initBalance;

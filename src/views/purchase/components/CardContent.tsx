@@ -161,7 +161,6 @@ function RanderOptions(
 
     setopenDialog(false);
   }
-  console.log('sxf', balance);
 
   return (
     <BalanceContent>

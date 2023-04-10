@@ -1,14 +1,11 @@
 import * as ethUtil from 'ethereumjs-util';
 import { IChainData, OneInchQuoteParams, ZeroExQuoteParams } from './types';
 import supportedChains from './chains';
-import { BigNumber, BigNumberish, FixedNumber, utils } from 'ethers';
+import { BigNumber, FixedNumber } from 'ethers';
 import qs from 'qs';
 import { formatUnits } from 'ethers/lib/utils';
 import { QUOTE_CHANNEL, TOKEN_DECIMAL, TOKEN_TYPE } from './constant';
 import { SwapQuoteStruct } from '../arbitrum/contract/contracts/interfaces/v1/IEzTreasury';
-import { ezioJson } from './contract_call';
-// import { apiGetGasPrices, apiGetAccountNonce } from "./api";
-// import { convertAmountToRawNumber, convertStringToHex } from "./bignumber";
 
 export function capitalize(string: string): string {
   return string
@@ -172,8 +169,18 @@ export function formatDecimal(
   return formatString(ether, floatDecimal);
 }
 
-export const formatString = (str: string, decimal: number = 2) => {
-  const numArr = str.split('.');
+export function add(x: number, y: number) {
+  return x + y;
+}
+
+export const formatString = (str: string | FixedNumber, decimal: number = 2) => {
+  let _str;
+  if (str instanceof FixedNumber) {
+    _str = str.toString();
+  } else {
+    _str = str;
+  }
+  const numArr = _str.split('.');
 
   if (numArr.length == 1) {
     return FixedNumber.from(numArr[0]);
