@@ -20,7 +20,7 @@ import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import useWallet from '../views/hooks/useWallet';
 import { UIContext } from '../views/context/UIProvider';
-import { SwapQuoteStruct } from '../views/wallet/arbitrum/contract/contracts/interfaces/v1/IEzTreasury';
+import { SwapQuoteStruct } from '../views/wallet/arbitrum/contract/contracts/interfaces/v1/IEzVault';
 
 const channel = process.env.REACT_APP_QUOTE_CHANNEL === '1inch' ? QUOTE_CHANNEL.OneInch : QUOTE_CHANNEL.ZeroEx;
 

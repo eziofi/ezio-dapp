@@ -23,7 +23,7 @@ export default function CumulativeRateOfReturn() {
   const queryClient: QueryClient = useQueryClient();
 
   useEffect(() => {
-    queryClient.invalidateQueries('queryTreasuryValue');
+    queryClient.invalidateQueries('queryVaultValue');
   }, [mode]);
 
   const [queryType, setQueryType] = useState('hour');

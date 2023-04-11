@@ -1,7 +1,7 @@
 import { Box, Card, CardHeader, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import ReactApexChart from 'react-apexcharts';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
-import { queryMaticPrice, queryTotalNetWorth, queryTreasuryValue } from '../../../api/api';
+import { queryMaticPrice, queryVaultValue } from '../../../api/api';
 import { t } from 'i18next';
 import { formatString, getYMax, getYMin } from '../../wallet/helpers/utilities';
 import { useContext, useEffect, useState } from 'react';
@@ -21,12 +21,12 @@ export default function MarketApexChart() {
   const queryClient: QueryClient = useQueryClient();
 
   useEffect(() => {
-    queryClient.invalidateQueries('queryTreasuryValue');
+    queryClient.invalidateQueries('queryVaultValue');
   }, [mode]);
 
   const [aRate, setARate] = useState<number[] | null>(null);
   const [XData, setXData] = useState<string[] | null>(null);
-  // const [treasuryData, setTreasuryData] = useState<number[]>([]);
+  // const [vaultData, setVaultData] = useState<number[]>([]);
   const [ezE2LpRate, setEzE2LpRate] = useState<number[] | null>(null);
 
   const [queryType, setQueryType] = useState('hour');
@@ -43,7 +43,7 @@ export default function MarketApexChart() {
     },
   });
 
-  useQuery(['queryTreasuryValue', queryType], () => queryTreasuryValue(queryType, networkName as NETWORK_TYPE), {
+  useQuery(['queryVaultValue', queryType], () => queryVaultValue(queryType, networkName as NETWORK_TYPE), {
     enabled: !!networkName,
     onSuccess: ({ data }) => {
       const XData = data.data.map(i => {
@@ -53,8 +53,6 @@ export default function MarketApexChart() {
           return i.groupTime.slice(5, 10);
         }
       });
-      // const treasuryData = data.data.map(i => parseFloat(i.treasuryValue));
-      // setTreasuryData([...treasuryData]);
 
       setXData([...XData]);
     },

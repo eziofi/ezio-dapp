@@ -60,8 +60,8 @@ export interface E2LPV1Interface extends utils.Interface {
     "totalSupply()": FunctionFragment;
     "transfer(address,uint256)": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
-    "treasury()": FunctionFragment;
     "unpause()": FunctionFragment;
+    "vault()": FunctionFragment;
   };
 
   getFunction(
@@ -97,8 +97,8 @@ export interface E2LPV1Interface extends utils.Interface {
       | "totalSupply"
       | "transfer"
       | "transferFrom"
-      | "treasury"
       | "unpause"
+      | "vault"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -211,8 +211,8 @@ export interface E2LPV1Interface extends utils.Interface {
       PromiseOrValue<BigNumberish>
     ]
   ): string;
-  encodeFunctionData(functionFragment: "treasury", values?: undefined): string;
   encodeFunctionData(functionFragment: "unpause", values?: undefined): string;
+  encodeFunctionData(functionFragment: "vault", values?: undefined): string;
 
   decodeFunctionResult(
     functionFragment: "BURNER_ROLE",
@@ -287,8 +287,8 @@ export interface E2LPV1Interface extends utils.Interface {
     functionFragment: "transferFrom",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "treasury", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "unpause", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "vault", data: BytesLike): Result;
 
   events: {
     "Approval(address,address,uint256)": EventFragment;
@@ -452,7 +452,7 @@ export interface E2LPV1 extends BaseContract {
     ): Promise<ContractTransaction>;
 
     contact(
-      treasury_: PromiseOrValue<string>,
+      vault_: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -556,11 +556,11 @@ export interface E2LPV1 extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    treasury(overrides?: CallOverrides): Promise<[string]>;
-
     unpause(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    vault(overrides?: CallOverrides): Promise<[string]>;
   };
 
   BURNER_ROLE(overrides?: CallOverrides): Promise<string>;
@@ -595,7 +595,7 @@ export interface E2LPV1 extends BaseContract {
   ): Promise<ContractTransaction>;
 
   contact(
-    treasury_: PromiseOrValue<string>,
+    vault_: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -699,11 +699,11 @@ export interface E2LPV1 extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  treasury(overrides?: CallOverrides): Promise<string>;
-
   unpause(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
+
+  vault(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
     BURNER_ROLE(overrides?: CallOverrides): Promise<string>;
@@ -738,7 +738,7 @@ export interface E2LPV1 extends BaseContract {
     ): Promise<void>;
 
     contact(
-      treasury_: PromiseOrValue<string>,
+      vault_: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -840,9 +840,9 @@ export interface E2LPV1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    treasury(overrides?: CallOverrides): Promise<string>;
-
     unpause(overrides?: CallOverrides): Promise<void>;
+
+    vault(overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {
@@ -944,7 +944,7 @@ export interface E2LPV1 extends BaseContract {
     ): Promise<BigNumber>;
 
     contact(
-      treasury_: PromiseOrValue<string>,
+      vault_: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1048,11 +1048,11 @@ export interface E2LPV1 extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    treasury(overrides?: CallOverrides): Promise<BigNumber>;
-
     unpause(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
+
+    vault(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -1090,7 +1090,7 @@ export interface E2LPV1 extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     contact(
-      treasury_: PromiseOrValue<string>,
+      vault_: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1194,10 +1194,10 @@ export interface E2LPV1 extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    treasury(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     unpause(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
+
+    vault(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

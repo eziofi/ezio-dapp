@@ -37,7 +37,7 @@ export type SwapQuoteStructOutput = [string, string, BigNumber, string] & {
   swapCallData: string;
 };
 
-export interface IEzTreasuryInterface extends utils.Interface {
+export interface IEzVaultInterface extends utils.Interface {
   functions: {
     "convertDownPrice()": FunctionFragment;
     "interestRate()": FunctionFragment;
@@ -116,12 +116,12 @@ export interface IEzTreasuryInterface extends utils.Interface {
   events: {};
 }
 
-export interface IEzTreasury extends BaseContract {
+export interface IEzVault extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: IEzTreasuryInterface;
+  interface: IEzVaultInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

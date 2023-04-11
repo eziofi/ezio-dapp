@@ -68,14 +68,14 @@ export function queryTotalPurchaseBy24h() {
 }
 
 // 金库市值
-interface ITreasuryValue {
+interface IVaultValue {
   code: number;
   message: string;
   data: { groupTime: string; treasuryValue: string }[];
 }
 
-export function queryTreasuryValue(QueryType: string, networkName: NETWORK_TYPE | undefined) {
-  return httpClient.get<ITreasuryValue>(`/api/${networkName}/lineGraph/treasuryValue`, {
+export function queryVaultValue(QueryType: string, networkName: NETWORK_TYPE | undefined) {
+  return httpClient.get<IVaultValue>(`/api/${networkName}/lineGraph/treasuryValue`, {
     params: { QueryType },
   });
 }

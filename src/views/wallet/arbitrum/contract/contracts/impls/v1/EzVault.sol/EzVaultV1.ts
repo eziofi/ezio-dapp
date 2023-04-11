@@ -41,7 +41,7 @@ export type SwapQuoteStructOutput = [string, string, BigNumber, string] & {
   swapCallData: string;
 };
 
-export interface EzTreasuryV1Interface extends utils.Interface {
+export interface EzVaultV1Interface extends utils.Interface {
   functions: {
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
     "GOVERNOR_ROLE()": FunctionFragment;
@@ -624,12 +624,12 @@ export type RoleRevokedEvent = TypedEvent<
 
 export type RoleRevokedEventFilter = TypedEventFilter<RoleRevokedEvent>;
 
-export interface EzTreasuryV1 extends BaseContract {
+export interface EzVaultV1 extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: EzTreasuryV1Interface;
+  interface: EzVaultV1Interface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

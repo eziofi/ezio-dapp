@@ -4,6 +4,6 @@
 export * as conversionSol from "./Conversion.sol";
 export * as e2LpSol from "./E2LP.sol";
 export * as ezTokenSol from "./EzToken.sol";
-export * as ezTreasurySol from "./EzTreasury.sol";
+export * as ezVaultSol from "./EzVault.sol";
 export * as swapCollectorSol from "./SwapCollector.sol";
 export * as usdeSol from "./USDE.sol";

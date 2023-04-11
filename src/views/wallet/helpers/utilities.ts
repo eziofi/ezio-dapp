@@ -5,7 +5,7 @@ import { BigNumber, FixedNumber } from 'ethers';
 import qs from 'qs';
 import { formatUnits } from 'ethers/lib/utils';
 import { QUOTE_CHANNEL, TOKEN_DECIMAL, TOKEN_TYPE } from './constant';
-import { SwapQuoteStruct } from '../arbitrum/contract/contracts/interfaces/v1/IEzTreasury';
+import { SwapQuoteStruct } from '../arbitrum/contract/contracts/interfaces/v1/IEzVault';
 
 export function capitalize(string: string): string {
   return string

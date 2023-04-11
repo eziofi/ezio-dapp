@@ -38,7 +38,7 @@ export default {
     price: 'Price',
     one_day_change: '24H Change',
     one_day_purchase: '24H Purchase',
-    treasury: 'Treasury',
+    vault: 'Vault',
     funds_issued: 'Funds Issued',
     EZAT_totalSupply: 'USDE Total Supply',
     // EZBT_totalSupply: ' Total Supply',
@@ -54,7 +54,7 @@ export default {
     logout: 'logout',
     login: 'connect wallet',
     connecting: 'connecting...',
-    treasuryValue: 'Treasury Value',
+    vaultValue: 'Vault Value',
     priceTitle: 'Token Price',
     ethPrice: 'Eth Price',
     netWorthAxis: 'Price',
@@ -139,7 +139,7 @@ export default {
     title: {
       usdc: 'Coffers USDC amount',
       wstETH: 'Coffers wstETH amount',
-      stMATIC: 'Treasury stMATIC value',
+      stMATIC: 'Vault stMATIC value',
       fee: 'Fees Earned (last 24h)',
     },
     everyday: 'Every Day',
@@ -149,7 +149,7 @@ export default {
   tips: {
     line1: "The big decline of stEth may cause risks to USDE's investors.",
     line2:
-      'When the TokenB worth of the owners is less than 60 percent of TokenA worth，the owner of TokenA will decrease funds and sell 1/4 stEth in the treasury.',
+      'When the TokenB worth of the owners is less than 60 percent of TokenA worth，the owner of TokenA will decrease funds and sell 1/4 stEth in the vault.',
     line3: 'The income will be stored in TokenA fund.',
   },
   drawerSeting: {

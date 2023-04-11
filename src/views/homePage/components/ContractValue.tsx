@@ -18,7 +18,7 @@ export default function TotleNetWorthApexChart() {
   const queryClient: QueryClient = useQueryClient();
 
   React.useEffect(() => {
-    queryClient.invalidateQueries('queryTreasuryValue');
+    queryClient.invalidateQueries('queryVaultValue');
   }, [mode]);
 
   const [queryType, setQueryType] = React.useState('hour');

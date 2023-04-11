@@ -1,7 +1,7 @@
 import {
   E2LPV1__factory,
-  EzTreasuryV1,
-  EzTreasuryV1__factory,
+  EzVaultV1,
+  EzVaultV1__factory,
   USDEV1__factory as USDEV1__factory__arbitrum,
 } from '../arbitrum/contract';
 import {
@@ -39,7 +39,7 @@ export const E2LPJson = {
 };
 
 export const ezioJson = {
-  [NETWORK_TYPE.arbitrum]: require('../arbitrum/contract/abi/EzTreasuryV1.json'),
+  [NETWORK_TYPE.arbitrum]: require('../arbitrum/contract/abi/EzVaultV1.json'),
   [NETWORK_TYPE.polygon]: require('../polygon/contract/abi/EzioV1.json'),
 };
 
@@ -82,7 +82,7 @@ export function USDTConnect(signerOrProvider: Signer | Provider, network: NETWOR
 }
 
 export function EzioConnect(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
-  return (network === NETWORK_TYPE.arbitrum ? EzTreasuryV1__factory : EzioV1__factory).connect(
+  return (network === NETWORK_TYPE.arbitrum ? EzVaultV1__factory : EzioV1__factory).connect(
     ezioJson[network].address,
     signerOrProvider,
   );
@@ -100,12 +100,12 @@ export function reverseCoinConnect(signerOrProvider: Signer | Provider, network:
  * 获取 金库储量
  * @returns 金库储量
  */
-export async function treasuryTotalNetWorth(
+export async function vaultTotalNetWorth(
   signerOrProvider: Signer | Provider,
   network: NETWORK_TYPE,
 ): Promise<BigNumber> {
   const res = await EzioConnect(signerOrProvider, network).totalNetWorth();
-  console.log('treasury Total NetWorth = ' + res.toString());
+  console.log('vault Total NetWorth = ' + res.toString());
   return res;
 }
 
@@ -160,7 +160,7 @@ export async function commissionIncome(networkId?: NETWORK_TYPE | undefined) {
  * 获取 日利息
  * @returns 日利息
  */
-export async function treasuryInterestRate(
+export async function vaultInterestRate(
   signerOrProvider: Signer | Provider,
   network: NETWORK_TYPE,
 ): Promise<BigNumber> {
@@ -181,12 +181,12 @@ export async function redeemFeeRate(
   if (tokenType === TOKEN_TYPE.USDE) {
     rawRate =
       network === NETWORK_TYPE.arbitrum
-        ? await (EzioConnect(signerOrProvider, network) as EzTreasuryV1).redeemFeeRateA()
+        ? await (EzioConnect(signerOrProvider, network) as EzVaultV1).redeemFeeRateA()
         : await (EzioConnect(signerOrProvider, network) as EzioV1).redeemFeeRate();
   } else {
     rawRate =
       network === NETWORK_TYPE.arbitrum
-        ? await (EzioConnect(signerOrProvider, network) as EzTreasuryV1).redeemFeeRateB()
+        ? await (EzioConnect(signerOrProvider, network) as EzVaultV1).redeemFeeRateB()
         : await (EzioConnect(signerOrProvider, network) as EzioV1).redeemFeeRate();
   }
   const denominator = await EzioConnect(signerOrProvider, network).REDEEM_RATE_DENOMINATOR();
@@ -391,14 +391,14 @@ export async function ezbtTotalSupply(signerOrProvider: Signer | Provider, netwo
 }
 
 export async function interestRateYear(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
-  const rate = await treasuryInterestRate(signerOrProvider, network);
+  const rate = await vaultInterestRate(signerOrProvider, network);
   const yearRate = '' + (rate.toNumber() / 1000000) * 365 * 100;
   // const yearRate2 = '' + ((1 + rate.toNumber() / 1000000) * (10 ^ 365)) / 100;
   return formatString(yearRate);
 }
 
 export async function interestRateDay(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
-  const rate = await treasuryInterestRate(signerOrProvider, network);
+  const rate = await vaultInterestRate(signerOrProvider, network);
   const dayRate = formatString('' + (rate.toNumber() / 1000000) * 10000, 3) + '‱';
   return dayRate;
 }
@@ -455,7 +455,7 @@ export interface RedeemRecord {
  * @returns eth 价格
  */
 // export async function ethPrice(signerOrProvider: Signer | Provider): Promise<BigNumber> {
-//   return TreasuryConnect(signerOrProvider).ethPrice();
+//   return VaultConnect(signerOrProvider).ethPrice();
 // }
 
 /**
