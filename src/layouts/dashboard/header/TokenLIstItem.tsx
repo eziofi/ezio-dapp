@@ -79,7 +79,7 @@ export default function TokenLIstItem({ item }: { item: IOptions }) {
     );
   }
 
-  const rawTotalValue = FixedNumber.from(item.balance || '0').mulUnsafe(FixedNumber.from(item.price || '0'));
+  const rawTotalValue = item.balance && item.price ? item.balance.mulUnsafe(item.price).toUnsafeFloat() : 0;
   const totalValue = formatString(rawTotalValue.toString(), 2).toString();
 
   return (
