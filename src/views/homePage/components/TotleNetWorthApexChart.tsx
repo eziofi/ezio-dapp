@@ -36,7 +36,7 @@ export default function TotleNetWorthApexChart() {
           return i.groupTime.slice(5, 10);
         }
       });
-      console.log(1);
+
       const ezMaticTotalnetworth = data.data.map(i => i.ezMaticTotalnetworth);
       const ezUsdTotalnetworth = data.data.map(i => i.ezUsdTotalnetworth);
       const total = data.data.map(i => i.ezMaticTotalnetworth + i.ezUsdTotalnetworth);

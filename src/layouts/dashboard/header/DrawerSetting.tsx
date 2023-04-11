@@ -96,15 +96,9 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
 
   useMemo(() => {
     if (USDEBALANCE && E2LPBALANCE && E2LPPrice && USDEPrice) {
-      const USDEBALANCETotalValue = formatString(
-        FixedNumber.from(USDEBALANCE).mulUnsafe(FixedNumber.from(USDEPrice)).toString(),
-        2,
-      ).toString();
+      const USDEBALANCETotalValue = formatString(USDEBALANCE.mulUnsafe(USDEPrice).toString(), 2).toString();
 
-      const E2LPBALANCETotalValue = formatString(
-        FixedNumber.from(E2LPBALANCE).mulUnsafe(FixedNumber.from(E2LPPrice)).toString(),
-        2,
-      ).toString();
+      const E2LPBALANCETotalValue = formatString(E2LPBALANCE.mulUnsafe(E2LPPrice).toString(), 2).toString();
 
       const sum = formatString(String(+USDEBALANCETotalValue + +E2LPBALANCETotalValue).toString(), 2).toString();
 
