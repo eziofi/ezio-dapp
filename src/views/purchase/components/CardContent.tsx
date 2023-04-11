@@ -8,7 +8,7 @@ import { ATokenMap, REVERSE_COIN, TOKEN_TYPE, TRANSFER_TYPE } from '../../wallet
 import BaseIconFont from '../../components/BaseIconFont';
 import { usePrice } from '../../../hooks/usePrice';
 import { InlineSkeleton } from '../../components/Skeleton';
-import useWallet from '../../hooks/useWallet';
+import useWallet from '../../../hooks/useWallet';
 import TokenTypeDialog from './TokenTypeDialog';
 
 interface IProps {

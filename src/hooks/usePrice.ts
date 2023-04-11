@@ -1,7 +1,7 @@
 import { NETWORK_TYPE, TOKEN_TYPE } from '../views/wallet/helpers/constant';
 import { USDEPrice, E2LPPrice, usdcPrice, usdtPrice, reverseCoinPrice } from '../views/wallet/helpers/contract_call';
 import { useQuery } from 'react-query';
-import useWallet from '../views/hooks/useWallet';
+import useWallet from './useWallet';
 
 export function usePrice(tokenType: TOKEN_TYPE) {
   const { ethersProvider, networkName } = useWallet();

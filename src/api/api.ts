@@ -1,5 +1,4 @@
-import { NETWORK_TYPE } from './../views/wallet/helpers/constant';
-import useWallet from '../views/hooks/useWallet';
+import { NETWORK_TYPE } from '../views/wallet/helpers/constant';
 import httpClient from './request';
 
 interface ICommonRes<T> {
@@ -16,16 +15,7 @@ interface ITokenInfoRes {
   recordTime: string;
 }
 
-// function backNetwork(networkId: NETWORK_TYPE | undefined) {
-//   if (networkId === NETWORK_ID.arbitrum) {
-//     return 'arbitrum';
-//   } else {
-//     return 'polygon';
-//   }
-// }
-
 export function queryTokenInfo() {
-  // return httpClient.get<ITokenInfoRes[]>('/api/queryTokenInfo');
   return httpClient.get<ICommonRes<ITokenInfoRes[]>>('/api/v1/ezioGroup24HChange');
 }
 
@@ -37,7 +27,6 @@ interface ITotalNetWorth {
 
 // stEth的价格变化和金库总值
 export function queryTotalNetWorth() {
-  // return httpClient.get<ICommonRes<ITotalNetWorth[]>>('/api/queryTotalNetWorth');
   return httpClient.get<ICommonRes<ITotalNetWorth[]>>('/api/ezioGroupTotalWorth');
 }
 
@@ -51,7 +40,6 @@ interface ITokenGroup {
 }
 // 市值曲线
 export function queryTokenGroup(QueryType: string, networkName: NETWORK_TYPE | undefined) {
-  // return httpClient.get<ITokenGroup[]>('/api/queryTokenGroup');
   return httpClient.get<ICommonRes<ITokenGroup[]>>(`/api/${networkName}/ezioGroupSupply`, {
     params: { QueryType },
   });
@@ -63,7 +51,6 @@ interface ITotalPurchase {
   purchaseAmt: number;
 }
 export function queryTotalPurchaseBy24h() {
-  // return httpClient.get<ITotalPurchase[]>('/api/queryTotalPurchaseBy24h');
   return httpClient.get<ICommonRes<ITotalPurchase[]>>('/api/v1/ezioGroupPurchase');
 }
 
@@ -81,8 +68,7 @@ export function queryVaultValue(QueryType: string, networkName: NETWORK_TYPE | u
 }
 
 // ab总净值
-
-interface IAbTotalnetworth {
+interface IAbTotalNetworth {
   code: number;
   message: string;
   data: {
@@ -94,8 +80,8 @@ interface IAbTotalnetworth {
   }[];
 }
 
-export function queryAbTotalnetworth(QueryType: string, networkName: NETWORK_TYPE | undefined) {
-  return httpClient.get<IAbTotalnetworth>(`api/${networkName}/lineGraph/abTotalnetworth`, {
+export function queryAbTotalNetworth(QueryType: string, networkName: NETWORK_TYPE | undefined) {
+  return httpClient.get<IAbTotalNetworth>(`api/${networkName}/lineGraph/abTotalnetworth`, {
     params: { QueryType },
   });
 }
@@ -119,11 +105,10 @@ export function queryMaticPrice(QueryType: string, networkName: NETWORK_TYPE | u
 }
 
 // AccumulatedFees24H 过去24h手续费收入
-
 interface IAccumulatedFees24H {
   code: number;
   message: string;
-  data: { fees24H: string };
+  data: { fees24H: number };
 }
 
 export function queryAccumulatedFees24H(networkName: NETWORK_TYPE | undefined) {
@@ -131,7 +116,6 @@ export function queryAccumulatedFees24H(networkName: NETWORK_TYPE | undefined) {
 }
 
 // DailyAccumulatedFees 按日分组手续费
-
 interface IDailyAccumulatedFees {
   code: number;
   message: string;
@@ -143,7 +127,6 @@ export function queryDailyAccumulatedFees(networkName: NETWORK_TYPE | undefined)
 }
 
 // AccumulatedFees 累计EZIO手续费
-
 interface IAccumulatedFees {
   code: number;
   message: string;
@@ -155,7 +138,6 @@ export function queryAccumulatedFees(networkName: NETWORK_TYPE | undefined) {
 }
 
 // 统计E2LP的价格和下折价格
-
 interface IConvertDownPrice {
   code: number;
   message: string;

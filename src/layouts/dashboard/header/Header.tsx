@@ -4,17 +4,14 @@ import { styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar, IconButton, CircularProgress, Chip } from '@mui/material';
 // utils
 import { bgBlur } from '../../../utils/cssStyles';
-import LanguagePopover from './LanguagePopover';
-import Iconify from '../../../components/iconify';
 import AddressPopover from './AddressPopover';
-import ThemeSwitcher from './ThemeSwitcher';
 
 import { useLocation } from 'react-router-dom';
 import NetWorkPopover from './NetWorkPopover';
 import Nav from '../nav/Nav';
 import React from 'react';
 import useResponsive from '../../../hooks/useResponsive';
-import useWallet from '../../../views/hooks/useWallet';
+import Iconify from '../../../components/iconify/Iconify';
 
 // ----------------------------------------------------------------------
 
@@ -58,7 +55,6 @@ export default function Header({
 }) {
   const { pathname } = useLocation();
   const isDesktop = useResponsive('up', 'md', 'md');
-  const { networkName } = useWallet();
 
   return (
     <StyledRoot>
@@ -88,10 +84,6 @@ export default function Header({
               variant="outlined"
             />
           )}
-          {/* <ThemeSwitcher /> */}
-          {/* <LanguagePopover /> */}
-          {/*<NotificationsPopover />*/}
-          {/*<AccountPopover />*/}
           <NetWorkPopover />
           <AddressPopover />
         </Stack>

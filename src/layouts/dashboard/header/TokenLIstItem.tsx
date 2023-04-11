@@ -1,9 +1,9 @@
 import { ListItem, styled, useTheme } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { StyleProps } from '../../../types/styleType';
 import BaseIconFont from '../../../views/components/BaseIconFont';
 import { InlineSkeleton } from '../../../views/components/Skeleton';
-import useWallet from '../../../views/hooks/useWallet';
+import useWallet from '../../../hooks/useWallet';
 import { ATokenMap, NETWORK_TYPE, TOKEN_TYPE } from '../../../views/wallet/helpers/constant';
 import { formatString } from '../../../views/wallet/helpers/utilities';
 import { FixedNumber } from 'ethers';
@@ -89,7 +89,6 @@ export default function TokenLIstItem({ item }: { item: IOptions }) {
         alignItems: 'center',
       }}
     >
-      {/* <ListItem> {renderIcon(item)}</ListItem> */}
       <MyListItem>
         <>
           {renderIcon(item)}

@@ -19,7 +19,7 @@ import { AToken, ATokenMap, NETWORK_TYPE, TOKEN_TYPE } from '../../wallet/helper
 import ClearIcon from '@mui/icons-material/Clear';
 import SearchIcon from '@mui/icons-material/Search';
 import BaseIconFont from '../../components/BaseIconFont';
-import useWallet from '../../hooks/useWallet';
+import useWallet from '../../../hooks/useWallet';
 import { StyleProps } from '../../../types/styleType';
 
 import { useTranslation } from 'react-i18next';

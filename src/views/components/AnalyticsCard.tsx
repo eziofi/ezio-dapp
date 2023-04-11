@@ -2,14 +2,8 @@ import { styled, useTheme } from '@mui/material/styles';
 import { Box, Card, SxProps, Theme, Tooltip } from '@mui/material';
 
 import { useTranslation } from 'react-i18next';
-import useWallet from '../hooks/useWallet';
-import {
-  commissionIncome,
-  ezWETHReverse,
-  getPooledA,
-  reverseCoinBalanceOf,
-  usdcBalanceOf,
-} from '../wallet/helpers/contract_call';
+import useWallet from '../../hooks/useWallet';
+import { commissionIncome, ezWETHReverse, getPooledA } from '../wallet/helpers/contract_call';
 import { useQuery } from 'react-query';
 import { NETWORK_TYPE } from '../wallet/helpers/constant';
 import { InlineSkeleton } from './Skeleton';
@@ -89,7 +83,6 @@ export default function AnalyticsCard({
     [ANALYTICS_CARD_TYPE.FEE]: FeeValueIcon,
   };
 
-  // @ts-ignore
   const { data } = useQuery(
     ['AnalyticsCard', type],
     () => {
@@ -101,6 +94,10 @@ export default function AnalyticsCard({
       enabled: !!ethersProvider && !!networkName,
     },
   );
+
+  if (type === ANALYTICS_CARD_TYPE.FEE) {
+    const der = data?.toUnsafeFloat();
+  }
 
   return (
     <Card
@@ -121,7 +118,7 @@ export default function AnalyticsCard({
       <Box style={{ display: 'flex', flexDirection: 'column', marginLeft: theme.spacing(4) }}>
         {type === ANALYTICS_CARD_TYPE.FEE ? (
           <div style={{ width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>
-            {data !== undefined ? '$' + data : <InlineSkeleton />}
+            {data ? '$' + data.toString() : <InlineSkeleton />}
           </div>
         ) : (
           <div style={{ width: 150, fontSize: 34, fontWeight: 700, display: 'flex', justifyItems: 'flex-start' }}>
@@ -155,25 +152,7 @@ export default function AnalyticsCard({
           {title[type]}
         </div>
       </Box>
-      <StyledIcon
-      // sx={{
-      //   // color: theme => theme.palette[color][theme.palette.mode === 'light' ? 'dark' : 'light'],
-      //   backgroundImage: theme =>
-      //     `linear-gradient(${theme.palette.mode === 'light' ? '135deg' : '-45deg'}, ${alpha(
-      //       theme.palette[color][theme.palette.mode === 'light' ? 'dark' : 'light'],
-      //       0,
-      //     )} 0%, ${alpha(theme.palette[color][theme.palette.mode === 'light' ? 'dark' : 'light'], 0.24)} 100%)`,
-      // }}
-      >
-        {/* <BaseIconFont
-          name={icon[type]}
-          style={{
-            width: 22,
-            height: 22,
-            // @ts-ignore
-            fill: theme.palette[color][theme.palette.mode === 'light' ? 'darker' : 'lighter'],
-          }}
-        /> */}
+      <StyledIcon>
         <img
           src={
             theme.palette.mode === 'dark'
@@ -185,8 +164,6 @@ export default function AnalyticsCard({
               : icon_light[type]
           }
         />
-
-        {/*<Iconify icon={icon[type]} width={24} height={24} />*/}
       </StyledIcon>
     </Card>
   );

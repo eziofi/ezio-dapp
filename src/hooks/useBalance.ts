@@ -6,7 +6,7 @@ import {
   usdtBalanceOf,
 } from '../views/wallet/helpers/contract_call';
 import { useQuery } from 'react-query';
-import useWallet from '../views/hooks/useWallet';
+import useWallet from './useWallet';
 import { NETWORK_TYPE, TOKEN_TYPE } from '../views/wallet/helpers/constant';
 import { formatUnits } from 'ethers/lib/utils';
 import { formatDecimal } from '../views/wallet/helpers/utilities';

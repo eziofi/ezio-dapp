@@ -7,7 +7,7 @@ import { getYMax } from '../../wallet/helpers/utilities';
 import { useContext, useEffect, useState } from 'react';
 import { ColorModeContext } from '../../../theme';
 import RenderSkeleton from '../../homePage/components/RenderSkeleton';
-import useWallet from '../../hooks/useWallet';
+import useWallet from '../../../hooks/useWallet';
 import { ATokenMap, NETWORK_TYPE } from '../../wallet/helpers/constant';
 
 export default function LineChart() {
@@ -86,14 +86,6 @@ export default function LineChart() {
               min: 0,
               max: getYMax(ezMaticPrice),
             },
-            // {
-            //   opposite: true,
-            //   title: {
-            //     text: t('home.ethPrice'),
-            //   },
-            //   decimalsInFloat: 0,
-            //   max: getYMax(ethData),
-            // },
           ],
           tooltip: {
             shared: true,

@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import useWallet from '../views/hooks/useWallet';
+import useWallet from './useWallet';
 import { NETWORK_TYPE, TOKEN_TYPE } from '../views/wallet/helpers/constant';
 import { queryPurchaseRecord, queryRedeemRecord } from '../views/wallet/helpers/contract_call';
 

@@ -10,7 +10,7 @@ import { ColorModeContext } from '../../../theme';
 import RenderSkeleton from './RenderSkeleton';
 import { HomeCardHeader } from '../mainStyle';
 import RenderSelect from './RenderSelect';
-import useWallet from '../../hooks/useWallet';
+import useWallet from '../../../hooks/useWallet';
 import { ATokenMap, NETWORK_TYPE } from '../../wallet/helpers/constant';
 
 export default function MarketApexChart() {

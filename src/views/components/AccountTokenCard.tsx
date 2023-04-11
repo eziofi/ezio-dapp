@@ -8,7 +8,7 @@ import { InlineSkeleton } from './Skeleton';
 import { useTranslation } from 'react-i18next';
 import { Box, Tooltip, useTheme } from '@mui/material';
 import { useEffect } from 'react';
-import useWallet from '../hooks/useWallet';
+import useWallet from '../../hooks/useWallet';
 import { FixedNumber } from 'ethers';
 
 export default function AccountTokenCard({ type, refreshFlag }: { type: TOKEN_TYPE; refreshFlag: number }) {

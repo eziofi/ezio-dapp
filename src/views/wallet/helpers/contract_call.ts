@@ -11,21 +11,13 @@ import {
   EzUSDV1__factory as USDEV1__factory__polygon,
 } from '../polygon/contract';
 
-import {
-  ARBITRUM_TOKENS,
-  ERC20_ABI,
-  NETWORK_TYPE,
-  POLYGON_TOKENS,
-  REVERSE_COIN,
-  TOKEN_DECIMAL,
-  TOKEN_TYPE,
-  TRANSFER_TYPE,
-} from './constant';
+import { ARBITRUM_TOKENS, NETWORK_TYPE, POLYGON_TOKENS, REVERSE_COIN, TOKEN_TYPE, TRANSFER_TYPE } from './constant';
 import { BigNumber, ethers, FixedNumber, Signer } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
 import { formatDecimal, formatString } from './utilities';
 
 import { queryAccumulatedFees24H } from '../../../api/api';
+import { ERC20_ABI } from './ERC20ABI';
 
 export const USDEJson = {
   [NETWORK_TYPE.arbitrum]: require('../arbitrum/contract/abi/USDEV1.json'),
@@ -151,9 +143,10 @@ export async function ezWETHReverse(signerOrProvider: Signer | Provider, network
  * 获取 手续费收入
  * @returns 过去24小时手续费汇总 fees24H
  */
-export async function commissionIncome(networkId?: NETWORK_TYPE | undefined) {
-  const res = (await queryAccumulatedFees24H(networkId)).data.data.fees24H;
-  return FixedNumber.from(res);
+export async function commissionIncome(networkName?: NETWORK_TYPE | undefined) {
+  const data = (await queryAccumulatedFees24H(networkName)).data.data.fees24H;
+  const res = FixedNumber.from(data + '');
+  return res;
 }
 
 /**

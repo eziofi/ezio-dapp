@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import metamaskBtn from '../../../assets/home/metamask@3x.png';
 import useResponsive from '../../../hooks/useResponsive';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
-import useWallet from '../../../views/hooks/useWallet';
+import useWallet from '../../../hooks/useWallet';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import BalanceList from '../../../views/purchase/components/BalanceList';
@@ -261,7 +261,7 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
           </Box>
 
           {/* tokens */}
-          <Box sx={{ margin: '10px 0', padding: '0px 20px' }}>{t('drawerSeting.tokens')}</Box>
+          <Box sx={{ margin: '10px 0', padding: '0px 20px' }}>{t('drawerSetting.tokens')}</Box>
           <TabPanel value={0} index={0}>
             {tokens.map((item, index: number) => {
               return <TokenListItem item={item} key={index} />;
@@ -294,11 +294,11 @@ export default function DrawerSetting({ open, setOpen, setCopyFlag }: IProps) {
           </Box>
 
           <Typography sx={{ color: 'rgb(119, 128, 160)', mb: theme.spacing(3), padding: '0px 20px' }}>
-            {t('drawerSeting.preferences')}
+            {t('drawerSetting.preferences')}
           </Typography>
 
           <ListItem sx={listItemStyle}>
-            <Typography>{t('drawerSeting.setting')}</Typography>
+            <Typography>{t('drawerSetting.setting')}</Typography>
             <Box
               style={{
                 borderRadius: '16px',

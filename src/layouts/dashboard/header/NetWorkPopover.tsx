@@ -8,7 +8,7 @@ import styled from '@emotion/styled';
 import { Box } from '@mui/system';
 import { NETWORK_TYPE } from '../../../views/wallet/helpers/constant';
 import CheckIcon from '@mui/icons-material/Check';
-import useWallet from '../../../views/hooks/useWallet';
+import useWallet from '../../../hooks/useWallet';
 import { useTranslation } from 'react-i18next';
 
 export default function NetWorkPopover() {
@@ -105,14 +105,6 @@ export default function NetWorkPopover() {
         PaperProps={{ sx: { width: 300, p: '10px' } }}
       >
         <PopoverStyle>
-          {/*<Button sx={{ ...btnStyle }} onClick={() => handleCheckNetWork(NETWORK_TYPE.polygon)}>*/}
-          {/*  <div style={{ display: 'flex', alignItems: 'center' }}>*/}
-          {/*    <BaseIconFont name="icon-Polygon" style={{ ...networkIconStyle }} />*/}
-          {/*    {NETWORK_TYPE.polygon}*/}
-          {/*  </div>*/}
-          {/*  {checkNetworkName === NETWORK_TYPE.polygon && <CheckIcon />}*/}
-          {/*</Button>*/}
-
           <Button sx={{ ...btnStyle }} onClick={() => handleCheckNetWork(NETWORK_TYPE.arbitrum)}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <BaseIconFont name="icon-arbitrum" style={{ ...networkIconStyle }} />

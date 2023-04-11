@@ -5,8 +5,6 @@ import Web3Modal from 'web3modal';
 import { NETWORK_ID, NETWORK_TYPE, TOKEN_TYPE } from '../wallet/helpers/constant';
 import { useQuery } from 'react-query';
 import { getAllowance } from '../wallet/helpers/contract_call';
-import WalletConnect from '@walletconnect/client';
-import QRCodeModal from '@walletconnect/qrcode-modal';
 import { UIContext } from './UIProvider';
 import { useTranslation } from 'react-i18next';
 
@@ -52,10 +50,8 @@ export default function WalletProvider({ children }: { children: ReactElement })
     }
   }, []);
 
-  const [networkId, setNetworkId] = useState<number | undefined>(undefined);
   const [networkName, setNetworkName] = useState<NETWORK_TYPE | ''>('');
 
-  // const getNetwork = () => getChainData(this.state.chainId).network;
   const [allowanceUSDT, setAllowanceUSDT] = useState<FixedNumber>(FixedNumber.from(0));
 
   const [allowanceUSDC, setAllowanceUSDC] = useState<FixedNumber>(FixedNumber.from(0));
@@ -166,24 +162,15 @@ export default function WalletProvider({ children }: { children: ReactElement })
       } else {
         setAccount(accounts[0]);
       }
-      // await this.setState({ address: accounts[0] });
-      // await this.getAccountAssets();
     });
     provider.on('chainChanged', async (chainId: number) => {
       console.log(`chainChanged: ${chainId}`);
-      setNetworkId(chainId);
       setNetworkName(NETWORK_TYPE[chainId as unknown as keyof typeof NETWORK_TYPE]);
       window.location.reload();
-
-      // const { web3 } = this.state;
-      // const networkId = await web3.eth.net.getId();
-      // await this.setState({ chainId, networkId });
-      // await this.getAccountAssets();
     });
 
     provider.on('disconnect', (error: { code: number; message: string }) => {
       console.log('disconnect');
-      // setConnectedCache(false);
       window.location.reload();
     });
 
@@ -245,19 +232,6 @@ export default function WalletProvider({ children }: { children: ReactElement })
         console.error(error);
         return Promise.reject(error);
       });
-  }
-
-  //添加网络
-  async function addNetwork(network: string, web3ModalProvider: any) {
-    try {
-      return await web3ModalProvider.request({
-        method: 'wallet_addEthereumChain',
-        // @ts-ignore
-        params: [networkInfo[network]],
-      });
-    } catch (error) {
-      console.log(error);
-    }
   }
 
   const value = {

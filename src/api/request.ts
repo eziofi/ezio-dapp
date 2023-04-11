@@ -1,9 +1,8 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 const httpClient = axios.create({
-  // baseURL: process.env.NODE_ENV === 'development' ? process.env.REACT_APP_BASE_URL : undefined,
   baseURL: process.env.REACT_APP_BASE_URL,
-  timeout: 20000, // request timeout
+  timeout: 20000,
 });
 
 const requestOnFulfilled = (config: AxiosRequestConfig) => {

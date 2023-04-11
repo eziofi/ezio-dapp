@@ -5,14 +5,14 @@ import { t } from 'i18next';
 import { ColorModeContext } from '../../../theme';
 import RenderSkeleton from './RenderSkeleton';
 import { Box, Card, CardHeader } from '@mui/material';
-import { queryAbTotalnetworth } from '../../../api/api';
+import { queryAbTotalNetworth } from '../../../api/api';
 import { getYMax, getYMin } from '../../wallet/helpers/utilities';
 import { HomeCardHeader } from '../mainStyle';
 import RenderSelect from './RenderSelect';
-import useWallet from '../../hooks/useWallet';
+import useWallet from '../../../hooks/useWallet';
 import { ATokenMap, NETWORK_TYPE } from '../../wallet/helpers/constant';
 
-export default function TotleNetWorthApexChart() {
+export default function TotalNetWorthApexChart() {
   const [option, setOption] = React.useState<any>(null);
   const { mode } = React.useContext(ColorModeContext);
   const queryClient: QueryClient = useQueryClient();
@@ -26,7 +26,7 @@ export default function TotleNetWorthApexChart() {
   const { networkName } = useWallet();
 
   const colors = ['rgb(0, 143, 251)', 'rgb(0, 227, 150)', 'rgb(0, 143, 251)'];
-  useQuery(['queryAbTotalnetworth', queryType], () => queryAbTotalnetworth(queryType, networkName as NETWORK_TYPE), {
+  useQuery(['queryAbTotalnetworth', queryType], () => queryAbTotalNetworth(queryType, networkName as NETWORK_TYPE), {
     enabled: !!networkName,
     onSuccess: ({ data }) => {
       const XData = data.data.map(i => {

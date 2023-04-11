@@ -14,7 +14,7 @@ import {
 import { QueryClient, useMutation, useQueryClient } from 'react-query';
 import { FixedNumber, Signer } from 'ethers';
 import { ATokenMap, NETWORK_TYPE, TOKEN_TYPE, TRANSFER_TYPE } from '../wallet/helpers/constant';
-import useWallet from '../hooks/useWallet';
+import useWallet from '../../hooks/useWallet';
 import { formatString } from '../wallet/helpers/utilities';
 import { useTranslation } from 'react-i18next';
 import {
@@ -60,23 +60,18 @@ interface IApproveArg {
 export default function Purchase() {
   const queryClient: QueryClient = useQueryClient();
   const [type, setType] = useState(TRANSFER_TYPE.PURCHASE); // 0是购买 1是赎回
-  // const [tipDrawerOpened, setTipDrawerOpened] = useState(false);
   const [inputValue1, setInputValue1] = useState(''); // 上方输入框
   const [inputValue2, setInputValue2] = useState(''); // 下方输入框
-  // const [pricePercentage, setPricePercentage] = useState('');
   const [tokenType, setTokenType] = useState<TOKEN_TYPE.USDE | TOKEN_TYPE.E2LP>(TOKEN_TYPE.USDE); // 下拉框value
   const [redeemTokenType, setRedeemTokenType] = useState<TOKEN_TYPE.USDC | TOKEN_TYPE.USDT | TOKEN_TYPE.ReverseCoin>(
     TOKEN_TYPE.USDT,
   ); // 下拉框value
   const theme = useTheme();
 
-  // const [tokenRate, setTokenRate] = useState('1'); // eg. 1 USDT = xxx USDE
-  // const [tokenReverseRate, setTokenReverseRate] = useState('1'); // eg. 1 USDE = xxx USDT
   const [tokenRateReverseOpen, setTokenRateReverseOpen] = useState(false);
 
   const [slippage, setSlippage] = useState<number>(0.5);
   const [resetVal] = useState<number>(0.5);
-  // const [time, setTime] = useState<string>();
 
   const { loadingOpen, loadingText } = useContext(UIContext);
 
@@ -88,12 +83,9 @@ export default function Purchase() {
   const { price: toPrice } = usePrice(type === TRANSFER_TYPE.PURCHASE ? tokenType : redeemTokenType);
 
   // 两个token的price比值
-  // const _rate = fromPrice && toPrice ? parseFloat(fromPrice) / parseFloat(toPrice) : 1;
   const _rate = fromPrice && toPrice ? fromPrice.divUnsafe(toPrice).toUnsafeFloat() : 1;
   const interest = formatString('' + _rate, 6).toString();
   const reverseInterest = formatString('' + 1 / _rate, 6).toString();
-  // const percentage =
-  //   fromPrice && toPrice ? ((parseFloat(toPrice) - parseFloat(fromPrice)) / parseFloat(fromPrice)) * 100 : 0;
   const percentage =
     fromPrice && toPrice
       ? toPrice.subUnsafe(fromPrice).divUnsafe(fromPrice).mulUnsafe(FixedNumber.from(100)).toUnsafeFloat().toFixed(2)
@@ -119,9 +111,7 @@ export default function Purchase() {
 
   function reCalcValue1(value: string) {
     if (fromPrice && toPrice) {
-      const estimatedValue1 = FixedNumber.from(value)
-        .mulUnsafe(FixedNumber.from(toPrice))
-        .divUnsafe(FixedNumber.from(fromPrice));
+      const estimatedValue1 = FixedNumber.from(value).mulUnsafe(toPrice).divUnsafe(fromPrice);
       const flooredValue = Math.floor(estimatedValue1.toUnsafeFloat() * 10 ** 6) / 10 ** 6;
       setInputValue1(flooredValue + '');
     }

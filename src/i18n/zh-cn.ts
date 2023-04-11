@@ -150,7 +150,7 @@ export default {
     line2: '当TokenB的所有者权益低于已匹配TokenA资金的60%时，TokenA的持有人将减少出借资金。',
     line3: '出售金库中1/4的stETH，资金存入TokenA未匹配资金。',
   },
-  drawerSeting: {
+  drawerSetting: {
     tokens: '代币',
     setting: '设置',
     preferences: '偏好',

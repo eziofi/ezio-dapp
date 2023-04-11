@@ -16,7 +16,6 @@ import {
 import BaseIconFont from '../components/BaseIconFont';
 import { PurchaseRecord, RedeemRecord } from '../wallet/helpers/contract_call';
 export default function AccountDetail() {
-  // const recordList = useRecord();
   const recordList: (RedeemRecord | PurchaseRecord)[] = [];
 
   return (

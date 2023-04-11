@@ -1,15 +1,13 @@
-// import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 // @mui
-// import { styled, alpha } from '@mui/material/styles';
-import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
+import { Box, Button, Drawer, Stack } from '@mui/material';
 // hooks
 import useResponsive from '../../../hooks/useResponsive';
 
-import NavSection from '../../../components/nav-section';
-import SvgColor from '../../../components/svg-color';
 import { useTranslation } from 'react-i18next';
+import NavSection from '../../../components/nav-section/NavSection';
+import SvgColor from '../../../components/svg-color/SvgColor';
 
 const logo = require('../../../assets/logo.png');
 

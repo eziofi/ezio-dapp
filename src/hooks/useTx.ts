@@ -18,7 +18,7 @@ import {
 } from '../views/wallet/helpers/contract_call';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import useWallet from '../views/hooks/useWallet';
+import useWallet from './useWallet';
 import { UIContext } from '../views/context/UIProvider';
 import { SwapQuoteStruct } from '../views/wallet/arbitrum/contract/contracts/interfaces/v1/IEzVault';
 

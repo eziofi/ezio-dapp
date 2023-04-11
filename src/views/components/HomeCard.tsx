@@ -1,13 +1,11 @@
-import { alpha, styled, useTheme } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { Card, IconButton, SxProps, Theme, Tooltip, tooltipClasses, TooltipProps, Typography } from '@mui/material';
 
 import { useTranslation } from 'react-i18next';
-import useWallet from '../hooks/useWallet';
+import useWallet from '../../hooks/useWallet';
 import { convertDownPrice, ezWETHFundCost, getLeverage, interestRateYear } from '../wallet/helpers/contract_call';
 import { useQuery } from 'react-query';
-import BaseIconFont from './BaseIconFont';
 import { InlineSkeleton } from './Skeleton';
-import * as Net from 'net';
 import { ATokenMap, NETWORK_TYPE } from '../wallet/helpers/constant';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 export enum HOME_CARD_TYPE {
@@ -78,20 +76,6 @@ export default function HomeCard({
     marginBottom: theme.spacing(2),
     border: `1px solid ${IconDivBorderColor[type]}`,
   }));
-
-  const IconBgColor = {
-    [HOME_CARD_TYPE.Rate]: 'radial-gradient(50% 50%, rgba(107, 155, 237, 1) 0%, #6B9BED 100%)',
-    [HOME_CARD_TYPE.FundCost]: 'radial-gradient(50% 50%, rgba(235, 122, 141, 1) 0%, #EB7A8D 100%)',
-    [HOME_CARD_TYPE.RebalancePrice]: 'radial-gradient(50% 50%, rgba(20, 173, 179, 1) 0%, #14ADB3 100%)',
-    [HOME_CARD_TYPE.Leverage]: 'radial-gradient(50% 50%, rgba(222, 106, 106, 1) 0%, #DE6A6A 100%)',
-  };
-
-  const IconShadowColor = {
-    [HOME_CARD_TYPE.Rate]: '0px 0px 2px 0px rgba(69, 129, 235, 0.6)',
-    [HOME_CARD_TYPE.FundCost]: '0px 0px 2px 0px rgba(245, 89, 112, 0.6)',
-    [HOME_CARD_TYPE.RebalancePrice]: '0px 0px 2px 0px rgba(28, 196, 201, 0.6)',
-    [HOME_CARD_TYPE.Leverage]: '0px 0px 2px 0px rgba(233, 86, 84, 0.6)',
-  };
 
   return (
     <Card

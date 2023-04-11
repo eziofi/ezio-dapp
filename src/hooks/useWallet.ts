@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import { WalletContext } from '../context/WalletProvider';
-import { NETWORK_ID, REVERSE_COIN } from '../wallet/helpers/constant';
+import { WalletContext } from '../views/context/WalletProvider';
+import { NETWORK_ID, REVERSE_COIN } from '../views/wallet/helpers/constant';
 
 export default function useWallet() {
   const {
