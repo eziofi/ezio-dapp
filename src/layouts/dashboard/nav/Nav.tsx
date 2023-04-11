@@ -1,13 +1,12 @@
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 // @mui
-import { styled, alpha } from '@mui/material/styles';
+// import { styled, alpha } from '@mui/material/styles';
 import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
 // hooks
 import useResponsive from '../../../hooks/useResponsive';
-// components
-import Scrollbar from '../../../components/scrollbar';
+
 import NavSection from '../../../components/nav-section';
 import SvgColor from '../../../components/svg-color';
 import { useTranslation } from 'react-i18next';
@@ -98,17 +97,12 @@ export default function Nav({ openNav, onCloseNav }: { openNav: boolean; onClose
           sx: { width: NAV_WIDTH },
         }}
       >
-        <Scrollbar
-          sx={{
-            height: 1,
-            '& .simplebar-content': { height: 1, display: 'flex', flexDirection: 'column' },
-          }}
-        >
+        <>
           <Box sx={{ px: 2.5, py: 3, display: 'inline-flex' }}>
             <img src={logo} width="40" />
           </Box>
           <NavSection data={navConfig} />
-        </Scrollbar>
+        </>
       </Drawer>
     </Box>
   );

@@ -105,7 +105,7 @@ export async function vaultTotalNetWorth(
   network: NETWORK_TYPE,
 ): Promise<BigNumber> {
   const res = await EzioConnect(signerOrProvider, network).totalNetWorth();
-  console.log('vault Total NetWorth = ' + res.toString());
+  console.log('treasury Total NetWorth = ' + res.toString());
   return res;
 }
 
@@ -160,7 +160,7 @@ export async function commissionIncome(networkId?: NETWORK_TYPE | undefined) {
  * 获取 日利息
  * @returns 日利息
  */
-export async function vaultInterestRate(
+export async function treasuryInterestRate(
   signerOrProvider: Signer | Provider,
   network: NETWORK_TYPE,
 ): Promise<BigNumber> {
@@ -391,14 +391,14 @@ export async function ezbtTotalSupply(signerOrProvider: Signer | Provider, netwo
 }
 
 export async function interestRateYear(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
-  const rate = await vaultInterestRate(signerOrProvider, network);
+  const rate = await treasuryInterestRate(signerOrProvider, network);
   const yearRate = '' + (rate.toNumber() / 1000000) * 365 * 100;
   // const yearRate2 = '' + ((1 + rate.toNumber() / 1000000) * (10 ^ 365)) / 100;
   return formatString(yearRate);
 }
 
 export async function interestRateDay(signerOrProvider: Signer | Provider, network: NETWORK_TYPE) {
-  const rate = await vaultInterestRate(signerOrProvider, network);
+  const rate = await treasuryInterestRate(signerOrProvider, network);
   const dayRate = formatString('' + (rate.toNumber() / 1000000) * 10000, 3) + '‱';
   return dayRate;
 }
@@ -455,7 +455,7 @@ export interface RedeemRecord {
  * @returns eth 价格
  */
 // export async function ethPrice(signerOrProvider: Signer | Provider): Promise<BigNumber> {
-//   return VaultConnect(signerOrProvider).ethPrice();
+//   return TreasuryConnect(signerOrProvider).ethPrice();
 // }
 
 /**

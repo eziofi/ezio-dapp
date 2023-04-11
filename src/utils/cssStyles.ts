@@ -77,25 +77,3 @@ export function filterStyles(value: string) {
     MozFilter: value,
   };
 }
-
-// ----------------------------------------------------------------------
-
-export const hideScrollbarY = {
-  msOverflowStyle: 'none',
-  scrollbarWidth: 'none',
-  overflowY: 'scroll',
-  '&::-webkit-scrollbar': {
-    display: 'none',
-  },
-};
-
-// ----------------------------------------------------------------------
-
-export const hideScrollbarX = {
-  msOverflowStyle: 'none',
-  scrollbarWidth: 'none',
-  overflowX: 'scroll',
-  '&::-webkit-scrollbar': {
-    display: 'none',
-  },
-};
